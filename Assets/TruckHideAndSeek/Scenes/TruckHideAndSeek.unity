@@ -76977,6 +76977,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &109487176 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 546919213}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &109627871
 GameObject:
   m_ObjectHideFlags: 0
@@ -87191,6 +87197,81 @@ Transform:
   - {fileID: 1948344768}
   m_Father: {fileID: 1167226395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &125268091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 125268092}
+  - component: {fileID: 125268094}
+  - component: {fileID: 125268093}
+  m_Layer: 0
+  m_Name: Truck fit summary readability backing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &125268092
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125268091}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1098282464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1064, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &125268093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125268091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &125268094
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125268091}
+  m_CullTransparentMesh: 1
 --- !u!1 &125546732
 GameObject:
   m_ObjectHideFlags: 0
@@ -99987,6 +100068,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &142345118 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 756286279}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &142695016
 GameObject:
   m_ObjectHideFlags: 0
@@ -159425,6 +159512,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 226031151}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -159523,6 +159615,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 226031150}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 226031151}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &226031099 stripped
 Transform:
@@ -159886,6 +159982,8 @@ MonoBehaviour:
   - {fileID: 226031114}
   - {fileID: 226031113}
   - {fileID: 226031112}
+  appearanceHost: {fileID: 226031151}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 226031111}
     body: {fileID: 646870831}
@@ -159949,6 +160047,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 226031146}
+--- !u!114 &226031151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226031147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 2
+  presentationParent: {fileID: 226031099}
+  originalBodyRenderers:
+  - {fileID: 226031125}
+  - {fileID: 226031124}
+  - {fileID: 226031123}
+  - {fileID: 226031122}
+  - {fileID: 226031117}
+  - {fileID: 226031121}
+  - {fileID: 226031120}
+  - {fileID: 226031119}
+  - {fileID: 226031118}
+  - {fileID: 226031126}
+  - {fileID: 226031128}
+  - {fileID: 226031127}
+  - {fileID: 226031112}
+  - {fileID: 226031129}
+  - {fileID: 226031130}
+  - {fileID: 226031139}
+  - {fileID: 226031135}
+  - {fileID: 226031136}
+  - {fileID: 226031137}
+  - {fileID: 226031141}
+  - {fileID: 226031140}
+  - {fileID: 226031131}
+  - {fileID: 226031134}
+  - {fileID: 226031144}
+  - {fileID: 226031143}
+  - {fileID: 226031133}
+  - {fileID: 226031138}
+  - {fileID: 226031132}
+  - {fileID: 226031142}
+  originalWheelRenderers:
+  - {fileID: 226031116}
+  - {fileID: 226031115}
+  - {fileID: 226031114}
+  - {fileID: 226031113}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1059458503}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 327950597}
+  - {fileID: 327950596}
+  - {fileID: 327950595}
+  - {fileID: 327950594}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: 0.00000067316034, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000059604645, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000059604645, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &226062497
 GameObject:
   m_ObjectHideFlags: 0
@@ -225700,6 +226133,37 @@ Transform:
   - {fileID: 1984866765}
   m_Father: {fileID: 883267479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &317881071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 317881072}
+  m_Layer: 27
+  m_Name: Sports profile dashboard mount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &317881072
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317881071}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16, y: -0.22, z: 0.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1153623183}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &317901347
 GameObject:
   m_ObjectHideFlags: 0
@@ -245785,6 +246249,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &345374208 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 928575429}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &345456336
 GameObject:
   m_ObjectHideFlags: 0
@@ -313207,6 +313677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 429984109}
   - component: {fileID: 429984110}
+  - component: {fileID: 429984111}
   m_Layer: 28
   m_Name: Driver seat interior
   m_TagString: Untagged
@@ -313232,6 +313703,7 @@ Transform:
   - {fileID: 1182012571}
   - {fileID: 699459452}
   - {fileID: 1473930113}
+  - {fileID: 490017980}
   m_Father: {fileID: 315250094}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &429984110
@@ -313248,6 +313720,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCabSteering
   wheel: {fileID: 1473930113}
   lockToLockDegrees: 900
+--- !u!114 &429984111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429984108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6365b93e35394107a16ac312654253da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceCabBinding
+  drivingViews: {fileID: 1696293566}
+  bowlingLane: {fileID: 0}
+  viewIndex: 2
+  accessoryMount: {fileID: 490017980}
+  visibility: {fileID: 0}
 --- !u!1 &430090567
 GameObject:
   m_ObjectHideFlags: 0
@@ -359159,6 +359648,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &490017979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 490017980}
+  m_Layer: 28
+  m_Name: Sports profile dashboard mount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &490017980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490017979}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16, y: -0.22, z: 0.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 429984109}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &490312313
 GameObject:
   m_ObjectHideFlags: 0
@@ -380686,6 +381206,7 @@ GameObject:
   m_Component:
   - component: {fileID: 517829445}
   - component: {fileID: 517829446}
+  - component: {fileID: 517829447}
   m_Layer: 29
   m_Name: Driver seat interior
   m_TagString: Untagged
@@ -380711,6 +381232,7 @@ Transform:
   - {fileID: 1260412371}
   - {fileID: 956960674}
   - {fileID: 1460602109}
+  - {fileID: 1975355746}
   m_Father: {fileID: 1365140421}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &517829446
@@ -380727,6 +381249,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCabSteering
   wheel: {fileID: 1460602109}
   lockToLockDegrees: 900
+--- !u!114 &517829447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517829444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6365b93e35394107a16ac312654253da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceCabBinding
+  drivingViews: {fileID: 1696293566}
+  bowlingLane: {fileID: 0}
+  viewIndex: 3
+  accessoryMount: {fileID: 1975355746}
+  visibility: {fileID: 0}
 --- !u!1 &517900867
 GameObject:
   m_ObjectHideFlags: 0
@@ -403396,6 +403935,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 546919266}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -403494,6 +404038,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 546919265}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 546919266}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &546919214 stripped
 Transform:
@@ -403857,6 +404405,8 @@ MonoBehaviour:
   - {fileID: 546919229}
   - {fileID: 546919228}
   - {fileID: 546919227}
+  appearanceHost: {fileID: 546919266}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 546919226}
     body: {fileID: 318337919}
@@ -403920,6 +404470,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 546919261}
+--- !u!114 &546919266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546919262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 7
+  presentationParent: {fileID: 546919214}
+  originalBodyRenderers:
+  - {fileID: 546919240}
+  - {fileID: 546919239}
+  - {fileID: 546919238}
+  - {fileID: 546919237}
+  - {fileID: 546919232}
+  - {fileID: 546919236}
+  - {fileID: 546919235}
+  - {fileID: 546919234}
+  - {fileID: 546919233}
+  - {fileID: 546919241}
+  - {fileID: 546919243}
+  - {fileID: 546919242}
+  - {fileID: 546919227}
+  - {fileID: 546919244}
+  - {fileID: 546919245}
+  - {fileID: 546919254}
+  - {fileID: 546919250}
+  - {fileID: 546919251}
+  - {fileID: 546919252}
+  - {fileID: 546919256}
+  - {fileID: 546919255}
+  - {fileID: 546919246}
+  - {fileID: 546919249}
+  - {fileID: 546919259}
+  - {fileID: 546919258}
+  - {fileID: 546919248}
+  - {fileID: 546919253}
+  - {fileID: 546919247}
+  - {fileID: 546919257}
+  originalWheelRenderers:
+  - {fileID: 546919231}
+  - {fileID: 546919230}
+  - {fileID: 546919229}
+  - {fileID: 546919228}
+  auxiliaryExteriorRenderers:
+  - {fileID: 109487176}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1901506523}
+  - {fileID: 1901506522}
+  - {fileID: 1901506521}
+  - {fileID: 1901506520}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: -0.00000028051397, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000035762787, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000035762787, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &547152648
 GameObject:
   m_ObjectHideFlags: 0
@@ -404304,6 +405189,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 547990845}
     - target: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: m_Name
@@ -404342,6 +405232,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 547990842}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 547990845}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &547990793 stripped
 Transform:
@@ -404719,6 +405613,8 @@ MonoBehaviour:
   - {fileID: 547990800}
   - {fileID: 547990797}
   - {fileID: 547990795}
+  appearanceHost: {fileID: 547990845}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 547990833}
     body: {fileID: 82745718}
@@ -404768,6 +405664,341 @@ MonoBehaviour:
     body: {fileID: 576750720}
     collider: {fileID: 576750721}
     renderer: {fileID: 576750722}
+--- !u!114 &547990845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547990841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 0
+  presentationParent: {fileID: 547990793}
+  originalBodyRenderers:
+  - {fileID: 547990832}
+  - {fileID: 547990818}
+  - {fileID: 547990816}
+  - {fileID: 547990814}
+  - {fileID: 547990806}
+  - {fileID: 547990812}
+  - {fileID: 547990810}
+  - {fileID: 547990808}
+  - {fileID: 547990807}
+  - {fileID: 547990834}
+  - {fileID: 547990836}
+  - {fileID: 547990835}
+  - {fileID: 547990795}
+  - {fileID: 547990830}
+  - {fileID: 547990831}
+  - {fileID: 547990824}
+  - {fileID: 547990839}
+  - {fileID: 547990829}
+  - {fileID: 547990827}
+  - {fileID: 547990819}
+  - {fileID: 547990828}
+  - {fileID: 547990821}
+  - {fileID: 547990838}
+  - {fileID: 547990826}
+  - {fileID: 547990820}
+  - {fileID: 547990837}
+  - {fileID: 547990823}
+  - {fileID: 547990822}
+  - {fileID: 547990825}
+  originalWheelRenderers:
+  - {fileID: 547990804}
+  - {fileID: 547990802}
+  - {fileID: 547990800}
+  - {fileID: 547990797}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1157640877}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1619656769}
+  - {fileID: 1619656768}
+  - {fileID: 1619656767}
+  - {fileID: 1619656766}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: -0.00000028051397, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000035762787, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000035762787, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &548042707
 GameObject:
   m_ObjectHideFlags: 0
@@ -514857,6 +516088,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &699196239
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699196240}
+  m_Layer: 26
+  m_Name: Sports profile dashboard mount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &699196240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699196239}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16, y: -0.22, z: 0.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1081313483}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699221298
 GameObject:
   m_ObjectHideFlags: 0
@@ -526584,6 +527846,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 718408006}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -526682,6 +527949,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 718408005}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 718408006}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &718407954 stripped
 Transform:
@@ -527045,6 +528316,8 @@ MonoBehaviour:
   - {fileID: 718407969}
   - {fileID: 718407968}
   - {fileID: 718407967}
+  appearanceHost: {fileID: 718408006}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 718407966}
     body: {fileID: 2128471788}
@@ -527108,6 +528381,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 718408001}
+--- !u!114 &718408006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718408002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 5
+  presentationParent: {fileID: 718407954}
+  originalBodyRenderers:
+  - {fileID: 718407980}
+  - {fileID: 718407979}
+  - {fileID: 718407978}
+  - {fileID: 718407977}
+  - {fileID: 718407972}
+  - {fileID: 718407976}
+  - {fileID: 718407975}
+  - {fileID: 718407974}
+  - {fileID: 718407973}
+  - {fileID: 718407981}
+  - {fileID: 718407983}
+  - {fileID: 718407982}
+  - {fileID: 718407967}
+  - {fileID: 718407984}
+  - {fileID: 718407985}
+  - {fileID: 718407994}
+  - {fileID: 718407990}
+  - {fileID: 718407991}
+  - {fileID: 718407992}
+  - {fileID: 718407996}
+  - {fileID: 718407995}
+  - {fileID: 718407986}
+  - {fileID: 718407989}
+  - {fileID: 718407999}
+  - {fileID: 718407998}
+  - {fileID: 718407988}
+  - {fileID: 718407993}
+  - {fileID: 718407987}
+  - {fileID: 718407997}
+  originalWheelRenderers:
+  - {fileID: 718407971}
+  - {fileID: 718407970}
+  - {fileID: 718407969}
+  - {fileID: 718407968}
+  auxiliaryExteriorRenderers:
+  - {fileID: 2142930015}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1717816595}
+  - {fileID: 1717816594}
+  - {fileID: 1717816593}
+  - {fileID: 1717816592}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: 0.00000067316034, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000059604645, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000059604645, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &718471239
 GameObject:
   m_ObjectHideFlags: 0
@@ -551350,6 +552958,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 756286332}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -551448,6 +553061,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 756286331}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 756286332}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &756286280 stripped
 Transform:
@@ -551811,6 +553428,8 @@ MonoBehaviour:
   - {fileID: 756286295}
   - {fileID: 756286294}
   - {fileID: 756286293}
+  appearanceHost: {fileID: 756286332}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 756286292}
     body: {fileID: 1547170473}
@@ -551874,6 +553493,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 756286327}
+--- !u!114 &756286332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756286328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 3
+  presentationParent: {fileID: 756286280}
+  originalBodyRenderers:
+  - {fileID: 756286306}
+  - {fileID: 756286305}
+  - {fileID: 756286304}
+  - {fileID: 756286303}
+  - {fileID: 756286298}
+  - {fileID: 756286302}
+  - {fileID: 756286301}
+  - {fileID: 756286300}
+  - {fileID: 756286299}
+  - {fileID: 756286307}
+  - {fileID: 756286309}
+  - {fileID: 756286308}
+  - {fileID: 756286293}
+  - {fileID: 756286310}
+  - {fileID: 756286311}
+  - {fileID: 756286320}
+  - {fileID: 756286316}
+  - {fileID: 756286317}
+  - {fileID: 756286318}
+  - {fileID: 756286322}
+  - {fileID: 756286321}
+  - {fileID: 756286312}
+  - {fileID: 756286315}
+  - {fileID: 756286325}
+  - {fileID: 756286324}
+  - {fileID: 756286314}
+  - {fileID: 756286319}
+  - {fileID: 756286313}
+  - {fileID: 756286323}
+  originalWheelRenderers:
+  - {fileID: 756286297}
+  - {fileID: 756286296}
+  - {fileID: 756286295}
+  - {fileID: 756286294}
+  auxiliaryExteriorRenderers:
+  - {fileID: 142345118}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 305461121}
+  - {fileID: 305461120}
+  - {fileID: 305461119}
+  - {fileID: 305461118}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: -0.00000028051397, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000035762787, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000035762787, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &756570900
 GameObject:
   m_ObjectHideFlags: 0
@@ -558320,6 +560274,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 766623701}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -558418,6 +560377,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 766623700}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 766623701}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &766623649 stripped
 Transform:
@@ -558781,6 +560744,8 @@ MonoBehaviour:
   - {fileID: 766623664}
   - {fileID: 766623663}
   - {fileID: 766623662}
+  appearanceHost: {fileID: 766623701}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 766623661}
     body: {fileID: 43844398}
@@ -558844,6 +560809,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 766623696}
+--- !u!114 &766623701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766623697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 6
+  presentationParent: {fileID: 766623649}
+  originalBodyRenderers:
+  - {fileID: 766623675}
+  - {fileID: 766623674}
+  - {fileID: 766623673}
+  - {fileID: 766623672}
+  - {fileID: 766623667}
+  - {fileID: 766623671}
+  - {fileID: 766623670}
+  - {fileID: 766623669}
+  - {fileID: 766623668}
+  - {fileID: 766623676}
+  - {fileID: 766623678}
+  - {fileID: 766623677}
+  - {fileID: 766623662}
+  - {fileID: 766623679}
+  - {fileID: 766623680}
+  - {fileID: 766623689}
+  - {fileID: 766623685}
+  - {fileID: 766623686}
+  - {fileID: 766623687}
+  - {fileID: 766623691}
+  - {fileID: 766623690}
+  - {fileID: 766623681}
+  - {fileID: 766623684}
+  - {fileID: 766623694}
+  - {fileID: 766623693}
+  - {fileID: 766623683}
+  - {fileID: 766623688}
+  - {fileID: 766623682}
+  - {fileID: 766623692}
+  originalWheelRenderers:
+  - {fileID: 766623666}
+  - {fileID: 766623665}
+  - {fileID: 766623664}
+  - {fileID: 766623663}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1979204276}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1058522570}
+  - {fileID: 1058522569}
+  - {fileID: 1058522568}
+  - {fileID: 1058522567}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: 0.00000067316034, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000059604645, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000059604645, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &766681103
 GameObject:
   m_ObjectHideFlags: 0
@@ -617877,6 +620177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsFinishResultsSource
   session: {fileID: 1696293563}
+  cornhole: {fileID: 0}
+  wallball: {fileID: 0}
 --- !u!225 &840954217
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -798359,6 +800661,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 928575482}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -798457,6 +800764,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 928575481}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 928575482}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &928575430 stripped
 Transform:
@@ -798820,6 +801131,8 @@ MonoBehaviour:
   - {fileID: 928575445}
   - {fileID: 928575444}
   - {fileID: 928575443}
+  appearanceHost: {fileID: 928575482}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 928575442}
     body: {fileID: 395992209}
@@ -798883,6 +801196,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 928575477}
+--- !u!114 &928575482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928575478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 1
+  presentationParent: {fileID: 928575430}
+  originalBodyRenderers:
+  - {fileID: 928575456}
+  - {fileID: 928575455}
+  - {fileID: 928575454}
+  - {fileID: 928575453}
+  - {fileID: 928575448}
+  - {fileID: 928575452}
+  - {fileID: 928575451}
+  - {fileID: 928575450}
+  - {fileID: 928575449}
+  - {fileID: 928575457}
+  - {fileID: 928575459}
+  - {fileID: 928575458}
+  - {fileID: 928575443}
+  - {fileID: 928575460}
+  - {fileID: 928575461}
+  - {fileID: 928575470}
+  - {fileID: 928575466}
+  - {fileID: 928575467}
+  - {fileID: 928575468}
+  - {fileID: 928575472}
+  - {fileID: 928575471}
+  - {fileID: 928575462}
+  - {fileID: 928575465}
+  - {fileID: 928575475}
+  - {fileID: 928575474}
+  - {fileID: 928575464}
+  - {fileID: 928575469}
+  - {fileID: 928575463}
+  - {fileID: 928575473}
+  originalWheelRenderers:
+  - {fileID: 928575447}
+  - {fileID: 928575446}
+  - {fileID: 928575445}
+  - {fileID: 928575444}
+  auxiliaryExteriorRenderers:
+  - {fileID: 345374208}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1811899697}
+  - {fileID: 1811899696}
+  - {fileID: 1811899695}
+  - {fileID: 1811899694}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000070490586, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: 0.00000048718687, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: 0.00000067316034, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000059604645, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000059604645, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &928717835
 GameObject:
   m_ObjectHideFlags: 0
@@ -850234,6 +852882,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &996889695 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 1207836846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997213801
 GameObject:
   m_ObjectHideFlags: 0
@@ -897550,6 +900204,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1265189734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!199 &1059458503 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 226031098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1059513461
 GameObject:
   m_ObjectHideFlags: 0
@@ -906051,6 +908711,90 @@ Transform:
   m_Children:
   - {fileID: 57440958}
   m_Father: {fileID: 647670616}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1065276668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1065276671}
+  - component: {fileID: 1065276670}
+  - component: {fileID: 1065276669}
+  m_Layer: 0
+  m_Name: Truck fit setup adapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1065276669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065276668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0452881a11f84a3080865b9f86bb4c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilityPresenter
+  source: {fileID: 1065276670}
+  subtitle: {fileID: 2062163625}
+  originalSubtitle: 
+  reportButton: {fileID: 1373215302}
+--- !u!114 &1065276670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065276668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb5a099ffe7414a82564f95361fa8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilitySource
+  session: {fileID: 1696293563}
+  bowling: {fileID: 0}
+  cornhole: {fileID: 0}
+  cheese: {fileID: 0}
+  hockey: {fileID: 0}
+  airHockey: {fileID: 0}
+  wallball: {fileID: 0}
+  billiards: {fileID: 0}
+  menu: {fileID: 685122230}
+  setupPage: {fileID: 1098282463}
+  setupInteraction: {fileID: 1098282466}
+  sportName: TRUCK HIDE & SEEK
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantHosts:
+  - {fileID: 547990845}
+  - {fileID: 928575482}
+  - {fileID: 226031151}
+  - {fileID: 756286332}
+  - {fileID: 1207836899}
+  - {fileID: 718408006}
+  - {fileID: 766623701}
+  - {fileID: 546919266}
+  sharedTurnHost: {fileID: 0}
+--- !u!4 &1065276671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065276668}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1065295807
 GameObject:
@@ -917778,6 +920522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1081313483}
   - component: {fileID: 1081313484}
+  - component: {fileID: 1081313485}
   m_Layer: 26
   m_Name: Driver seat interior
   m_TagString: Untagged
@@ -917803,6 +920548,7 @@ Transform:
   - {fileID: 784227117}
   - {fileID: 151159500}
   - {fileID: 1877604124}
+  - {fileID: 699196240}
   m_Father: {fileID: 671380389}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1081313484
@@ -917819,6 +920565,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCabSteering
   wheel: {fileID: 1877604124}
   lockToLockDegrees: 900
+--- !u!114 &1081313485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081313482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6365b93e35394107a16ac312654253da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceCabBinding
+  drivingViews: {fileID: 1696293566}
+  bowlingLane: {fileID: 0}
+  viewIndex: 0
+  accessoryMount: {fileID: 699196240}
+  visibility: {fileID: 0}
 --- !u!1 &1081546832
 GameObject:
   m_ObjectHideFlags: 0
@@ -928739,6 +931502,9 @@ RectTransform:
   - {fileID: 1209264930}
   - {fileID: 23921404}
   - {fileID: 1776826485}
+  - {fileID: 125268092}
+  - {fileID: 2062163623}
+  - {fileID: 1373215303}
   m_Father: {fileID: 685122229}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -970257,6 +973023,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1153623183}
   - component: {fileID: 1153623184}
+  - component: {fileID: 1153623185}
   m_Layer: 27
   m_Name: Driver seat interior
   m_TagString: Untagged
@@ -970282,6 +973049,7 @@ Transform:
   - {fileID: 1851304727}
   - {fileID: 2089817512}
   - {fileID: 2140605959}
+  - {fileID: 317881072}
   m_Father: {fileID: 159479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1153623184
@@ -970298,6 +973066,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCabSteering
   wheel: {fileID: 2140605959}
   lockToLockDegrees: 900
+--- !u!114 &1153623185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153623182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6365b93e35394107a16ac312654253da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceCabBinding
+  drivingViews: {fileID: 1696293566}
+  bowlingLane: {fileID: 0}
+  viewIndex: 1
+  accessoryMount: {fileID: 317881072}
+  visibility: {fileID: 0}
 --- !u!1 &1153624714
 GameObject:
   m_ObjectHideFlags: 0
@@ -973545,6 +976330,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &1157640877 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 547990792}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1157801059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008714,6 +1011505,11 @@ PrefabInstance:
       propertyPath: session
       value: 
       objectReference: {fileID: 1696293563}
+    - target: {fileID: 1888067189640617346, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      propertyPath: appearanceHost
+      value: 
+      objectReference: {fileID: 1207836899}
     - target: {fileID: 7424474349234592128, guid: bb4109bace9266d49b1c0565865cfcbf,
         type: 3}
       propertyPath: effectsManager.lightsManager.lowBeamLights.lightSources.Array.size
@@ -1008812,6 +1011608,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1207836898}
+    - targetCorrespondingSourceObject: {fileID: 7742108816872672152, guid: bb4109bace9266d49b1c0565865cfcbf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1207836899}
   m_SourcePrefab: {fileID: 100100000, guid: bb4109bace9266d49b1c0565865cfcbf, type: 3}
 --- !u!4 &1207836847 stripped
 Transform:
@@ -1009175,6 +1011975,8 @@ MonoBehaviour:
   - {fileID: 1207836862}
   - {fileID: 1207836861}
   - {fileID: 1207836860}
+  appearanceHost: {fileID: 1207836899}
+  fragmentPresentation: {fileID: 0}
   pieces:
   - source: {fileID: 1207836859}
     body: {fileID: 1171303075}
@@ -1009238,6 +1012040,341 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideContacts
   match: {fileID: 1696293563}
   truck: {fileID: 1207836894}
+--- !u!114 &1207836899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207836895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 4
+  presentationParent: {fileID: 1207836847}
+  originalBodyRenderers:
+  - {fileID: 1207836873}
+  - {fileID: 1207836872}
+  - {fileID: 1207836871}
+  - {fileID: 1207836870}
+  - {fileID: 1207836865}
+  - {fileID: 1207836869}
+  - {fileID: 1207836868}
+  - {fileID: 1207836867}
+  - {fileID: 1207836866}
+  - {fileID: 1207836874}
+  - {fileID: 1207836876}
+  - {fileID: 1207836875}
+  - {fileID: 1207836860}
+  - {fileID: 1207836877}
+  - {fileID: 1207836878}
+  - {fileID: 1207836887}
+  - {fileID: 1207836883}
+  - {fileID: 1207836884}
+  - {fileID: 1207836885}
+  - {fileID: 1207836889}
+  - {fileID: 1207836888}
+  - {fileID: 1207836879}
+  - {fileID: 1207836882}
+  - {fileID: 1207836892}
+  - {fileID: 1207836891}
+  - {fileID: 1207836881}
+  - {fileID: 1207836886}
+  - {fileID: 1207836880}
+  - {fileID: 1207836890}
+  originalWheelRenderers:
+  - {fileID: 1207836864}
+  - {fileID: 1207836863}
+  - {fileID: 1207836862}
+  - {fileID: 1207836861}
+  auxiliaryExteriorRenderers:
+  - {fileID: 996889695}
+  protectedRoots:
+  - {fileID: 176755135}
+  - {fileID: 1976444953}
+  - {fileID: 1526379766}
+  - {fileID: 152699166}
+  - {fileID: 1081313483}
+  - {fileID: 1153623183}
+  - {fileID: 429984109}
+  - {fileID: 517829445}
+  wheels:
+  - {fileID: 1457043989}
+  - {fileID: 1457043988}
+  - {fileID: 1457043987}
+  - {fileID: 1457043986}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.83573335
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.monster
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 1.1486783
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: semi.lowrider
+    position: {x: -0.00000024876843, y: -0.047753464, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131791, y: 0.9131791, z: 0.9131791}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.8356901
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.83569026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.lifted
+    position: {x: -0.00000046648745, y: -0.047753572, z: 0.022421101}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.9131805, y: 0.9131805, z: 0.9131805}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 1.2536017
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: truck.fire
+    position: {x: -0.00000028051397, y: -0.047753572, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.64687824, y: 0.64687824, z: 0.64687824}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000035762787, y: -0.047753494, z: 0.022420883}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.66460085, y: 0.66460085, z: 0.66460085}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000035762787, y: -0.047753572, z: 0.022420729}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.6453256, y: 0.6453256, z: 0.6453256}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.66858757
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.66858757
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.66858757
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.66858757
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. This sport retains its original NWH physical envelope, cab and required
+      equipment.
+  modeOwnedSlots: []
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1207859089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016227,6 +1019364,144 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1217938968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1217938971}
+  - component: {fileID: 1217938970}
+  - component: {fileID: 1217938969}
+  m_Layer: 0
+  m_Name: Caption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1217938969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217938968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: TRUCK FIT
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 26
+  m_fontSizeBase: 26
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
+  m_fontSizeMax: 23
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1217938970
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217938968}
+  m_CullTransparentMesh: 1
+--- !u!224 &1217938971
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217938968}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1373215303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 162, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1218014758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136828,6 +1140103,236 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1373215301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1373215303}
+  - component: {fileID: 1373215308}
+  - component: {fileID: 1373215307}
+  - component: {fileID: 1373215306}
+  - component: {fileID: 1373215302}
+  - component: {fileID: 1373215305}
+  - component: {fileID: 1373215304}
+  m_Layer: 0
+  m_Name: truckfit Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1373215302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504050c5fda9c0645802e401a644a171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Michsky.UI.Heat.ButtonManager
+  buttonIcon: {fileID: 0}
+  buttonText: TRUCK FIT
+  iconScale: 1
+  textSize: 26
+  normalCG: {fileID: 0}
+  highlightCG: {fileID: 0}
+  disabledCG: {fileID: 0}
+  normalTextObj: {fileID: 1217938969}
+  highlightTextObj: {fileID: 0}
+  disabledTextObj: {fileID: 0}
+  normalImageObj: {fileID: 0}
+  highlightImageObj: {fileID: 0}
+  disabledImageObj: {fileID: 0}
+  autoFitContent: 0
+  padding:
+    left: 18
+    right: 18
+    top: 15
+    bottom: 15
+  spacing: 12
+  disabledLayout: {fileID: 0}
+  normalLayout: {fileID: 0}
+  highlightedLayout: {fileID: 0}
+  mainLayout: {fileID: 0}
+  mainFitter: {fileID: 0}
+  targetFitter: {fileID: 0}
+  targetRect: {fileID: 0}
+  isInteractable: 1
+  enableIcon: 0
+  enableText: 1
+  useCustomContent: 0
+  useCustomTextSize: 0
+  checkForDoubleClick: 0
+  useLocalization: 0
+  bypassUpdateOnEnable: 0
+  useUINavigation: 1
+  navigationMode: 4
+  selectOnUp: {fileID: 0}
+  selectOnDown: {fileID: 0}
+  selectOnLeft: {fileID: 0}
+  selectOnRight: {fileID: 0}
+  wrapAround: 0
+  useSounds: 0
+  doubleClickPeriod: 0.25
+  fadingMultiplier: 8
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  overrideInteractable: 0
+  latestTabIndex: 0
+--- !u!224 &1373215303
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1217938971}
+  m_Father: {fileID: 1098282464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 610, y: 492}
+  m_SizeDelta: {x: 180, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1373215304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
+  cut: 10
+  accent: 0
+--- !u!114 &1373215305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d69835bf87409842b2c42aba41fc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBilliards.BilliardsButtonVisual
+  surface: {fileID: 1373215307}
+  normal: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  highlight: {r: 0.06, g: 0.43, b: 0.4, a: 1}
+--- !u!114 &1373215306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1373215307}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1373215307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1373215308
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373215301}
+  m_CullTransparentMesh: 1
 --- !u!1 &1373350153
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368583,6 +1372088,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckHideAndSeek.HideMatch
   presentationWeather: {fileID: 0}
+  appearanceHosts:
+  - {fileID: 547990845}
+  - {fileID: 928575482}
+  - {fileID: 226031151}
+  - {fileID: 756286332}
+  - {fileID: 1207836899}
+  - {fileID: 718408006}
+  - {fileID: 766623701}
+  - {fileID: 546919266}
+  appearanceFraming: []
   setup:
     mode: 0
     count: 8
@@ -1369192,7 +1372707,40 @@ MonoBehaviour:
   daylightFill: {fileID: 953857245}
   preserveInteriorAmbient: 0
   setupLayoutVersion: 6
-  nightLights: []
+  nightLights:
+  - {fileID: 39120539}
+  - {fileID: 98810856}
+  - {fileID: 130143969}
+  - {fileID: 145436892}
+  - {fileID: 190022524}
+  - {fileID: 239855897}
+  - {fileID: 416089921}
+  - {fileID: 446738128}
+  - {fileID: 481307755}
+  - {fileID: 490712725}
+  - {fileID: 555765361}
+  - {fileID: 575430299}
+  - {fileID: 646393712}
+  - {fileID: 659451193}
+  - {fileID: 696573927}
+  - {fileID: 824908426}
+  - {fileID: 921206404}
+  - {fileID: 961484424}
+  - {fileID: 1041011534}
+  - {fileID: 1048708752}
+  - {fileID: 1194766618}
+  - {fileID: 1254578746}
+  - {fileID: 1275770261}
+  - {fileID: 1331016871}
+  - {fileID: 1567198458}
+  - {fileID: 1774466203}
+  - {fileID: 1973327442}
+  - {fileID: 2030071867}
+  - {fileID: 2051119366}
+  - {fileID: 2146540871}
+  morningLampMultiplier: 0
+  lampSnowSurface: {fileID: 0}
+  coveredLampMultiplier: 1
 --- !u!114 &1696293581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589986,6 +1593534,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1975355745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1975355746}
+  m_Layer: 29
+  m_Name: Sports profile dashboard mount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1975355746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975355745}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16, y: -0.22, z: 0.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 517829445}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1975515290
 GameObject:
   m_ObjectHideFlags: 0
@@ -1592780,6 +1596359,12 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!199 &1979204276 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 766623648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1979274174
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659198,6 +1662783,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062020262}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2062163622
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2062163623}
+  - component: {fileID: 2062163624}
+  - component: {fileID: 2062163625}
+  m_Layer: 0
+  m_Name: Truck fit setup subtitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2062163623
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062163622}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1098282464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1040, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2062163624
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062163622}
+  m_CullTransparentMesh: 1
+--- !u!114 &2062163625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062163622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 0.956, b: 0.84, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 21
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 21
+  m_fontSizeMax: 21
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 4096
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 0
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2062433691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1708167,11 +1711890,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsScorePresentation
   session: {fileID: 1696293563}
+  alternateSession: {fileID: 0}
   notification: {fileID: 507278134856586768}
   visibility: {fileID: 2133190087}
   portrait: {fileID: 6583156386882490820}
   accent: {fileID: 1182220320}
   notificationAnimator: {fileID: 6501972848498289660}
+  viewport: -1
   resultPosition: {x: 0, y: -8}
   resultSize: {x: 1120, y: 76}
 --- !u!225 &2133190087
@@ -1716801,6 +1720526,12 @@ LODGroup:
     - renderer: {fileID: 184639778}
   m_Enabled: 1
   m_GlobalIlluminationLOD: 0
+--- !u!199 &2142930015 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 4779600225351704518, guid: bb4109bace9266d49b1c0565865cfcbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 718407953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2142980964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808217,3 +1811948,4 @@ SceneRoots:
   - {fileID: 1283979426}
   - {fileID: 1572457475}
   - {fileID: 1968887815}
+  - {fileID: 1065276671}

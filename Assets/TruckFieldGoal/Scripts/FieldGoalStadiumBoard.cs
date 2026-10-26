@@ -89,7 +89,9 @@ public sealed class FieldGoalStadiumBoard : MonoBehaviour {
   var flow=match.CurrentWind;
   string bearing=flow.magnitude<.1f?"CALM":Mathf.Abs(flow.x)>Mathf.Abs(flow.z)?flow.x>0?"RIGHT CROSSWIND":"LEFT CROSSWIND":flow.z>0?"TAILWIND":"HEADWIND";
   weather.text=(match.Forecast!=null?match.atmosphere.Description:"MATCH FORECAST")+"  /  "+(flow.magnitude*2.236936f).ToString("F1")+" MPH  /  "+bearing;
-  controls.text=match.ReplayControls?"RECORDED PLAY  /  "+match.replay.Speed.ToString("0.##")+"x  /  CAMERA "+(match.replay.Angle+1)+"  /  TAB OR D-PAD TO SELECT":match.Controls(slot)+"  /  ESC OR START: PAUSE";
+  // Permanent controls live in Help. The existing replay transport stays owned
+  // by this board; this removes only its separate explanatory text graphic.
+  controls.gameObject.SetActive(!match.Running);controls.text=match.Running?"":match.Controls(slot);
   string key="TruckFieldGoal.Statistics.Foot";
   record.text="CAREER  "+SportsPrefs.GetInt(key+".Goals",0)+" GOOD / "+SportsPrefs.GetInt(key+".Attempts",0)+" KICKS  /  BEST "+SportsPrefs.GetInt("TruckFieldGoal.Best.Foot",0);
   for(int i=0;i<cards.Length;i++){

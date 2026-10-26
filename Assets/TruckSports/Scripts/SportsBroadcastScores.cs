@@ -61,6 +61,9 @@ namespace LWS.TruckSports {
    card.detail.rectTransform.sizeDelta=new Vector2(singleRow?width-104:width-65,25);
    card.value.rectTransform.anchoredPosition=new Vector2(width-(singleRow?84:110),singleRow?-28:-4);
    card.value.rectTransform.sizeDelta=new Vector2(singleRow?72:98,singleRow?30:42);
+   // Minefield keeps its original one-decimal feet value; units/heat points use
+   // the adjacent detail region instead of squeezing a long distance into72px.
+   if(singleRow&&menus.match is LWS.TruckMinefield.MinefieldMatch){card.detail.rectTransform.sizeDelta=new Vector2(76,25);card.value.rectTransform.anchoredPosition=new Vector2(96,-28);card.value.rectTransform.sizeDelta=new Vector2(width-108,30);}
    card.portrait.rectTransform.sizeDelta=new Vector2(singleRow?30:37,singleRow?30:37);
    card.padlock.GetComponent<RectTransform>().anchoredPosition=new Vector2(width-(singleRow?27:31),singleRow?-8:-38);
    card.progress.rectTransform.anchoredPosition=new Vector2(12,singleRow?-61:-57);

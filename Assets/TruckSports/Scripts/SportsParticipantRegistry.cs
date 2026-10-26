@@ -15,6 +15,7 @@ public interface ISportsParticipantSlot {
  public string id,displayName,preferredTruck="",origin="";
  public Color color=Color.cyan;
  public bool preferredAI;
+ public SportsTruckAppearanceData appearance=new SportsTruckAppearanceData();
 }
 [Serializable] public sealed class SportsLegacySetup {
  public string key,json;
@@ -24,7 +25,8 @@ public interface ISportsParticipantSlot {
  public string[] participantIds,names;
 }
 [Serializable] public sealed class SportsParticipantData {
- public int version=1;
+ public const int CurrentVersion=2;
+ public int version=CurrentVersion;
  public List<SportsParticipant> participants=new List<SportsParticipant>();
  public List<string> roster=new List<string>();
  public List<SportsLegacySetup> legacy=new List<SportsLegacySetup>();
@@ -44,18 +46,36 @@ public static class SportsParticipantRegistry {
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]static void ResetRuntime()=>ForgetCache();
  static bool Decode(string json,out SportsParticipantData value){
   value=null;if(string.IsNullOrWhiteSpace(json))return false;
-  try{value=JsonUtility.FromJson<SportsParticipantData>(json);var candidate=value;return candidate!=null&&candidate.version==1&&candidate.participants!=null&&candidate.roster!=null&&candidate.legacy!=null&&candidate.results!=null&&candidate.participants.All(p=>p!=null&&!string.IsNullOrWhiteSpace(p.id))&&candidate.participants.Select(p=>p.id).Distinct().Count()==candidate.participants.Count&&candidate.roster.All(id=>candidate.participants.Any(p=>p.id==id))&&candidate.roster.Distinct().Count()==candidate.roster.Count;}catch(Exception){return false;}
+  try{value=JsonUtility.FromJson<SportsParticipantData>(json);var candidate=value;return candidate!=null&&(candidate.version==1||candidate.version==SportsParticipantData.CurrentVersion)&&candidate.participants!=null&&candidate.roster!=null&&candidate.legacy!=null&&candidate.results!=null&&candidate.participants.All(p=>p!=null&&!string.IsNullOrWhiteSpace(p.id))&&candidate.participants.Select(p=>p.id).Distinct().Count()==candidate.participants.Count&&candidate.roster.All(id=>candidate.participants.Any(p=>p.id==id))&&candidate.roster.Distinct().Count()==candidate.roster.Count;}catch(Exception){return false;}
  }
  static void Load(){
   if(data!=null&&scope==Scope)return;scope=Scope;readOnly=false;Notice="";
   string json=SportsPrefs.GetString(Key);
-  if(Decode(json,out data))return;
+  if(Decode(json,out data)){PrepareAppearance(json);return;}
   // Never overwrite a newer schema with an older game executable.
-  if(!string.IsNullOrEmpty(json)){try{var header=JsonUtility.FromJson<SportsParticipantData>(json);if(header!=null&&header.version>1){data=new SportsParticipantData();readOnly=true;Notice="Participant data is from a newer game version. Changes are temporary.";Debug.LogWarning(Notice);return;}}catch(Exception){} }
-  if(Decode(SportsPrefs.GetString(BackupKey),out data)){
-   PreserveUnreadable(json);Notice="Participant preferences recovered from their previous saved copy.";Debug.LogWarning(Notice);Persist();return;
+  if(NewerRegistry(json)){data=new SportsParticipantData();NewerData();return;}
+  string backup=SportsPrefs.GetString(BackupKey);
+  if(Decode(backup,out data)){
+   PreserveUnreadable(json);PrepareAppearance(backup);if(readOnly)return;Notice="Participant preferences recovered from their previous saved copy.";Debug.LogWarning(Notice);Persist();return;
   }
+  // A future backup must not be overwritten when the primary is damaged.
+  if(NewerRegistry(backup)){data=new SportsParticipantData();NewerData();return;}
   PreserveUnreadable(json);data=Migrate(ReadLegacy());Persist();
+ }
+ // Read version headers independently: a future schema may change the types
+ // of fields the current full DTO cannot deserialize.
+ [Serializable]sealed class VersionHeader {public int version;}
+ [Serializable]sealed class ParticipantVersionHeader {public VersionHeader appearance;}
+ [Serializable]sealed class RegistryVersionHeader {public int version;public ParticipantVersionHeader[] participants;}
+ static bool NewerRegistry(string json){try{var root=JsonUtility.FromJson<VersionHeader>(json);if(root!=null&&root.version>SportsParticipantData.CurrentVersion)return true;var header=JsonUtility.FromJson<RegistryVersionHeader>(json);return header?.participants!=null&&header.participants.Any(p=>p?.appearance!=null&&p.appearance.version>SportsTruckAppearanceData.CurrentVersion);}catch(Exception){return false;}}
+ static void NewerData(){readOnly=true;Notice="Participant data is from a newer game version. Changes are temporary.";Debug.LogWarning(Notice);}
+ static void PrepareAppearance(string original){
+  if(data.participants.Any(p=>p.appearance!=null&&p.appearance.version>SportsTruckAppearanceData.CurrentVersion)){NewerData();return;}
+  bool migrated=data.version==1,repaired=false;foreach(var p in data.participants){p.appearance=SportsTruckAppearanceData.Normalize(p.appearance,out bool changed);repaired|=changed;}
+  data.version=SportsParticipantData.CurrentVersion;
+  if(migrated&&!SportsPrefs.HasKey(Key+".Migrated.v1"))SportsPrefs.SetString(Key+".Migrated.v1",original);
+  if(repaired&&!migrated){SportsPrefs.SetString(Key+".Recovered.Appearance."+DateTime.UtcNow.Ticks,original);Notice="Invalid truck appearance preferences were preserved and safely repaired.";Debug.LogWarning(Notice);}
+  if(migrated||repaired)Persist();
  }
  static void PreserveUnreadable(string json){if(!string.IsNullOrEmpty(json)){SportsPrefs.SetString(Key+".Recovered."+DateTime.UtcNow.Ticks,json);Notice="Unreadable participant preferences were preserved; legacy settings remain available.";Debug.LogWarning(Notice);}}
  static IEnumerable<SportsLegacySetup> ReadLegacy(){
@@ -94,6 +114,14 @@ public static class SportsParticipantRegistry {
  }
  public static SportsParticipant Default(int seat){Load();if(seat<0)throw new ArgumentOutOfRangeException(nameof(seat));if(data.roster.Count<=seat){Ensure(data,seat+1);Persist();}return Find(data.roster[seat]);}
  public static SportsParticipant Find(string id){Load();return data.participants.Find(p=>p.id==id);}
+ // Drafts have no live alias into saved preferences. Catalog fallback belongs
+ // to presentation; unknown content IDs are intentionally retained here.
+ public static SportsTruckAppearanceData GetAppearance(string profileId){var p=Find(profileId);if(p==null)return null;return p.appearance!=null&&p.appearance.version>SportsTruckAppearanceData.CurrentVersion?new SportsTruckAppearanceData():SportsTruckAppearanceData.Normalize(p.appearance,out _);}
+ public static bool TrySetAppearance(string profileId,SportsTruckAppearanceData draft){
+  var p=Find(profileId);if(p==null||readOnly||draft==null||!draft.Validate())return false;
+  var next=SportsTruckAppearanceData.Normalize(draft,out _);var current=SportsTruckAppearanceData.Normalize(p.appearance,out _);if(current.SameAs(next))return false;
+  var previous=p.appearance;p.appearance=next;try{if(!Persist()){p.appearance=previous;return false;}}catch{p.appearance=previous;throw;}Changed?.Invoke();return true;
+ }
  public static bool Rename(string id,string name,Color color,bool ai){var p=Find(id);if(p==null)return false;name=string.IsNullOrWhiteSpace(name)?p.displayName:name.Trim();if(p.displayName==name&&p.color==color&&p.preferredAI==ai)return false;p.displayName=name;p.color=color;p.preferredAI=ai;Persist();Changed?.Invoke();return true;}
  public static bool UseInSeat(int seat,string id){Load();if(Find(id)==null||seat<0)return false;Ensure(data,seat+1);int previous=data.roster.IndexOf(id);string old=data.roster[seat];if(previous>=0)data.roster[previous]=old;data.roster[seat]=id;Persist();Changed?.Invoke();return true;}
  public static SportsParticipant Create(string name){Load();var p=new SportsParticipant{id=Guid.NewGuid().ToString("N"),displayName=string.IsNullOrWhiteSpace(name)?"New driver":name.Trim(),color=Color.cyan};data.participants.Add(p);Persist();Changed?.Invoke();return p;}
@@ -107,8 +135,10 @@ public static class SportsParticipantRegistry {
   data.results.Add(new SportsMatchReceipt{matchId=matchId,mode=mode,completedUtc=DateTime.UtcNow.ToString("O"),summary=summary??"",participantIds=ids,names=names});
   if(data.results.Count>128)data.results.RemoveAt(0);Persist();return true;
  }
- static void Persist(){
-  if(readOnly)return;string previous=SportsPrefs.GetString(Key);if(Decode(previous,out _))SportsPrefs.SetString(BackupKey,previous);SportsPrefs.SetString(Key,JsonUtility.ToJson(data));SportsPrefs.Save();
+ static bool Persist(){
+  if(readOnly)return false;string previous=SportsPrefs.GetString(Key);
+  if(NewerRegistry(previous)||NewerRegistry(SportsPrefs.GetString(BackupKey))){NewerData();return false;}
+  if(Decode(previous,out _))SportsPrefs.SetString(BackupKey,previous);SportsPrefs.SetString(Key,JsonUtility.ToJson(data));SportsPrefs.Save();return true;
  }
 }
 // Explicit load/save boundary. It never reads or writes controller assignments.

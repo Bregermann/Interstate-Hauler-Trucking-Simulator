@@ -48,8 +48,7 @@ namespace LWS.TruckTrailerPlug
         float lastSupport = -100;
         public void Paint(Color color)
         {
-            var block = new MaterialPropertyBlock(); block.SetColor("_BaseColor", color); block.SetColor("_Color", color);
-            truck.paint.SetPropertyBlock(block);
+            truck.ApplyColor(color);
         }
         public void Prepare()
         {

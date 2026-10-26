@@ -4637,6 +4637,236 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &72246366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72246368}
+  - component: {fileID: 72246373}
+  - component: {fileID: 72246372}
+  - component: {fileID: 72246371}
+  - component: {fileID: 72246367}
+  - component: {fileID: 72246370}
+  - component: {fileID: 72246369}
+  m_Layer: 0
+  m_Name: truckfit Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &72246367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504050c5fda9c0645802e401a644a171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Michsky.UI.Heat.ButtonManager
+  buttonIcon: {fileID: 0}
+  buttonText: TRUCK FIT
+  iconScale: 1
+  textSize: 26
+  normalCG: {fileID: 0}
+  highlightCG: {fileID: 0}
+  disabledCG: {fileID: 0}
+  normalTextObj: {fileID: 1659735019}
+  highlightTextObj: {fileID: 0}
+  disabledTextObj: {fileID: 0}
+  normalImageObj: {fileID: 0}
+  highlightImageObj: {fileID: 0}
+  disabledImageObj: {fileID: 0}
+  autoFitContent: 0
+  padding:
+    left: 18
+    right: 18
+    top: 15
+    bottom: 15
+  spacing: 12
+  disabledLayout: {fileID: 0}
+  normalLayout: {fileID: 0}
+  highlightedLayout: {fileID: 0}
+  mainLayout: {fileID: 0}
+  mainFitter: {fileID: 0}
+  targetFitter: {fileID: 0}
+  targetRect: {fileID: 0}
+  isInteractable: 1
+  enableIcon: 0
+  enableText: 1
+  useCustomContent: 0
+  useCustomTextSize: 0
+  checkForDoubleClick: 0
+  useLocalization: 0
+  bypassUpdateOnEnable: 0
+  useUINavigation: 1
+  navigationMode: 4
+  selectOnUp: {fileID: 0}
+  selectOnDown: {fileID: 0}
+  selectOnLeft: {fileID: 0}
+  selectOnRight: {fileID: 0}
+  wrapAround: 0
+  useSounds: 0
+  doubleClickPeriod: 0.25
+  fadingMultiplier: 8
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  overrideInteractable: 0
+  latestTabIndex: 0
+--- !u!224 &72246368
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1659735021}
+  m_Father: {fileID: 272911366}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 610, y: 492}
+  m_SizeDelta: {x: 180, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &72246369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
+  cut: 10
+  accent: 0
+--- !u!114 &72246370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d69835bf87409842b2c42aba41fc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBilliards.BilliardsButtonVisual
+  surface: {fileID: 72246372}
+  normal: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  highlight: {r: 0.06, g: 0.43, b: 0.4, a: 1}
+--- !u!114 &72246371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 72246372}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &72246372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &72246373
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72246366}
+  m_CullTransparentMesh: 1
 --- !u!1 &74232030
 GameObject:
   m_ObjectHideFlags: 0
@@ -9807,6 +10037,7 @@ GameObject:
   - component: {fileID: 155575228}
   - component: {fileID: 155575231}
   - component: {fileID: 155575230}
+  - component: {fileID: 155575232}
   m_Layer: 2
   m_Name: Dodgeball competitor 4
   m_TagString: Untagged
@@ -9873,6 +10104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 155575232}
   tractorMotor: {fileID: 0}
   body: {fileID: 155575226}
   shape: {fileID: 155575229}
@@ -10059,6 +10291,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &155575232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155575224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 3
+  presentationParent: {fileID: 1502418558}
+  originalBodyRenderers:
+  - {fileID: 1040380816}
+  - {fileID: 827910884}
+  - {fileID: 290538235}
+  - {fileID: 1725668185}
+  - {fileID: 178589393}
+  - {fileID: 46244495}
+  - {fileID: 548406052}
+  - {fileID: 763052255}
+  - {fileID: 1191477079}
+  - {fileID: 79283772}
+  - {fileID: 1763572796}
+  - {fileID: 535038688}
+  - {fileID: 2095057915}
+  - {fileID: 1076558870}
+  - {fileID: 174615103}
+  - {fileID: 161294358}
+  - {fileID: 1909537685}
+  - {fileID: 1026396244}
+  - {fileID: 183908097}
+  - {fileID: 1662587482}
+  - {fileID: 1491310199}
+  - {fileID: 904213334}
+  - {fileID: 1832049396}
+  - {fileID: 1915568564}
+  - {fileID: 909715776}
+  - {fileID: 616723927}
+  - {fileID: 1911068699}
+  - {fileID: 857732608}
+  - {fileID: 1451521652}
+  originalWheelRenderers:
+  - {fileID: 230686930}
+  - {fileID: 1904435932}
+  - {fileID: 957258820}
+  - {fileID: 1107869004}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1692767239}
+  - {fileID: 916040847}
+  protectedRoots:
+  - {fileID: 1496121169}
+  - {fileID: 1253479004}
+  - {fileID: 1692767238}
+  - {fileID: 916040846}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 1265266432}
+  - {fileID: 938783761}
+  - {fileID: 970293078}
+  - {fileID: 1726606888}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &155612226
 GameObject:
   m_ObjectHideFlags: 0
@@ -18479,6 +19047,9 @@ RectTransform:
   - {fileID: 972538926}
   - {fileID: 704679649}
   - {fileID: 1857840}
+  - {fileID: 532080870}
+  - {fileID: 477076995}
+  - {fileID: 72246368}
   m_Father: {fileID: 2007191099}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -24303,6 +24874,7 @@ GameObject:
   - component: {fileID: 347353057}
   - component: {fileID: 347353060}
   - component: {fileID: 347353059}
+  - component: {fileID: 347353061}
   m_Layer: 2
   m_Name: Dodgeball competitor 3
   m_TagString: Untagged
@@ -24369,6 +24941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 347353061}
   tractorMotor: {fileID: 0}
   body: {fileID: 347353055}
   shape: {fileID: 347353058}
@@ -24555,6 +25128,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &347353061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347353053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 2
+  presentationParent: {fileID: 1257027494}
+  originalBodyRenderers:
+  - {fileID: 1268198820}
+  - {fileID: 448710576}
+  - {fileID: 420431287}
+  - {fileID: 947719784}
+  - {fileID: 515224407}
+  - {fileID: 1198707036}
+  - {fileID: 1961819019}
+  - {fileID: 1231882181}
+  - {fileID: 655036279}
+  - {fileID: 457774218}
+  - {fileID: 350741411}
+  - {fileID: 2013841595}
+  - {fileID: 1666132867}
+  - {fileID: 1726953124}
+  - {fileID: 902923173}
+  - {fileID: 1665616559}
+  - {fileID: 456773500}
+  - {fileID: 623924013}
+  - {fileID: 789377291}
+  - {fileID: 210096590}
+  - {fileID: 1154082023}
+  - {fileID: 186833058}
+  - {fileID: 113500380}
+  - {fileID: 1749352658}
+  - {fileID: 1671442063}
+  - {fileID: 1060544518}
+  - {fileID: 911216900}
+  - {fileID: 544458896}
+  - {fileID: 988485985}
+  originalWheelRenderers:
+  - {fileID: 543402926}
+  - {fileID: 988453973}
+  - {fileID: 868305104}
+  - {fileID: 1494019219}
+  auxiliaryExteriorRenderers:
+  - {fileID: 467818519}
+  - {fileID: 1868605672}
+  protectedRoots:
+  - {fileID: 1102019292}
+  - {fileID: 1503207536}
+  - {fileID: 467818518}
+  - {fileID: 1868605671}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 574311887}
+  - {fileID: 2022927511}
+  - {fileID: 2014963774}
+  - {fileID: 1266191279}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &349145698
 GameObject:
   m_ObjectHideFlags: 0
@@ -39601,6 +40510,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476983489}
   m_Mesh: {fileID: 4300000, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &477076994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477076995}
+  - component: {fileID: 477076996}
+  - component: {fileID: 477076997}
+  m_Layer: 0
+  m_Name: Truck fit setup subtitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &477076995
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477076994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 272911366}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1040, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &477076996
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477076994}
+  m_CullTransparentMesh: 1
+--- !u!114 &477076997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477076994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 0.956, b: 0.84, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 21
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 21
+  m_fontSizeMax: 21
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 4096
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 0
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &477452788
 GameObject:
   m_ObjectHideFlags: 0
@@ -42700,6 +43747,81 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 531336768}
   m_Mesh: {fileID: 4300000, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &532080869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 532080870}
+  - component: {fileID: 532080872}
+  - component: {fileID: 532080871}
+  m_Layer: 0
+  m_Name: Truck fit summary readability backing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &532080870
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532080869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 272911366}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1064, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &532080871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532080869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &532080872
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532080869}
+  m_CullTransparentMesh: 1
 --- !u!1 &533182989
 GameObject:
   m_ObjectHideFlags: 0
@@ -57334,6 +58456,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsFinishResultsSource
   session: {fileID: 842680007}
+  cornhole: {fileID: 0}
+  wallball: {fileID: 0}
 --- !u!225 &746534268
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -64613,6 +65737,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDodgeball.DodgeMatch
   presentationWeather: {fileID: 842680017}
+  appearanceHosts:
+  - {fileID: 1776675000}
+  - {fileID: 1284519334}
+  - {fileID: 347353061}
+  - {fileID: 155575232}
+  - {fileID: 1929891071}
+  - {fileID: 2125967623}
+  - {fileID: 1684121301}
+  - {fileID: 1578847268}
+  appearanceFraming:
+  - {fileID: 1561424138}
   setup:
     mode: 0
     count: 8
@@ -64947,6 +66082,7 @@ MonoBehaviour:
   sun: {fileID: 6218731547290910709}
   ambience: {fileID: 842680018}
   matchTime: {fileID: 842680020}
+  alternateSession: {fileID: 0}
 --- !u!82 &842680018
 AudioSource:
   m_ObjectHideFlags: 0
@@ -65084,6 +66220,9 @@ MonoBehaviour:
   - {fileID: 1165518161}
   - {fileID: 707601128}
   - {fileID: 942273481}
+  morningLampMultiplier: 0
+  lampSnowSurface: {fileID: 0}
+  coveredLampMultiplier: 1
 --- !u!114 &842680021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65120,34 +66259,43 @@ MonoBehaviour:
     light: {fileID: 270623324}
     position: {x: 0.00000047683716, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1284519327}
     light: {fileID: 1325203113}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 347353054}
     light: {fileID: 1730750252}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 155575225}
     light: {fileID: 2109551462}
     position: {x: 0.00000047683716, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1929891064}
     light: {fileID: 1798743718}
     position: {x: 0.00000047683716, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 2125967616}
     light: {fileID: 477540691}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1684121294}
     light: {fileID: 295794158}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1578847261}
     light: {fileID: 376446373}
     position: {x: 0.00000047683716, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
+  alternateSession: {fileID: 0}
   layoutVersion: 2
 --- !u!114 &842680022
 MonoBehaviour:
@@ -103944,6 +105092,7 @@ GameObject:
   - component: {fileID: 1284519330}
   - component: {fileID: 1284519333}
   - component: {fileID: 1284519332}
+  - component: {fileID: 1284519334}
   m_Layer: 2
   m_Name: Dodgeball competitor 2
   m_TagString: Untagged
@@ -104010,6 +105159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1284519334}
   tractorMotor: {fileID: 0}
   body: {fileID: 1284519328}
   shape: {fileID: 1284519331}
@@ -104196,6 +105346,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1284519334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284519326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 1
+  presentationParent: {fileID: 2033258229}
+  originalBodyRenderers:
+  - {fileID: 2008904848}
+  - {fileID: 1441411703}
+  - {fileID: 1516259758}
+  - {fileID: 307927464}
+  - {fileID: 956444511}
+  - {fileID: 1954206193}
+  - {fileID: 1554675170}
+  - {fileID: 1698015459}
+  - {fileID: 1740648648}
+  - {fileID: 837567608}
+  - {fileID: 1835313172}
+  - {fileID: 1771656912}
+  - {fileID: 1906256951}
+  - {fileID: 1910618166}
+  - {fileID: 587046284}
+  - {fileID: 244030216}
+  - {fileID: 1986228465}
+  - {fileID: 1396332240}
+  - {fileID: 1797978516}
+  - {fileID: 870100534}
+  - {fileID: 260448321}
+  - {fileID: 32608319}
+  - {fileID: 2073982939}
+  - {fileID: 801810489}
+  - {fileID: 292812288}
+  - {fileID: 893500728}
+  - {fileID: 1669495699}
+  - {fileID: 1235061803}
+  - {fileID: 1139938607}
+  originalWheelRenderers:
+  - {fileID: 2056808386}
+  - {fileID: 1919812414}
+  - {fileID: 360279217}
+  - {fileID: 531336770}
+  auxiliaryExteriorRenderers:
+  - {fileID: 190682531}
+  - {fileID: 64037157}
+  protectedRoots:
+  - {fileID: 904619553}
+  - {fileID: 1785611083}
+  - {fileID: 190682530}
+  - {fileID: 64037156}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 570128513}
+  - {fileID: 267611904}
+  - {fileID: 1941571900}
+  - {fileID: 169489293}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1285526050
 GameObject:
   m_ObjectHideFlags: 0
@@ -142572,6 +144058,7 @@ GameObject:
   - component: {fileID: 1578847264}
   - component: {fileID: 1578847267}
   - component: {fileID: 1578847266}
+  - component: {fileID: 1578847268}
   m_Layer: 2
   m_Name: Dodgeball competitor 8
   m_TagString: Untagged
@@ -142638,6 +144125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1578847268}
   tractorMotor: {fileID: 0}
   body: {fileID: 1578847262}
   shape: {fileID: 1578847265}
@@ -142824,6 +144312,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1578847268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578847260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 7
+  presentationParent: {fileID: 168831478}
+  originalBodyRenderers:
+  - {fileID: 477452790}
+  - {fileID: 1281155860}
+  - {fileID: 682016501}
+  - {fileID: 375994738}
+  - {fileID: 598066670}
+  - {fileID: 401138233}
+  - {fileID: 451923493}
+  - {fileID: 525608124}
+  - {fileID: 1535857013}
+  - {fileID: 1133003189}
+  - {fileID: 1965757120}
+  - {fileID: 1581530649}
+  - {fileID: 949831602}
+  - {fileID: 1126649624}
+  - {fileID: 1117985562}
+  - {fileID: 786910413}
+  - {fileID: 1340492891}
+  - {fileID: 75986197}
+  - {fileID: 60520147}
+  - {fileID: 1233279738}
+  - {fileID: 301439979}
+  - {fileID: 1038623199}
+  - {fileID: 872178996}
+  - {fileID: 1369373862}
+  - {fileID: 2090539023}
+  - {fileID: 1776142540}
+  - {fileID: 1402881639}
+  - {fileID: 284912190}
+  - {fileID: 1754169541}
+  originalWheelRenderers:
+  - {fileID: 1040676646}
+  - {fileID: 1828003279}
+  - {fileID: 1101479487}
+  - {fileID: 1105959556}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1943786642}
+  - {fileID: 1607196916}
+  protectedRoots:
+  - {fileID: 2116085221}
+  - {fileID: 1301968309}
+  - {fileID: 1943786641}
+  - {fileID: 1607196915}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 298539229}
+  - {fileID: 18731839}
+  - {fileID: 2092254748}
+  - {fileID: 204555343}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1579603917
 GameObject:
   m_ObjectHideFlags: 0
@@ -149808,6 +151632,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1659301486}
   m_Mesh: {fileID: 4300010, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &1659735018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1659735021}
+  - component: {fileID: 1659735020}
+  - component: {fileID: 1659735019}
+  m_Layer: 0
+  m_Name: Caption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1659735019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659735018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: TRUCK FIT
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 26
+  m_fontSizeBase: 26
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
+  m_fontSizeMax: 23
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1659735020
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659735018}
+  m_CullTransparentMesh: 1
+--- !u!224 &1659735021
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659735018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 72246368}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 162, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1662209550
 GameObject:
   m_ObjectHideFlags: 0
@@ -152057,6 +154019,7 @@ GameObject:
   - component: {fileID: 1684121297}
   - component: {fileID: 1684121300}
   - component: {fileID: 1684121299}
+  - component: {fileID: 1684121301}
   m_Layer: 2
   m_Name: Dodgeball competitor 7
   m_TagString: Untagged
@@ -152123,6 +154086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1684121301}
   tractorMotor: {fileID: 0}
   body: {fileID: 1684121295}
   shape: {fileID: 1684121298}
@@ -152309,6 +154273,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1684121301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684121293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 6
+  presentationParent: {fileID: 1602492862}
+  originalBodyRenderers:
+  - {fileID: 967462121}
+  - {fileID: 1309603145}
+  - {fileID: 619707578}
+  - {fileID: 247653096}
+  - {fileID: 60037139}
+  - {fileID: 684450580}
+  - {fileID: 188495606}
+  - {fileID: 834893968}
+  - {fileID: 175479624}
+  - {fileID: 551967976}
+  - {fileID: 1110055060}
+  - {fileID: 2067230336}
+  - {fileID: 955939203}
+  - {fileID: 688695622}
+  - {fileID: 991941105}
+  - {fileID: 645947616}
+  - {fileID: 1130562058}
+  - {fileID: 293472446}
+  - {fileID: 1508138978}
+  - {fileID: 1010498336}
+  - {fileID: 1205516124}
+  - {fileID: 2065374318}
+  - {fileID: 1622706705}
+  - {fileID: 873330219}
+  - {fileID: 654304717}
+  - {fileID: 627947494}
+  - {fileID: 2108186147}
+  - {fileID: 1776772375}
+  - {fileID: 56419312}
+  originalWheelRenderers:
+  - {fileID: 1106212177}
+  - {fileID: 716318699}
+  - {fileID: 422714192}
+  - {fileID: 656192689}
+  auxiliaryExteriorRenderers:
+  - {fileID: 672363551}
+  - {fileID: 1896477499}
+  protectedRoots:
+  - {fileID: 920990611}
+  - {fileID: 1379326876}
+  - {fileID: 672363550}
+  - {fileID: 1896477498}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 3283329}
+  - {fileID: 1949850418}
+  - {fileID: 1117591942}
+  - {fileID: 346468456}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1684481961
 GameObject:
   m_ObjectHideFlags: 0
@@ -158229,6 +160529,7 @@ GameObject:
   - component: {fileID: 1776674996}
   - component: {fileID: 1776674999}
   - component: {fileID: 1776674998}
+  - component: {fileID: 1776675000}
   m_Layer: 2
   m_Name: Dodgeball competitor 1
   m_TagString: Untagged
@@ -158295,6 +160596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1776675000}
   tractorMotor: {fileID: 0}
   body: {fileID: 1776674994}
   shape: {fileID: 1776674997}
@@ -158481,6 +160783,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1776675000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776674992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 0
+  presentationParent: {fileID: 575828635}
+  originalBodyRenderers:
+  - {fileID: 1618144485}
+  - {fileID: 2111156739}
+  - {fileID: 899337268}
+  - {fileID: 712103417}
+  - {fileID: 49612813}
+  - {fileID: 581428133}
+  - {fileID: 146282481}
+  - {fileID: 83063013}
+  - {fileID: 1153010926}
+  - {fileID: 1141392249}
+  - {fileID: 2005211091}
+  - {fileID: 663809178}
+  - {fileID: 61997898}
+  - {fileID: 15202360}
+  - {fileID: 116527272}
+  - {fileID: 643621406}
+  - {fileID: 1078592560}
+  - {fileID: 715183291}
+  - {fileID: 875416438}
+  - {fileID: 1348068133}
+  - {fileID: 175505268}
+  - {fileID: 648464590}
+  - {fileID: 1345996367}
+  - {fileID: 1032707829}
+  - {fileID: 413547772}
+  - {fileID: 1188759826}
+  - {fileID: 916974484}
+  - {fileID: 2042787928}
+  - {fileID: 1496017347}
+  originalWheelRenderers:
+  - {fileID: 1028010036}
+  - {fileID: 780001016}
+  - {fileID: 994031289}
+  - {fileID: 848409524}
+  auxiliaryExteriorRenderers:
+  - {fileID: 722978848}
+  - {fileID: 138427637}
+  protectedRoots:
+  - {fileID: 797168175}
+  - {fileID: 1545272876}
+  - {fileID: 722978847}
+  - {fileID: 138427636}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 1062398953}
+  - {fileID: 1748967390}
+  - {fileID: 931270883}
+  - {fileID: 1587180694}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1776677546
 GameObject:
   m_ObjectHideFlags: 0
@@ -166843,6 +169481,90 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832049394}
   m_Mesh: {fileID: 2993892503164922157, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &1833894234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1833894237}
+  - component: {fileID: 1833894236}
+  - component: {fileID: 1833894235}
+  m_Layer: 0
+  m_Name: Truck fit setup adapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1833894235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833894234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0452881a11f84a3080865b9f86bb4c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilityPresenter
+  source: {fileID: 1833894236}
+  subtitle: {fileID: 477076997}
+  originalSubtitle: 
+  reportButton: {fileID: 72246367}
+--- !u!114 &1833894236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833894234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb5a099ffe7414a82564f95361fa8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilitySource
+  session: {fileID: 842680007}
+  bowling: {fileID: 0}
+  cornhole: {fileID: 0}
+  cheese: {fileID: 0}
+  hockey: {fileID: 0}
+  airHockey: {fileID: 0}
+  wallball: {fileID: 0}
+  billiards: {fileID: 0}
+  menu: {fileID: 2007191095}
+  setupPage: {fileID: 272911365}
+  setupInteraction: {fileID: 272911368}
+  sportName: TRAMPOLINE DODGEBALL
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantHosts:
+  - {fileID: 1776675000}
+  - {fileID: 1284519334}
+  - {fileID: 347353061}
+  - {fileID: 155575232}
+  - {fileID: 1929891071}
+  - {fileID: 2125967623}
+  - {fileID: 1684121301}
+  - {fileID: 1578847268}
+  sharedTurnHost: {fileID: 0}
+--- !u!4 &1833894237
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833894234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1835313170
 GameObject:
   m_ObjectHideFlags: 0
@@ -174420,6 +177142,7 @@ GameObject:
   - component: {fileID: 1929891067}
   - component: {fileID: 1929891070}
   - component: {fileID: 1929891069}
+  - component: {fileID: 1929891071}
   m_Layer: 2
   m_Name: Dodgeball competitor 5
   m_TagString: Untagged
@@ -174486,6 +177209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1929891071}
   tractorMotor: {fileID: 0}
   body: {fileID: 1929891065}
   shape: {fileID: 1929891068}
@@ -174672,6 +177396,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1929891071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929891063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 4
+  presentationParent: {fileID: 2080120810}
+  originalBodyRenderers:
+  - {fileID: 473935187}
+  - {fileID: 1794787492}
+  - {fileID: 1584087393}
+  - {fileID: 1662651907}
+  - {fileID: 1858108178}
+  - {fileID: 296543225}
+  - {fileID: 2086215577}
+  - {fileID: 297115444}
+  - {fileID: 698051562}
+  - {fileID: 803652307}
+  - {fileID: 327482691}
+  - {fileID: 730009549}
+  - {fileID: 1692738426}
+  - {fileID: 1915785031}
+  - {fileID: 1801005978}
+  - {fileID: 757347166}
+  - {fileID: 1556514320}
+  - {fileID: 1483301517}
+  - {fileID: 1307083098}
+  - {fileID: 933348747}
+  - {fileID: 1053454667}
+  - {fileID: 1477938289}
+  - {fileID: 953549201}
+  - {fileID: 1112020902}
+  - {fileID: 803568426}
+  - {fileID: 443677876}
+  - {fileID: 1169832725}
+  - {fileID: 1816988891}
+  - {fileID: 592904911}
+  originalWheelRenderers:
+  - {fileID: 85791618}
+  - {fileID: 1210976032}
+  - {fileID: 1809160499}
+  - {fileID: 1652631295}
+  auxiliaryExteriorRenderers:
+  - {fileID: 100969360}
+  - {fileID: 1579876084}
+  protectedRoots:
+  - {fileID: 1774054371}
+  - {fileID: 448349862}
+  - {fileID: 100969359}
+  - {fileID: 1579876083}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 823817007}
+  - {fileID: 1622612255}
+  - {fileID: 68856713}
+  - {fileID: 1268456419}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1935381195
 GameObject:
   m_ObjectHideFlags: 0
@@ -176444,11 +179504,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsScorePresentation
   session: {fileID: 842680007}
+  alternateSession: {fileID: 0}
   notification: {fileID: 1662792742062900609}
   visibility: {fileID: 1968093727}
   portrait: {fileID: 5423822879467455061}
   accent: {fileID: 34994007}
   notificationAnimator: {fileID: 5342111579763341421}
+  viewport: -1
   resultPosition: {x: 0, y: -8}
   resultSize: {x: 1120, y: 76}
 --- !u!225 &1968093727
@@ -193394,6 +196456,7 @@ GameObject:
   - component: {fileID: 2125967619}
   - component: {fileID: 2125967622}
   - component: {fileID: 2125967621}
+  - component: {fileID: 2125967623}
   m_Layer: 2
   m_Name: Dodgeball competitor 6
   m_TagString: Untagged
@@ -193460,6 +196523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 2125967623}
   tractorMotor: {fileID: 0}
   body: {fileID: 2125967617}
   shape: {fileID: 2125967620}
@@ -193646,6 +196710,342 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &2125967623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125967615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 5
+  presentationParent: {fileID: 297182051}
+  originalBodyRenderers:
+  - {fileID: 255889617}
+  - {fileID: 1028394091}
+  - {fileID: 1745976402}
+  - {fileID: 1736826655}
+  - {fileID: 1891043651}
+  - {fileID: 689137084}
+  - {fileID: 1638303184}
+  - {fileID: 1417374747}
+  - {fileID: 1911023604}
+  - {fileID: 1190447887}
+  - {fileID: 2014753776}
+  - {fileID: 635751553}
+  - {fileID: 38420031}
+  - {fileID: 1935381197}
+  - {fileID: 320307984}
+  - {fileID: 1046756090}
+  - {fileID: 1419642761}
+  - {fileID: 847196216}
+  - {fileID: 1797703846}
+  - {fileID: 686806630}
+  - {fileID: 1968264068}
+  - {fileID: 269693481}
+  - {fileID: 1561695242}
+  - {fileID: 1195114777}
+  - {fileID: 940480729}
+  - {fileID: 1924490917}
+  - {fileID: 451064862}
+  - {fileID: 1566009866}
+  - {fileID: 656594227}
+  originalWheelRenderers:
+  - {fileID: 100013013}
+  - {fileID: 1453221101}
+  - {fileID: 1776091526}
+  - {fileID: 1883291268}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1801098434}
+  - {fileID: 1458175405}
+  protectedRoots:
+  - {fileID: 850925599}
+  - {fileID: 2059954201}
+  - {fileID: 1801098433}
+  - {fileID: 1458175404}
+  - {fileID: 458602117}
+  - {fileID: 1594520940}
+  - {fileID: 230939200}
+  wheels:
+  - {fileID: 286203594}
+  - {fileID: 441923705}
+  - {fileID: 1546696544}
+  - {fileID: 969713634}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dodgeball retains its team stripes, timed strike crescent, trampoline
+      contact and three physical balls.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &2126130921
 GameObject:
   m_ObjectHideFlags: 0
@@ -269373,3 +272773,4 @@ SceneRoots:
   - {fileID: 286792136}
   - {fileID: 2007191099}
   - {fileID: 6324067845268302579}
+  - {fileID: 1833894237}

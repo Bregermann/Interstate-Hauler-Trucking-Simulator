@@ -50,11 +50,22 @@ namespace LWS.TruckHotPotato
         public override float RaceCountdownSeconds => Live && Countdown > 0 ? Countdown : -1;
         public override float RaceStartSeconds => Countdown <= 0 ? rules.Clock : -1;
         public override bool ReplayControls => review != null && review.Playing;
+        public bool HumanArenaFraming
+        {
+            get
+            {
+                if (!Running || Finished || ReplayControls || drivingViews == null || !drivingViews.NeedsArena) return false;
+                for (int i = 0; i < setup.count; i++) if (rules.alive[i] && setup.players[i].source != BowlingSource.AI) return true;
+                return false;
+            }
+        }
+        public override bool BroadcastFramingApplicable => !ReplayControls && !HumanArenaFraming;
+        public readonly HotPotatoHumanArenaCamera humanArenaCamera = new HotPotatoHumanArenaCamera();
         public override bool MultiViewHUD => !ReplayControls && drivingViews != null && !drivingViews.NeedsArena;
         public override bool BroadcastStandingsVisible => !ReplayControls;
         public override string Header => ReplayControls ? Title + " · RECORDED REPLAY" : Title + " · " + rules.AliveCount() + " SURVIVORS · CYCLE " + rules.Cycle;
         public override string Status => Countdown > 0 ? "GET READY" : rules.Carrier >= 0 ? setup.players[rules.Carrier].name + " HAS THE BOMB · " + rules.Fuse.ToString("F1") + "s" + (rules.Cooldown > 0 ? " · TRANSFER COOLING " + rules.Cooldown.ToString("F1") + "s" : " · BUMP TO PASS!") : "LAST TRUCK STANDING";
-        public override string Help => "Eight trucks. One giant ticking bomb. Any real truck-body bump passes it: no speed threshold, no proximity transfer. Resting contact cannot repeatedly swap it; the same pair must separate and a visible 0.7-second transfer cooldown must expire. The carrier gets a modest 15% engine-power boost. An unpredictable 12–20-second fuse eliminates the carrier with a physical truck-shattering blast. Blast damage never passes the bomb. A new cycle selects one survivor; last truck standing wins. +10 for your first successful pass each cycle, +20 for surviving a cycle and +100 for sole survival. Pass counts remain visible, but repeated passes in one cycle cannot farm points. Human and named AI trucks obey the same contacts and timer. AI carriers chase; others evade. Use normal throttle/brake/steering. ACTION recovers an overturned or genuinely stuck truck at its current safe location; it never pauses the bomb. Shared, chase and full-cab cameras, free look, optional AI views and the universal horn are available. Weather, crew names/colors and inputs use the shared collection settings. Match-end replays are recorded transforms and never change results.";
+        public override string Help => "Eight trucks. One giant ticking bomb. Any real truck-body bump passes it: no speed threshold, no proximity transfer. Resting contact cannot repeatedly swap it; the same pair must separate and a visible 0.7-second transfer cooldown must expire. The carrier gets a modest 15% engine-power boost. An unpredictable 12–20-second fuse eliminates the carrier with a physical truck-shattering blast. Blast damage never passes the bomb. A new cycle selects one survivor; last truck standing wins. +" + rules.TransferPoints + " per successful bomb transfer, +20 for surviving a cycle and +100 for sole survival. A new legitimate contact after separation and cooldown can earn another pass award; continuous overlapping contact earns nothing extra. Human and named AI trucks obey the same contacts and timer. AI carriers chase; others evade. Use normal throttle/brake/steering. ACTION recovers an overturned or genuinely stuck truck at its current safe location; it never pauses the bomb. Shared, chase and full-cab cameras, free look, optional AI views and the universal horn are available. Weather, crew names/colors and inputs use the shared collection settings. Match-end replays are recorded transforms and never change results.";
         public override string ControlCaption(int slot) => base.ControlCaption(slot).Replace(" ACTION", " RECOVER");
         readonly StringBuilder text = new StringBuilder(600);
         readonly float[] basePower = new float[8], stuck = new float[8], reverseUntil = new float[8], recoveryAt = new float[8];
@@ -84,6 +95,7 @@ namespace LWS.TruckHotPotato
 
         protected override void BeginGame()
         {
+            humanArenaCamera.Reset();
             if (review == null) { review = gameObject.AddComponent<SportsRecordedReview>(); review.match = this; review.trucks = trucks; review.fragments = fragments; review.drivingViews = drivingViews; review.broadcast = broadcast; review.framing = framing; review.atmosphere = atmosphere; review.watchAction = "watchpotato"; review.extras = new[] { bomb }; }
             review.ResetRecord(); rules.Reset(setup.count, Environment.TickCount); Countdown = 3; Explosions = 0; priorCarrier = -1; nextTick = 0; aftermath = 2;
             crowd?.ResetAttempt();
@@ -185,10 +197,14 @@ namespace LWS.TruckHotPotato
         protected override void Present(float dt)
         {
             if (drivingViews == null) return;
-            if (ReplayControls) { review.Tick(); return; }
+            if (ReplayControls) { humanArenaCamera.Reset(); review.Tick(); return; }
             drivingViews.Tick(dt);
-            if (drivingViews.NeedsArena)
+            bool visible = Running && !Finished && rules.Carrier >= 0; bomb.gameObject.SetActive(visible);
+            if (visible) { bomb.position = trucks[rules.Carrier].body.position + Vector3.up * 5; bomb.rotation = Quaternion.Euler(0, rules.Clock * 22, 0); }
+            if (HumanArenaFraming) humanArenaCamera.Present(this, dt);
+            else if (drivingViews.NeedsArena)
             {
+                humanArenaCamera.Reset();
                 Bounds active = new Bounds(Vector3.zero, new Vector3(100, 8, 100));
                 for (int i = 0; i < setup.count; i++) if (rules.alive[i]) active.Encapsulate(trucks[i].body.position);
                 active.Expand(new Vector3(14, 10, 14));
@@ -198,15 +214,13 @@ namespace LWS.TruckHotPotato
                 if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -90, 135), Vector3.up);
                 framing.arenaBounds = active; framing.Apply();
             }
-            bool visible = Running && !Finished && rules.Carrier >= 0; bomb.gameObject.SetActive(visible);
+            else humanArenaCamera.Reset();
             if (!visible) return;
-            bomb.position = trucks[rules.Carrier].body.position + Vector3.up * 5;
             if (fuseSparks != null)
             {
                 if (rules.Fuse < 5 && !fuseSparks.isPlaying) fuseSparks.Play();
                 else if (rules.Fuse >= 5 && fuseSparks.isPlaying) fuseSparks.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             }
-            bomb.rotation = Quaternion.Euler(0, rules.Clock * 22, 0);
             float urgency = 1 - Mathf.Clamp01(rules.Fuse / 12); float pulse = .5f + .5f * Mathf.Sin(rules.Clock * Mathf.Lerp(5, 22, urgency));
             glow.SetColor("_BaseColor", Color.Lerp(new Color(.2f, .02f, .01f), Color.red, pulse)); glow.SetColor("_EmissionColor", Color.red * (1 + pulse * 4)); bombGlow.SetPropertyBlock(glow);
             bombClock.text = rules.Fuse.ToString("F1"); bombClock.transform.rotation = broadcast.view.transform.rotation;
@@ -216,6 +230,7 @@ namespace LWS.TruckHotPotato
         protected override void StopSounds() { if (trucks != null) foreach (var truck in trucks) truck.StopSound(); }
         protected override void StopGame()
         {
+            humanArenaCamera.Reset();
             review?.End(false); StopSounds(); if (bomb != null) bomb.gameObject.SetActive(false);
             if (breakables != null) foreach (var prop in breakables) { prop.intactBody.isKinematic = true; foreach (var piece in prop.fragments) piece.isKinematic = true; }
             if (trucks != null) for (int i = 0; i < trucks.Length; i++) { trucks[i].Power(false); trucks[i].body.isKinematic = true; fragments[i].Freeze(); if (basePower[i] > 0) trucks[i].tractorMotor.vehicle.powertrain.engine.maxPower = basePower[i]; }

@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 1,
+  "scope": "CARNIVAL_0_6_CORNHOLE_PRIMARY_SPECTATOR_NATIVE49",
+  "classification": "CONTROLLED_NATIVE_PLAYMODE_PROJECTION_AND_RENDER_NOT_WINDOWS",
+  "acceptance": {
+    "nativeCombinedCases": 2,
+    "nativeCombinedPassed": 2,
+    "runnerExit": 0,
+    "runnerWallSeconds": 276.91,
+    "xmlTestSeconds": 188.9371775,
+    "cameraCaseResult": "Passed",
+    "cameraCaseSeconds": 84.205414,
+    "nativeResultXml": "carnival-fortyninth-corn-final-native.xml",
+    "nativeResultXmlSha256": "5da5f9ee0b5d5788b355d4480e21e9fd90b81288a4f09a07ef8d64b51161c207",
+    "windowsAcceptanceOfThisCameraChange": false,
+    "humanApproval": false,
+    "replacementBuildAndExactWindowsRerun": "PENDING_LEAD"
+  },
+  "sourceHashes": {
+    "Assets/TruckCornhole/Scripts/CornholeCamera.cs": "fe1ef5cf0408d3b8b71f83bdb32034c8063a3b2ba5b42c23fa24b018d36cf45f",
+    "Assets/TruckSports/Tests/GoddessPlayMode/CornholeNaturalFlightFramingTests.cs": "99817c22752277c32127f130a8179863ba35089bcfd45a78d37bb74662f799f3",
+    "Assets/TruckSports/Editor/SportsTruckAppearanceCornholeAuthoring.cs": "dd9e0150e8d60eb8a3db152d9872db61774c4e375e7ec4046dadd7ed8bc531e9"
+  },
+  "summary": {
+    "sharedPrimarySamples": 77,
+    "sharedPrimaryFullyInsideSamples": 77,
+    "sharedPrimaryCornersInside": 32032,
+    "sharedPrimaryCornersTested": 32032,
+    "sharedBoardCenterVisibleSamples": 77,
+    "sharedPrimaryHeightFractionMin": 0.04200124740600586,
+    "sharedPrimaryHeightFractionMax": 0.057031601667404175,
+    "originalCabSamples": 200,
+    "originalCabStateSamples": 200,
+    "observedFovDegrees": [
+      72.0
+    ],
+    "controlledCases": 8,
+    "controlledPngsReviewed": 16
+  },
+  "cases": [
+    {
+      "case": "original-cab-split-1",
+      "roster": 1,
+      "viewMode": "ORIGINAL_FIRST_PERSON_CAB",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "1c479c9b5376e71583403ed57935804e709a5ed32cd4449e80f80e58cf099af5",
+      "samples": 20,
+      "actualCameraOwners": [
+        0
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "cabStateSamples": 20,
+      "boardCenterObservedVisibleSamples": 20,
+      "hiddenOwnExteriorFrustumRequirement": "NOT_APPLICABLE_ORIGINAL_CAB_CONTRACT"
+    },
+    {
+      "case": "original-cab-split-2",
+      "roster": 2,
+      "viewMode": "ORIGINAL_FIRST_PERSON_CAB",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "10fb2081af19d03f6fefcad324b4a7c523b60a80d018683e4a422e44631dd5c1",
+      "samples": 40,
+      "actualCameraOwners": [
+        0,
+        1
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "cabStateSamples": 40,
+      "boardCenterObservedVisibleSamples": 40,
+      "hiddenOwnExteriorFrustumRequirement": "NOT_APPLICABLE_ORIGINAL_CAB_CONTRACT"
+    },
+    {
+      "case": "original-cab-split-3",
+      "roster": 3,
+      "viewMode": "ORIGINAL_FIRST_PERSON_CAB",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "c5df504835ef030483e0c9e39a5fd45a1a199ad9251b1853418da6189143817a",
+      "samples": 60,
+      "actualCameraOwners": [
+        0,
+        1,
+        2
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "cabStateSamples": 60,
+      "boardCenterObservedVisibleSamples": 60,
+      "hiddenOwnExteriorFrustumRequirement": "NOT_APPLICABLE_ORIGINAL_CAB_CONTRACT"
+    },
+    {
+      "case": "original-cab-split-4",
+      "roster": 4,
+      "viewMode": "ORIGINAL_FIRST_PERSON_CAB",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "5da5ed7fa32fc9bacb183b82384f0c3b31b9f1567c362a9ae1f14a46242380a2",
+      "samples": 80,
+      "actualCameraOwners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "cabStateSamples": 80,
+      "boardCenterObservedVisibleSamples": 80,
+      "hiddenOwnExteriorFrustumRequirement": "NOT_APPLICABLE_ORIGINAL_CAB_CONTRACT"
+    },
+    {
+      "case": "shared-external-1",
+      "roster": 1,
+      "viewMode": "SHARED_PRIMARY_SPECTATOR",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "a86d860b53049e9e2256de5ff035730f1e61bd64c761fad89c46d0e44c22077c",
+      "samples": 19,
+      "actualCameraOwners": [
+        0
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "primarySamples": 19,
+      "primaryClippedSamples": 0,
+      "primaryCornersInside": 7904,
+      "primaryCornersTested": 7904,
+      "bodyViewportBoundsAcrossSamples": {
+        "minX": 0.3961144685745239,
+        "maxX": 0.46761733293533325,
+        "minY": 0.367471843957901,
+        "maxY": 0.6637269258499146
+      },
+      "primaryHeightFraction": {
+        "min": 0.042019546031951904,
+        "max": 0.056781232357025146
+      },
+      "requiredReadableHeightFraction": {
+        "min": 0.04,
+        "max": 0.04
+      },
+      "readabilityPassSamples": 19,
+      "boardCenterVisibleSamples": 19,
+      "flightAgeSeconds": {
+        "min": 0.39999979734420776,
+        "max": 6.159994602203369
+      }
+    },
+    {
+      "case": "shared-external-2",
+      "roster": 2,
+      "viewMode": "SHARED_PRIMARY_SPECTATOR",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "26436c680e786321e4e31485b0e2958c2412527d7dafb05d89fb96df0250f885",
+      "samples": 19,
+      "actualCameraOwners": [
+        0
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "primarySamples": 19,
+      "primaryClippedSamples": 0,
+      "primaryCornersInside": 7904,
+      "primaryCornersTested": 7904,
+      "bodyViewportBoundsAcrossSamples": {
+        "minX": 0.40022173523902893,
+        "maxX": 0.46844011545181274,
+        "minY": 0.3771025836467743,
+        "maxY": 0.6609153747558594
+      },
+      "primaryHeightFraction": {
+        "min": 0.042206645011901855,
+        "max": 0.05683022737503052
+      },
+      "requiredReadableHeightFraction": {
+        "min": 0.04,
+        "max": 0.04
+      },
+      "readabilityPassSamples": 19,
+      "boardCenterVisibleSamples": 19,
+      "flightAgeSeconds": {
+        "min": 0.3799998164176941,
+        "max": 6.119994640350342
+      }
+    },
+    {
+      "case": "shared-external-3",
+      "roster": 3,
+      "viewMode": "SHARED_PRIMARY_SPECTATOR",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "638cb58b9719bbf0c7280926a4684048667c8820129a6ad474cf09d0c0be0fcd",
+      "samples": 19,
+      "actualCameraOwners": [
+        0
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "primarySamples": 19,
+      "primaryClippedSamples": 0,
+      "primaryCornersInside": 7904,
+      "primaryCornersTested": 7904,
+      "bodyViewportBoundsAcrossSamples": {
+        "minX": 0.399946928024292,
+        "maxX": 0.4683074355125427,
+        "minY": 0.3757534921169281,
+        "maxY": 0.6622479557991028
+      },
+      "primaryHeightFraction": {
+        "min": 0.042233288288116455,
+        "max": 0.05685704946517944
+      },
+      "requiredReadableHeightFraction": {
+        "min": 0.04,
+        "max": 0.04
+      },
+      "readabilityPassSamples": 19,
+      "boardCenterVisibleSamples": 19,
+      "flightAgeSeconds": {
+        "min": 0.3799998164176941,
+        "max": 6.119994640350342
+      }
+    },
+    {
+      "case": "shared-external-4",
+      "roster": 4,
+      "viewMode": "SHARED_PRIMARY_SPECTATOR",
+      "measurementKind": "FINAL_NATIVE_CAMERA_PROJECTION_AFTER_LATEUPDATE_32000",
+      "sourceReportSha256": "ffdd9fb79faba0d243ec8cbca119ab27217cbe68a0a25c8c9ef450a2b7fe50a8",
+      "samples": 20,
+      "actualCameraOwners": [
+        0
+      ],
+      "actualFirstDeliveryLaunchCounts": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "controlledCaptureCreated": true,
+      "observedFovDegrees": [
+        72.0
+      ],
+      "primarySamples": 20,
+      "primaryClippedSamples": 0,
+      "primaryCornersInside": 8320,
+      "primaryCornersTested": 8320,
+      "bodyViewportBoundsAcrossSamples": {
+        "minX": 0.4008430540561676,
+        "maxX": 0.46735066175460815,
+        "minY": 0.377378910779953,
+        "maxY": 0.6607513427734375
+      },
+      "primaryHeightFraction": {
+        "min": 0.04200124740600586,
+        "max": 0.057031601667404175
+      },
+      "requiredReadableHeightFraction": {
+        "min": 0.04,
+        "max": 0.04
+      },
+      "readabilityPassSamples": 20,
+      "boardCenterVisibleSamples": 20,
+      "flightAgeSeconds": {
+        "min": 0.3799998164176941,
+        "max": 6.1399946212768555
+      }
+    }
+  ],
+  "retainedNative46Failure": {
+    "classification": "VALID_PRIOR_CAMERA_FAILURE_NOT_RELABELLED",
+    "sameV4TestSha256": "99817c22752277c32127f130a8179863ba35089bcfd45a78d37bb74662f799f3",
+    "oldCameraSha256": "634c7bfa045967aa2cf0dbc429dc48caab9017018fcd97cfd162e0af4d3e9374",
+    "correctedMiniatureFitsAlreadyApplied": true,
+    "primarySamples": 77,
+    "clippedPrimarySamples": 57,
+    "cases": [
+      {
+        "case": "shared-external-1",
+        "retainedReportSha256": "e1cb2a8021516f10fe51705d90ae319dbbf8a408efd4098aa019aa0de339674e",
+        "primarySamples": 19,
+        "clippedSamples": 14,
+        "minViewportX": -0.0915675163269043,
+        "maxViewportY": 1.6176049709320068
+      },
+      {
+        "case": "shared-external-2",
+        "retainedReportSha256": "d7da182cdd32d41d70ac569fbb84b80860b5d94f978833ed8f2dae8137d5896a",
+        "primarySamples": 19,
+        "clippedSamples": 14,
+        "minViewportX": -0.0860375165939331,
+        "maxViewportY": 1.579911470413208
+      },
+      {
+        "case": "shared-external-3",
+        "retainedReportSha256": "a3c2cbbb172f95b09916724c61119ed104d7715a05004fb2d2f1bfea3b1cc822",
+        "primarySamples": 19,
+        "clippedSamples": 14,
+        "minViewportX": -0.08616739511489868,
+        "maxViewportY": 1.579484462738037
+      },
+      {
+        "case": "shared-external-4",
+        "retainedReportSha256": "9a0c12891b2f41c5ebcde9e6dd2bf7d9d15b1362114c9f742bc30b345c14835d",
+        "primarySamples": 20,
+        "clippedSamples": 15,
+        "minViewportX": -0.08502686023712158,
+        "maxViewportY": 1.5783560276031494
+      }
+    ],
+    "explanation": "The prior camera positioned its eye relative to a point35% toward the distant board; early flight passed beside the primary and apex framing looked below it. Native49 changes only the live all-AI spectator composition/dolly; the strong V4 primary/board/stock-relative readability assertions remain unchanged. Native43 no-render-callback and Native45 rendererless-board-root fixture failures are retained separately and do not prove clipping."
+  },
+  "curatedOriginals": [
+    {
+      "file": "native49-cornhole-shared-primary-1080-controlled.png",
+      "sha256": "e61f5cc019b91a15ff86f3d231481b093862e22556452a22e0bda8a221060c72",
+      "width": 1920,
+      "height": 1080,
+      "sourceCapture": "shared-external-4-1920-controlled.png",
+      "byteIdenticalToOriginal": true,
+      "classification": "CONTROLLED_NATIVE_NOT_WINDOWS_NOT_HUMAN",
+      "caption": "CONTROLLED NATIVE49: four original AI competitors; the shared spectator keeps its focused miniature projectile and real shared board in frame during natural flight. This is an original1920x1080 controlled rerender, not a Windows backbuffer or human approval."
+    },
+    {
+      "file": "native49-cornhole-four-cabs-720-controlled.png",
+      "sha256": "1c007b61adefb226dadf66c07950693760710b898a6f03ebede0521cb046beaf",
+      "width": 1280,
+      "height": 720,
+      "sourceCapture": "original-cab-split-4-1280-controlled.png",
+      "byteIdenticalToOriginal": true,
+      "classification": "CONTROLLED_NATIVE_NOT_WINDOWS_NOT_HUMAN",
+      "caption": "CONTROLLED NATIVE49: four original AI-owned first-person cab views retain their private interiors, distinct HUD owners and visible target boards. Own exterior bodies are intentionally hidden by the original cab contract. Original1280x720 controlled rerender, not Windows/human acceptance."
+    }
+  ],
+  "allControlledCapturesReviewed": [
+    {
+      "file": "original-cab-split-1-1280-controlled.png",
+      "sha256": "ef53f2cba5b92c0f71f019ddf7c727f0e668c51fcc1046411b58776bbbbdc520",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-1-1920-controlled.png",
+      "sha256": "7f46b1d6cbf5d8465b2efc060d7ee9a6bfcd2d59eb8737393a13234cb22f2299",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-2-1280-controlled.png",
+      "sha256": "c95ea84a1c85a21860dbd50ad4dee072581dceb463d46e1a5e2685b8d9a6e108",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-2-1920-controlled.png",
+      "sha256": "e762370ca699f73546d913b5b79b7f5d7712e9b7f51762cbe4c2adc587a39970",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-3-1280-controlled.png",
+      "sha256": "e6cc35fc1eb32e08ce8cdb90cc0c4d0a00c7f90385b3683036a5761db62ee723",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-3-1920-controlled.png",
+      "sha256": "74a4bc5b201a0528271f7f5ee60f39807118ddce235d63a40fc4d3eb0884e1ff",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "original-cab-split-4-1280-controlled.png",
+      "sha256": "1c007b61adefb226dadf66c07950693760710b898a6f03ebede0521cb046beaf",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_AND_DIRECT_ORIGINAL_INSPECTED"
+    },
+    {
+      "file": "original-cab-split-4-1920-controlled.png",
+      "sha256": "62b2dffcad402fee803b045c076874cbb924c51391b157d720f09d7bf01d5f96",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_AND_DIRECT_ORIGINAL_INSPECTED"
+    },
+    {
+      "file": "shared-external-1-1280-controlled.png",
+      "sha256": "8c41ec824fe7e5921f6a346c37af278fb000d302315cf405d439cef684f69948",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-1-1920-controlled.png",
+      "sha256": "3017530afae3a1ad8491c04b08cb9c0ed8d12a19877f29e0a9a6ffd6083f3fcb",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_AND_DIRECT_ORIGINAL_INSPECTED"
+    },
+    {
+      "file": "shared-external-2-1280-controlled.png",
+      "sha256": "d328aace7341d90470932fb89a34a052a47ee10fea04ea3ffd57159e092b5614",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-2-1920-controlled.png",
+      "sha256": "f554f3d562079143baed8a8729a71d4153f3c03c88661b62127686982cbf68c8",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-3-1280-controlled.png",
+      "sha256": "784b001f91c2867ef2a5cf762b7475a5177cb90eefd3fe568dcafd7d0f6fec39",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-3-1920-controlled.png",
+      "sha256": "2b83c0ec165a532802cb6a5e2eabc42664d0a7d1079bfc58bf241749d66b47f2",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-4-1280-controlled.png",
+      "sha256": "d5f6180c92795d3779ad9219b1dc619e2adaea719f3e5cc0132a28e3cbb07f53",
+      "width": 1280,
+      "height": 720,
+      "review": "CONTACT_SHEET_INSPECTED_AND_SANITY_CHECKED"
+    },
+    {
+      "file": "shared-external-4-1920-controlled.png",
+      "sha256": "e61f5cc019b91a15ff86f3d231481b093862e22556452a22e0bda8a221060c72",
+      "width": 1920,
+      "height": 1080,
+      "review": "CONTACT_SHEET_AND_DIRECT_ORIGINAL_INSPECTED"
+    }
+  ],
+  "visualObservations": [
+    "Contact sheets cover all16 original720/1080 images. Shared captures now show the naturally rotating focused truck completely in frame above/alongside the real target, with its intentionally miniature scale retained.",
+    "Direct shared1080 originals show the primary separated from HUD corners and the board/hole clearly visible. Other concurrently flying AI are context, not forced framing subjects.",
+    "Direct four-way cab720/1080 originals retain each private cab/interior, visible target board/hole and distinct participant HUD. Cab exterior hiding is intentional."
+  ],
+  "limits": [
+    "Controlled native rerenders at requested resolutions; these are not actual Windows ScreenCapture evidence.",
+    "First original natural AI delivery/flight across1\u20134 rosters in shared and split modes; no supplied poses, forces, scores, results or explicit launch injection.",
+    "Primary mesh corners exclude wheel-mount graphics for body readability; the separate combined wheel test covers all seven corrected miniature fits.",
+    "No human input, physical controller, listening, complete five-round match, long-term profile/save soak or performance/GPU acceptance is claimed.",
+    "Raw reports with instance IDs, renderer paths, machine paths and participant identifiers are not copied into this sanitized proof."
+  ]
+}

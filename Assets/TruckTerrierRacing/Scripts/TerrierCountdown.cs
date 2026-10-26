@@ -22,13 +22,15 @@ public sealed class TerrierCountdown:MonoBehaviour {
   lastRemaining=remaining;
   bool changed=Beat!=previous;previous=Beat;
   for(int i=0;i<panels.Length;i++){
-   bool active=i<race.cameras.Length&&race.cameras[i].enabled;panels[i].gameObject.SetActive(active);if(!active)continue;
+   bool wasActive=panels[i].gameObject.activeSelf;bool active=i<race.cameras.Length&&race.cameras[i].enabled;panels[i].gameObject.SetActive(active);if(!active)continue;
    var viewport=race.cameras[i].rect;panels[i].anchorMin=viewport.min;panels[i].anchorMax=viewport.max;panels[i].offsetMin=panels[i].offsetMax=Vector2.zero;
    fades[i].alpha=Beat==0?1-Mathf.SmoothStep(0,1,elapsed):1;
    rings[i].fillAmount=Beat==0?1:1-Mathf.Repeat(3-remaining,1);
    rings[i].color=Beat==0?new Color(.25f,1,.75f):Beat==1?new Color(1,.35f,.12f):new Color(1,.76f,.22f);
-   if(changed){
-    labels[i].text=Beat==0?"GO GO GO!":Beat.ToString();labels[i].fontSize=Beat==0?64:88;labels[i].rectTransform.sizeDelta=new Vector2(Beat==0?440:145,115);
+   // A newly enabled viewport may join during the SAME beat. Its initial
+   // serialized "3" must not survive when the authoritative state is GO.
+   labels[i].text=Beat==0?"GO GO GO!":Beat.ToString();labels[i].fontSize=Beat==0?64:88;labels[i].rectTransform.sizeDelta=new Vector2(Beat==0?440:145,115);
+   if(changed||!wasActive){
     badges[i].DOKill();badges[i].localScale=Vector3.one;badges[i].DOPunchScale(Vector3.one*(Beat==1?.16f:.1f),.36f,3).SetLink(badges[i].gameObject);
    }
   }

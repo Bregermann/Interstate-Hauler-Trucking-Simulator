@@ -10,6 +10,8 @@ namespace LWS.TruckBowling {
 // NWH is the only tire/suspension force authority. LWS sets sport surface/input policy.
 [DefaultExecutionOrder(-20)]public sealed class BowlingTruck:MonoBehaviour {
  public Rigidbody body;public WheelController[] wheels;public BowlingLane lane;public BowlingHandling handling=new BowlingHandling();public GameObject exterior;
+ public LWS.TruckSports.SportsTruckAppearanceHost appearanceHost;
+ public void PrepareAppearance(BowlingPlayer owner){if(appearanceHost==null)return;var highlights=lane.highlights;if(highlights!=null)highlights.End();int revision=appearanceHost.AppearanceRevision;appearanceHost.Prepare(owner.participantId,owner.color);if(highlights!=null&&highlights.replay!=null&&appearanceHost.AppearanceRevision!=revision){int source=Array.IndexOf(highlights.replay.sources,transform);if(!highlights.replay.RebuildGhostHierarchy(source))throw new InvalidOperationException("Bowling appearance cannot refresh the existing replay source.");}lane.cab.exterior=appearanceHost.ExteriorRenderers;}
  public AudioSource engine,skid;public float throttle,steer;public float Grip{get;private set;}public float AssistAcceleration{get;private set;}public float CarryAcceleration{get;private set;}public bool ControlLost{get;private set;}public float Speed=>body.linearVelocity.magnitude;public int PinImpacts{get;private set;}
  readonly BowlingPin[] tirePins=new BowlingPin[4];readonly RaycastHit[] carryHits=new RaycastHit[16];Collider[] colliders;BoxCollider chassis;bool braking;float nextImpact;
  void Start(){colliders=GetComponentsInChildren<Collider>(true);chassis=GetComponent<BoxCollider>();Stop();}

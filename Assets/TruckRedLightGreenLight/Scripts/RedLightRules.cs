@@ -70,9 +70,17 @@ namespace LWS.TruckRedLightGreenLight
         public bool Observe(int slot, Vector2 position, Vector2 previous, Vector2 velocity,
             float forwardSpeed, float throttle, bool grounded, float dt)
         {
+            // Compatibility for existing probes which only provide signed drive.
+            // Production supplies independent driver intent before axis cancellation.
+            return ObserveWithIntent(slot, position, previous, velocity, Math.Abs(throttle) > .15f, false, grounded, dt);
+        }
+
+        public bool ObserveWithIntent(int slot, Vector2 position, Vector2 previous, Vector2 velocity,
+            bool accelerating, bool braking, bool grounded, float dt)
+        {
             if (outcomes[slot] != RedLightOutcome.Racing) return false;
             Vector2 delta = position - previous;
-            bool driven = throttle > .15f && forwardSpeed > .015f || throttle < -.15f && forwardSpeed < -.015f;
+            bool driven = accelerating;
             Vector2 pushed = pushedVelocity[slot];
             bool externallyMoved = !driven && pushed.sqrMagnitude > .01f &&
                 Vector2.Dot(delta, pushed.normalized) >= delta.magnitude * .7f &&
@@ -81,6 +89,12 @@ namespace LWS.TruckRedLightGreenLight
             pushedVelocity[slot] = velocity.sqrMagnitude < .01f ? Vector2.zero :
                 Vector2.ClampMagnitude(pushed * Mathf.Exp(-dt * .65f), velocity.magnitude);
             if (Phase != RedLightPhase.Red) return false;
+            // Intentional throttle is a violation even from rest, in the air or
+            // while also braking. A combined axis must never hide that intent.
+            if (accelerating) return Eliminate(slot, "DRIVING ON RED");
+            // Real braking is safe while snow, ice, inertia or impacts continue
+            // moving the truck. Reanchor so a later settled release is not a creep.
+            if (braking) { redAnchor[slot] = position; anchored[slot] = true; return false; }
             if (!anchored[slot] || externallyMoved) { redAnchor[slot] = previous; anchored[slot] = true; }
             if (externallyMoved) { redAnchor[slot] = position; return false; }
             if (!grounded || delta.magnitude < .0001f) return false;

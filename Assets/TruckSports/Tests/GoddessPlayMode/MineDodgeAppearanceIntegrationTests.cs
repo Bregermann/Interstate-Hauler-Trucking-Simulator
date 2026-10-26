@@ -1,0 +1,59 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+public sealed class MineDodgeAppearanceIntegrationTests
+{
+    const BindingFlags Any=BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;
+    static Type Sports(string name)=>Type.GetType("LWS.TruckSports."+name+", Assembly-CSharp",true);
+    static object Get(object owner,string name)=>owner.GetType().GetField(name,Any) is FieldInfo field?field.GetValue(owner):owner.GetType().GetProperty(name,Any).GetValue(owner);
+    static void Set(object owner,string name,object value){if(owner.GetType().GetField(name,Any) is FieldInfo field)field.SetValue(owner,value);else owner.GetType().GetProperty(name,Any).SetValue(owner,value);}
+    static object Call(object owner,string name,params object[] args)=>owner.GetType().GetMethods(Any).Single(method=>method.Name==name&&method.GetParameters().Length==args.Length).Invoke(owner,args);
+    static object Registry(string name,params object[] args)=>Sports("SportsParticipantRegistry").GetMethod(name).Invoke(null,args);
+    Component match;IDisposable lease;GameObject isolation;bool mine;Component[] trucks;object[] hosts;string[] ids;
+    [TearDown]public void Cleanup(){Time.timeScale=1;if(match!=null)Call(match,"SetupScreen");if(isolation!=null)UnityEngine.Object.DestroyImmediate(isolation);Registry("ForgetCache");lease?.Dispose();lease=null;}
+    static void Save(string id,string body){var draft=Registry("GetAppearance",id);Set(draft,"bodyId",body);((IList)Get(draft,"selections")).Clear();Registry("TrySetAppearance",id,draft);Registry("ForgetCache");Assert.That(Get(Registry("GetAppearance",id),"bodyId"),Is.EqualTo(body));}
+    IEnumerator Load(bool minefield)
+    {
+        mine=minefield;lease=(IDisposable)Sports("SportsPrefs").GetMethod("IsolateValidation").Invoke(null,new object[]{"MineDodgeAppearance"+Guid.NewGuid().ToString("N")});Registry("ForgetCache");isolation=new GameObject("Saved Minefield Dodgeball appearance fixture");UnityEngine.Object.DontDestroyOnLoad(isolation);isolation.AddComponent(Sports("SportsProbeInputIsolation"));string mode=mine?"TruckMinefield":"TruckTrampolineDodgeball";EditorSceneManager.LoadSceneInPlayMode("Assets/"+mode+"/Scenes/"+mode+".unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;yield return null;
+        match=(Component)UnityEngine.Object.FindAnyObjectByType(Type.GetType(mine?"LWS.TruckMinefield.MinefieldMatch, Assembly-CSharp":"LWS.TruckDodgeball.DodgeMatch, Assembly-CSharp",true));Assert.That(match,Is.Not.Null);Call(match,"AllBots");if(!mine){Set(match,"teamA",4);Set(match,"teamB",4);}Set(Get(match,"setup"),"count",8);Call(match,"NormalizeSetup");trucks=((Array)Get(match,mine?"racers":"fighters")).Cast<object>().Select(r=>(Component)Get(r,"truck")).ToArray();hosts=((Array)Get(match,"appearanceHosts")).Cast<object>().ToArray();Assert.That(hosts.Length,Is.EqualTo(8),"Run BindMissingMinefieldAndDodgeballHosts first.");ids=new string[8];for(int i=0;i<8;i++){ids[i]=(string)Get(Registry("Create","Same Contact Driver"),"id");Registry("UseInSeat",i,ids[i]);Save(ids[i],i%2==0?"truck.fire":"novelty.icecream");Assert.That(((Component)hosts[i]).transform,Is.SameAs(trucks[i].transform));Assert.That(Get(hosts[i],"participantSlot"),Is.EqualTo(i));}Call(match,"RefreshParticipants",false);
+    }
+    IEnumerable<Component> Physical()=>trucks.SelectMany(t=>t.GetComponentsInChildren<Component>(true)).Where(c=>c is Rigidbody||c is Collider).Distinct();
+    static string Config(Component c){if(c is Rigidbody b)return b.mass+"/"+b.centerOfMass.ToString("R")+"/"+b.inertiaTensor.ToString("R")+"/"+b.linearDamping+"/"+b.angularDamping+"/"+b.constraints;var shape=(Collider)c;string s=shape.isTrigger+"/"+shape.contactOffset+"/"+(shape.sharedMaterial!=null?shape.sharedMaterial.GetInstanceID():0);if(shape is BoxCollider box)s+="/"+box.center.ToString("R")+"/"+box.size.ToString("R");if(shape is MeshCollider mesh)s+="/"+(mesh.sharedMesh!=null?mesh.sharedMesh.GetInstanceID():0)+"/"+mesh.convex;return s;}
+    Dictionary<Component,string> Snapshot()=>Physical().ToDictionary(c=>c,Config);
+    void Same(Dictionary<Component,string> before){CollectionAssert.AreEquivalent(before.Keys,Physical());foreach(var pair in before)Assert.That(Config(pair.Key),Is.EqualTo(pair.Value),"Composition changed existing physical configuration: "+pair.Key.name);}
+    string Wheels()=>string.Join(";",trucks.SelectMany(t=>((Array)Get(t,"wheels")).Cast<object>()).Select(w=>((Component)w).GetInstanceID()+"/"+Get(Get(w,"wheel"),"radius")+"/"+Get(Get(w,"wheel"),"width")+"/"+Get(Get(w,"spring"),"maxLength")+"/"+Get(Get(w,"spring"),"maxForce")));
+    IEnumerator OriginalStartup()
+    {
+        var bindings=(Array)Get(match,"appearanceHosts");var truckBindings=trucks.Select(t=>Get(t,"appearanceHost")).ToArray();Set(match,"appearanceHosts",Array.CreateInstance(Sports("SportsTruckAppearanceHost"),0));foreach(var truck in trucks)Set(truck,"appearanceHost",null);
+        try{Assert.That(Call(match,"StartMatch"),Is.EqualTo(true));double deadline=Time.realtimeSinceStartupAsDouble+8;while(Time.realtimeSinceStartupAsDouble<deadline&&Get(match,mine?"Phase":"Stage").ToString()!=(mine?"Driving":"Playing"))yield return null;Assert.That(Get(match,mine?"Phase":"Stage").ToString(),Is.EqualTo(mine?"Driving":"Playing"),"Original countdown must release actual wheels.");yield return null;}
+        finally{Set(match,"appearanceHosts",bindings);for(int i=0;i<trucks.Length;i++)Set(trucks[i],"appearanceHost",truckBindings[i]);}
+        ((Behaviour)match).enabled=false;foreach(var truck in trucks){Call(truck,"Power",false);((Rigidbody)Get(truck,"body")).isKinematic=true;}yield return null;
+    }
+    static string Relative(Transform part,Transform root){string path=part.name;while(part.parent!=root){part=part.parent;Assert.That(part,Is.Not.Null);path=part.name+"/"+path;}return path;}
+    IEnumerator Exercise(bool minefield)
+    {
+        yield return Load(minefield);var originalRefs=Physical().ToArray();var replay=Get(match,"replay");var sources=((Transform[])Get(replay,"sources")).ToArray();var ghosts=((Transform[])Get(replay,"ghosts")).ToArray();Assert.That(sources.Length,Is.EqualTo(mine?8:11));for(int i=0;i<8;i++)Assert.That(sources[i],Is.SameAs(Get(trucks[i],"visuals")));var untouched=ghosts.Skip(8).SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).ToArray();var ballRefs=!mine?((Array)Get(match,"balls")).Cast<object>().ToArray():null;var protectedRefs=hosts.SelectMany(h=>(Transform[])Get(h,"protectedRoots")).Distinct().ToArray();yield return OriginalStartup();foreach(var part in originalRefs)Assert.That(Physical().Contains(part),Is.True);string wheelConfig=Wheels();
+        foreach(string body in new[]{"truck.fire","truck.monster","truck.lifted","semi.lowrider","novelty.hotdog","novelty.icecream","semi.standard"})
+        {
+            Save(ids[0],body);Call(match,"RefreshParticipants",false);var physical=Snapshot();var equipmentState=protectedRefs.Select(t=>(t.localPosition,t.localRotation,t.localScale,t.gameObject.activeSelf)).ToArray();Call(match,"PrepareAppearances");Same(physical);CollectionAssert.AreEqual(equipmentState,protectedRefs.Select(t=>(t.localPosition,t.localRotation,t.localScale,t.gameObject.activeSelf)));CollectionAssert.AreEqual(protectedRefs,hosts.SelectMany(h=>(Transform[])Get(h,"protectedRoots")).Distinct());Assert.That(Wheels(),Is.EqualTo(wheelConfig));
+            for(int i=0;i<8;i++){Assert.That(Get(hosts[i],"ProfileId"),Is.EqualTo(ids[i]));Assert.That(Get(hosts[i],"EffectiveBodyId"),Is.EqualTo(i==0?body:i%2==0?"truck.fire":"novelty.icecream"));var model=(Transform)Get(hosts[i],"AppearanceRoot");Assert.That(model,Is.Not.Null);Assert.That(model.GetComponentsInChildren<Collider>(true),Is.Empty);Assert.That(model.GetComponentsInChildren<Rigidbody>(true),Is.Empty);Assert.That(((Renderer[])Get(hosts[i],"originalBodyRenderers")).Length,Is.EqualTo(29));Assert.That(((Renderer[])Get(hosts[i],"originalBodyRenderers")).All(r=>!r.enabled),Is.True);var entry=Call(Get(hosts[i],"catalog"),"FindBody",Get(hosts[i],"EffectiveBodyId"));var expected=((GameObject)Get(entry,"visualPrefab")).GetComponentsInChildren<Renderer>(true);var actual=(Renderer[])Get(hosts[i],"paintRenderers");for(int r=0;r<actual.Length;r++)CollectionAssert.AreEqual(expected[r].sharedMaterials,actual[r].sharedMaterials);}
+            Call(match,mine?"BeginHeat":"BeginRound");Call(match,"CaptureAppearanceReplay",0f,mine?255:2047);Call(match,"CaptureAppearanceReplay",.2f,mine?255:2047);CollectionAssert.AreEqual(sources,(Transform[])Get(replay,"sources"));CollectionAssert.AreEqual(ghosts,(Transform[])Get(replay,"ghosts"));CollectionAssert.AreEqual(untouched,ghosts.Skip(8).SelectMany(g=>g.GetComponentsInChildren<Transform>(true)));
+            for(int i=0;i<8;i++)foreach(var slot in (Array)Get(hosts[i],"paintSlots")){var renderer=((Renderer[])Get(hosts[i],"paintRenderers"))[(int)Get(slot,"rendererIndex")];var copy=ghosts[i].Find(Relative(renderer.transform,sources[i])).GetComponent<Renderer>();int index=(int)Get(slot,"materialIndex");CollectionAssert.AreEqual(renderer.sharedMaterials,copy.sharedMaterials);var a=new MaterialPropertyBlock();var b=new MaterialPropertyBlock();renderer.GetPropertyBlock(a,index);copy.GetPropertyBlock(b,index);Assert.That(b.GetColor("_BaseColor"),Is.EqualTo(a.GetColor("_BaseColor")));}
+            if(!mine){var fighters=((Array)Get(match,"fighters")).Cast<object>().ToArray();for(int i=0;i<8;i++){var trim=(Renderer[])Get(fighters[i],"teamTrim");var copy=(Renderer[])Get(fighters[i],"ghostTrim");Assert.That(copy.Length,Is.EqualTo(2));foreach(var renderer in trim)Assert.That(renderer.enabled,Is.True);Assert.That(((Transform)Get(fighters[i],"strikeHalo")).gameObject.activeSelf,Is.False);for(int k=0;k<2;k++){Assert.That(copy[k],Is.SameAs(ghosts[i].Find(Relative(trim[k].transform,sources[i])).GetComponent<Renderer>()));var a=new MaterialPropertyBlock();var b=new MaterialPropertyBlock();trim[k].GetPropertyBlock(a);copy[k].GetPropertyBlock(b);Assert.That(b.GetColor("_BaseColor"),Is.EqualTo(a.GetColor("_BaseColor")));}}CollectionAssert.AreEqual(ballRefs,((Array)Get(match,"balls")).Cast<object>());}
+        }
+        var buffers=Get(replay,"roots");Call(match,mine?"BeginHeat":"BeginRound");Call(match,"CaptureAppearanceReplay",0f,mine?255:2047);Call(match,"CaptureAppearanceReplay",.2f,mine?255:2047);Assert.That(Get(replay,"roots"),Is.SameAs(buffers));Call(replay,"Begin",0f,float.PositiveInfinity);Assert.That(Get(replay,"Playing"),Is.EqualTo(true));Assert.That(Call(replay,"RefreshAppearanceSources",new[]{0,1,2,3,4,5,6,7},true),Is.EqualTo(false));Assert.That(Get(replay,"roots"),Is.SameAs(buffers));Call(replay,"End");int revision=(int)Get(hosts[0],"AppearanceRevision");Call(match,"SetupScreen");Assert.That(Call(match,"StartMatch"),Is.EqualTo(true));Assert.That(Get(hosts[0],"AppearanceRevision"),Is.EqualTo(revision));
+        TestContext.WriteLine("MINE_DODGE_APPEARANCE "+(mine?"Minefield":"Dodgeball")+" actual8 owners/all7 bodies; original countdown/NWH startup, synchronous exact physical config, original source roots/counts, paint/material/equipment refs, same-body pose buffers, playing guard and rematch. Dodge actual3 ball ghost trees and explicit original2 team trim refs retained. Controlled fixture, no full-match/art/hardware claim.");
+    }
+    [UnityTest,Timeout(180000)]public IEnumerator MinefieldEightBodiesRetainActualMinesRestRulesAndEightVisualReplayRoots(){yield return Exercise(true);}
+    [UnityTest,Timeout(180000)]public IEnumerator DodgeballEightBodiesPreserveStrikeHaloTeamTrimAndThreeOriginalBallReplayTrees(){yield return Exercise(false);}
+}
+#endif

@@ -4,25 +4,42 @@ using UnityEngine.InputSystem;
 using LWS.TruckSports;
 using LWS.TruckBowling;
 namespace LWS.TruckCornhole {
-[DefaultExecutionOrder(-100)]public sealed class CornholeMatch:MonoBehaviour {
- LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
+[DefaultExecutionOrder(-100)]public sealed class CornholeMatch:MonoBehaviour,ISportsScorePresentationSource {
+ public SportsScoreJournal ScoreJournal{get;private set;}
+ public event Action<SportsScoreEvent> ScoreConfirmed;
+ bool ISportsScorePresentationSource.ScoreRunning=>InMatch;
+ bool ISportsScorePresentationSource.ScorePaused=>Paused;
+ bool ISportsScorePresentationSource.ScoreFinished=>Finished;
+ bool ISportsScorePresentationSource.ScoreResultPage=>menus.Screen==CornholeScreen.Result;
+ bool ISportsScorePresentationSource.ScorePlayPage=>menus.Screen==CornholeScreen.Play;
+ Camera ISportsScorePresentationSource.ScoreCamera(int view)=>view>=0&&view<courses.Length?courses[view].chase.view:null;
+ bool ISportsScorePresentationSource.TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;return false;}
+ void ConfirmBanked(int slot){int earned=lastRound[slot];if(earned<=0)return;if(ScoreJournal.TryConfirm("round:"+Round+":course:"+slot,setup.players[slot],slot,earned,totals[slot],"ROUND "+Round+" BANKED",earned>=8?SportsScoreTier.Major:SportsScoreTier.Small,"PTS",null,true,Round>=CornholeRules.Rounds,out var receipt))ScoreConfirmed?.Invoke(receipt);}
+ LWS.TruckSports.SportsParticipantBinding participantBinding;SportsMatchColors matchColors;string participantMatchId; public SportsMatchColors MatchColors=>matchColors;
  public string MatchId=>participantMatchId;
- public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
+ public void RefreshParticipants(bool saveEdits=false){using(matchColors?.Suspend()){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,SetupKey,summary,setup.players,count);}
 
  public SportsChaosWeather atmosphere;public SportsWeatherPresets weatherPresets;[Range(0,.03f)]public float windDrag=.012f;[Range(0,4)]public float maximumWindAcceleration=2;
- public Vector3 FlightWind(Vector3 velocity){if(atmosphere==null)return Vector3.zero;var relative=atmosphere.Flow-Vector3.ProjectOnPlane(velocity,Vector3.up);return Vector3.ClampMagnitude(relative*relative.magnitude*windDrag,maximumWindAcceleration);}
+ public const float MaximumHeadwind=4.4704f;
+ public Vector3 EffectiveWind(Vector3 approachHeading){if(atmosphere==null)return Vector3.zero;var flow=Vector3.ProjectOnPlane(atmosphere.Flow,Vector3.up);var forward=Vector3.ProjectOnPlane(approachHeading,Vector3.up);if(forward.sqrMagnitude<.0001f)forward=Vector3.forward;else forward.Normalize();float opposing=Vector3.Dot(flow,forward);return opposing< -MaximumHeadwind?flow+forward*(-MaximumHeadwind-opposing):flow;}
+ public Vector3 WindHeading(CornholeTruck truck)=>truck==null?Vector3.forward:truck.Launched?truck.LaunchHeading:Vector3.ProjectOnPlane(truck.transform.forward,Vector3.up).normalized;
+ Vector3 WindAcceleration(Vector3 velocity,Vector3 flow){var relative=flow-Vector3.ProjectOnPlane(velocity,Vector3.up);return Vector3.ClampMagnitude(relative*relative.magnitude*windDrag,maximumWindAcceleration);}
+ public Vector3 FlightWind(Vector3 velocity)=>atmosphere==null?Vector3.zero:WindAcceleration(velocity,EffectiveWind(Vector3.forward));
+ public Vector3 FlightWindFor(CornholeTruck truck,Vector3 velocity)=>atmosphere==null?Vector3.zero:WindAcceleration(velocity,EffectiveWind(WindHeading(truck)));
  public const string SetupKey="TruckCornhole.Setup.v1";public BowlingSetup setup=new BowlingSetup();public CornholeCourse[] courses;public CornholeMenus menus;public SportsSettings settings;public SportsFeedback feedback;
  public bool InMatch{get;private set;}public bool Paused{get;private set;}public bool Finished{get;private set;}public bool RoundBreak{get;private set;}public int Round{get;private set;}public int[] totals=new int[4];public int[] lastRound=new int[4];public int[] winners=Array.Empty<int>();public int RoundFinalizations{get;private set;}public int Revision{get;private set;}
- readonly SportsDeviceInput input=new SportsDeviceInput();bool menuReleased;int gateFrame;float roundTimer,roundQuiet;public int ModalOwner{get;private set;}
+ readonly SportsDeviceInput input=new SportsDeviceInput();CornholeLandingCollision landingCollisions;bool menuReleased;int gateFrame;float roundTimer,roundQuiet;public int ModalOwner{get;private set;}
  public bool Ready(int i){var p=setup.players[i];return p.source==BowlingSource.AI||p.source==BowlingSource.Keyboard&&Keyboard.current!=null&&Keyboard.current.enabled||p.Controller&&p.pad!=null&&p.pad.added&&p.pad.enabled;}
  public bool DevicesReady{get{if(!setup.Validate(out _))return false;for(int i=0;i<setup.count;i++)if(!Ready(i))return false;return true;}}
- public void Dirty(){Revision++;menus.Dirty();}public void Save(){RefreshParticipants(true);setup.mode=BowlingMode.Simultaneous;LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(setup));LWS.TruckSports.SportsPrefs.Save();Dirty();}
+ public void Dirty(){Revision++;menus.Dirty();}public void Save(){using(matchColors?.Suspend()){RefreshParticipants(true);setup.mode=BowlingMode.Simultaneous;LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(setup));LWS.TruckSports.SportsPrefs.Save();Dirty();}}
  void Awake(){try{if(LWS.TruckSports.SportsPrefs.HasKey(SetupKey)){var s=JsonUtility.FromJson<BowlingSetup>(LWS.TruckSports.SportsPrefs.GetString(SetupKey));if(s!=null&&s.players!=null&&s.players.Length==8)setup=s;}}catch(Exception){Debug.LogWarning("Cornhole setup invalid; defaults restored.");}setup.count=Mathf.Clamp(setup.count,1,4);setup.mode=BowlingMode.Simultaneous;}
  void Start(){RefreshParticipants();foreach(var c in courses)c.Clear();Layout();menus.Show(CornholeScreen.Setup);}
- void OnEnable(){InputSystem.onDeviceChange+=Changed;}void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();}void OnDestroy(){Time.timeScale=1;}
- public bool StartMatch(){if(!DevicesReady){menus.Show(CornholeScreen.Join);return false;}Save();participantMatchId=System.Guid.NewGuid().ToString("N");if(atmosphere!=null&&weatherPresets!=null){int seed=UnityEngine.Random.Range(1,1000000);atmosphere.ConfigurePreset(weatherPresets.Resolve(seed),seed);}InMatch=true;Paused=Finished=RoundBreak=false;Round=1;RoundFinalizations=0;winners=Array.Empty<int>();Array.Clear(totals,0,4);Array.Clear(lastRound,0,4);Time.timeScale=1;foreach(var c in courses){c.Clear();c.RoundLocksReset();}Layout();for(int i=0;i<setup.count;i++){Paint(courses[i],setup.players[i].color);courses[i].BeginRound();}roundQuiet=roundTimer=0;Gate();menus.Show(CornholeScreen.Play);return true;}
- void Paint(CornholeCourse c,Color color){var block=new MaterialPropertyBlock();block.SetColor("_BaseColor",color);foreach(var t in c.trucks)t.paint.SetPropertyBlock(block);}
+ void OnEnable(){InputSystem.onDeviceChange+=Changed;}void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();}void OnDestroy(){matchColors?.Restore();matchColors=null;landingCollisions?.Clear();Time.timeScale=1;}
+ void FixedUpdate(){if(InMatch&&!Paused&&!Finished)landingCollisions?.Tick();}
+ public bool StartMatch(){if(!DevicesReady){menus.Show(CornholeScreen.Join);return false;}Save();matchColors?.Restore();matchColors=new SportsMatchColors(setup.players,setup.count);try{landingCollisions??=new CornholeLandingCollision(this);landingCollisions.Clear();participantMatchId=System.Guid.NewGuid().ToString("N");ScoreJournal=new SportsScoreJournal(SetupKey,participantMatchId);if(atmosphere!=null&&weatherPresets!=null){int seed=UnityEngine.Random.Range(1,1000000);atmosphere.ConfigurePreset(weatherPresets.Resolve(seed),seed);}InMatch=true;Paused=Finished=RoundBreak=false;Round=1;RoundFinalizations=0;winners=Array.Empty<int>();Array.Clear(totals,0,4);Array.Clear(lastRound,0,4);Time.timeScale=1;foreach(var c in courses){c.Clear();c.RoundLocksReset();}PrepareAppearances();Layout();for(int i=0;i<setup.count;i++){Paint(courses[i],setup.players[i].color);courses[i].BeginRound();}roundQuiet=roundTimer=0;landingCollisions.Tick();Gate();menus.Show(CornholeScreen.Play);return true;}catch{matchColors?.Restore();matchColors=null;throw;}}
+ void PrepareAppearances(){for(int i=0;i<courses.Length;i++)foreach(var t in courses[i].trucks)if(t.appearanceHost!=null){if(i<setup.count)t.appearanceHost.Prepare(setup.players[i].participantId,setup.players[i].color);else t.appearanceHost.RestoreOriginal();}}
+ void Paint(CornholeCourse c,Color color){var block=new MaterialPropertyBlock();block.SetColor("_BaseColor",color);foreach(var t in c.trucks)if(t.appearanceHost==null||!t.appearanceHost.ApplyEffectiveColor(color))t.paint.SetPropertyBlock(block);}
  public void AllAI(){for(int i=0;i<setup.count;i++){setup.players[i].source=BowlingSource.AI;setup.players[i].pad=null;}Save();}
  public bool Assign(int i,Gamepad pad){if(i<0||i>=setup.count||!setup.players[i].Controller||pad==null||!pad.added||!pad.enabled)return false;var old=setup.players[i].pad;setup.players[i].pad=pad;if(!setup.Validate(out _)){setup.players[i].pad=old;return false;}Gate();Dirty();return true;}
  public void Unassign(int i){setup.players[i].pad=null;Gate();Dirty();}
@@ -37,7 +54,7 @@ namespace LWS.TruckCornhole {
  public bool MenuConfirm(){if(!InMatch||Finished)return true;if(!menuReleased)return false;var p=setup.players[ModalOwner];return Mouse.current!=null&&Mouse.current.leftButton.wasReleasedThisFrame||SportsDeviceInput.KeyDown(Key.Enter)||SportsDeviceInput.KeyDown(Key.Space)||p.Controller&&Ready(ModalOwner)&&p.pad.buttonSouth.wasPressedThisFrame;}
  public void Pause(int owner=0,bool disconnected=false){if(!InMatch||Finished)return;ModalOwner=Mathf.Clamp(owner,0,setup.count-1);Paused=true;foreach(var c in courses)if(c.replay!=null)c.replay.SyncClock();atmosphere?.Pause(true);Time.timeScale=0;Gate();feedback.StopAll();foreach(var c in courses)foreach(var t in c.trucks)t.StopSound();menus.Show(disconnected?CornholeScreen.Join:CornholeScreen.Pause);}
  public void Resume(){if(!InMatch){StartMatch();return;}if(!DevicesReady){menus.Show(CornholeScreen.Join);return;}Paused=false;foreach(var c in courses)if(c.replay!=null)c.replay.SyncClock();atmosphere?.Pause(false);Time.timeScale=1;Gate();menus.Show(CornholeScreen.Play);}
- public void ChangeSetup(){InMatch=Paused=RoundBreak=Finished=false;Time.timeScale=1;foreach(var c in courses)c.Clear();feedback.StopAll();Layout();menus.Show(CornholeScreen.Setup);}
+ public void ChangeSetup(){matchColors?.Restore();matchColors=null;landingCollisions?.Clear();ScoreJournal?.Close();InMatch=Paused=RoundBreak=Finished=false;Time.timeScale=1;foreach(var c in courses)c.Clear();feedback.StopAll();Layout();menus.Show(CornholeScreen.Setup);}
  public void Layout(){var owners=new int[4];int count=InMatch?SportsCameraOptions.SelectOrSpectate(setup,owners):1;if(!InMatch)owners[0]=0;for(int i=0;i<4;i++){int view=Array.IndexOf(owners,i,0,count);bool visible=view>=0;var rect=ViewRect(count,Mathf.Max(0,view));courses[i].chase.view.rect=rect;courses[i].chase.view.enabled=visible;menus.LayoutView(i,rect,visible);}}
  public static Rect ViewRect(int n,int i)=>n==1?new Rect(0,0,1,1):n==2?new Rect(0,i==0?.5f:0,1,.5f):n==3&&i==0?new Rect(0,.5f,1,.5f):n==3?new Rect(i==1?0:.5f,0,.5f,.5f):new Rect(i%2*.5f,i<2?.5f:0,.5f,.5f);
  void Changed(InputDevice d,InputDeviceChange change){if(LWS.TruckSports.SportsFocusPolicy.Suspended(d,change))return;Dirty();if(!InMatch||Finished)return;for(int i=0;i<setup.count;i++)if(setup.players[i].pad==d){input.Forget((Gamepad)d);Gate();if(change==InputDeviceChange.Removed||change==InputDeviceChange.Disconnected||change==InputDeviceChange.Disabled)Pause(i,true);break;}}
@@ -49,7 +66,7 @@ namespace LWS.TruckCornhole {
   if(RoundBreak){roundTimer+=Time.deltaTime;if(roundTimer>=3){RoundBreak=false;Round++;for(int i=0;i<setup.count;i++)courses[i].BeginRound();roundQuiet=roundTimer=0;}return;}
   bool done=true,quiet=true;for(int i=0;i<setup.count;i++){done&=courses[i].Done;quiet&=courses[i].AllQuiet;}if(!done){roundTimer=roundQuiet=0;return;}roundTimer+=Time.deltaTime;roundQuiet=quiet?roundQuiet+Time.deltaTime:0;if(roundQuiet<1.5f&&roundTimer<12)return;
   if(!quiet)for(int i=0;i<setup.count;i++)foreach(var t in courses[i].trucks)if(t.gameObject.activeSelf&&!t.Quiet)t.Exclude();
-  for(int i=0;i<setup.count;i++){lastRound[i]=courses[i].FinalizeRound();totals[i]+=lastRound[i];}RoundFinalizations++;roundTimer=0;feedback.Play(4,0,true);Dirty();if(Round>=CornholeRules.Rounds){Finished=true;RecordParticipants("Final totals: "+LWS.TruckSports.SportsParticipantRegistry.Totals(setup.players,setup.count,i=>totals[i]),setup.count);winners=CornholeRules.Winners(totals,setup.count);feedback.StopMotors();menus.Show(CornholeScreen.Result);}else RoundBreak=true;
+  for(int i=0;i<setup.count;i++){lastRound[i]=courses[i].FinalizeRound();totals[i]+=lastRound[i];ConfirmBanked(i);}RoundFinalizations++;roundTimer=0;feedback.Play(4,0,true);Dirty();if(Round>=CornholeRules.Rounds){Finished=true;ScoreJournal.Close();RecordParticipants("Final totals: "+LWS.TruckSports.SportsParticipantRegistry.Totals(setup.players,setup.count,i=>totals[i]),setup.count);winners=CornholeRules.Winners(totals,setup.count);feedback.StopMotors();menus.Show(CornholeScreen.Result);}else RoundBreak=true;
  }
 }
 }

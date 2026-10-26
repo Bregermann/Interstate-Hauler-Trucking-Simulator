@@ -2508,6 +2508,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &56502462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 56502463}
+  - component: {fileID: 56502465}
+  - component: {fileID: 56502464}
+  m_Layer: 0
+  m_Name: Truck fit summary readability backing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &56502463
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56502462}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1002502960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1064, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &56502464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56502462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &56502465
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56502462}
+  m_CullTransparentMesh: 1
 --- !u!1 &58145413
 GameObject:
   m_ObjectHideFlags: 0
@@ -3380,6 +3455,88 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
   cut: 10
   accent: 0
+--- !u!1 &70067874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70067877}
+  - component: {fileID: 70067876}
+  - component: {fileID: 70067875}
+  m_Layer: 0
+  m_Name: Truck fit setup adapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &70067875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70067874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0452881a11f84a3080865b9f86bb4c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilityPresenter
+  source: {fileID: 70067876}
+  subtitle: {fileID: 278228766}
+  originalSubtitle: 
+  reportButton: {fileID: 2088282038}
+--- !u!114 &70067876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70067874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb5a099ffe7414a82564f95361fa8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilitySource
+  session: {fileID: 0}
+  bowling: {fileID: 0}
+  cornhole: {fileID: 0}
+  cheese: {fileID: 0}
+  hockey: {fileID: 760767675}
+  airHockey: {fileID: 0}
+  wallball: {fileID: 0}
+  billiards: {fileID: 0}
+  menu: {fileID: 1771200871}
+  setupPage: {fileID: 1002502959}
+  setupInteraction: {fileID: 1002502964}
+  sportName: TRUCK HOCKEY
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantHosts:
+  - {fileID: 1616169956}
+  - {fileID: 817434202}
+  - {fileID: 77428445}
+  - {fileID: 894855571}
+  - {fileID: 2093723468}
+  - {fileID: 1215300120}
+  sharedTurnHost: {fileID: 0}
+--- !u!4 &70067877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70067874}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &71508285
 GameObject:
   m_ObjectHideFlags: 0
@@ -3606,6 +3763,7 @@ GameObject:
   - component: {fileID: 77428444}
   - component: {fileID: 77428442}
   - component: {fileID: 77428441}
+  - component: {fileID: 77428445}
   m_Layer: 0
   m_Name: Blue Truck 3
   m_TagString: Untagged
@@ -3736,6 +3894,343 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.95, y: 0.55, z: 1.95}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &77428445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77428439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 2
+  presentationParent: {fileID: 1900167582}
+  originalBodyRenderers:
+  - {fileID: 328273466}
+  - {fileID: 1347275344}
+  - {fileID: 335947238}
+  - {fileID: 1414182909}
+  - {fileID: 1954643493}
+  - {fileID: 1385312704}
+  - {fileID: 765272650}
+  - {fileID: 606897156}
+  - {fileID: 1695316551}
+  - {fileID: 308647648}
+  - {fileID: 164109164}
+  - {fileID: 929675381}
+  - {fileID: 2120368982}
+  - {fileID: 313730215}
+  - {fileID: 744395597}
+  - {fileID: 1285037837}
+  - {fileID: 1780039094}
+  - {fileID: 1459835332}
+  - {fileID: 220855495}
+  - {fileID: 1138086195}
+  - {fileID: 30984733}
+  - {fileID: 1452154005}
+  - {fileID: 1280690731}
+  - {fileID: 477321085}
+  - {fileID: 1530709527}
+  - {fileID: 340379426}
+  - {fileID: 1867475917}
+  - {fileID: 525618789}
+  - {fileID: 1464921013}
+  originalWheelRenderers:
+  - {fileID: 2083435223}
+  - {fileID: 280640375}
+  - {fileID: 1831835234}
+  - {fileID: 910679065}
+  auxiliaryExteriorRenderers:
+  - {fileID: 623577210}
+  - {fileID: 818773955}
+  protectedRoots:
+  - {fileID: 610844409}
+  - {fileID: 610844409}
+  - {fileID: 266421964}
+  - {fileID: 1341623142}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 2083435222}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 280640374}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1831835233}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 910679064}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: -0.00000005920727, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000008940697, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000008940697, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &79388004
 GameObject:
   m_ObjectHideFlags: 0
@@ -12998,6 +13493,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278004995}
   m_Mesh: {fileID: 127176158521474991, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &278228763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278228764}
+  - component: {fileID: 278228765}
+  - component: {fileID: 278228766}
+  m_Layer: 0
+  m_Name: Truck fit setup subtitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &278228764
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278228763}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1002502960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1040, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &278228765
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278228763}
+  m_CullTransparentMesh: 1
+--- !u!114 &278228766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278228763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 0.956, b: 0.84, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 21
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 21
+  m_fontSizeMax: 21
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 4096
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 0
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &278383049
 GameObject:
   m_ObjectHideFlags: 0
@@ -35322,6 +35955,13 @@ MonoBehaviour:
   - {fileID: 894855567}
   - {fileID: 2093723465}
   - {fileID: 1215300116}
+  appearanceHosts:
+  - {fileID: 1616169956}
+  - {fileID: 817434202}
+  - {fileID: 77428445}
+  - {fileID: 894855571}
+  - {fileID: 2093723468}
+  - {fileID: 1215300120}
   ai: {fileID: 760767676}
   agents:
   - {fileID: 1616169955}
@@ -35608,26 +36248,32 @@ MonoBehaviour:
     light: {fileID: 462396605}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 817434197}
     light: {fileID: 1581456631}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 77428440}
     light: {fileID: 378314088}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 894855570}
     light: {fileID: 282935637}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 2093723463}
     light: {fileID: 211366422}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1215300119}
     light: {fileID: 1705354328}
     position: {x: 0, y: 0.11000001, z: 0.95550007}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   alternateSession: {fileID: 760767675}
   layoutVersion: 0
 --- !u!114 &760767686
@@ -35673,6 +36319,9 @@ MonoBehaviour:
   - {fileID: 1350514530}
   - {fileID: 1848009529}
   - {fileID: 330782641}
+  morningLampMultiplier: 0
+  lampSnowSurface: {fileID: 0}
+  coveredLampMultiplier: 1
 --- !u!82 &760767688
 AudioSource:
   m_ObjectHideFlags: 0
@@ -38545,6 +39194,7 @@ GameObject:
   - component: {fileID: 817434201}
   - component: {fileID: 817434199}
   - component: {fileID: 817434198}
+  - component: {fileID: 817434202}
   m_Layer: 0
   m_Name: Blue Truck 2
   m_TagString: Untagged
@@ -38675,6 +39325,343 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.95, y: 0.55, z: 1.95}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &817434202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817434196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 1
+  presentationParent: {fileID: 595258149}
+  originalBodyRenderers:
+  - {fileID: 1094220043}
+  - {fileID: 1417121599}
+  - {fileID: 366120358}
+  - {fileID: 1609646844}
+  - {fileID: 1132130501}
+  - {fileID: 1676592798}
+  - {fileID: 1996934233}
+  - {fileID: 1623541135}
+  - {fileID: 1836727074}
+  - {fileID: 336270664}
+  - {fileID: 2102619684}
+  - {fileID: 364185040}
+  - {fileID: 450892622}
+  - {fileID: 2141302962}
+  - {fileID: 860629801}
+  - {fileID: 1718576620}
+  - {fileID: 278004997}
+  - {fileID: 215217373}
+  - {fileID: 1388981569}
+  - {fileID: 1982421133}
+  - {fileID: 1971925202}
+  - {fileID: 241882103}
+  - {fileID: 1212121740}
+  - {fileID: 522913100}
+  - {fileID: 597208667}
+  - {fileID: 452499427}
+  - {fileID: 1716903488}
+  - {fileID: 1747881574}
+  - {fileID: 1053150304}
+  originalWheelRenderers:
+  - {fileID: 1427659141}
+  - {fileID: 1341675845}
+  - {fileID: 553776627}
+  - {fileID: 2035148582}
+  auxiliaryExteriorRenderers:
+  - {fileID: 472794943}
+  - {fileID: 564076920}
+  protectedRoots:
+  - {fileID: 561467474}
+  - {fileID: 561467474}
+  - {fileID: 606444801}
+  - {fileID: 1476040762}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 1427659140}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1341675844}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 553776626}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 2035148581}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: -0.00000005920727, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000008940697, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000008940697, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &818773952
 GameObject:
   m_ObjectHideFlags: 0
@@ -42659,6 +43646,7 @@ GameObject:
   - component: {fileID: 894855568}
   - component: {fileID: 894855569}
   - component: {fileID: 894855567}
+  - component: {fileID: 894855571}
   m_Layer: 0
   m_Name: Orange Truck 1
   m_TagString: Untagged
@@ -42757,6 +43745,343 @@ Transform:
   - {fileID: 1526889958}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &894855571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894855566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 3
+  presentationParent: {fileID: 748903022}
+  originalBodyRenderers:
+  - {fileID: 1218969234}
+  - {fileID: 413644925}
+  - {fileID: 2045725363}
+  - {fileID: 1775592747}
+  - {fileID: 1036390281}
+  - {fileID: 788518396}
+  - {fileID: 600333365}
+  - {fileID: 1315690540}
+  - {fileID: 1018128454}
+  - {fileID: 177813122}
+  - {fileID: 744577681}
+  - {fileID: 161501090}
+  - {fileID: 256745484}
+  - {fileID: 1539666671}
+  - {fileID: 405500453}
+  - {fileID: 448809327}
+  - {fileID: 2057971735}
+  - {fileID: 1018349431}
+  - {fileID: 404254356}
+  - {fileID: 1800681553}
+  - {fileID: 811838513}
+  - {fileID: 327017419}
+  - {fileID: 112582819}
+  - {fileID: 1728020671}
+  - {fileID: 1271947070}
+  - {fileID: 1162623043}
+  - {fileID: 822158810}
+  - {fileID: 904816141}
+  - {fileID: 1396965146}
+  originalWheelRenderers:
+  - {fileID: 1511451401}
+  - {fileID: 951665132}
+  - {fileID: 1500184677}
+  - {fileID: 1601636380}
+  auxiliaryExteriorRenderers:
+  - {fileID: 230527455}
+  - {fileID: 1526889957}
+  protectedRoots:
+  - {fileID: 1043966752}
+  - {fileID: 1043966752}
+  - {fileID: 1493068677}
+  - {fileID: 1086329555}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 1511451400}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 951665131}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1500184676}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1601636379}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: 0.000000089804345, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: 0.000000059604645, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: 0.000000059604645, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &898856792
 GameObject:
   m_ObjectHideFlags: 0
@@ -48176,6 +49501,9 @@ RectTransform:
   - {fileID: 423003395}
   - {fileID: 1745002697}
   - {fileID: 1275888332}
+  - {fileID: 56502463}
+  - {fileID: 278228764}
+  - {fileID: 2088282039}
   m_Father: {fileID: 1771200875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -59443,6 +60771,7 @@ GameObject:
   - component: {fileID: 1215300117}
   - component: {fileID: 1215300116}
   - component: {fileID: 1215300115}
+  - component: {fileID: 1215300120}
   m_Layer: 0
   m_Name: Orange Truck 3
   m_TagString: Untagged
@@ -59573,6 +60902,343 @@ Transform:
   - {fileID: 1391154784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1215300120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215300114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 5
+  presentationParent: {fileID: 676021601}
+  originalBodyRenderers:
+  - {fileID: 833880580}
+  - {fileID: 222778603}
+  - {fileID: 736485758}
+  - {fileID: 1418420900}
+  - {fileID: 1989582847}
+  - {fileID: 1456296013}
+  - {fileID: 350641247}
+  - {fileID: 1712533577}
+  - {fileID: 908495966}
+  - {fileID: 1051060454}
+  - {fileID: 219741171}
+  - {fileID: 978260047}
+  - {fileID: 1421445318}
+  - {fileID: 472730692}
+  - {fileID: 224294381}
+  - {fileID: 1795011576}
+  - {fileID: 1290899381}
+  - {fileID: 707477174}
+  - {fileID: 1928006760}
+  - {fileID: 863132133}
+  - {fileID: 433122949}
+  - {fileID: 1330758007}
+  - {fileID: 233487636}
+  - {fileID: 156743914}
+  - {fileID: 393082994}
+  - {fileID: 1944420266}
+  - {fileID: 716254470}
+  - {fileID: 89943071}
+  - {fileID: 268995462}
+  originalWheelRenderers:
+  - {fileID: 653959105}
+  - {fileID: 1050533634}
+  - {fileID: 1576208}
+  - {fileID: 1010667559}
+  auxiliaryExteriorRenderers:
+  - {fileID: 410307046}
+  - {fileID: 1391154783}
+  protectedRoots:
+  - {fileID: 276380533}
+  - {fileID: 276380533}
+  - {fileID: 1571941147}
+  - {fileID: 1352317599}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 653959104}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1050533633}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1576207}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1010667558}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: 0.000000089804345, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: 0.000000059604645, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: 0.000000059604645, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1216436408
 GameObject:
   m_ObjectHideFlags: 0
@@ -61018,6 +62684,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239479181}
   m_Mesh: {fileID: -5076515277078691699, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &1245411914
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245411917}
+  - component: {fileID: 1245411916}
+  - component: {fileID: 1245411915}
+  m_Layer: 0
+  m_Name: Caption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1245411915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245411914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: TRUCK FIT
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 26
+  m_fontSizeBase: 26
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
+  m_fontSizeMax: 23
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1245411916
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245411914}
+  m_CullTransparentMesh: 1
+--- !u!224 &1245411917
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245411914}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2088282039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 162, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1247238741
 GameObject:
   m_ObjectHideFlags: 0
@@ -80979,6 +82783,7 @@ GameObject:
   - component: {fileID: 1616169953}
   - component: {fileID: 1616169951}
   - component: {fileID: 1616169955}
+  - component: {fileID: 1616169956}
   m_Layer: 0
   m_Name: Blue Truck 1
   m_TagString: Untagged
@@ -81109,6 +82914,343 @@ MonoBehaviour:
     positionError: 0.08
     steeringError: 0.7
     defenseThreshold: 0.3
+--- !u!114 &1616169956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616169950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 0
+  presentationParent: {fileID: 1114865873}
+  originalBodyRenderers:
+  - {fileID: 1553127322}
+  - {fileID: 822843195}
+  - {fileID: 872943325}
+  - {fileID: 1332577827}
+  - {fileID: 1284040166}
+  - {fileID: 1155867188}
+  - {fileID: 1330203132}
+  - {fileID: 1843584906}
+  - {fileID: 2063478690}
+  - {fileID: 2146242215}
+  - {fileID: 1714963793}
+  - {fileID: 199731543}
+  - {fileID: 869586614}
+  - {fileID: 752644105}
+  - {fileID: 995351329}
+  - {fileID: 691451099}
+  - {fileID: 230965836}
+  - {fileID: 1452725272}
+  - {fileID: 1519112275}
+  - {fileID: 1307421626}
+  - {fileID: 1239479183}
+  - {fileID: 231235619}
+  - {fileID: 1136913277}
+  - {fileID: 1659066209}
+  - {fileID: 751941077}
+  - {fileID: 1718439820}
+  - {fileID: 105869386}
+  - {fileID: 696147692}
+  - {fileID: 811425663}
+  originalWheelRenderers:
+  - {fileID: 1562374878}
+  - {fileID: 1215036437}
+  - {fileID: 1130279896}
+  - {fileID: 85099155}
+  auxiliaryExteriorRenderers:
+  - {fileID: 699679065}
+  - {fileID: 860709932}
+  protectedRoots:
+  - {fileID: 1265929851}
+  - {fileID: 1265929851}
+  - {fileID: 1135724178}
+  - {fileID: 1074374138}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 1562374877}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1215036436}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1130279895}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 85099154}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.326224
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.4483797
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: -0.000000046914277, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.3262071
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620716
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: -0.00000013189965, y: -0.19999981, z: 0.00000044261324}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645452, y: 0.35645452, z: 0.35645452}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: -0.00000005920727, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: -0.00000008940697, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: -0.00000008940697, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1622511769
 GameObject:
   m_ObjectHideFlags: 0
@@ -105016,6 +107158,236 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085587064}
   m_Mesh: {fileID: 3998443429825257798, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &2088282037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2088282039}
+  - component: {fileID: 2088282044}
+  - component: {fileID: 2088282043}
+  - component: {fileID: 2088282042}
+  - component: {fileID: 2088282038}
+  - component: {fileID: 2088282041}
+  - component: {fileID: 2088282040}
+  m_Layer: 0
+  m_Name: truckfit Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2088282038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504050c5fda9c0645802e401a644a171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Michsky.UI.Heat.ButtonManager
+  buttonIcon: {fileID: 0}
+  buttonText: TRUCK FIT
+  iconScale: 1
+  textSize: 26
+  normalCG: {fileID: 0}
+  highlightCG: {fileID: 0}
+  disabledCG: {fileID: 0}
+  normalTextObj: {fileID: 1245411915}
+  highlightTextObj: {fileID: 0}
+  disabledTextObj: {fileID: 0}
+  normalImageObj: {fileID: 0}
+  highlightImageObj: {fileID: 0}
+  disabledImageObj: {fileID: 0}
+  autoFitContent: 0
+  padding:
+    left: 18
+    right: 18
+    top: 15
+    bottom: 15
+  spacing: 12
+  disabledLayout: {fileID: 0}
+  normalLayout: {fileID: 0}
+  highlightedLayout: {fileID: 0}
+  mainLayout: {fileID: 0}
+  mainFitter: {fileID: 0}
+  targetFitter: {fileID: 0}
+  targetRect: {fileID: 0}
+  isInteractable: 1
+  enableIcon: 0
+  enableText: 1
+  useCustomContent: 0
+  useCustomTextSize: 0
+  checkForDoubleClick: 0
+  useLocalization: 0
+  bypassUpdateOnEnable: 0
+  useUINavigation: 1
+  navigationMode: 4
+  selectOnUp: {fileID: 0}
+  selectOnDown: {fileID: 0}
+  selectOnLeft: {fileID: 0}
+  selectOnRight: {fileID: 0}
+  wrapAround: 0
+  useSounds: 0
+  doubleClickPeriod: 0.25
+  fadingMultiplier: 8
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  overrideInteractable: 0
+  latestTabIndex: 0
+--- !u!224 &2088282039
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1245411917}
+  m_Father: {fileID: 1002502960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 610, y: 492}
+  m_SizeDelta: {x: 180, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2088282040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
+  cut: 10
+  accent: 0
+--- !u!114 &2088282041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d69835bf87409842b2c42aba41fc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBilliards.BilliardsButtonVisual
+  surface: {fileID: 2088282043}
+  normal: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  highlight: {r: 0.06, g: 0.43, b: 0.4, a: 1}
+--- !u!114 &2088282042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2088282043}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2088282043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2088282044
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088282037}
+  m_CullTransparentMesh: 1
 --- !u!1 &2090008979
 GameObject:
   m_ObjectHideFlags: 0
@@ -105137,6 +107509,7 @@ GameObject:
   - component: {fileID: 2093723467}
   - component: {fileID: 2093723465}
   - component: {fileID: 2093723464}
+  - component: {fileID: 2093723468}
   m_Layer: 0
   m_Name: Orange Truck 2
   m_TagString: Untagged
@@ -105267,6 +107640,343 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.95, y: 0.55, z: 1.95}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2093723468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093723462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 4
+  presentationParent: {fileID: 947678661}
+  originalBodyRenderers:
+  - {fileID: 583119163}
+  - {fileID: 1358068907}
+  - {fileID: 1371784415}
+  - {fileID: 79388006}
+  - {fileID: 1157981983}
+  - {fileID: 1492469386}
+  - {fileID: 916910800}
+  - {fileID: 503932060}
+  - {fileID: 1879409394}
+  - {fileID: 2085587066}
+  - {fileID: 1882287075}
+  - {fileID: 870665730}
+  - {fileID: 436030734}
+  - {fileID: 1607877801}
+  - {fileID: 1608125295}
+  - {fileID: 48369277}
+  - {fileID: 791361233}
+  - {fileID: 213895910}
+  - {fileID: 913276896}
+  - {fileID: 1025776761}
+  - {fileID: 1886919723}
+  - {fileID: 1180097498}
+  - {fileID: 1599319784}
+  - {fileID: 631642789}
+  - {fileID: 353355137}
+  - {fileID: 1348294373}
+  - {fileID: 1955189613}
+  - {fileID: 1027858066}
+  - {fileID: 118260277}
+  originalWheelRenderers:
+  - {fileID: 835922569}
+  - {fileID: 1110805218}
+  - {fileID: 1051816087}
+  - {fileID: 296530395}
+  auxiliaryExteriorRenderers:
+  - {fileID: 1372956088}
+  - {fileID: 1581130139}
+  protectedRoots:
+  - {fileID: 549073062}
+  - {fileID: 549073062}
+  - {fileID: 1987185279}
+  - {fileID: 1213865882}
+  - {fileID: 403675482}
+  - {fileID: 1680893432}
+  - {fileID: 970053807}
+  wheels: []
+  staticWheelPoses:
+  - source: {fileID: 835922568}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1110805217}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 1051816086}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  - source: {fileID: 296530394}
+    center: {x: 0, y: 0, z: 0}
+    diameter: 0.32622385
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.3262239
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.monster
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.44837958
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: semi.lowrider
+    position: {x: 0.000000102097324, y: -0.19999976, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.326207
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.32620707
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.lifted
+    position: {x: 0.000000017111965, y: -0.19999981, z: 0.0000004426132}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.35645443, y: 0.35645443, z: 0.35645443}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.48933578
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: truck.fire
+    position: {x: 0.000000089804345, y: -0.19999981, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25333342, y: 0.25333342, z: 0.25333342}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.hotdog
+    position: {x: 0.000000059604645, y: -0.19999978, z: 0.00000035762787}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.26027405, y: 0.26027405, z: 0.26027405}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  - bodyId: novelty.icecream
+    position: {x: 0.000000059604645, y: -0.19999981, z: 0.00000029741028}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.25257093, y: 0.25257093, z: 0.25257093}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.2609791
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.2609791
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.2609791
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.2609791
+    notice: Existing render-only wheel transforms supply position and rotation; this
+      sport retains its original physical envelope.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &2097363681
 GameObject:
   m_ObjectHideFlags: 0
@@ -181788,3 +184498,4 @@ SceneRoots:
   - {fileID: 2093723463}
   - {fileID: 1215300119}
   - {fileID: 440019985256929398}
+  - {fileID: 70067877}

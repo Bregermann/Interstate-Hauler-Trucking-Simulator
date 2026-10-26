@@ -196,8 +196,10 @@ namespace LWS.TruckKickball
             int index = slot % rules.TeamSize;
             return index == 0 ? new Vector3(0, .7f, 24) : index == 1 ? Bases[1] + new Vector3(5, .7f, 3) : index == 2 ? Bases[3] + new Vector3(-5, .7f, 3) : index == 3 ? Bases[2] + new Vector3(5, .7f, 3) : new Vector3(index == 4 ? -30 : 30, .7f, 66);
         }
+        bool pendingAppearanceRecord;readonly int[] appearanceRevisions={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
         void PreparePlate(bool newHalf)
         {
+            replay.End();
             Carrier = -1; lastThrower = -1; contactSlot = -1; contactDistance = float.MaxValue;
             Array.Clear(tags, 0, tags.Length); PlayTime = deadTime = 0; grounded = groundPending = pitchCrossed = false;
             transition = newHalf ? 3 : 1.3f; pitchReady = 0; notice = newHalf ? "NEW HALF · GET READY" : "NEXT KICKER";
@@ -213,9 +215,21 @@ namespace LWS.TruckKickball
                 else truck.Park(new Vector3(rules.BattingTeam == 0 ? -49 : 49, .7f, 4 + i % rules.TeamSize * 5));
                 agents[i].blocked = agents[i].reversing = 0; agents[i].Observe();
             }
-            SetBallHeld(Pitcher); replay.ResetRecord();
+            SetBallHeld(Pitcher); pendingAppearanceRecord=Array.Exists(agents,a=>a.truck.appearanceHost!=null);if(pendingAppearanceRecord)replay.ResetFreshAppearanceRecord();else replay.ResetRecord();presentation.RefreshAppearanceExteriors();
             ball.gameObject.GetComponent<Renderer>().enabled = true;
             Gate();
+        }
+
+        // Preserve the thirteenth physical ball source and all original roots.
+        void CaptureAppearanceReplay(float time,int mask)
+        {
+            if(pendingAppearanceRecord)
+            {
+                bool changed=false;for(int i=0;i<12;i++)changed|=(agents[i].truck.appearanceHost!=null?agents[i].truck.appearanceHost.AppearanceRevision:0)!=appearanceRevisions[i];var indices=new[]{0,1,2,3,4,5,6,7,8,9,10,11};
+                if(!replay.RefreshAppearanceSources(indices,changed)&&!replay.RefreshAppearanceSources(indices,true))throw new InvalidOperationException("Kickball appearance requires stopped original truck replay sources.");
+                for(int i=0;i<12;i++)appearanceRevisions[i]=agents[i].truck.appearanceHost!=null?agents[i].truck.appearanceHost.AppearanceRevision:0;pendingAppearanceRecord=false;replay.ResetRecord();
+            }
+            replay.Record(time,mask);
         }
 
         void SetBallHeld(int carrier)
@@ -345,7 +359,7 @@ namespace LWS.TruckKickball
             DriveAgents(dt); HoldBall();
             if (!ball.body.isKinematic) ball.body.AddForce(contactModel.AirAcceleration(ball.body.linearVelocity, ball.body.angularVelocity, atmosphere.Flow), ForceMode.Acceleration);
             for (int i = 0; i < setup.count; i++) agents[i].Observe(); ball.Observe();
-            replay.Record(Clock, ((1 << setup.count) - 1) | (1 << 12));
+            CaptureAppearanceReplay(Clock, ((1 << setup.count) - 1) | (1 << 12));
         }
 
         void ObserveBases()
@@ -390,7 +404,7 @@ namespace LWS.TruckKickball
         {
             if (!rules.FinishPlay()) return;
             if (rules.Complete) { EndMatch(); return; }
-            replay.Record(Clock + .051f, ((1 << setup.count) - 1) | (1 << 12));
+            CaptureAppearanceReplay(Clock + .051f, ((1 << setup.count) - 1) | (1 << 12));
             replay.Begin(Mathf.Max(0, Clock - 7)); replaying = replay.Playing;
             if (!replaying) { PreparePlate(lastTeam != rules.BattingTeam); lastTeam = rules.BattingTeam; return; }
             for (int i = 0; i < setup.count; i++)

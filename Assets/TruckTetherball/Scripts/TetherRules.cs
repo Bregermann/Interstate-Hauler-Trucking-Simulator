@@ -18,13 +18,18 @@ namespace LWS.TruckTetherball
         bool sampled;float previous;
         public void Reset(int bestOf,int targetTurns)
         {
-            if(bestOf!=3&&bestOf!=5||targetTurns<1||targetTurns>4)throw new ArgumentOutOfRangeException();
+            if(bestOf!=3&&bestOf!=5||targetTurns<1||targetTurns>8)throw new ArgumentOutOfRangeException();
             BestOf=bestOf;TargetTurns=targetTurns;Round=0;Winner=-1;Complete=false;wins[0]=wins[1]=0;ResetRound();
         }
         void ResetRound(){RoundWinner=-1;NetDegrees=Clock=0;Live=sampled=false;previous=0;}
         public void Begin(){if(BestOf==0)throw new InvalidOperationException("Configure the match first.");if(!Complete&&RoundWinner<0)Live=true;}
         public bool NextRound(){if(Complete||RoundWinner<0)return false;Round++;ResetRound();return true;}
         public float Progress(int slot)=>Math.Max(0,Math.Min(1,NetDegrees*(slot==0?1:-1)/(TargetTurns*360f)));
+        public void ObserveUnstruckBall(float angleDegrees,float radialMetres,float dt)
+        {
+            if(!Live||Complete||RoundWinner>=0||dt<=0||!Finite(dt)||!Finite(angleDegrees)||!Finite(radialMetres)||radialMetres<4)return;
+            Clock+=dt;sampled=true;previous=angleDegrees;NetDegrees=0;
+        }
         public void Sample(float angleDegrees,float radialMetres,float dt)
         {
             if(!Live||Complete||RoundWinner>=0||dt<=0||!Finite(dt)||!Finite(angleDegrees)||!Finite(radialMetres)||radialMetres<4)return;

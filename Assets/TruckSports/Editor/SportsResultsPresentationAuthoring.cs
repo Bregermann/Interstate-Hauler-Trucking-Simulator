@@ -8,6 +8,8 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsResultsPresentationAuthoring
     {
+        public static void InstallCornholeResults(){InstallScenes(new[] { "TruckCornhole" });InstallReadability(new[] { "TruckCornhole" });}
+        public static void InstallWallballResults(){InstallScenes(new[] { "TruckWallball" });InstallReadability(new[] { "TruckWallball" });}
         public static void InstallMountainAndNinja() => InstallScenes(new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" });
         public static void InstallScoredBatch() => InstallScenes(new[] { "TruckWhackAMole", "TruckMagnetMayhem", "TruckSheepHerding", "TruckSeesaw", "TruckKingOfTheHill", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
         public static void InstallContestBatch() => InstallScenes(new[] { "TruckHotPotato", "TruckBalloonBattle", "TruckTetherball", "TruckJousting", "TruckFrogger", "TruckRedLightGreenLight", "TruckVolleyball", "TruckFreezeTag" });
@@ -18,8 +20,10 @@ namespace LWS.TruckSports.Editor
             foreach (string name in names)
             {
                 var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => System.IO.Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
-                var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
-                var page = session.menus.pages[(int)SportsEventScreen.Result];
+                var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).SingleOrDefault();
+                var cornhole = session == null ? scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<LWS.TruckCornhole.CornholeMatch>(true)).SingleOrDefault() : null;
+                var wallball = session == null && cornhole == null ? scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<LWS.TruckWallball.WallballMatch>(true)).Single() : null;
+                var page = session != null ? session.menus.pages[(int)SportsEventScreen.Result] : cornhole != null ? cornhole.menus.pages[(int)LWS.TruckCornhole.CornholeScreen.Result] : wallball.menus.pages[(int)LWS.TruckWallball.WallballScreen.Result];
                 if (page.transform.Find("Results readability backing") != null) continue;
                 var backing = SportsUIAuthoring.Rect("Results readability backing", page.transform, Vector2.zero, Vector2.zero);
                 var rect = (RectTransform)backing.transform; SportsBroadcastCanvas.Stretch(rect); rect.SetAsFirstSibling();
@@ -55,13 +59,15 @@ namespace LWS.TruckSports.Editor
             foreach (string name in names)
             {
                 var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => System.IO.Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
-                var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
-                var page = session.menus.pages[(int)SportsEventScreen.Result];
+                var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).SingleOrDefault();
+                var cornhole = session == null ? scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<LWS.TruckCornhole.CornholeMatch>(true)).SingleOrDefault() : null;
+                var wallball = session == null && cornhole == null ? scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<LWS.TruckWallball.WallballMatch>(true)).Single() : null;
+                var page = session != null ? session.menus.pages[(int)SportsEventScreen.Result] : cornhole != null ? cornhole.menus.pages[(int)LWS.TruckCornhole.CornholeScreen.Result] : wallball.menus.pages[(int)LWS.TruckWallball.WallballScreen.Result];
                 if (page.GetComponentInChildren<SportsResultsPresentation>(true) != null) continue;
                 var root = SportsUIAuthoring.Rect("Authoritative ranked results", page.transform, new Vector2(1320, 560), Vector2.zero);
                 var presentation = root.AddComponent<SportsResultsPresentation>(); presentation.visibility = root.AddComponent<CanvasGroup>();
                 presentation.visibility.alpha = 0; presentation.visibility.interactable = presentation.visibility.blocksRaycasts = false;
-                presentation.menus = session.menus; presentation.source = root.AddComponent<SportsFinishResultsSource>(); presentation.source.session = session;
+                presentation.menus = session != null ? session.menus : null; presentation.source = root.AddComponent<SportsFinishResultsSource>(); presentation.source.session = session; presentation.source.cornhole = cornhole; presentation.source.wallball = wallball;
                 var theme = Resources.Load<SportsBroadcastTheme>("SportsBroadcastTheme");
                 presentation.heading = SportsUIAuthoring.Text("Outcome headline", root.transform, "", new Vector2(1280, 64), new Vector2(0, 205), 40); presentation.heading.font = theme.headingFont;
                 presentation.summary = SportsUIAuthoring.Text("Authoritative summary", root.transform, "", new Vector2(1280, 32), new Vector2(0, 158), 21); presentation.summary.font = theme.bodyFont;

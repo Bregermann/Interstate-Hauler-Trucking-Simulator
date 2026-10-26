@@ -11,7 +11,7 @@ namespace LWS.TruckNinjaWarrior
   void NextAttempt(){Checkpoint=0;Clock=Penalty=StateClock=0;Phase=NinjaPhase.Countdown;}
   public void Tick(float dt){if(!float.IsFinite(dt)||dt<=0||Phase==NinjaPhase.Setup||Complete)return;if(Phase==NinjaPhase.Running){Clock=Math.Min(Limit,Clock+dt);if(Clock>=Limit){Phase=NinjaPhase.TurnResult;StateClock=0;}return;}StateClock+=dt;if(Phase==NinjaPhase.Countdown&&StateClock>=3){Clock=StateClock-3;StateClock=0;Phase=NinjaPhase.Running;}else if(Phase==NinjaPhase.TurnResult&&StateClock>=3){if(++Active>=Players){Active=Players-1;Phase=NinjaPhase.Complete;}else NextAttempt();}}
   public bool Clear(int actor,int checkpoint){if(Phase!=NinjaPhase.Running||actor!=Active||checkpoint!=Checkpoint+1||checkpoint>Obstacles)return false;Checkpoint=checkpoint;cleared[actor]=checkpoint;return true;}
-  public bool Fall(int actor){if(Phase!=NinjaPhase.Running||actor!=Active)return false;falls[actor]++;Penalty+=5;return true;}
+  public bool Fall(int actor){if(Phase!=NinjaPhase.Running||actor!=Active)return false;falls[actor]++;cleared[actor]=0;NextAttempt();return true;}
   public event Action<int,float> FinishConfirmed;
   public bool Bell(int actor){if(Phase!=NinjaPhase.Running||actor!=Active||Checkpoint!=Obstacles)return false;finished[actor]=true;adjustedTime[actor]=Clock+Penalty;Phase=NinjaPhase.TurnResult;StateClock=0;FinishConfirmed?.Invoke(actor,adjustedTime[actor]);return true;}
   public int Place(int slot){int rank=1;for(int i=0;i<Players;i++)if(i!=slot&&(finished[i]&&!finished[slot]||finished[i]&&finished[slot]&&(adjustedTime[i]<adjustedTime[slot]-.001f||Math.Abs(adjustedTime[i]-adjustedTime[slot])<=.001f&&falls[i]<falls[slot])||!finished[i]&&!finished[slot]&&cleared[i]>cleared[slot]))rank++;return rank;}

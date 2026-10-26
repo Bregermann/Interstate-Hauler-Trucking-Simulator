@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "status": "FAILED_NOT_PROMOTED",
+  "sourceRun": "Carnival060-4c8917-presentation",
+  "processReceipt": {
+    "artifact": "process.json",
+    "sha256": "a2b4c0ba3649ab20b4ffe808f13c047a0a7f9dc69ad453de61a7481833ccb321"
+  },
+  "resultArtifact": {
+    "artifact": "result.txt",
+    "sha256": "9b7187ddc42abe59df034346d98196f3b3788089f8b2b79c036945748d124b16"
+  },
+  "completedRunReceipt": {
+    "exit": 2,
+    "seconds": 137.39,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "3c322bf077c87198f9380c83f11a21b9847089d563b5c364b89aa4565a04c2c0",
+    "buildContentSha256": "4c89174b061a8b26a9d3706079d8ceebb76443c3e7140d182621189d0c6a30f9",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 783,
+    "errors": 1098
+  },
+  "completedEvidenceMeaning": "Runner produced its final receipt; exit2/errors1098 mean failure, not acceptance.",
+  "coverage": {
+    "requestedVenues": 13,
+    "visitedVenues": 3,
+    "completedOrAttemptedCasesReportedByLead": 15,
+    "capturedPngs": 30,
+    "boundedAbort": true
+  },
+  "failureCategoriesReportedByLead": {
+    "strictWeatherRefreshErrors": 985,
+    "transformNullReferenceErrors": 112,
+    "venueCoverageAssertion": 1
+  },
+  "reportedCause": "Sky4-to1participant restart retained stale inactive appearance hierarchy; presentation agent implementing production correction and native regression.",
+  "remainingWork": "New candidate build and required actualWindowsprobe reruns; Ninja/fullpresentation acceptance remains open. No finalWindowsaggregate or whole-release pass is packaged.",
+  "limits": [
+    "No rawlogs/stacks/commandlines/processIDs included",
+    "Earlier separate core/appearance passes on thiscandidate do not override thisfailure",
+    "Nohuman/hardware/audio/performanceacceptance"
+  ]
+}

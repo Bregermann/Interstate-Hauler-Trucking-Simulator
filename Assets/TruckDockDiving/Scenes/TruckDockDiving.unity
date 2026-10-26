@@ -4557,10 +4557,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968252998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 12}
-  m_SizeDelta: {x: -40, y: 52}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 86}
+  m_SizeDelta: {x: 600, y: 48}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &32784454
 MonoBehaviour:
@@ -33836,6 +33836,7 @@ GameObject:
   - component: {fileID: 125597780}
   - component: {fileID: 125597777}
   - component: {fileID: 125597778}
+  - component: {fileID: 125597782}
   m_Layer: 2
   m_Name: Staged competitor 3
   m_TagString: Untagged
@@ -33855,6 +33856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 125597782}
   tractorMotor: {fileID: 0}
   body: {fileID: 125597781}
   shape: {fileID: 125597780}
@@ -34040,6 +34042,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &125597782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125597776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 2
+  presentationParent: {fileID: 426977786}
+  originalBodyRenderers:
+  - {fileID: 142705918}
+  - {fileID: 966592538}
+  - {fileID: 575692698}
+  - {fileID: 2099089356}
+  - {fileID: 1692053235}
+  - {fileID: 2084371793}
+  - {fileID: 108735806}
+  - {fileID: 981756757}
+  - {fileID: 1798203917}
+  - {fileID: 1167586627}
+  - {fileID: 722659903}
+  - {fileID: 1556199260}
+  - {fileID: 739266794}
+  - {fileID: 1847593329}
+  - {fileID: 1936755359}
+  - {fileID: 586828645}
+  - {fileID: 1317117559}
+  - {fileID: 1087086814}
+  - {fileID: 116061745}
+  - {fileID: 898311056}
+  - {fileID: 1029075540}
+  - {fileID: 1018124561}
+  - {fileID: 1197375876}
+  - {fileID: 2110698360}
+  - {fileID: 1079522334}
+  - {fileID: 106932910}
+  - {fileID: 471128012}
+  - {fileID: 1900649559}
+  - {fileID: 703446871}
+  originalWheelRenderers:
+  - {fileID: 87588646}
+  - {fileID: 1105946461}
+  - {fileID: 987426117}
+  - {fileID: 1463051826}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1760716550}
+  - {fileID: 1619274566}
+  - {fileID: 761829234}
+  - {fileID: 1932940737}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689299, y: -0.20000035, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3999999, y: 0.3999999, z: 0.3999999}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095877, y: 0.41095877, z: 0.41095877}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: -0.000000095080445}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &126477366
 GameObject:
   m_ObjectHideFlags: 0
@@ -49628,6 +49961,7 @@ GameObject:
   - component: {fileID: 204384727}
   - component: {fileID: 204384724}
   - component: {fileID: 204384725}
+  - component: {fileID: 204384729}
   m_Layer: 2
   m_Name: Staged competitor 6
   m_TagString: Untagged
@@ -49647,6 +49981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 204384729}
   tractorMotor: {fileID: 0}
   body: {fileID: 204384728}
   shape: {fileID: 204384727}
@@ -49832,6 +50167,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &204384729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204384723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 5
+  presentationParent: {fileID: 2090495031}
+  originalBodyRenderers:
+  - {fileID: 525417006}
+  - {fileID: 1705374909}
+  - {fileID: 602873491}
+  - {fileID: 1669334303}
+  - {fileID: 397255809}
+  - {fileID: 685623863}
+  - {fileID: 149493958}
+  - {fileID: 550146671}
+  - {fileID: 1529646199}
+  - {fileID: 1290641197}
+  - {fileID: 962735415}
+  - {fileID: 714744055}
+  - {fileID: 578204689}
+  - {fileID: 2025957247}
+  - {fileID: 821326818}
+  - {fileID: 532866258}
+  - {fileID: 1998956829}
+  - {fileID: 1845808942}
+  - {fileID: 842245447}
+  - {fileID: 237814902}
+  - {fileID: 371323686}
+  - {fileID: 1851152314}
+  - {fileID: 1321096098}
+  - {fileID: 424683685}
+  - {fileID: 498902642}
+  - {fileID: 73696668}
+  - {fileID: 1731596794}
+  - {fileID: 587525507}
+  - {fileID: 1495136344}
+  originalWheelRenderers:
+  - {fileID: 399626774}
+  - {fileID: 565727551}
+  - {fileID: 1363322505}
+  - {fileID: 843105333}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 2129780583}
+  - {fileID: 995332880}
+  - {fileID: 698843938}
+  - {fileID: 1196452776}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689302, y: -0.20000035, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: 0.0000003817567}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &204533232
 GameObject:
   m_ObjectHideFlags: 0
@@ -126310,6 +126976,144 @@ Transform:
   - {fileID: 1838054607}
   m_Father: {fileID: 822490165}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &614975514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 614975517}
+  - component: {fileID: 614975516}
+  - component: {fileID: 614975515}
+  m_Layer: 0
+  m_Name: Caption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &614975515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614975514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: TRUCK FIT
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 26
+  m_fontSizeBase: 26
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
+  m_fontSizeMax: 23
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &614975516
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614975514}
+  m_CullTransparentMesh: 1
+--- !u!224 &614975517
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614975514}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1772722291}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 162, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &615424214
 GameObject:
   m_ObjectHideFlags: 0
@@ -141088,6 +141892,7 @@ GameObject:
   - component: {fileID: 704302533}
   - component: {fileID: 704302530}
   - component: {fileID: 704302531}
+  - component: {fileID: 704302535}
   m_Layer: 2
   m_Name: Staged competitor 4
   m_TagString: Untagged
@@ -141107,6 +141912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 704302535}
   tractorMotor: {fileID: 0}
   body: {fileID: 704302534}
   shape: {fileID: 704302533}
@@ -141292,6 +142098,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &704302535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704302529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 3
+  presentationParent: {fileID: 1415129467}
+  originalBodyRenderers:
+  - {fileID: 691101308}
+  - {fileID: 1683060067}
+  - {fileID: 1291120774}
+  - {fileID: 585887683}
+  - {fileID: 599638541}
+  - {fileID: 981619196}
+  - {fileID: 1504111332}
+  - {fileID: 786818629}
+  - {fileID: 141703813}
+  - {fileID: 783925197}
+  - {fileID: 39759186}
+  - {fileID: 567344164}
+  - {fileID: 285666660}
+  - {fileID: 885195035}
+  - {fileID: 1156380722}
+  - {fileID: 1108233479}
+  - {fileID: 997442155}
+  - {fileID: 732655244}
+  - {fileID: 1810735423}
+  - {fileID: 1516534801}
+  - {fileID: 235129193}
+  - {fileID: 1361196176}
+  - {fileID: 1452078723}
+  - {fileID: 118122304}
+  - {fileID: 2125740374}
+  - {fileID: 669256113}
+  - {fileID: 1231226522}
+  - {fileID: 1878185660}
+  - {fileID: 1625081219}
+  originalWheelRenderers:
+  - {fileID: 2061790652}
+  - {fileID: 2089967462}
+  - {fileID: 350640696}
+  - {fileID: 1383661437}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1569104711}
+  - {fileID: 984673008}
+  - {fileID: 2095719543}
+  - {fileID: 1485606376}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689299, y: -0.20000035, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3999999, y: 0.3999999, z: 0.3999999}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095877, y: 0.41095877, z: 0.41095877}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: -0.000000095080445}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &704710639
 GameObject:
   m_ObjectHideFlags: 0
@@ -180645,6 +181782,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDockDiving.DockMatch
   presentationWeather: {fileID: 906088780}
+  appearanceHosts:
+  - {fileID: 1117505580}
+  - {fileID: 1039179423}
+  - {fileID: 2128951651}
+  - {fileID: 125597782}
+  - {fileID: 704302535}
+  - {fileID: 1294061292}
+  - {fileID: 204384729}
+  - {fileID: 1734944828}
+  - {fileID: 1419117884}
+  appearanceFraming: []
   setup:
     mode: 0
     count: 2
@@ -180733,6 +181881,7 @@ MonoBehaviour:
   teamA: 1
   teamB: 1
   weather: 0
+  appearanceSplit: {fileID: 1117505579}
   truck: {fileID: 1117505575}
   staged:
   - {fileID: 1039179418}
@@ -181768,6 +182917,7 @@ MonoBehaviour:
   sun: {fileID: 1311841734}
   ambience: {fileID: 906088781}
   matchTime: {fileID: 906088782}
+  alternateSession: {fileID: 0}
 --- !u!82 &906088781
 AudioSource:
   m_ObjectHideFlags: 0
@@ -181894,6 +183044,9 @@ MonoBehaviour:
   - {fileID: 786482868}
   - {fileID: 538650475}
   - {fileID: 1160422438}
+  morningLampMultiplier: 0
+  lampSnowSurface: {fileID: 0}
+  coveredLampMultiplier: 1
 --- !u!114 &906088783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181932,38 +183085,48 @@ MonoBehaviour:
     light: {fileID: 521181022}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 906088767}
   - target: {fileID: 1039179420}
     light: {fileID: 1059151518}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 2128951648}
     light: {fileID: 709596918}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 125597779}
     light: {fileID: 1930906606}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 704302532}
     light: {fileID: 1345193981}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1294061289}
     light: {fileID: 1277897365}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 204384726}
     light: {fileID: 1555084974}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1734944825}
     light: {fileID: 1652042832}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1419117881}
     light: {fileID: 569884114}
     position: {x: 0, y: 0.32999992, z: 1.323}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
+  alternateSession: {fileID: 0}
   layoutVersion: 2
 --- !u!114 &906088784
 MonoBehaviour:
@@ -204263,6 +205426,7 @@ GameObject:
   - component: {fileID: 1039179421}
   - component: {fileID: 1039179418}
   - component: {fileID: 1039179419}
+  - component: {fileID: 1039179423}
   m_Layer: 2
   m_Name: Staged competitor 1
   m_TagString: Untagged
@@ -204282,6 +205446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1039179423}
   tractorMotor: {fileID: 0}
   body: {fileID: 1039179422}
   shape: {fileID: 1039179421}
@@ -204467,6 +205632,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &1039179423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039179417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 0
+  presentationParent: {fileID: 149205910}
+  originalBodyRenderers:
+  - {fileID: 794652515}
+  - {fileID: 1532311230}
+  - {fileID: 1572054600}
+  - {fileID: 61114202}
+  - {fileID: 860415643}
+  - {fileID: 1224327993}
+  - {fileID: 361330692}
+  - {fileID: 298066709}
+  - {fileID: 423382729}
+  - {fileID: 285840530}
+  - {fileID: 1116264507}
+  - {fileID: 390329967}
+  - {fileID: 601189637}
+  - {fileID: 2019911408}
+  - {fileID: 596558352}
+  - {fileID: 1863021867}
+  - {fileID: 1729597344}
+  - {fileID: 1609603075}
+  - {fileID: 1779751863}
+  - {fileID: 46226106}
+  - {fileID: 776131492}
+  - {fileID: 1131333627}
+  - {fileID: 1012567272}
+  - {fileID: 707843072}
+  - {fileID: 493753853}
+  - {fileID: 1731403541}
+  - {fileID: 1229715178}
+  - {fileID: 2139692054}
+  - {fileID: 313755339}
+  originalWheelRenderers:
+  - {fileID: 745200049}
+  - {fileID: 585205494}
+  - {fileID: 1979216286}
+  - {fileID: 1639338200}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1584478178}
+  - {fileID: 762063957}
+  - {fileID: 1231494128}
+  - {fileID: 372075861}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689299, y: -0.20000035, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3999999, y: 0.3999999, z: 0.3999999}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095877, y: 0.41095877, z: 0.41095877}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: -0.000000095080445}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1039987436
 GameObject:
   m_ObjectHideFlags: 0
@@ -214586,6 +216082,8 @@ GameObject:
   - component: {fileID: 1117505576}
   - component: {fileID: 1117505578}
   - component: {fileID: 1117505574}
+  - component: {fileID: 1117505580}
+  - component: {fileID: 1117505579}
   m_Layer: 2
   m_Name: Active dock diver
   m_TagString: Untagged
@@ -214675,6 +216173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1117505580}
   tractorMotor: {fileID: 0}
   body: {fileID: 1117505573}
   shape: {fileID: 1117505577}
@@ -214826,6 +216325,359 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDockDiving.DockContact
   match: {fileID: 906088766}
+--- !u!114 &1117505579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117505571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f42a2a3f968f4c6fbf77ebbd96b2522d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDockDiving.DockSelectedSplitPresentation
+  match: {fileID: 906088766}
+  host: {fileID: 1117505580}
+  recipes:
+  - {fileID: 11400000, guid: 2cfaa5e2ae5572c479529a4799ecc2a6, type: 2}
+  - {fileID: 11400000, guid: ac3b8c2478feeba48b07c0b90e52b039, type: 2}
+  - {fileID: 11400000, guid: 9f96143ea96f5fe4a80db40ea1dca3af, type: 2}
+  - {fileID: 11400000, guid: 6d8da4669ee0a8548951b3c82f2766b3, type: 2}
+  - {fileID: 11400000, guid: ef4dec55077f6114ea222b7f9db6af70, type: 2}
+  - {fileID: 11400000, guid: aa59d84bd7192fd43b29148b5bb6e41e, type: 2}
+  - {fileID: 11400000, guid: b675f2650434bb4489beb9f0817d0446, type: 2}
+--- !u!114 &1117505580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117505571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: -1
+  presentationParent: {fileID: 166498416}
+  originalBodyRenderers:
+  - {fileID: 553793402}
+  - {fileID: 1693985443}
+  - {fileID: 1988744531}
+  - {fileID: 1822989776}
+  - {fileID: 634134121}
+  - {fileID: 573967030}
+  - {fileID: 2085412585}
+  - {fileID: 251198123}
+  - {fileID: 865504625}
+  - {fileID: 899512118}
+  - {fileID: 501080933}
+  - {fileID: 88539785}
+  - {fileID: 717592850}
+  - {fileID: 777045768}
+  - {fileID: 1692375986}
+  - {fileID: 1051861989}
+  - {fileID: 675646109}
+  - {fileID: 736900391}
+  - {fileID: 1119027334}
+  - {fileID: 1464350000}
+  - {fileID: 1668028614}
+  - {fileID: 57498493}
+  - {fileID: 115499417}
+  - {fileID: 1495114165}
+  - {fileID: 1962050153}
+  - {fileID: 1418342403}
+  - {fileID: 671030271}
+  - {fileID: 2004567848}
+  - {fileID: 1747950999}
+  originalWheelRenderers:
+  - {fileID: 1117538442}
+  - {fileID: 743176621}
+  - {fileID: 1491142323}
+  - {fileID: 1786508583}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1821398331}
+  - {fileID: 2075113553}
+  - {fileID: 1133084371}
+  - {fileID: 622354223}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.20000035, z: 0.00000013418742}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.20000035, z: 0.00000013418742}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000040531157, y: -0.20000035, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3999999, y: 0.3999999, z: 0.3999999}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.2000003, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095877, y: 0.41095877, z: 0.41095877}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.20000035, z: -0.000000095080445}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1117538439
 GameObject:
   m_ObjectHideFlags: 0
@@ -218385,6 +220237,81 @@ Transform:
   - {fileID: 289159686}
   m_Father: {fileID: 1366621654}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1138856063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138856064}
+  - component: {fileID: 1138856066}
+  - component: {fileID: 1138856065}
+  m_Layer: 0
+  m_Name: Truck fit summary readability backing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1138856064
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138856063}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1455526733}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1064, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1138856065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138856063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1138856066
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138856063}
+  m_CullTransparentMesh: 1
 --- !u!1 &1139529666
 GameObject:
   m_ObjectHideFlags: 0
@@ -219300,6 +221227,90 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145889995}
   m_Mesh: {fileID: 4300002, guid: aed1b13b52477b343bc5dcdc960edeff, type: 3}
+--- !u!1 &1146079732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146079735}
+  - component: {fileID: 1146079734}
+  - component: {fileID: 1146079733}
+  m_Layer: 0
+  m_Name: Truck fit setup adapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1146079733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146079732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0452881a11f84a3080865b9f86bb4c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilityPresenter
+  source: {fileID: 1146079734}
+  subtitle: {fileID: 1410052515}
+  originalSubtitle: 
+  reportButton: {fileID: 1772722290}
+--- !u!114 &1146079734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146079732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb5a099ffe7414a82564f95361fa8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilitySource
+  session: {fileID: 906088766}
+  bowling: {fileID: 0}
+  cornhole: {fileID: 0}
+  cheese: {fileID: 0}
+  hockey: {fileID: 0}
+  airHockey: {fileID: 0}
+  wallball: {fileID: 0}
+  billiards: {fileID: 0}
+  menu: {fileID: 517996897}
+  setupPage: {fileID: 1455526732}
+  setupInteraction: {fileID: 1455526737}
+  sportName: TRUCK DOCK DIVING
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantHosts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  sharedTurnHost: {fileID: 1117505580}
+--- !u!4 &1146079735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146079732}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1146430592
 GameObject:
   m_ObjectHideFlags: 0
@@ -252865,6 +254876,7 @@ GameObject:
   - component: {fileID: 1294061290}
   - component: {fileID: 1294061287}
   - component: {fileID: 1294061288}
+  - component: {fileID: 1294061292}
   m_Layer: 2
   m_Name: Staged competitor 5
   m_TagString: Untagged
@@ -252884,6 +254896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1294061292}
   tractorMotor: {fileID: 0}
   body: {fileID: 1294061291}
   shape: {fileID: 1294061290}
@@ -253069,6 +255082,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &1294061292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294061286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 4
+  presentationParent: {fileID: 638595782}
+  originalBodyRenderers:
+  - {fileID: 276453552}
+  - {fileID: 1410225549}
+  - {fileID: 1408839899}
+  - {fileID: 1736062162}
+  - {fileID: 21544709}
+  - {fileID: 1258917684}
+  - {fileID: 1594718043}
+  - {fileID: 703195063}
+  - {fileID: 261665396}
+  - {fileID: 1842293739}
+  - {fileID: 858302280}
+  - {fileID: 1460546345}
+  - {fileID: 729360789}
+  - {fileID: 1843817451}
+  - {fileID: 1206150342}
+  - {fileID: 833201225}
+  - {fileID: 988780242}
+  - {fileID: 886296432}
+  - {fileID: 2140222813}
+  - {fileID: 1216903333}
+  - {fileID: 1805428171}
+  - {fileID: 707540141}
+  - {fileID: 1082063364}
+  - {fileID: 1674059777}
+  - {fileID: 979330516}
+  - {fileID: 525254362}
+  - {fileID: 913489146}
+  - {fileID: 1494227927}
+  - {fileID: 101430106}
+  originalWheelRenderers:
+  - {fileID: 563119265}
+  - {fileID: 2061138417}
+  - {fileID: 1828733376}
+  - {fileID: 1503935389}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1590243467}
+  - {fileID: 168448524}
+  - {fileID: 1338009281}
+  - {fileID: 2072383772}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689302, y: -0.20000035, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: 0.0000003817567}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1294746934
 GameObject:
   m_ObjectHideFlags: 0
@@ -269872,6 +272216,144 @@ Transform:
   - {fileID: 760422429}
   m_Father: {fileID: 2058400193}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1410052512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1410052513}
+  - component: {fileID: 1410052514}
+  - component: {fileID: 1410052515}
+  m_Layer: 0
+  m_Name: Truck fit setup subtitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1410052513
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410052512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1455526733}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1040, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1410052514
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410052512}
+  m_CullTransparentMesh: 1
+--- !u!114 &1410052515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410052512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 0.956, b: 0.84, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 21
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 21
+  m_fontSizeMax: 21
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 4096
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 0
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1410225547
 GameObject:
   m_ObjectHideFlags: 0
@@ -271475,6 +273957,7 @@ GameObject:
   - component: {fileID: 1419117882}
   - component: {fileID: 1419117879}
   - component: {fileID: 1419117880}
+  - component: {fileID: 1419117884}
   m_Layer: 2
   m_Name: Staged competitor 8
   m_TagString: Untagged
@@ -271494,6 +273977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1419117884}
   tractorMotor: {fileID: 0}
   body: {fileID: 1419117883}
   shape: {fileID: 1419117882}
@@ -271679,6 +274163,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &1419117884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419117878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 7
+  presentationParent: {fileID: 147616868}
+  originalBodyRenderers:
+  - {fileID: 2129902548}
+  - {fileID: 2001446389}
+  - {fileID: 223064856}
+  - {fileID: 1132902888}
+  - {fileID: 2130639355}
+  - {fileID: 1708389683}
+  - {fileID: 911149443}
+  - {fileID: 663968460}
+  - {fileID: 461375190}
+  - {fileID: 2112210270}
+  - {fileID: 1901859381}
+  - {fileID: 1152323600}
+  - {fileID: 574134141}
+  - {fileID: 231750842}
+  - {fileID: 1042377958}
+  - {fileID: 2103669314}
+  - {fileID: 1370475798}
+  - {fileID: 1143926175}
+  - {fileID: 1761955994}
+  - {fileID: 1665791287}
+  - {fileID: 1014311970}
+  - {fileID: 955432581}
+  - {fileID: 1396391852}
+  - {fileID: 189433129}
+  - {fileID: 384982589}
+  - {fileID: 128815593}
+  - {fileID: 154804856}
+  - {fileID: 432049344}
+  - {fileID: 523411324}
+  originalWheelRenderers:
+  - {fileID: 793235770}
+  - {fileID: 604328847}
+  - {fileID: 194215737}
+  - {fileID: 2017050905}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1947956318}
+  - {fileID: 520005524}
+  - {fileID: 759919709}
+  - {fileID: 1824956512}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689302, y: -0.20000035, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: 0.0000003817567}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1419489058
 GameObject:
   m_ObjectHideFlags: 0
@@ -275855,6 +278670,9 @@ RectTransform:
   - {fileID: 1539506666}
   - {fileID: 327088361}
   - {fileID: 583953613}
+  - {fileID: 1138856064}
+  - {fileID: 1410052513}
+  - {fileID: 1772722291}
   m_Father: {fileID: 517996901}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -289637,11 +292455,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsScorePresentation
   session: {fileID: 906088766}
+  alternateSession: {fileID: 0}
   notification: {fileID: 7281851941696939241}
   visibility: {fileID: 1544791984}
   portrait: {fileID: 4132178959701844797}
   accent: {fileID: 207646351}
   notificationAnimator: {fileID: 4053176852353587461}
+  viewport: -1
   resultPosition: {x: 0, y: -8}
   resultSize: {x: 1120, y: 76}
 --- !u!225 &1544791984
@@ -294991,6 +297811,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsFinishResultsSource
   session: {fileID: 906088766}
+  cornhole: {fileID: 0}
+  wallball: {fileID: 0}
 --- !u!225 &1580136270
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -297625,10 +300447,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968252998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 12}
-  m_SizeDelta: {x: -40, y: 52}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 86}
+  m_SizeDelta: {x: 600, y: 48}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1595189303
 CanvasRenderer:
@@ -331968,6 +334790,7 @@ GameObject:
   - component: {fileID: 1734944826}
   - component: {fileID: 1734944823}
   - component: {fileID: 1734944824}
+  - component: {fileID: 1734944828}
   m_Layer: 2
   m_Name: Staged competitor 7
   m_TagString: Untagged
@@ -331987,6 +334810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1734944828}
   tractorMotor: {fileID: 0}
   body: {fileID: 1734944827}
   shape: {fileID: 1734944826}
@@ -332172,6 +334996,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &1734944828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734944822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 6
+  presentationParent: {fileID: 891550350}
+  originalBodyRenderers:
+  - {fileID: 363826620}
+  - {fileID: 2135969099}
+  - {fileID: 1597450703}
+  - {fileID: 279314781}
+  - {fileID: 1887654613}
+  - {fileID: 788658380}
+  - {fileID: 637355128}
+  - {fileID: 1216677906}
+  - {fileID: 302627485}
+  - {fileID: 793032287}
+  - {fileID: 1251274808}
+  - {fileID: 1718060590}
+  - {fileID: 1803207001}
+  - {fileID: 1520955989}
+  - {fileID: 162835813}
+  - {fileID: 415414880}
+  - {fileID: 1925735574}
+  - {fileID: 1362120202}
+  - {fileID: 1543062488}
+  - {fileID: 1730258982}
+  - {fileID: 205906899}
+  - {fileID: 1768711654}
+  - {fileID: 1484559124}
+  - {fileID: 2128784817}
+  - {fileID: 1882370001}
+  - {fileID: 838886455}
+  - {fileID: 477583866}
+  - {fileID: 1372316326}
+  - {fileID: 1715013100}
+  originalWheelRenderers:
+  - {fileID: 584844681}
+  - {fileID: 207902646}
+  - {fileID: 1781852327}
+  - {fileID: 681279489}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1112841301}
+  - {fileID: 1615364141}
+  - {fileID: 583780532}
+  - {fileID: 298839811}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689302, y: -0.20000035, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: 0.0000003817567}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1735262822
 GameObject:
   m_ObjectHideFlags: 0
@@ -339210,6 +342365,236 @@ Transform:
   - {fileID: 406458197}
   m_Father: {fileID: 1806944879}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1772722289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1772722291}
+  - component: {fileID: 1772722296}
+  - component: {fileID: 1772722295}
+  - component: {fileID: 1772722294}
+  - component: {fileID: 1772722290}
+  - component: {fileID: 1772722293}
+  - component: {fileID: 1772722292}
+  m_Layer: 0
+  m_Name: truckfit Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1772722290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504050c5fda9c0645802e401a644a171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Michsky.UI.Heat.ButtonManager
+  buttonIcon: {fileID: 0}
+  buttonText: TRUCK FIT
+  iconScale: 1
+  textSize: 26
+  normalCG: {fileID: 0}
+  highlightCG: {fileID: 0}
+  disabledCG: {fileID: 0}
+  normalTextObj: {fileID: 614975515}
+  highlightTextObj: {fileID: 0}
+  disabledTextObj: {fileID: 0}
+  normalImageObj: {fileID: 0}
+  highlightImageObj: {fileID: 0}
+  disabledImageObj: {fileID: 0}
+  autoFitContent: 0
+  padding:
+    left: 18
+    right: 18
+    top: 15
+    bottom: 15
+  spacing: 12
+  disabledLayout: {fileID: 0}
+  normalLayout: {fileID: 0}
+  highlightedLayout: {fileID: 0}
+  mainLayout: {fileID: 0}
+  mainFitter: {fileID: 0}
+  targetFitter: {fileID: 0}
+  targetRect: {fileID: 0}
+  isInteractable: 1
+  enableIcon: 0
+  enableText: 1
+  useCustomContent: 0
+  useCustomTextSize: 0
+  checkForDoubleClick: 0
+  useLocalization: 0
+  bypassUpdateOnEnable: 0
+  useUINavigation: 1
+  navigationMode: 4
+  selectOnUp: {fileID: 0}
+  selectOnDown: {fileID: 0}
+  selectOnLeft: {fileID: 0}
+  selectOnRight: {fileID: 0}
+  wrapAround: 0
+  useSounds: 0
+  doubleClickPeriod: 0.25
+  fadingMultiplier: 8
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  overrideInteractable: 0
+  latestTabIndex: 0
+--- !u!224 &1772722291
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 614975517}
+  m_Father: {fileID: 1455526733}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 610, y: 492}
+  m_SizeDelta: {x: 180, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1772722292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
+  cut: 10
+  accent: 0
+--- !u!114 &1772722293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d69835bf87409842b2c42aba41fc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBilliards.BilliardsButtonVisual
+  surface: {fileID: 1772722295}
+  normal: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  highlight: {r: 0.06, g: 0.43, b: 0.4, a: 1}
+--- !u!114 &1772722294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1772722295}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1772722295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1772722296
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772722289}
+  m_CullTransparentMesh: 1
 --- !u!1 &1772928916
 GameObject:
   m_ObjectHideFlags: 0
@@ -400295,6 +403680,7 @@ GameObject:
   - component: {fileID: 2128951649}
   - component: {fileID: 2128951646}
   - component: {fileID: 2128951647}
+  - component: {fileID: 2128951651}
   m_Layer: 2
   m_Name: Staged competitor 2
   m_TagString: Untagged
@@ -400314,6 +403700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 2128951651}
   tractorMotor: {fileID: 0}
   body: {fileID: 2128951650}
   shape: {fileID: 2128951649}
@@ -400499,6 +403886,337 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &2128951651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128951645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 1
+  presentationParent: {fileID: 623938477}
+  originalBodyRenderers:
+  - {fileID: 571825649}
+  - {fileID: 2098232280}
+  - {fileID: 1773503975}
+  - {fileID: 140638323}
+  - {fileID: 1992635370}
+  - {fileID: 258177609}
+  - {fileID: 1002131907}
+  - {fileID: 1562669024}
+  - {fileID: 1885419478}
+  - {fileID: 1588414515}
+  - {fileID: 358507753}
+  - {fileID: 1176338106}
+  - {fileID: 332900008}
+  - {fileID: 902811373}
+  - {fileID: 1954869920}
+  - {fileID: 1207066035}
+  - {fileID: 1497362470}
+  - {fileID: 663539935}
+  - {fileID: 278166069}
+  - {fileID: 1958563274}
+  - {fileID: 1774379491}
+  - {fileID: 902844397}
+  - {fileID: 246242313}
+  - {fileID: 1488497503}
+  - {fileID: 1056724568}
+  - {fileID: 312818799}
+  - {fileID: 926691316}
+  - {fileID: 1407625374}
+  - {fileID: 1549173345}
+  originalWheelRenderers:
+  - {fileID: 2090470900}
+  - {fileID: 347484483}
+  - {fileID: 1508354867}
+  - {fileID: 1428117894}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1271416919}
+  - {fileID: 1759538148}
+  - {fileID: 240628586}
+  - {fileID: 906950666}
+  wheels:
+  - {fileID: 1496483267}
+  - {fileID: 2144294343}
+  - {fileID: 1564998930}
+  - {fileID: 1817302203}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.monster
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000018630303, y: -0.20000027, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.lifted
+    position: {x: 0.00000005211556, y: -0.20000035, z: 0.00000013418746}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: truck.fire
+    position: {x: 0.00000016689299, y: -0.20000035, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3999999, y: 0.3999999, z: 0.3999999}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000011920929, y: -0.2000003, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095877, y: 0.41095877, z: 0.41095877}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000011920929, y: -0.20000035, z: -0.000000095080445}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.3987963, y: 0.3987963, z: 0.3987963}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Dock keeps its original physical envelope and upper/lower visual separation.
+      No dashboard view is authored here.
+  modeOwnedSlots:
+  - dashboard
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &2129780581
 GameObject:
   m_ObjectHideFlags: 0
@@ -547089,3 +550807,4 @@ SceneRoots:
   - {fileID: 198013144}
   - {fileID: 517996901}
   - {fileID: 4541400445287344418}
+  - {fileID: 1146079735}

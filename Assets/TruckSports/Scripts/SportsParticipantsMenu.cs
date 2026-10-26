@@ -8,6 +8,8 @@ public sealed class SportsParticipantsMenu:MonoBehaviour {
  public TMP_Text[] details;public ButtonManager[] profiles,colors,kinds;
  public TMP_Text heading,notice,choiceHeading;public int choicePage;public ButtonManager[] choices;int bank,choiceBank,choiceSeat,returnPage;
  int Seat(int row)=>bank*4+row;
+ SportsTruckCustomizerMenu customizer;
+ public bool IsCustomizing=>customizer!=null&&customizer.IsOpen;
  void Start(){for(int i=0;i<names.Length;i++){int row=i;names[i].onEndEdit.AddListener(value=>{var p=SportsParticipantRegistry.Default(Seat(row));SportsParticipantRegistry.Rename(p.id,value,p.color,p.preferredAI);Refresh();});}}
  public void Open(){returnPage=front.Page;bank=0;Refresh();front.Show(page);}
  public void Action(string action){
@@ -17,6 +19,7 @@ public sealed class SportsParticipantsMenu:MonoBehaviour {
   if(action=="peopleback"){front.Show(returnPage);return;}
   if(action=="peopleprev"||action=="peoplenext"){int banks=Mathf.CeilToInt(Mathf.Max(12,SportsParticipantRegistry.Current.roster.Count)/4f);bank=(bank+(action=="peopleprev"?banks-1:1))%banks;Refresh();return;}
   int row=action[action.Length-1]-'0';if(row<0||row>=names.Length)return;int seat=Seat(row);var p=SportsParticipantRegistry.Default(seat);
+  if(action.StartsWith("peoplecustom")){OpenCustomizer(p.id);return;}
   if(action.StartsWith("peopleprofile")){
    choiceSeat=seat;choiceBank=0;RefreshChoices();front.Show(choicePage);return;
   }else if(action.StartsWith("peoplecolor")){Color.RGBToHSV(p.color,out float h,out _,out _);SportsParticipantRegistry.Rename(p.id,p.displayName,Color.HSVToRGB(Mathf.Repeat(h+.137f,1),.7f,1),p.preferredAI);
@@ -24,6 +27,12 @@ public sealed class SportsParticipantsMenu:MonoBehaviour {
   else if(action.StartsWith("peoplenew")){var added=SportsParticipantRegistry.Create("New driver");SportsParticipantRegistry.UseInSeat(seat,added.id);}
   Refresh();
  }
+ void OpenCustomizer(string participantId){
+  if(customizer==null){var prefab=Resources.Load<GameObject>("TruckSports/SportsTruckCustomizerMenu");if(prefab==null){notice.text="Truck Customizer content is unavailable in this build.";return;}customizer=Instantiate(prefab).GetComponent<SportsTruckCustomizerMenu>();}
+  front.pages[page].SetActive(false);
+  customizer.Open(participantId,()=>{if(this==null||front==null||!front.gameObject.activeInHierarchy)return;Refresh();front.Show(page);});
+ }
+ void OnDestroy(){if(customizer!=null)Destroy(customizer.gameObject);}
  static void Caption(ButtonManager button,string value){button.buttonText=value;button.UpdateUI();}
  void RefreshChoices(){var all=SportsParticipantRegistry.Current.participants;int banks=Mathf.CeilToInt(all.Count/(float)choices.Length);choiceHeading.text="CHOOSE DRIVER  /  SEAT "+(choiceSeat+1)+(banks>1?"  /  "+(choiceBank+1)+" OF "+banks:"");for(int i=0;i<choices.Length;i++){int at=choiceBank*choices.Length+i;choices[i].gameObject.SetActive(at<all.Count);if(at>=all.Count)continue;var p=all[at];Caption(choices[i],p.displayName+"\nID "+p.id.Substring(0,Mathf.Min(8,p.id.Length)));choices[i].normalTextObj.color=p.color;}foreach(var action in front.pages[choicePage].GetComponentsInChildren<SportsMenuAction>(true))if(action.action=="peoplechooseprev"||action.action=="peoplechoosenext")action.gameObject.SetActive(banks>1);}
  public void Refresh(){

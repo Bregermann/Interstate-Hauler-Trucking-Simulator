@@ -11,6 +11,7 @@ namespace LWS.TruckKickball
         public SportsRallyViews rally;
         public Transform[] cabs;
         public SportsCabLook[] looks;
+        public SportsTruckAppearanceCabBinding[] appearanceCabs=System.Array.Empty<SportsTruckAppearanceCabBinding>();
         readonly Quaternion[] headings = new Quaternion[4];
         Renderer[][] exteriors;
         Renderer[] hidden;
@@ -18,13 +19,16 @@ namespace LWS.TruckKickball
         Camera hiddenFor;
         int lastMode = -1;
 
-        void Awake()
+        void Awake() => RefreshAppearanceExteriors();
+        public void RefreshAppearanceExteriors()
         {
+            Restore();
             exteriors = new Renderer[match.agents.Length][];
             int maximum = 0;
             for (int i = 0; i < exteriors.Length; i++)
             {
-                exteriors[i] = match.agents[i].truck.visuals.GetComponentsInChildren<Renderer>(true);
+                var truck=match.agents[i].truck;
+                exteriors[i] = truck.appearanceHost!=null&&truck.appearanceHost.Applied?truck.appearanceHost.ExteriorRenderers:truck.visuals.GetComponentsInChildren<Renderer>(true);
                 maximum = Mathf.Max(maximum, exteriors[i].Length);
             }
             prior = new bool[maximum];
@@ -71,6 +75,7 @@ namespace LWS.TruckKickball
             {
                 cabs[v].gameObject.SetActive(lastMode == 2 && rally.views[v].view.enabled);
                 headings[v] = Quaternion.identity; looks[v].ResetLook();
+                if(v<appearanceCabs.Length&&appearanceCabs[v]!=null)appearanceCabs[v].SetOwner(lastMode==2&&v<rally.Humans?match.agents[rally.owners[v]].truck.appearanceHost:null);
             }
             if (match.atmosphere != null)
             {

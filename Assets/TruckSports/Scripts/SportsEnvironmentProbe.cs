@@ -28,6 +28,7 @@ namespace LWS.TruckSports
         readonly StringBuilder log = new StringBuilder();
         string folder; int checks, errors; bool complete;
         IDisposable preferences; Keyboard keyboard; Gamepad menuPad;
+        InputSettings originalInputSettings, probeInputSettings;
         void Check(bool pass, string message)
         {
             checks++; if (!pass) errors++; log.AppendLine((pass ? "PASS " : "FAIL ") + message);
@@ -44,6 +45,10 @@ namespace LWS.TruckSports
             if (index < 0 || index + 1 == arguments.Length) throw new ArgumentException("Provide -tsEnvironmentOutput.");
             folder = Path.GetFullPath(arguments[index + 1]); Directory.CreateDirectory(folder);
             preferences = SportsPrefs.IsolateValidation("EnvironmentWindows"); Application.logMessageReceived += Error;
+            originalInputSettings = InputSystem.settings;
+            probeInputSettings = Instantiate(originalInputSettings);
+            probeInputSettings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+            InputSystem.settings = probeInputSettings;
             keyboard = InputSystem.AddDevice<Keyboard>();
             if (Array.IndexOf(arguments, "verify-time-persistence") >= 0)
             {
@@ -69,6 +74,7 @@ namespace LWS.TruckSports
             bool maximumRoster = Array.IndexOf(arguments, "maximum-rosters") >= 0;
             bool allWeather = Array.IndexOf(arguments, "all-weather") >= 0;
             bool weatherTimeMatrix = Array.IndexOf(arguments, "weather-time-matrix") >= 0;
+            bool snowStartup = Array.IndexOf(arguments, "snow-startup") >= 0;
             foreach (string scene in scenes)
             {
                 SportsNavigation.LoadSport(scene); yield return null; yield return null;
@@ -84,20 +90,33 @@ namespace LWS.TruckSports
                     if (match.TeamSport) match.teamA = match.teamB = 4;
                 }
                 match.AllBots(); SportsCameraOptions.Set(false);
+                bool singleHumanCab = scene == SportsNavigation.KeepawayCab && Array.IndexOf(arguments, "single-human-cab") >= 0;
+                if (singleHumanCab) match.setup.players[0].source = LWS.TruckBowling.BowlingSource.Keyboard;
                 yield return Capture(scene + "-setup");
                 if (scene == SportsNavigation.FieldGoal) yield return MenuNavigation(clock, forecast);
-                var cases = allWeather ? forecast.catalog.entries.Select(entry => entry.displayName + "|Night").ToArray() : weatherTimeMatrix || scene == SportsNavigation.FieldGoal
+                var cases = snowStartup ? new[] { "Snow|Day", "Heavy Snow|Day", "Blizzard|Night", "Clear|Day", "Snow|Day", "Snow|Morning" }
+                    : allWeather ? forecast.catalog.entries.Select(entry => entry.displayName + "|Night").ToArray() : weatherTimeMatrix || scene == SportsNavigation.FieldGoal
                     ? new[] { "Clear|Morning", "Clear|Day", "Clear|Evening", "Clear|Night", "Rain|Evening", "Thunderstorm|Night", "Snow|Morning", "Blizzard|Night", "Hurricane|Day" }
                     : new[] { "Clear|Day", "Clear|Night" };
+                int caseNumber = 0;
                 foreach (string combination in cases)
                 {
+                    caseNumber++;
                     match.SetupScreen(); string[] choice = combination.Split('|');
                     clock.Choose((int)Enum.Parse<SportsTimeChoice>(choice[1]));
                     int entry = Array.FindIndex(forecast.catalog.entries, item => item.displayName == choice[0]);
                     Check(entry >= 0, scene + " installed forecast " + choice[0]); if (entry < 0) continue;
                     forecast.Choose(entry + 1);
                     Check(match.StartMatch(), scene + " starts " + combination);
-                    yield return new WaitForSeconds(choice[0] == "Hurricane" ? 9 : 2);
+                    yield return new WaitForSeconds(choice[0] == "Hurricane" ? 9 : snowStartup ? 6 : 2);
+                    if (singleHumanCab)
+                    {
+                        var keepaway = match as LWS.TruckKeepaway.KeepawayMatch;
+                        Check(keepaway != null && keepaway.cabVariant && keepaway.HumanViews == 1 && match.cameras.Count(camera => camera.enabled) == 1 && match.cameras.Single(camera => camera.enabled).rect == new Rect(0, 0, 1, 1),
+                            "one software-keyboard human owns a full-screen saved Keepaway cab while AI cameras stay off");
+                        Check(match.setup.players.Skip(1).Take(match.setup.count - 1).All(player => player.source == LWS.TruckBowling.BowlingSource.AI),
+                            "other Keepaway competitors remain AI during the software-human cab lighting fixture");
+                    }
                     var binding = weather.matchTime;
                     Check(binding.Applied.ToString() == choice[1] && Mathf.Abs(binding.cycle.TimeOfDay - SportsTimeOfDay.Seconds(binding.Applied)) < .01f, scene + " real vendor clock " + combination);
                     Check(!binding.daylightFill.enabled && binding.cycle.Speed == 0 && binding.cycle.NightSpeed == 0, scene + " fixed fill off and short-match time frozen");
@@ -109,7 +128,19 @@ namespace LWS.TruckSports
                     var samples = new List<float>(60);
                     for (int frame = 0; frame < 60; frame++) { yield return null; samples.Add(Time.unscaledDeltaTime * 1000); }
                     samples.Sort(); log.AppendLine("FRAME_TIME " + scene + " " + combination + " medianMs=" + samples[30].ToString("F2") + " p95Ms=" + samples[56].ToString("F2") + " samples=60; whole-player frame interval, not isolated GPU/CPU profiling.");
-                    yield return Capture(scene + "-" + combination.Replace('|', '-'));
+                    if (snowStartup)
+                    {
+                        var snow = match.GetComponent<SportsSnowSurface>();
+                        Check(snow != null && (choice[0] == "Clear" ? snow.Coverage == 0 && snow.RoadsInClearMode : snow.Coverage > .5f && snow.MaximumRoadCoverage > .5f), scene + " original surface state " + combination);
+                        if (snow != null)
+                        {
+                            snow.surface.RequestTracePixelDiagnostic();
+                            float deadline = Time.realtimeSinceStartup + 3;
+                            while (snow.surface.TracePixelDiagnostic.Contains("pending") && Time.realtimeSinceStartup < deadline) yield return null;
+                            log.AppendLine("SNOW_SURFACE " + scene + " case=" + caseNumber + " " + combination + " coverage=" + snow.Coverage + " roadCoverage=" + snow.MaximumRoadCoverage + " roadContacts=" + snow.RoadContacts + " " + snow.surface.Diagnostic + " " + snow.surface.TracePixelDiagnostic);
+                        }
+                    }
+                    yield return Capture(scene + (snowStartup ? "-snow-start-" + caseNumber : "") + "-" + combination.Replace('|', '-'));
                     if (choice[0] == "Hurricane")
                     {
                         Check(weather.precipitation.SnowScript.Intensity < .001f && weather.precipitation.SnowScript.GetComponentsInChildren<ParticleSystem>(true).Sum(system => system.particleCount) == 0, "prior Blizzard flakes have actually retired; Hurricane is emitting rain");
@@ -184,6 +215,14 @@ namespace LWS.TruckSports
                 if (corn != null) corn.ChangeSetup(); else if (cheese != null) cheese.ChangeSetup(); else jumper.SetupScreen();
                 setup.players[0].source = setup.players[1].source = LWS.TruckBowling.BowlingSource.Keyboard;
                 SportsCameraOptions.Set(false); SportsTimeOfDay.Select(SportsTimeChoice.Night);
+                // Physical keyboards are deliberately muted by this explicit
+                // probe. Bind its software device before asking the real match
+                // to validate the human sources; retain every production guard.
+                keyboard.MakeCurrent();
+                string sourceReason;
+                bool sourceValid = corn != null ? corn.setup.Validate(out sourceReason) : cheese != null ? cheese.setup.Validate(out sourceReason) : jumper.ValidateSources(out sourceReason);
+                log.AppendLine("HUMAN_SOURCE_PREFLIGHT " + scene + " valid=" + sourceValid + " reason=" + sourceReason + " keyboard=" + keyboard.deviceId + " enabled=" + keyboard.enabled + " current=" + Keyboard.current?.deviceId);
+                Check(sourceValid, scene + " two software-keyboard source validation: " + sourceReason);
                 Check(corn != null ? corn.StartMatch() : cheese != null ? cheese.StartMatch() : jumper.StartMatch(), scene + " two software-keyboard human night views start");
                 yield return new WaitForSeconds(1);
                 var cameras = corn != null ? corn.courses.Select(course => course.chase.view).ToArray() : cheese != null ? cheese.cameras.Select(rig => rig.view).ToArray() : jumper.views.Select(rig => rig.view).ToArray();
@@ -248,9 +287,17 @@ namespace LWS.TruckSports
                 // substitute a camera render for actual window evidence.
                 for (int attempt = 0; attempt < 10; attempt++)
                 {
+                    // A Windows resize request can be lost during a scene/UI
+                    // transition. Reissue it at bounded intervals; acceptance
+                    // still requires the requested real backbuffer dimensions.
+                    if (attempt > 0 && attempt % 3 == 0)
+                    {
+                        Screen.SetResolution(size.x, size.y, false);
+                        yield return new WaitForSecondsRealtime(.35f);
+                    }
                     yield return new WaitForEndOfFrame(); texture = ScreenCapture.CaptureScreenshotAsTexture();
                     if (texture.width == size.x && texture.height == size.y) break;
-                    log.AppendLine("CAPTURE_RESIZE_RETRY " + label + " requested=" + size + " actual=" + texture.width + "x" + texture.height + " attempt=" + (attempt + 1));
+                    log.AppendLine("CAPTURE_RESIZE_RETRY " + label + " requested=" + size + " actual=" + texture.width + "x" + texture.height + " reported=" + Screen.width + "x" + Screen.height + " mode=" + Screen.fullScreenMode + " attempt=" + (attempt + 1));
                     Destroy(texture); texture = null; yield return new WaitForSecondsRealtime(.15f);
                 }
                 Check(texture != null, label + " actual Windows backbuffer " + size.x + "x" + size.y);
@@ -289,6 +336,8 @@ namespace LWS.TruckSports
         {
             Application.logMessageReceived -= Error; preferences?.Dispose(); if (keyboard != null && keyboard.added) InputSystem.RemoveDevice(keyboard);
             if (menuPad != null && menuPad.added) InputSystem.RemoveDevice(menuPad);
+            if (originalInputSettings != null) InputSystem.settings = originalInputSettings;
+            if (probeInputSettings != null) Destroy(probeInputSettings);
             if (!complete && folder != null) File.WriteAllText(Path.Combine(folder, "interrupted.txt"), log.ToString());
         }
     }

@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-10-25T21:31:36.499791+00:00",
+  "scope": "Native38 targeted Sky restart and Skee perceptual palette correction; separate from previous16\u201337 continuation history.",
+  "sourceReceipts": [
+    {
+      "artifact": "carnival-thirtyeighth-native-results.json",
+      "sha256": "baa5697f0a98a997d3457cbd1a3415c7857b530480dfd08fd5a33b3e3e217a26"
+    },
+    {
+      "artifact": "carnival-thirtyeighth-native-source-inputs.json",
+      "sha256": "fcac08721e06a068a48cccee0c67293a75d6ee516f54a7783030dbdd9ebc466d"
+    },
+    {
+      "artifact": "camera-validation-processes.json",
+      "sha256": "4d9f0db1effc19a9b9186e97149b5674748e2b59dd1ac5a99d5a7fc14d17f44d",
+      "sanitization": "Only the3matching job exit/elapsed/timeout fields copied; no process IDs or unrelated entries."
+    }
+  ],
+  "frozenSourceInputs": [
+    {
+      "path": "Assets/TruckSkyTow/Scripts/SkyTowReview.cs",
+      "sha256": "9b5c10760f86338a9c570318e1323fd3071fc15dbbd164cdab2551fb910d9cbb"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/SkyTowReplayRestartTests.cs",
+      "sha256": "3d46daac992dbd4a1ac5f59ec620459c457954d7c7d5c31806d7521bba53ac78"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/SkyTowReplayRestartTests.cs.meta",
+      "sha256": "248f193bd8bb7569000ef9afa74a5a0d63688fcacee3d186631c51d66fbe9680"
+    },
+    {
+      "path": "Assets/TruckSkeeBall/Rendering/SkeeArcadePixels.shader",
+      "sha256": "bfc5420da354e5cfea4728f8e4a05d661d0f25e329bd117b9969c1857acccb6b"
+    },
+    {
+      "path": "Assets/TruckSkeeBall/Rendering/SkeeArcadePixels.shader.meta",
+      "sha256": "66c07d4650899a2f24600697bb5b82d8b9614dd3c57385fdebf45ab5d4a6f11c"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/PresentationEditMode/SkeePerceptualPaletteGpuTests.cs",
+      "sha256": "e39ab78a6ae947dd837c2eadb4a8f100899a967330cf6c810427c0265cba1840"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/PresentationEditMode/SkeePerceptualPaletteGpuTests.cs.meta",
+      "sha256": "fc50e2845ca4e3a335cb2fbd621a5d44848c12eab6dfb9cbe9be9fa9f73921da"
+    }
+  ],
+  "runs": [
+    {
+      "job": "carnival-thirtyeighth-sky-native",
+      "xml": {
+        "artifact": "carnival-thirtyeighth-sky-native.xml",
+        "sha256": "0fda0e33f7329b2dbb810e335b98e5133ac8b3eb9cfa8ca28c8931edeed0764d"
+      },
+      "result": "Passed",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "testDurationSeconds": 177.34147,
+      "runnerReceipt": {
+        "exit": 0,
+        "seconds": 265.3,
+        "timeoutSeconds": 1200,
+        "timedOut": false
+      },
+      "cases": [
+        {
+          "case": "LaunchFourAppearanceIntegrationTests.RealAiAttemptsReplayAllAnglesAndPrepareNextActualTurnOwner",
+          "result": "Passed"
+        },
+        {
+          "case": "LaunchFourAppearanceIntegrationTests.SevenBodiesAcrossFourOriginalLaunchVenuesKeepPhysicsEquipmentProfilesAndGhostRoots",
+          "result": "Passed"
+        },
+        {
+          "case": "LaunchFourAppearanceIntegrationTests.SkyFourOriginalOwnersRefreshRecordedModelsWithoutChangingTowOrRecordedBoatRoots",
+          "result": "Passed"
+        },
+        {
+          "case": "SkyTowCarnivalPlayModeTests.ActualTowPassesAnimateBoundedPoolsWithoutMovingFramesAndCleanlyRematch",
+          "result": "Passed"
+        },
+        {
+          "case": "SkyTowCarnivalPlayModeTests.ProductionRacerResolvesPartialBodyOnceButRejectsOutsideFrameReverseAndNoncrossing",
+          "result": "Passed"
+        },
+        {
+          "case": "SkyTowReplayRestartTests.NativeMixedOwnerCountsRebindAllEightBeforeSamplesAndRetainWeatherReplayAuthority",
+          "result": "Passed"
+        }
+      ]
+    },
+    {
+      "job": "carnival-thirtyeighth-skee-gpu-native",
+      "xml": {
+        "artifact": "carnival-thirtyeighth-skee-gpu-native.xml",
+        "sha256": "629003517fadd7fd4cc12c487a76cae7f60f75b3d4322dd7523c20dfba4ee63b"
+      },
+      "result": "Passed",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "testDurationSeconds": 0.0959366,
+      "runnerReceipt": {
+        "exit": 0,
+        "seconds": 32.21,
+        "timeoutSeconds": 600,
+        "timedOut": false
+      },
+      "cases": [
+        {
+          "case": "SkeePerceptualPaletteGpuTests.ActualGpuKeepsDarkWoodRoadAndTruckPaletteDistinctInActiveColorSpace",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeePerceptualPaletteGpuTests.ActualGpuPreservesPointBlocksBlackWhiteAndOriginalAlternatingScanlines",
+          "result": "Passed"
+        }
+      ]
+    },
+    {
+      "job": "carnival-thirtyeighth-skee-native",
+      "xml": {
+        "artifact": "carnival-thirtyeighth-skee-native.xml",
+        "sha256": "6fd6c76cead8947984448154f91918b5739b04873165e74fecfbfbf6a69272bb"
+      },
+      "result": "Passed",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "testDurationSeconds": 33.3736845,
+      "runnerReceipt": {
+        "exit": 0,
+        "seconds": 65.9,
+        "timeoutSeconds": 900,
+        "timedOut": false
+      },
+      "cases": [
+        {
+          "case": "SkeeAppearanceIntegrationTests.EightHotseatProfilesFollowActualDeliveryReviewHandoffsOnTheSamePhysicalLane",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeeAppearanceIntegrationTests.FourIndependentLanesUseSelectedBodiesWithoutChangingPhysicalRingRulesCabLayersOrReplayRoots",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeeCarnivalPlayModeTests.ActualOpeningKeepsOriginalOnceOnlyAwardAndIndependentLaneRematch",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeeCarnivalPlayModeTests.OriginalAiUsesRealRampAndNewReturnWithoutInjectedTrajectoryOrScores",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeeCarnivalPlayModeTests.PhysicalMissRestsInZeroTrayAndRealSideNetPreventsGuardEscape",
+          "result": "Passed"
+        },
+        {
+          "case": "SkeeCarnivalPlayModeTests.PixelFeedsCoverOneToFourViewportsResizeAndRestoreCamerasCanvasAndWeather",
+          "result": "Passed"
+        }
+      ]
+    }
+  ],
+  "executionCountsForThisBatchOnly": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "interpretation": [
+    "Sky6cases include repaired4\u21921restart and existinglaunch/sky regressions at the recorded source hashes.",
+    "Skee2synthetic actualGPUtests passed with recorded activeColorSpace=Linear. They exercise the actualshader through sRGBsampling/floatlinearreadback, independentdarkpaletteexpectedvalues and originalblack/white/scanline/pointblocks.",
+    "ExistingSkee6nativegameplay/compositor regressions passed.",
+    "These14executions are not cumulativeunique requirements or releaseacceptance. Native39owner-switch follow-up is stillrunning and excluded.",
+    "No replacementWindowsbuild or newactualWindowsrender/visualacceptance is implied. All3Windowsprobes must rerun on the futureexactcandidate."
+  ],
+  "retainedBeforeEvidence": {
+    "failedCandidate": "4c89174b061a8b26a9d3706079d8ceebb76443c3e7140d182621189d0c6a30f9",
+    "presentationFailureSummary": "failed-presentation-4c8917.json",
+    "appearanceBeforeVisualReview": "Logs/TruckSports/PlaytestRepair/Carnival060-AppearanceVisualQA/appearance-visual-review.json",
+    "beforeVisualReviewSha256": "af11077fa8a7e361e9f568cc216ac01d415c76090a26e5439756689d2f6cdeca",
+    "beforeCaptureCount": 98,
+    "candidatePromotionStatus": "NOT_PROMOTED",
+    "scope": "Oldcaptures remain beforeevidence; they do not show the native38shaderfix."
+  },
+  "sanitization": "No rawlogs/XML, failurestacks, workstationpaths, participantIDs, processIDs or commandlines included.",
+  "acceptanceExcluded": [
+    "Humanplaytest",
+    "Physicalcontroller/wheel",
+    "Listening/audioquality",
+    "Performance/GPUbenchmark/soak",
+    "Whole0.6release",
+    "Futurebuildidentity"
+  ]
+}

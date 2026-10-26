@@ -7805,6 +7805,236 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158897678}
   m_CullTransparentMesh: 1
+--- !u!1 &159859275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 159859277}
+  - component: {fileID: 159859282}
+  - component: {fileID: 159859281}
+  - component: {fileID: 159859280}
+  - component: {fileID: 159859276}
+  - component: {fileID: 159859279}
+  - component: {fileID: 159859278}
+  m_Layer: 0
+  m_Name: truckfit Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &159859276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504050c5fda9c0645802e401a644a171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Michsky.UI.Heat.ButtonManager
+  buttonIcon: {fileID: 0}
+  buttonText: TRUCK FIT
+  iconScale: 1
+  textSize: 26
+  normalCG: {fileID: 0}
+  highlightCG: {fileID: 0}
+  disabledCG: {fileID: 0}
+  normalTextObj: {fileID: 1685080393}
+  highlightTextObj: {fileID: 0}
+  disabledTextObj: {fileID: 0}
+  normalImageObj: {fileID: 0}
+  highlightImageObj: {fileID: 0}
+  disabledImageObj: {fileID: 0}
+  autoFitContent: 0
+  padding:
+    left: 18
+    right: 18
+    top: 15
+    bottom: 15
+  spacing: 12
+  disabledLayout: {fileID: 0}
+  normalLayout: {fileID: 0}
+  highlightedLayout: {fileID: 0}
+  mainLayout: {fileID: 0}
+  mainFitter: {fileID: 0}
+  targetFitter: {fileID: 0}
+  targetRect: {fileID: 0}
+  isInteractable: 1
+  enableIcon: 0
+  enableText: 1
+  useCustomContent: 0
+  useCustomTextSize: 0
+  checkForDoubleClick: 0
+  useLocalization: 0
+  bypassUpdateOnEnable: 0
+  useUINavigation: 1
+  navigationMode: 4
+  selectOnUp: {fileID: 0}
+  selectOnDown: {fileID: 0}
+  selectOnLeft: {fileID: 0}
+  selectOnRight: {fileID: 0}
+  wrapAround: 0
+  useSounds: 0
+  doubleClickPeriod: 0.25
+  fadingMultiplier: 8
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onDoubleClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+  onSelect:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  overrideInteractable: 0
+  latestTabIndex: 0
+--- !u!224 &159859277
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1685080395}
+  m_Father: {fileID: 1875407582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 610, y: 492}
+  m_SizeDelta: {x: 180, y: 44}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &159859278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
+  cut: 10
+  accent: 0
+--- !u!114 &159859279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d69835bf87409842b2c42aba41fc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBilliards.BilliardsButtonVisual
+  surface: {fileID: 159859281}
+  normal: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  highlight: {r: 0.06, g: 0.43, b: 0.4, a: 1}
+--- !u!114 &159859280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 159859281}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &159859281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.035, g: 0.19, b: 0.19, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &159859282
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159859275}
+  m_CullTransparentMesh: 1
 --- !u!1 &160072068
 GameObject:
   m_ObjectHideFlags: 0
@@ -9394,11 +9624,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsScorePresentation
   session: {fileID: 1500103612}
+  alternateSession: {fileID: 0}
   notification: {fileID: 4341475509708319150}
   visibility: {fileID: 186808407}
   portrait: {fileID: 6923760944249204346}
   accent: {fileID: 2079469649}
   notificationAnimator: {fileID: 7021560302352356418}
+  viewport: -1
   resultPosition: {x: 0, y: -8}
   resultSize: {x: 1120, y: 76}
 --- !u!225 &186808407
@@ -13327,6 +13559,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsFinishResultsSource
   session: {fileID: 1500103612}
+  cornhole: {fileID: 0}
+  wallball: {fileID: 0}
 --- !u!225 &264021552
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -14070,10 +14304,14 @@ MonoBehaviour:
     wait3.2seconds. A missed shove can carry you over the edge. Stopped trucks can
     be pushed; there is no stationary counter. At20seconds a warning announces the
     physical ring shrinking from23seconds toward its minimum. The visible surface
-    and legal radius shrink together. An unresolved90second heat is an explicit draw
-    and replay. Starts rotate each heat. Outfits and eyebrows are cosmetic. Recorded
-    decisive replays offer angle, speed, rewind and skip. Pause/reconnect preserves
-    the match; release and freshly confirm after replacement. No online services.'
+    and legal radius shrink together. At90seconds, sudden death visibly closes the
+    real ring over18seconds. Only physical ring-outs resolve the heat; a genuine
+    simultaneous fall or unresolved stacked-body case remains a draw with no invented
+    survival points. Starts rotate each heat. Outfits and eyebrows are cosmetic.
+    Your selected truck body is used inside the Sumo costume; this sport retains
+    its headband and animated eyebrows. Recorded decisive replays offer angle, speed,
+    rewind and skip. Pause/reconnect preserves the match; release and freshly confirm
+    after replacement. No online services.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -22456,6 +22694,7 @@ GameObject:
   - component: {fileID: 452185764}
   - component: {fileID: 452185759}
   - component: {fileID: 452185763}
+  - component: {fileID: 452185765}
   m_Layer: 2
   m_Name: Sumo competitor 1
   m_TagString: Untagged
@@ -22551,6 +22790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 452185765}
   tractorMotor: {fileID: 0}
   body: {fileID: 452185758}
   shape: {fileID: 452185762}
@@ -22814,6 +23054,341 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &452185765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452185756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 0
+  presentationParent: {fileID: 516197963}
+  originalBodyRenderers:
+  - {fileID: 1437143208}
+  - {fileID: 646915641}
+  - {fileID: 219105576}
+  - {fileID: 1148316397}
+  - {fileID: 833114041}
+  - {fileID: 205843959}
+  - {fileID: 1645573201}
+  - {fileID: 1222094712}
+  - {fileID: 482615978}
+  - {fileID: 594131668}
+  - {fileID: 1300030091}
+  - {fileID: 760164625}
+  - {fileID: 161928843}
+  - {fileID: 606689888}
+  - {fileID: 922404156}
+  - {fileID: 793867147}
+  - {fileID: 644971114}
+  - {fileID: 71483493}
+  - {fileID: 2143080906}
+  - {fileID: 1179249693}
+  - {fileID: 1640528698}
+  - {fileID: 35595081}
+  - {fileID: 650371557}
+  - {fileID: 1603208489}
+  - {fileID: 1892838610}
+  - {fileID: 1971990084}
+  - {fileID: 1814209265}
+  - {fileID: 1641661802}
+  - {fileID: 1795111358}
+  originalWheelRenderers:
+  - {fileID: 97518004}
+  - {fileID: 376567835}
+  - {fileID: 1902089507}
+  - {fileID: 2070143435}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 618164778}
+  - {fileID: 761034425}
+  - {fileID: 149441736}
+  - {fileID: 1228960515}
+  - {fileID: 985922137}
+  - {fileID: 734148298}
+  - {fileID: 1945930320}
+  - {fileID: 138038161}
+  wheels:
+  - {fileID: 1152761267}
+  - {fileID: 848676715}
+  - {fileID: 1655799424}
+  - {fileID: 1383637311}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  modeOwnedSlots:
+  - face.brows
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &455909940
 GameObject:
   m_ObjectHideFlags: 0
@@ -34454,6 +35029,81 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 697782874}
   m_Mesh: {fileID: 4300026, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &698192404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 698192405}
+  - component: {fileID: 698192407}
+  - component: {fileID: 698192406}
+  m_Layer: 0
+  m_Name: Truck fit summary readability backing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &698192405
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698192404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875407582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1064, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &698192406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698192404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &698192407
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698192404}
+  m_CullTransparentMesh: 1
 --- !u!114 &698880902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37503,6 +38153,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767000123}
   m_CullTransparentMesh: 1
+--- !u!1 &768828191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 768828194}
+  - component: {fileID: 768828193}
+  - component: {fileID: 768828192}
+  m_Layer: 0
+  m_Name: Truck fit setup adapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &768828192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768828191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0452881a11f84a3080865b9f86bb4c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilityPresenter
+  source: {fileID: 768828193}
+  subtitle: {fileID: 915123489}
+  originalSubtitle: 
+  reportButton: {fileID: 159859276}
+--- !u!114 &768828193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768828191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb5a099ffe7414a82564f95361fa8b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckCompatibilitySource
+  session: {fileID: 1500103612}
+  bowling: {fileID: 0}
+  cornhole: {fileID: 0}
+  cheese: {fileID: 0}
+  hockey: {fileID: 0}
+  airHockey: {fileID: 0}
+  wallball: {fileID: 0}
+  billiards: {fileID: 0}
+  menu: {fileID: 57833312}
+  setupPage: {fileID: 1875407581}
+  setupInteraction: {fileID: 1875407586}
+  sportName: TRUCK SUMO
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantHosts:
+  - {fileID: 452185765}
+  - {fileID: 1014324754}
+  - {fileID: 2109924826}
+  - {fileID: 1634639270}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  sharedTurnHost: {fileID: 0}
+--- !u!4 &768828194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768828191}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &770861064
 GameObject:
   m_ObjectHideFlags: 0
@@ -42276,7 +43010,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Sumo keeps its costume and animated eyebrows.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -44382,6 +45116,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914857492}
   m_Mesh: {fileID: 4300012, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &915123486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 915123487}
+  - component: {fileID: 915123488}
+  - component: {fileID: 915123489}
+  m_Layer: 0
+  m_Name: Truck fit setup subtitle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &915123487
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915123486}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1875407582}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 492}
+  m_SizeDelta: {x: 1040, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &915123488
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915123486}
+  m_CullTransparentMesh: 1
+--- !u!114 &915123489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915123486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 0.956, b: 0.84, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 21
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 21
+  m_fontSizeMax: 21
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 4096
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 0
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &915709786
 GameObject:
   m_ObjectHideFlags: 3
@@ -47634,6 +48506,7 @@ GameObject:
   - component: {fileID: 1014324753}
   - component: {fileID: 1014324748}
   - component: {fileID: 1014324752}
+  - component: {fileID: 1014324754}
   m_Layer: 2
   m_Name: Sumo competitor 2
   m_TagString: Untagged
@@ -47729,6 +48602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1014324754}
   tractorMotor: {fileID: 0}
   body: {fileID: 1014324747}
   shape: {fileID: 1014324751}
@@ -47992,6 +48866,341 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1014324754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014324745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 1
+  presentationParent: {fileID: 2139354654}
+  originalBodyRenderers:
+  - {fileID: 1191661226}
+  - {fileID: 1809664233}
+  - {fileID: 1640630510}
+  - {fileID: 1243501643}
+  - {fileID: 1842882011}
+  - {fileID: 1020713333}
+  - {fileID: 1093491294}
+  - {fileID: 1108131240}
+  - {fileID: 234591366}
+  - {fileID: 682276233}
+  - {fileID: 1221164408}
+  - {fileID: 679274655}
+  - {fileID: 318173272}
+  - {fileID: 1343623852}
+  - {fileID: 582503843}
+  - {fileID: 270877361}
+  - {fileID: 1500736054}
+  - {fileID: 1076252493}
+  - {fileID: 1631220410}
+  - {fileID: 910160907}
+  - {fileID: 482386316}
+  - {fileID: 2077973706}
+  - {fileID: 1279488550}
+  - {fileID: 1087197962}
+  - {fileID: 709469865}
+  - {fileID: 1953003774}
+  - {fileID: 2061421456}
+  - {fileID: 10313338}
+  - {fileID: 779542251}
+  originalWheelRenderers:
+  - {fileID: 2101634939}
+  - {fileID: 1709014207}
+  - {fileID: 27223243}
+  - {fileID: 1475693117}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1268119162}
+  - {fileID: 92020566}
+  - {fileID: 759083372}
+  - {fileID: 1104607163}
+  - {fileID: 216302041}
+  - {fileID: 1577949575}
+  - {fileID: 1384920495}
+  - {fileID: 919952542}
+  wheels:
+  - {fileID: 683791923}
+  - {fileID: 2050595955}
+  - {fileID: 1794197083}
+  - {fileID: 896200709}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.0000004247216, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053413, y: -0.2410478, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: semi.lowrider
+    position: {x: 0.0000004247216, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053413, y: -0.2410478, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4000001, y: 0.4000001, z: 0.4000001}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095895, y: 0.41095895, z: 0.41095895}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4000001, y: 0.4000001, z: 0.4000001}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  modeOwnedSlots:
+  - face.brows
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1018784827
 GameObject:
   m_ObjectHideFlags: 0
@@ -72748,6 +73957,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSumo.SumoMatch
   presentationWeather: {fileID: 1500103620}
+  appearanceHosts:
+  - {fileID: 452185765}
+  - {fileID: 1014324754}
+  - {fileID: 2109924826}
+  - {fileID: 1634639270}
+  appearanceFraming:
+  - {fileID: 1218303921}
   setup:
     mode: 0
     count: 4
@@ -73146,6 +74362,9 @@ MonoBehaviour:
   - {fileID: 202015915}
   - {fileID: 594050493}
   - {fileID: 193697770}
+  morningLampMultiplier: 0
+  lampSnowSurface: {fileID: 0}
+  coveredLampMultiplier: 1
 --- !u!114 &1500103624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73174,18 +74393,22 @@ MonoBehaviour:
     light: {fileID: 1193842188}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1014324746}
     light: {fileID: 273383223}
     position: {x: 0.00000023841858, y: 1.1001518, z: 1.4700004}
     rotation: {x: 0, y: 0, z: 0, w: 1.0000001}
+    replaySource: {fileID: 0}
   - target: {fileID: 2109924818}
     light: {fileID: 455909942}
     position: {x: 0.00000023841856, y: 1.1001518, z: 1.4700003}
     rotation: {x: 0, y: 0, z: -0, w: 1}
+    replaySource: {fileID: 0}
   - target: {fileID: 1634639262}
     light: {fileID: 1453954571}
     position: {x: 0.00000023841864, y: 1.1001518, z: 1.4700004}
     rotation: {x: 0, y: 0, z: -0, w: 1.0000001}
+    replaySource: {fileID: 0}
   alternateSession: {fileID: 0}
   layoutVersion: 2
 --- !u!114 &1500103625
@@ -73895,7 +75118,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: All bodies, attempts, scores and replay state are preserved
+  m_text: 'All bodies, attempts, scores and replay state are preserved
+
+    Sumo
+    keeps its costume and animated eyebrows.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -79758,6 +80984,7 @@ GameObject:
   - component: {fileID: 1634639269}
   - component: {fileID: 1634639264}
   - component: {fileID: 1634639268}
+  - component: {fileID: 1634639270}
   m_Layer: 2
   m_Name: Sumo competitor 4
   m_TagString: Untagged
@@ -79853,6 +81080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 1634639270}
   tractorMotor: {fileID: 0}
   body: {fileID: 1634639263}
   shape: {fileID: 1634639267}
@@ -80116,6 +81344,341 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &1634639270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634639261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 3
+  presentationParent: {fileID: 1247583261}
+  originalBodyRenderers:
+  - {fileID: 1043636581}
+  - {fileID: 2076598689}
+  - {fileID: 229444158}
+  - {fileID: 376200737}
+  - {fileID: 1097898238}
+  - {fileID: 1172733795}
+  - {fileID: 2000522484}
+  - {fileID: 1575048538}
+  - {fileID: 1694244318}
+  - {fileID: 1649022050}
+  - {fileID: 391623732}
+  - {fileID: 82294909}
+  - {fileID: 1394259266}
+  - {fileID: 264194788}
+  - {fileID: 1960640508}
+  - {fileID: 1602295143}
+  - {fileID: 1690769364}
+  - {fileID: 1979818786}
+  - {fileID: 1103972202}
+  - {fileID: 57082702}
+  - {fileID: 35786462}
+  - {fileID: 381958136}
+  - {fileID: 436931686}
+  - {fileID: 1682747663}
+  - {fileID: 1224442157}
+  - {fileID: 1570384698}
+  - {fileID: 754604154}
+  - {fileID: 1406134925}
+  - {fileID: 1686362443}
+  originalWheelRenderers:
+  - {fileID: 1780477287}
+  - {fileID: 279721898}
+  - {fileID: 308130554}
+  - {fileID: 91718624}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 42994800}
+  - {fileID: 2062782661}
+  - {fileID: 1382145679}
+  - {fileID: 230503595}
+  - {fileID: 1707720313}
+  - {fileID: 1427989740}
+  - {fileID: 1919687579}
+  - {fileID: 1360733007}
+  wheels:
+  - {fileID: 1958600089}
+  - {fileID: 1937956494}
+  - {fileID: 2079663019}
+  - {fileID: 1997031241}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.0000004843262, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150906
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.monster
+    position: {x: 0.00000035013878, y: -0.2410478, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.707968
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: semi.lowrider
+    position: {x: 0.0000004843262, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.5150639
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.515064
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.lifted
+    position: {x: 0.00000035013878, y: -0.2410478, z: 0.00000061102463}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.562823, y: 0.562823, z: 0.562823}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080055
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.fire
+    position: {x: 0.00000046491624, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4000001, y: 0.4000001, z: 0.4000001}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.hotdog
+    position: {x: 0.0000004172325, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.41095895, y: 0.41095895, z: 0.41095895}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.icecream
+    position: {x: 0.0000004172325, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4000001, y: 0.4000001, z: 0.4000001}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  modeOwnedSlots:
+  - face.brows
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &1637020406
 GameObject:
   m_ObjectHideFlags: 0
@@ -82646,6 +84209,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682747661}
   m_Mesh: {fileID: 7074463278887544656, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &1685080392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1685080395}
+  - component: {fileID: 1685080394}
+  - component: {fileID: 1685080393}
+  m_Layer: 0
+  m_Name: Caption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1685080393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685080392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: TRUCK FIT
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
+  m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 26
+  m_fontSizeBase: 26
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
+  m_fontSizeMax: 23
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1685080394
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685080392}
+  m_CullTransparentMesh: 1
+--- !u!224 &1685080395
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685080392}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 159859277}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 162, y: 36}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1686362441
 GameObject:
   m_ObjectHideFlags: 0
@@ -92303,6 +94004,9 @@ RectTransform:
   - {fileID: 158897679}
   - {fileID: 2038730607}
   - {fileID: 398021846}
+  - {fileID: 698192405}
+  - {fileID: 915123487}
+  - {fileID: 159859277}
   m_Father: {fileID: 57833316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -103808,6 +105512,7 @@ GameObject:
   - component: {fileID: 2109924825}
   - component: {fileID: 2109924820}
   - component: {fileID: 2109924824}
+  - component: {fileID: 2109924826}
   m_Layer: 2
   m_Name: Sumo competitor 3
   m_TagString: Untagged
@@ -103903,6 +105608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  appearanceHost: {fileID: 2109924826}
   tractorMotor: {fileID: 0}
   body: {fileID: 2109924819}
   shape: {fileID: 2109924823}
@@ -104166,6 +105872,341 @@ MonoBehaviour:
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
   - {x: 0.0027402525, y: 6.2507723e-19, z: -2.281153e-16, w: 0.99999624}
+--- !u!114 &2109924826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109924817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4acf33c08c41b49f82bd35901d06c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceHost
+  catalog: {fileID: 11400000, guid: e8e5dbb0d177bbb4c9c6e4413744e11c, type: 2}
+  participantSlot: 2
+  presentationParent: {fileID: 475960628}
+  originalBodyRenderers:
+  - {fileID: 1482722630}
+  - {fileID: 448525923}
+  - {fileID: 694040260}
+  - {fileID: 1941367172}
+  - {fileID: 1305606421}
+  - {fileID: 1703594909}
+  - {fileID: 485018455}
+  - {fileID: 1855592557}
+  - {fileID: 1863904630}
+  - {fileID: 857292877}
+  - {fileID: 1479890597}
+  - {fileID: 2132792217}
+  - {fileID: 501757628}
+  - {fileID: 1477868086}
+  - {fileID: 1060313026}
+  - {fileID: 357493605}
+  - {fileID: 106462322}
+  - {fileID: 2021914684}
+  - {fileID: 1608425781}
+  - {fileID: 697782876}
+  - {fileID: 1850871542}
+  - {fileID: 1086126300}
+  - {fileID: 1291274500}
+  - {fileID: 408677177}
+  - {fileID: 250877593}
+  - {fileID: 2038347579}
+  - {fileID: 1341350249}
+  - {fileID: 307273021}
+  - {fileID: 307292132}
+  originalWheelRenderers:
+  - {fileID: 1776534484}
+  - {fileID: 2090423382}
+  - {fileID: 754851848}
+  - {fileID: 1209428944}
+  auxiliaryExteriorRenderers: []
+  protectedRoots:
+  - {fileID: 1757875740}
+  - {fileID: 1814223353}
+  - {fileID: 1456682085}
+  - {fileID: 2026304653}
+  - {fileID: 2032696427}
+  - {fileID: 1826821448}
+  - {fileID: 2137620923}
+  - {fileID: 1038488287}
+  wheels:
+  - {fileID: 389513022}
+  - {fileID: 1196573032}
+  - {fileID: 1851862269}
+  - {fileID: 1383170227}
+  staticWheelPoses: []
+  compatibleBodies:
+  - bodyId: semi.standard
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91519105
+      visualDiameter: 0.5150904
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.monster
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.2578875
+      visualDiameter: 0.70796776
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: semi.lowrider
+    position: {x: 0.00000042472158, y: -0.24104773, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 18
+      materialIndex: 4
+    - rendererIndex: 19
+      materialIndex: 0
+    - rendererIndex: 20
+      materialIndex: 1
+    - rendererIndex: 21
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 1c000000
+      center: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 1
+      rendererIndices: 1d000000
+      center: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514367
+      visualDiameter: 0.51506376
+    - physicalWheel: 2
+      rendererIndices: 1e000000
+      center: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    - physicalWheel: 3
+      rendererIndices: 1f000000
+      center: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.91514385
+      visualDiameter: 0.5150638
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.lifted
+    position: {x: 0.00000029053416, y: -0.2410478, z: 0.0000006110246}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.5628228, y: 0.5628228, z: 0.5628228}
+    paintSlots:
+    - rendererIndex: 2
+      materialIndex: 0
+    - rendererIndex: 15
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 2f000000
+      center: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 1
+      rendererIndices: 30000000
+      center: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 2
+      rendererIndices: 32000000
+      center: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    - physicalWheel: 3
+      rendererIndices: 33000000
+      center: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      diameter: 1.5472014
+      visualDiameter: 0.87080026
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: truck.fire
+    position: {x: 0.0000004053116, y: -0.2410478, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 5
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.000002414837, y: 270, z: -0.0000024148367}
+      diameter: 0.9760482
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.9760481
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.00000724451, y: 90, z: 180}
+      diameter: 0.97605795
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659348, y: 90, z: 0}
+      diameter: 0.97605777
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.hotdog
+    position: {x: 0.00000035762787, y: -0.24104775, z: 0.00000047683716}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4109589, y: 0.4109589, z: 0.4109589}
+    paintSlots:
+    - rendererIndex: 17
+      materialIndex: 4
+    - rendererIndex: 18
+      materialIndex: 1
+    - rendererIndex: 19
+      materialIndex: 2
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 16000000
+      center: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 17000000
+      center: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 18000000
+      center: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 19000000
+      center: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      diameter: 0.927167
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  - bodyId: novelty.icecream
+    position: {x: 0.00000035762787, y: -0.2410478, z: 0.0000003814697}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 0.40000004, y: 0.40000004, z: 0.40000004}
+    paintSlots:
+    - rendererIndex: 8
+      materialIndex: 0
+    wheelGeometry:
+    - physicalWheel: 0
+      rendererIndices: 01000000
+      center: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      diameter: 0.8383415
+      visualDiameter: 0.48000002
+    - physicalWheel: 1
+      rendererIndices: 02000000
+      center: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903858, y: 270, z: 0.0000024148349}
+      diameter: 0.838341
+      visualDiameter: 0.48000002
+    - physicalWheel: 2
+      rendererIndices: 03000000
+      center: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.00000724451, y: 270, z: 180}
+      diameter: 0.8383411
+      visualDiameter: 0.48000002
+    - physicalWheel: 3
+      rendererIndices: 04000000
+      center: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      diameter: 0.83834165
+      visualDiameter: 0.48000002
+    notice: Visual fit uses this sport's existing four wheel positions and balanced
+      chassis. Sumo retains its required costume, headband and animated eyebrows;
+      saved brow cosmetics remain available in other sports.
+  modeOwnedSlots:
+  - face.brows
+  fragmentPresentation: {fileID: 0}
 --- !u!1 &2112012016
 GameObject:
   m_ObjectHideFlags: 0
@@ -181038,3 +183079,4 @@ SceneRoots:
   - {fileID: 1160847231}
   - {fileID: 2088820490}
   - {fileID: 1214553388616003108}
+  - {fileID: 768828194}

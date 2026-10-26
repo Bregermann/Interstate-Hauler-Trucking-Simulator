@@ -85,6 +85,9 @@ namespace LWS.TruckSports
         readonly RaycastHit[] contacts=new RaycastHit[32];
 
         public void Request(Vector3 point){RequestedFocus=point;}
+        // Appearance changes replace rendering below the same subject roots.
+        // Keep the existing camera, target group, shot and exclusions intact.
+        public void RefreshAppearanceSubjects(){renderers=null;worldCorners=null;}
         void Awake(){if(cameraRig==null)cameraRig=GetComponent<SportsEventCamera>();if(cameraRig!=null)cameraRig.broadcastFraming=this;}
         public bool Valid(int slot)=>slot>=0&&slot<SubjectCount&&slot<ParticipantCount&&Body(slot)!=null&&Body(slot).gameObject.activeInHierarchy&&(source!=null?source.Valid(slot):session.BroadcastParticipantActive(slot));
         public int Nearest(Vector3 point,bool humansOnly=false)

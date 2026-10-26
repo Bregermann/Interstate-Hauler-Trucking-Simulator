@@ -1,0 +1,397 @@
+{
+  "reviewedUtc": "2026-10-25T22:48:17.949502+00:00",
+  "sourceRun": "Carnival060-246dbb-environments",
+  "buildContentSha256": "246dbb94bf85af3f357430c15825a6f2f94b4a4649a30065d95510e75ecef766",
+  "managedSha256": "f827c455ae9985b3c19b31b5d3bd3b7324af99ae3b26f9a5e240cf5ae26b4875",
+  "processExit": 0,
+  "seconds": 78.75,
+  "reportedAutomatedChecks": 157,
+  "reportedAutomatedErrors": 0,
+  "reportedBuildAndManagedIdentityUnchanged": true,
+  "reviewer": "Codex visual analysis; not human/device/listening acceptance",
+  "reviewMethod": {
+    "all40": "Every source PNG viewed in two labelled20-image contact sheets; thumbnails preserve entire frames. Contact sheets generated at1944x1540 and tool-displayed at1777x1408.",
+    "directOriginals": [
+      {
+        "file": "TruckKickball-Snow-Morning-1920x1080.png",
+        "sha256": "fc7fa2b7e2bd0c7b1ca4a4b98f7d47a3fd0a9e1d5eb471b0af6b4055463ea7c2",
+        "method": "view_image original detail,1920x1080 complete original frame"
+      },
+      {
+        "file": "TruckKickball-Blizzard-Night-1920x1080.png",
+        "sha256": "13ef40916bb0292d397e3642f87ed594f4a0abae60959b9e456267e0aeaa01ca",
+        "method": "view_image original detail,1920x1080 complete original frame"
+      },
+      {
+        "file": "TruckFishing-Clear-Day-1920x1080.png",
+        "sha256": "4bb28e2fb626d61060ccc6fdeb6c815cad671cfa64d2ffc30a903c73c3ba43fc",
+        "method": "view_image original detail,1920x1080 complete original frame"
+      },
+      {
+        "file": "TruckFishing-Snow-Morning-1920x1080.png",
+        "sha256": "923cda80b93dd566c6cdd39b4f24d6d69d6b3b8090e3ab7c0d1ef02704890523",
+        "method": "view_image original detail,1920x1080 complete original frame"
+      }
+    ],
+    "sourceImagesWereEdited": false,
+    "contactSheetsAreAnalyticalDerivativesNotRuntimeCaptures": true
+  },
+  "findings": {
+    "kickball": {
+      "clearedBasesAndRoutes": "The visible bases and dark plowed connecting routes remain clearly distinguishable from surrounding snow in both Snow Morning and Blizzard Night originals. The framing exposes only part of the diamond, so it does not prove every base is on screen simultaneously.",
+      "snowAppearance": "Snow Morning contains plainly visible falling flake sprites and snow-covered ground with raised banks beside the cleared routes.",
+      "readability": "Team scorebug and match/action strips are readable. Clear Morning is notably dark on contact sheets. Blizzard Night has strong bright glare across the upper field and far base, but dark route shape and near base remain distinguishable.",
+      "subjectiveArtLimit": "Repeated rounded bank pieces and long strong shadows are conspicuous; their realism is a subjective limit, not proof of missing geometry."
+    },
+    "fishing": {
+      "visibleSubjects": "Clear Day and Snow Morning originals show the river/bed texture, banks, rocks, trees, dock, truck, hoop/net and readable Player1/catch HUD. No blank output, magenta missing-material rendering or obvious missing core subject is seen in these samples.",
+      "snowVisibility": "Snow Morning is dark and shows no obvious visible flakes or whitened banks/trees in this captured still. Snow/storm appearance is therefore NOT visually confirmed by this review, despite the separate probe reporting active emission. This is an appearance observation, not a confirmed runtime cause.",
+      "lightingAndTexture": "Time-of-day changes are visible across contacts. Dense river surface/bed texture remains visible; temporal shimmer, wave motion and noir/night comfort cannot be accepted from still images.",
+      "viewLimit": "The foreground tree covers much of the left side and near objects approach the bottom HUD; the flowing river channel and net remain visible. Captures are near match start and do not establish later fish/wolf/bear animation or full-match behavior."
+    }
+  },
+  "limitations": [
+    "Contact-sheet review gives broad static coverage; only the four listed originals received direct full-size viewing.",
+    "No animation, audio, controller, human-play or whole-match acceptance is inferred from still images.",
+    "The9-condition emitter/clock/identity checks are recorded as the existing automated run, not rerun by this reviewer.",
+    "Fishing precipitation appearance remains visually unconfirmed; Kickball Blizzard exposure/glare remains a subjective caveat."
+  ],
+  "overallReleaseAccepted": false,
+  "overallReleaseHold": "246 remains visually blocked by separately observed Cornhole detached wheels and top-of-viewport clipping; environment157/0 does not override that gate.",
+  "curatedExactOriginals": [
+    {
+      "file": "candidate-246dbb-environment-kickball-snow-morning-1080.png",
+      "originalCapture": "TruckKickball-Snow-Morning-1920x1080.png",
+      "sha256": "fc7fa2b7e2bd0c7b1ca4a4b98f7d47a3fd0a9e1d5eb471b0af6b4055463ea7c2",
+      "byteExactOriginal": true
+    },
+    {
+      "file": "candidate-246dbb-environment-fishing-clear-day-1080.png",
+      "originalCapture": "TruckFishing-Clear-Day-1920x1080.png",
+      "sha256": "4bb28e2fb626d61060ccc6fdeb6c815cad671cfa64d2ffc30a903c73c3ba43fc",
+      "byteExactOriginal": true
+    }
+  ],
+  "all40CaptureHashes": [
+    {
+      "file": "TruckKickball-Blizzard-Night-1280x720.png",
+      "sha256": "881cea41f4d761baef99bc537c1016b0e57fd89ad52c58b5f501aa29f6f8be05",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Blizzard-Night-1920x1080.png",
+      "sha256": "13ef40916bb0292d397e3642f87ed594f4a0abae60959b9e456267e0aeaa01ca",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": true
+    },
+    {
+      "file": "TruckKickball-Clear-Day-1280x720.png",
+      "sha256": "2b9151111cd49540d121d68ac90d0bbbf4ea68c72e7fb09bc182f8295b3a0533",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Day-1920x1080.png",
+      "sha256": "b318feceb3715140fd92166aafd3fb18e828144cdba331b4b78d4d9a4c317012",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Evening-1280x720.png",
+      "sha256": "284b3ae741c91a2da1cf74716e04a6963363dbcb2931478465f8ca5422defe9b",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Evening-1920x1080.png",
+      "sha256": "6d3f2a5ca7ec458c0840a72207366f4d30c0723ccdd87f2858b6ce33c7cec810",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Morning-1280x720.png",
+      "sha256": "a2f78e756ba04a7a4effe3937b5d042c445fff71acf1ea549f62e49456543dec",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Morning-1920x1080.png",
+      "sha256": "1dd2f70d311aad20e3b149b5037e7d56c1a6f8302bbc5f9eefb19a9da6a5a04b",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Night-1280x720.png",
+      "sha256": "84808c63569fe708dfa8827bb0b416dd95ac61df0f32737767ff1b4ac7425361",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Clear-Night-1920x1080.png",
+      "sha256": "dc7669939a102e6e4860cdbfcb22e3140eb4602806710565913edcfd70eeb4b0",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Hurricane-Day-1280x720.png",
+      "sha256": "966ec0ca7c197e30e1033e3e06d3474fdc1bc24a02454972c10c3ad1301c16f7",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Hurricane-Day-1920x1080.png",
+      "sha256": "b36134af797aa80bf7d888b19627206ae744930d19a4517faf1e861bbc1c9f26",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Rain-Evening-1280x720.png",
+      "sha256": "b8fd7065179eec27486dc7b124184c0c9fada88dcd21ca106eea1bcb459cb2ec",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Rain-Evening-1920x1080.png",
+      "sha256": "6faed84957aa0213c7bd11e83f987c1cf5a4bcca86b2ea72da657d2726a4b30c",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-setup-1280x720.png",
+      "sha256": "a94bdbc5649a7fee5aa44d747ead20a3e8377944a7b6c88cd6488063dbd1e26b",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-setup-1920x1080.png",
+      "sha256": "e4267ab980414a09ef5b908ec0296869e3368926f45206d816a1a5bafe8cf968",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Snow-Morning-1280x720.png",
+      "sha256": "f919e1e66b7de02d8c90d78d240820b63dd9e4ac43a79af4afd5e7e896b5ea5d",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Snow-Morning-1920x1080.png",
+      "sha256": "fc7fa2b7e2bd0c7b1ca4a4b98f7d47a3fd0a9e1d5eb471b0af6b4055463ea7c2",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": true
+    },
+    {
+      "file": "TruckKickball-Thunderstorm-Night-1280x720.png",
+      "sha256": "fb0bd54bf8a0eae6146be2a833fb56743d2c08e6d00d92b477e2966cfbd21c68",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckKickball-Thunderstorm-Night-1920x1080.png",
+      "sha256": "47b14712f6b0b598f8601be16f6a0f3de80974c52a77e518106f99f6f2bc2711",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Blizzard-Night-1280x720.png",
+      "sha256": "a8798e58968fce71bc56390391a01fe87345dd77281109bca55f35ecbbd9f027",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Blizzard-Night-1920x1080.png",
+      "sha256": "be6f8bcbf2f2cdbb1afd3a7edf8aca9528443f2a59be4aaf15fefda75978d6e0",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Day-1280x720.png",
+      "sha256": "94dc90823e4dda9b85c1245b829a34acd41ddd353488634776f2a610da83c4f4",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Day-1920x1080.png",
+      "sha256": "4bb28e2fb626d61060ccc6fdeb6c815cad671cfa64d2ffc30a903c73c3ba43fc",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": true
+    },
+    {
+      "file": "TruckFishing-Clear-Evening-1280x720.png",
+      "sha256": "bbb4a2b23349a4da80b262b2f05b694f9aec266035f8827b159cecad60d3d7a4",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Evening-1920x1080.png",
+      "sha256": "edee8d240db32db636cbda857f236fbdf77c20c9652c901a792c391f4a822efa",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Morning-1280x720.png",
+      "sha256": "44059a1ce044db1caaa063b3e284ae2e55a1c1f252016546df90cb3b69722500",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Morning-1920x1080.png",
+      "sha256": "eb5e6b2deedcdefe5ff232b30ea6fa3ba405839f7a6c281426feb92aa58764bb",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Night-1280x720.png",
+      "sha256": "5bbabb9fe74541e815ea0b104b033bbac1f894773f406a59c0604dd4dea1bd12",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Clear-Night-1920x1080.png",
+      "sha256": "c18bb63c374c856ddc4c9601648afe73ac2dd7c555989da70d29083bddb73079",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Hurricane-Day-1280x720.png",
+      "sha256": "8ba104393e2f26f1e86ea56ea2ed9d46a255155b4f27a6a7a57488e1a0237e10",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Hurricane-Day-1920x1080.png",
+      "sha256": "bbe594fc7593c136c0bbc010ed9f66c021ac15bfe5bc27141384c67c2bc26965",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Rain-Evening-1280x720.png",
+      "sha256": "7b78a82c2c2ccede98f6ae59a0eda8b20b4f1d29692b0395333bb6e17cc32ed4",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Rain-Evening-1920x1080.png",
+      "sha256": "f3a9a5c7fd7abe87e200a0db2c1e90627a3eec9cff2114503b0cc2894535e94b",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-setup-1280x720.png",
+      "sha256": "6ff256e71bc102cbf512ea8f4bf903ee6efbc65134f6c44ddf8e511e532fe6cb",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-setup-1920x1080.png",
+      "sha256": "e79fed2fc7856d2b1575663afbda2f7c4ec542391db5ac354d4d428112ecbd27",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Snow-Morning-1280x720.png",
+      "sha256": "5d00d7e780e3738a1dd7e44d96d48fef953af71503944a647b4590438a091f82",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Snow-Morning-1920x1080.png",
+      "sha256": "923cda80b93dd566c6cdd39b4f24d6d69d6b3b8090e3ab7c0d1ef02704890523",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": true
+    },
+    {
+      "file": "TruckFishing-Thunderstorm-Night-1280x720.png",
+      "sha256": "d8455429fa42c21ea3238ce2435dd427da4c9274f9d6f466f343e8d2c670f340",
+      "width": 1280,
+      "height": 720,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    },
+    {
+      "file": "TruckFishing-Thunderstorm-Night-1920x1080.png",
+      "sha256": "d7acfafe425863cad872acfa832affa2d8d769a79e1006671b592a88ded98d29",
+      "width": 1920,
+      "height": 1080,
+      "viewedMethod": "labelled mode contact sheet",
+      "directOriginalViewed": false
+    }
+  ]
+}

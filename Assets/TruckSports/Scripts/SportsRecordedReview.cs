@@ -22,11 +22,31 @@ namespace LWS.TruckSports
         Renderer[][] liveRenderers;
         bool[][] hiddenBefore;
         int focus;
+        int[] appearanceRevisions;
+        bool pendingAppearanceRecord;
 
         public void ResetRecord()
         {
             End(false);
-            if (record != null) record.ResetRecord();
+            if (record == null) return;
+            if (HasAppearanceHosts())
+            {
+                if (!record.ResetFreshAppearanceRecord()) throw new System.InvalidOperationException("Appearance refresh requires a stopped recorded review.");
+                pendingAppearanceRecord = true;
+            }
+            else record.ResetRecord();
+        }
+        bool HasAppearanceHosts(){foreach(var truck in trucks)if(truck!=null&&truck.appearanceHost!=null)return true;return false;}
+        void CacheAppearanceRevisions(){appearanceRevisions=new int[trucks.Length];for(int i=0;i<trucks.Length;i++)appearanceRevisions[i]=trucks[i].appearanceHost!=null?trucks[i].appearanceHost.AppearanceRevision:-1;}
+        void RefreshAppearanceRecord()
+        {
+            if(!pendingAppearanceRecord)return;
+            bool changed=appearanceRevisions==null||appearanceRevisions.Length!=trucks.Length;var indices=new System.Collections.Generic.List<int>();
+            for(int i=0;i<trucks.Length;i++)if(trucks[i].appearanceHost!=null){indices.Add(i);indices.Add(trucks.Length+i);if(!changed&&appearanceRevisions[i]!=trucks[i].appearanceHost.AppearanceRevision)changed=true;}
+            if(!record.RefreshAppearanceSources(indices.ToArray(),changed))throw new System.InvalidOperationException("Stopped appearance review hierarchy does not match its explicit source bindings.");
+            liveRenderers=new Renderer[record.sources.Length][];hiddenBefore=new bool[record.sources.Length][];
+            for(int i=0;i<record.sources.Length;i++){liveRenderers[i]=record.sources[i].GetComponentsInChildren<Renderer>(true);hiddenBefore[i]=new bool[liveRenderers[i].Length];}
+            CacheAppearanceRevisions();pendingAppearanceRecord=false;record.ResetRecord();
         }
         void Ensure()
         {
@@ -59,11 +79,12 @@ namespace LWS.TruckSports
                 record.ghosts[i] = ghost.transform; ghost.SetActive(false);
             }
             record.ResetRecord();
+            CacheAppearanceRevisions(); pendingAppearanceRecord = false;
         }
         public void Capture(float time)
         {
             if (time < 3 || Playing) return;
-            Ensure(); int mask = 0;
+            Ensure(); RefreshAppearanceRecord(); int mask = 0;
             for (int i = 0; i < match.setup.count; i++) mask |= 1 << (fragments[i].Bursting ? trucks.Length + i : i);
             for (int i = 0; i < extras.Length; i++) if (extras[i].gameObject.activeInHierarchy) mask |= 1 << (trucks.Length * 2 + i);
             record.Record(time, mask);

@@ -1,0 +1,165 @@
+{
+  "status": "final probe-only fixture/observation corrections frozen; cached-reference RuntimeSDK Roslyn compile0; corrected Windows run not performed",
+  "files": {
+    "Assets/TruckSports/Scripts/SportsCarnivalAppearanceWindowsProbe.cs": "6249AEF51D7883EF496A715C8B1AE50CF81286BD736D1A9BD9BF488E1C0B57B8",
+    "Assets/TruckSports/Scripts/SportsCarnivalAppearanceWindowsProbe.cs.meta": "DD4EC8F6E5BA7D18354A8CBD9FCE3D29FA2ACA136027210D9F45A3234AF9B456"
+  },
+  "flags": {
+    "enable": "-tsCarnivalAppearance",
+    "output": "-tsCarnivalAppearanceOutput"
+  },
+  "runCommand": "python Tools/TruckSports/RunPlaytestWindowsValidation.py CarnivalAppearanceActualWindows --flag=-tsCarnivalAppearance --output-flag=-tsCarnivalAppearanceOutput --timeout=600",
+  "runPreconditions": [
+    "Root must build this exact frozen source into the combined development Windows candidate.",
+    "Use a fresh run name/output directory; prior result or PNG evidence is never overwritten.",
+    "Existing RunPlaytestWindowsValidation/BuildIdentity records the exact executable payload, managed hash and owned process identity."
+  ],
+  "limits": {
+    "probeWatchdogSeconds": 570,
+    "suggestedExternalProcessTimeoutSeconds": 600,
+    "captureSizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "injectedPosesForcesScoresOutcomes": false,
+    "targetNaturalWindowSeconds": 90
+  },
+  "ownershipStyles": [
+    {
+      "scene": "TruckSumo",
+      "roster": 4,
+      "physicalActorRoots": 4,
+      "style": "original fixed-owner NWH"
+    },
+    {
+      "scene": "TruckAirHockey",
+      "roster": 2,
+      "physicalActorRoots": 2,
+      "style": "original static wheel poses"
+    },
+    {
+      "scene": "TruckCornhole",
+      "roster": 4,
+      "physicalActorRoots": 16,
+      "style": "four miniature retained delivery actors per participant"
+    },
+    {
+      "scene": "TruckCurling",
+      "roster": 4,
+      "physicalActorRoots": 16,
+      "style": "current delivery plus retained stones; unprepared actors logged without inferred owner"
+    },
+    {
+      "scene": "TruckSkeeBall",
+      "roster": 4,
+      "physicalActorRoots": 4,
+      "style": "original four independent arcade compositor feeds"
+    },
+    {
+      "scene": "TruckWifeCarrying",
+      "roster": 8,
+      "physicalActorRoots": 8,
+      "style": "four driver/passenger pairs retaining original .55 passenger scale"
+    },
+    {
+      "scene": "TruckTargetLaunch",
+      "roster": 4,
+      "physicalActorRoots": 4,
+      "style": "original four AI actors; genuine rules-resolved attempt or actual lava emission. Safe banking is valid. Exact impacted-owner selected fracture is checked only on actual lava; unobserved Windows fracture remains explicitly unverified."
+    },
+    {
+      "scene": "TruckTerrierRacing",
+      "roster": 12,
+      "physicalActorRoots": 12,
+      "style": "actual AI-triggered selected wreck on original pool required"
+    },
+    {
+      "scene": "TruckDockDiving",
+      "roster": 8,
+      "physicalActorRoots": 9,
+      "style": "eight staged originals plus actual current-turn upper/lower selected body"
+    }
+  ],
+  "checks": [
+    "Actual public registry create/seat/detached draft commit, seven varied known body IDs plus genuine compatible catalog item IDs, cache reload/byte stability and duplicate-name ID independence.",
+    "Saved real setup source, Heat roster paging/first detail/full stable ID/TMP overflow/close; exact rule, body, host-revision and profile-byte purity. Missing modal or selected-body adapters fail.",
+    "Original all-AI StartMatch and bounded natural workload only; no drive, pose, impulse, resolution, score or outcome injection.",
+    "Requested/effective body agreement, explicit participant paint/livery MPBs, renderer-only selected models and supported shaders.",
+    "Original actor/body/core-collider and NWH controller references retained; excludes only exact generated collider references owned by those existing NWH controllers from cross-start identity checks.",
+    "Original cab bindings/layers and active dashboard graphics; Skee original four feed textures, logical viewports, point filtering, zero-world output camera and original listener policy.",
+    "Actual original Pause/Resume, unscaled capture while paused, exact rule clock/body position/rotation/velocity/profile owner and appearance revision preservation.",
+    "Original rematch, fresh match identity, source actor reuse, menu return/actor unloading and unchanged requested profiles.",
+    "Actual ScreenCapture PNG IEND/dimensions, original camera render callbacks, nonblank backbuffer pixels and contemporaneous frustum metadata. Frustum bounds are not per-pixel occlusion or human visual acceptance.",
+    "Private SportsPrefs validation lease restored; ordinary unscoped player participant registry bytes/presence unchanged."
+  ],
+  "evidence": [
+    "result.txt",
+    "progress.txt",
+    "actors.tsv",
+    "frames.tsv",
+    "actual game-window PNG captures at both original resolutions",
+    "external BuildIdentity/process receipt"
+  ],
+  "staticDiagnostics": {
+    "sources": 1,
+    "cachedReferences": 534,
+    "errors": 0,
+    "assemblyEmitted": false,
+    "unityInvoked": false
+  },
+  "remainingAcceptance": [
+    "Parent native combined compilation/build and actual Windows execution with exact final frozen source.",
+    "Target selected fracture remains Windows-unverified if NOT_OBSERVED_TARGET_LAVA is nonzero and no successful genuine-impact sample exists.",
+    "Human visual review of captured art/UI; no human playtest, physical controller/wheel, audio/listening, full-match, performance/GPU or soak acceptance is implied."
+  ],
+  "priorActualEvidence": {
+    "folder": "Logs/TruckSports/PlaytestRepair/CarnivalAppearance-bef464",
+    "pid": 40848,
+    "checks": 5088,
+    "errors": 44,
+    "scenes": 9,
+    "screenshots": 98,
+    "seconds": 240.72,
+    "preserved": true,
+    "accepted": false,
+    "targetLava": {
+      "observed": 0,
+      "notObserved": 1,
+      "firstRoundOriginalBankedPoints": [
+        25,
+        25,
+        10,
+        25
+      ],
+      "originalOverconstrainedHazardExpectationFailed": true
+    }
+  },
+  "probeFixtureCorrections": [
+    "Original inactive chassis ownership uses nearest Rigidbody in the original hierarchy with includeInactive=true; native Collider.attachedRigidbody was null until activation. Existing collider/controller IDs stay strict; exact current NWH wheel.meshCollider references alone are excluded. No warmup/physics mutation.",
+    "Pixel coverage uses96x54 samples across inner90% of each actual viewport rather than77 central points. Original .15 nonblack/.012 variation thresholds unchanged. All116 views in98 preserved original PNGs pass offline dense coverage; black and uniform synthetic frames still fail. This is fixture evidence, not a corrected Windows acceptance run.",
+    "Collider mismatch telemetry logs baseline/current IDs, type/path/active state and native/hierarchy/exact NWH owner."
+  ],
+  "remainingObservedFailures": [
+    "Corn actual setup missing host reports was delegated to presentation agent; no production/UI source changes by this probe fix.",
+    "First Windows Target lava observed0/not-observed1; conditional fracture path remains Windows-unverified until genuine lava occurs. Original native controlled real-lava evidence is separately retained by parent."
+  ],
+  "targetObservationPolicy": {
+    "naturalReady": "original TargetRules attempts>0 and resolved, or actual bridge emission; original score domains/totals read and checked",
+    "lavaObserved": "check exact LastImpactSlot owner/profile/requested/effective/emitted body, no fallback, all original physical IDs; missing selected graphics after actual impact fails",
+    "lavaNotObserved": "NOT_OBSERVED_TARGET_LAVA counter/note and UNVERIFIED_NOT_OBSERVED footer; no Windows fracture acceptance inferred from successful banking or separate native tests",
+    "summaryCounters": [
+      "TARGET_NATURAL_SAMPLES",
+      "TARGET_LAVA_OBSERVED",
+      "NOT_OBSERVED_TARGET_LAVA",
+      "WINDOWS_TARGET_FRACTURE"
+    ],
+    "setupDifficultySeedPhysicsRulesUnchanged": true,
+    "firstActualRunObservationCounts": "observed0 / not-observed1; failed first executable/evidence retained; corrected run counts pending actual Windows execution"
+  }
+}

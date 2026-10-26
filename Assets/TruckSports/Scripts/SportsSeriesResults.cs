@@ -27,7 +27,7 @@ namespace LWS.TruckSports
             else if (session is MattressMatch mattress)
                 snapshot = Capture(session, "MATTRESS RACING RESULTS", mattress.series.completed + " RACES · SERIES POINTS",
                     mattress.ResultPlace, i => mattress.series.winner == i, i => mattress.series.total[i], "PTS",
-                    i => mattress.series.finishes[i * 8] + " RACE WINS · FINAL RACE " + LastPlace(mattress.series, i));
+                    i => mattress.series.finishes[i * 8] + (mattress.series.finishes[i * 8] == 1 ? " RACE WIN" : " RACE WINS") + " · FINAL RACE " + LastPlace(mattress.series, i));
             else if (session is TerrierMatch terrier)
                 snapshot = Capture(session, "TERRIER RACING CHAMPION", "FIRST TO FIVE HEAT WINS · " + terrier.Heat + " HEATS",
                     terrier.ResultPlace, i => terrier.MatchWinner == i, i => terrier.wins[i], "WINS",

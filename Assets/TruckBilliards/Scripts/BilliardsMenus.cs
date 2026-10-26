@@ -114,6 +114,7 @@ namespace LWS.TruckBilliards
   }
   public void Back()
   {
+   if(!enabled)return;
    switch(session.Screen){
     case BilliardsScreen.Help:case BilliardsScreen.Settings:session.Show(returnScreen);break;
     case BilliardsScreen.Setup:session.SaveSetup();if(LWS.TruckSports.SportsNavigation.Collection)LWS.TruckSports.SportsNavigation.FrontEnd();else session.Show(BilliardsScreen.Main);break;

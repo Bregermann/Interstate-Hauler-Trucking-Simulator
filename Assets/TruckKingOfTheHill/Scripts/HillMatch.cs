@@ -43,8 +43,13 @@ namespace LWS.TruckKingOfTheHill
         public override bool BroadcastStandingsVisible => !ReplayControls;
         public override float ParticipantProgress(int slot) => rules.Target > 0 ? rules.control[slot] / rules.Target : 0;
         public override string Header => Title + (ReplayControls ? " · RECORDED REPLAY" : " · " + (sites != null && sites.Length > rules.Zone ? siteNames[rules.Zone] : "CROWN PLATEAU"));
-        public override string Status => Countdown > 0 ? "REACH THE ILLUMINATED CONTROL RING" : rules.Warning ? "HILL MOVING IN " + rules.UntilMove.ToString("F1") + "s · NEXT: " + siteNames[rules.NextZone] : rules.Occupants > 1 ? "CONTESTED · NO CONTROL POINTS" : rules.Controller >= 0 ? setup.players[rules.Controller].name + " CONTROLS THE HILL · " + rules.control[rules.Controller].ToString("F1") + " / " + rules.Target + "s" : "HILL OPEN · DRIVE INTO THE RING";
+        public override string Status => Countdown > 0 ? "" : rules.Warning ? "HILL MOVING IN " + rules.UntilMove.ToString("F1") + "s · " + siteNames[rules.NextZone] : rules.Occupants > 1 ? "HILL CONTESTED" : "";
         public override string ControlCaption(int slot) => base.ControlCaption(slot).Replace(" ACTION", " RECOVER");
+        public override bool CompactBroadcastStatus=>true;
+        public override bool BroadcastStatusVisible=>!ReplayControls&&!string.IsNullOrEmpty(Status);
+        public override bool CompactViewportHud=>true;
+        public override string ViewportTelemetry(int view)=>"TARGET "+rules.Target.ToString("F0")+"s · MOVE "+rules.UntilMove.ToString("F0")+"s";
+        public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail)=>TryReadDrivingViewportCard(drivingViews,view,out participant,out score,out detail);
         public override string Help => "Eight trucks fight for a moving illuminated mountaintop control zone. One physically present, upright and grounded truck earns control seconds. Two or more opponents contest it and nobody scores; an overturned truck still physically contests while it remains in the ring. Distant compound colliders and airborne passes cannot award control. Default victory requires 60 cumulative uncontested seconds; choose 30 or 90 in setup. Every 40 seconds by default the hill relocates to an accessible connected plateau, with a three-second preview ring at the announced next site. Use the broad authored roads, bridges and ridges; shove rivals out using actual NWH collisions. Falling from a cliff costs recovery time. ACTION only recovers a genuinely stuck/overturned truck at a separated nearby safe plateau; it cannot warp a moving truck to the next hill. AI uses the existing LWS road planner and Fare Fight driving adapter, navigates the same roads, contests and physically rams; no hidden points. Shared arena/chase/full cab, free look, optional AI views, crew colors/names, shared weather and horn use collection controls. Match-end replay records actual movement and never changes the winner.";
         readonly bool[] present = new bool[8], eligible = new bool[8];
         readonly float[] stuck = new float[8], nextPlan = new float[8], fallenAt = new float[8];
@@ -65,7 +70,7 @@ namespace LWS.TruckKingOfTheHill
             if (humans <= 4) return true; reason = "Up to four local humans; assign additional competitors to AI."; return false;
         }
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
-        { value = rules.control[slot].ToString("F1") + "s"; detail = fallenAt[slot] >= 0 ? "RECOVERING" : present[slot] ? rules.Occupants > 1 ? "CONTESTING" : eligible[slot] ? "CONTROLLING" : "GET UPRIGHT" : "REACH THE HILL"; return slot < setup.count; }
+        { value = rules.control[slot].ToString("F1") + "s"; detail = fallenAt[slot] >= 0 ? "RECOVERING" : present[slot] ? rules.Occupants > 1 ? "CONTESTING" : eligible[slot] ? "CONTROLLING" : "GET UPRIGHT" : "OFF HILL"; return slot < setup.count; }
         public override string ViewText(int view) { int slot = drivingViews.rally.owners[view]; TryReadScoreCard(slot, out var score, out var detail); return setup.players[slot].name + " · " + score + " / " + rules.Target + "s\n" + detail + "\n" + Status; }
         public override string Standings { get { text.Clear(); for (int i = 0; i < setup.count; i++) text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.control[i].ToString("F1")).Append(" / ").Append(rules.Target).Append("s CONTROL\n"); return text.ToString(); } }
         public override string Results => (rules.Winner >= 0 ? setup.players[rules.Winner].name + " IS KING!" : "CONTROL RESULTS") + "\n\n" + Standings;

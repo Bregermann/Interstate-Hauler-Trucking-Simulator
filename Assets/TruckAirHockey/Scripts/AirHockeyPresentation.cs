@@ -33,7 +33,7 @@ namespace LWS.TruckAirHockey
             var match = menus.match; var rules = match.rules;
             foreach (var dock in legacyDocks) if (dock != null) dock.SetActive(false);
             menus.scoreText.gameObject.SetActive(false); menus.resultText.gameObject.SetActive(false);
-            controls.gameObject.SetActive(true);
+            controls.gameObject.SetActive(false);
             for (int side = 0; side < 2; side++)
             {
                 var player = match.players[side]; var color = player.color;

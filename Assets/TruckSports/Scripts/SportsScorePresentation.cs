@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using DG.Tweening;
 using Michsky.UI.Heat;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,9 @@ namespace LWS.TruckSports
     public sealed class SportsScorePresentation : MonoBehaviour
     {
         public SportsEventSession session;
+        [Tooltip("Optional original sport lifecycle implementing the shared read-only score contract.")]
+        public MonoBehaviour alternateSession;
+        ISportsScorePresentationSource Source => session != null ? (ISportsScorePresentationSource)session : alternateSession as ISportsScorePresentationSource;
         public NotificationManager notification;
         public CanvasGroup visibility;
         public Image portrait, accent;
@@ -28,10 +32,16 @@ namespace LWS.TruckSports
             public int count;
         }
         readonly List<Pending> pending = new List<Pending>();
-        string match;
+        string match, terminalOutcomeMatch;
         float next;
         RectTransform layout;
         Vector2 playAnchorMin, playAnchorMax, playPivot, playPosition, playSize;
+        TMP_Text message;
+        RectTransform messageLayout;
+        Vector2 playTextAnchorMin, playTextAnchorMax, playTextPivot, playTextOffsetMin, playTextOffsetMax;
+        Vector4 playTextMargin;
+        float playTextSize, playTextMin, playTextMax;
+        bool playTextAutoSize, textLayoutCached;
         bool resultLayout;
         int viewportOwner = -1;
         float audienceReady;
@@ -43,18 +53,71 @@ namespace LWS.TruckSports
             layout = (RectTransform)transform;
             playAnchorMin = layout.anchorMin; playAnchorMax = layout.anchorMax; playPivot = layout.pivot;
             playPosition = layout.anchoredPosition; playSize = layout.sizeDelta;
+            CacheTextLayout();
         }
-        void OnEnable() { if (session != null) session.ScoreConfirmed += Accept; }
+        void OnEnable() { var source = Source; if (source != null) source.ScoreConfirmed += Accept; }
         void OnDisable()
         {
-            if (session != null) session.ScoreConfirmed -= Accept;
+            var source = Source; if (source != null) source.ScoreConfirmed -= Accept;
             pending.Clear(); if (portrait != null) portrait.transform.DOKill();
+            SetResultLayout(false);
+        }
+        void CacheTextLayout()
+        {
+            if (textLayoutCached || notification == null) return;
+            message = notification.GetComponentInChildren<TMP_Text>(true);
+            if (message == null) return;
+            messageLayout = message.rectTransform;
+            playTextAnchorMin = messageLayout.anchorMin; playTextAnchorMax = messageLayout.anchorMax;
+            playTextPivot = messageLayout.pivot; playTextOffsetMin = messageLayout.offsetMin; playTextOffsetMax = messageLayout.offsetMax;
+            playTextMargin = message.margin; playTextSize = message.fontSize;
+            playTextAutoSize = message.enableAutoSizing; playTextMin = message.fontSizeMin; playTextMax = message.fontSizeMax;
+            textLayoutCached = true;
+        }
+        void SetResultLayout(bool result)
+        {
+            if (layout == null || resultLayout == result) return;
+            CacheTextLayout(); resultLayout = result;
+            layout.anchorMin = result ? new Vector2(.5f, 1) : playAnchorMin;
+            layout.anchorMax = result ? new Vector2(.5f, 1) : playAnchorMax;
+            layout.pivot = result ? new Vector2(.5f, 1) : playPivot;
+            layout.anchoredPosition = result ? resultPosition : playPosition;
+            layout.sizeDelta = result ? resultSize : playSize;
+            if (!textLayoutCached) return;
+            if (result)
+            {
+                // The compact result rail keeps the portrait and full two-line
+                // award. Its former 12px insets left only 52px for 140% rich text.
+                messageLayout.offsetMin = new Vector2(playTextOffsetMin.x, 4);
+                messageLayout.offsetMax = new Vector2(playTextOffsetMax.x, -4);
+                message.margin = Vector4.zero;
+                message.enableAutoSizing = true; message.fontSizeMin = 16; message.fontSizeMax = 24;
+            }
+            else
+            {
+                messageLayout.anchorMin = playTextAnchorMin; messageLayout.anchorMax = playTextAnchorMax;
+                messageLayout.pivot = playTextPivot; messageLayout.offsetMin = playTextOffsetMin; messageLayout.offsetMax = playTextOffsetMax;
+                message.margin = playTextMargin; message.enableAutoSizing = playTextAutoSize;
+                message.fontSizeMin = playTextMin; message.fontSizeMax = playTextMax; message.fontSize = playTextSize;
+            }
         }
         void Accept(SportsScoreEvent receipt)
         {
-            if (receipt.MatchId != session.MatchId) return;
+            var source = Source; if (source == null || receipt.MatchId != source.MatchId) return;
             if (match != receipt.MatchId) ResetMatch(receipt.MatchId);
             if (viewport >= 0 && (!RefreshAudience() || receipt.IsTeam || receipt.Slot != viewportOwner)) return;
+            // A final measured outcome replaces stale round measurements in
+            // presentation only. Every receipt remains in the match journal;
+            // earned positive/negative point changes retain their commit order.
+            if (receipt.Kind == SportsScoreKind.Outcome)
+            {
+                if (receipt.MatchEnded)
+                {
+                    pending.RemoveAll(item => item.latest.MatchId == receipt.MatchId && item.latest.Kind == SportsScoreKind.Outcome && !item.latest.MatchEnded);
+                    terminalOutcomeMatch = receipt.MatchId;
+                }
+                else if (terminalOutcomeMatch == receipt.MatchId) return;
+            }
             // Combine rapid awards only when their actual identities, reason,
             // unit and tier agree. Names may deliberately be identical.
             for (int i = pending.Count - 1; i >= 0; i--)
@@ -81,7 +144,7 @@ namespace LWS.TruckSports
         }
         void ResetMatch(string id)
         {
-            match = id; pending.Clear(); Presented = 0; LastPresented = null;
+            match = id; terminalOutcomeMatch = null; pending.Clear(); Presented = 0; LastPresented = null;
             notification.MinimizeNotification(); next = Time.time + .7f;
             if (viewport >= 0) { viewportOwner = -1; WaitForAudience(); }
         }
@@ -98,40 +161,32 @@ namespace LWS.TruckSports
         bool RefreshAudience()
         {
             int owner = -1;
-            bool valid = viewport < session.cameras.Length && session.cameras[viewport] != null && session.cameras[viewport].enabled
-                && session.TryReadViewportCard(viewport, out owner, out _, out _);
+            var source = Source; var camera = source?.ScoreCamera(viewport);
+            bool valid = camera != null && camera.enabled && source.TryReadViewportCard(viewport, out owner, out _, out _);
             if (!valid) owner = -1;
             if (owner != viewportOwner) { viewportOwner = owner; WaitForAudience(); }
             if (valid && layout != null)
             {
-                var view = session.cameras[viewport].rect;
+                var view = camera.rect;
                 layout.anchorMin = layout.anchorMax = new Vector2(view.center.x, view.yMax);
             }
             return valid;
         }
         void LateUpdate()
         {
-            if (session == null || notification == null) return;
-            if (match != session.MatchId) ResetMatch(session.MatchId);
+            var source = Source; if (source == null || notification == null) return;
+            if (match != source.MatchId) ResetMatch(source.MatchId);
             bool audience = viewport < 0 || RefreshAudience();
-            bool result = viewport < 0 && session.Finished && session.menus.Screen == SportsEventScreen.Result;
-            bool showing = audience && (viewport < 0 || Time.time >= audienceReady) && session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
+            bool result = viewport < 0 && source.ScoreFinished && source.ScoreResultPage;
+            bool showing = audience && (viewport < 0 || Time.time >= audienceReady) && source.ScoreRunning && !source.ScorePaused && (result || !source.ScoreFinished && source.ScorePlayPage);
             visibility.alpha = showing ? 1 : 0;
-            if (viewport < 0 && layout != null && resultLayout != result)
-            {
-                resultLayout = result;
-                layout.anchorMin = result ? new Vector2(.5f, 1) : playAnchorMin;
-                layout.anchorMax = result ? new Vector2(.5f, 1) : playAnchorMax;
-                layout.pivot = result ? new Vector2(.5f, 1) : playPivot;
-                layout.anchoredPosition = result ? resultPosition : playPosition;
-                layout.sizeDelta = result ? resultSize : playSize;
-            }
+            if (viewport < 0) SetResultLayout(result);
             // A final physical deposit can close the match in the same step.
             // Its already-confirmed receipt still belongs on the results page.
-            if (!session.Running) { pending.Clear(); return; }
+            if (!source.ScoreRunning) { pending.Clear(); return; }
             if (!showing || Time.time < next || pending.Count == 0) return;
             var item = pending[0]; pending.RemoveAt(0); var receipt = item.latest;
-            if (receipt.MatchId != session.MatchId) return;
+            if (receipt.MatchId != source.MatchId) return;
             Color color = receipt.Color;
             accent.color = color; portrait.color = Color.Lerp(color, Color.white, .4f);
             string delta = (item.delta >= 0 ? "+" : "") + item.delta.ToString("0.##", CultureInfo.InvariantCulture);

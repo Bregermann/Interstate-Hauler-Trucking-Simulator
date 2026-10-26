@@ -49,6 +49,9 @@ namespace LWS.TruckSports
             card.score=Text(card.root,"Owned score",old,new Vector2(53,-29),new Vector2(94,28),25);card.score.fontStyle=FontStyles.Bold;
             card.detail=Text(card.root,"Race status",old,new Vector2(151,-32),new Vector2(108,34),17);
             card.telemetry=Text(card.root,"Driving telemetry",old,new Vector2(12,-87),new Vector2(316,23),17);card.telemetry.gameObject.SetActive(false);
+            // Only the newly opted-in Carnival HUDs use the taller name line.
+            // Approved BASE/Mattress layouts retain their exact existing rectangles.
+            if(menus.match.CompactBroadcastStatus){card.name.rectTransform.sizeDelta=new Vector2(246,28);card.score.rectTransform.anchoredPosition=new Vector2(53,-34);card.detail.rectTransform.anchoredPosition=new Vector2(151,-34);}
             return cards[view]=card;
         }
         void Context(Card card,string value,Vector2 anchor,int view)
@@ -69,7 +72,7 @@ namespace LWS.TruckSports
                 if(!active){if(cards[view]!=null)cards[view].root.gameObject.SetActive(false);continue;}
                 var card=cards[view]??Build(view);card.root.gameObject.SetActive(true);
                 string telemetry=match.ViewportTelemetry(view);bool hasTelemetry=!string.IsNullOrEmpty(telemetry);
-                bool hasDetail=!string.IsNullOrEmpty(detail);card.root.sizeDelta=hasTelemetry?new Vector2(340,116):hasDetail?new Vector2(270,76):new Vector2(230,72);card.name.rectTransform.sizeDelta=new Vector2(hasTelemetry?316:hasDetail?246:206,26);card.score.rectTransform.sizeDelta=new Vector2(hasDetail?94:166,28);card.detail.rectTransform.sizeDelta=new Vector2(hasTelemetry?178:108,hasTelemetry?48:34);card.telemetry.text=telemetry;card.telemetry.gameObject.SetActive(hasTelemetry);
+                bool hasDetail=!string.IsNullOrEmpty(detail);card.root.sizeDelta=hasTelemetry?new Vector2(340,116):hasDetail?new Vector2(270,76):new Vector2(230,72);card.name.rectTransform.sizeDelta=new Vector2(hasTelemetry?316:hasDetail?246:206,match.CompactBroadcastStatus?28:26);card.score.rectTransform.sizeDelta=new Vector2(hasDetail?94:166,28);card.detail.rectTransform.sizeDelta=new Vector2(hasTelemetry?178:108,hasTelemetry?48:34);card.telemetry.text=telemetry;card.telemetry.gameObject.SetActive(hasTelemetry);
                 menus.viewTexts[view].gameObject.SetActive(false);var obsolete=menus.viewPanels[view].Find("View data backing");if(obsolete!=null)obsolete.gameObject.SetActive(false);
                 var anchor=InnerAnchor(match.cameras[view].rect);card.root.anchorMin=card.root.anchorMax=card.root.pivot=anchor;
                 card.root.anchoredPosition=new Vector2(anchor.x<.01f?10:anchor.x>.99f?-10:0,anchor.y<.01f?10:anchor.y>.99f?-10:0);

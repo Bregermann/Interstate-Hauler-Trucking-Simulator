@@ -1,0 +1,20 @@
+# Curling delivery-owner appearance source handoff
+
+Q22-CARNIVAL §7. Source implemented; explicit native author/save/integration, tests and Windows/human acceptance pending. Cornhole, launch-four and Hot human-camera handoffs remain independently frozen. Dock/Target regional work is not implemented.
+
+Read-only original saved-scene audit found64 existing NWH WheelController components across16 stones and64 distinct nonzero rotatingContainer references, all resolving to saved Transform blocks. This was reported before implementation and approved by the lead. No Host API extension, controller, wheel container or physics adapter is added.
+
+Explicit stopped-Editor author on the open original Curling scene: `LWS.TruckSports.Editor.SportsTruckAppearanceHostAuthoring.InstallOpenCurlingAppearance()`. Caller opens/saves. The author preflights all16 original circular convex MeshCollider actors, four existing NWH controllers per actor, exact33 installed GR3D mesh identities, original footprint/guard roots and actual upgraded cab. It reuses the existing static original-wheel mesh binding helper plus Host Create/Fit. No FitTruck/factory/vehicle regeneration occurs. Existing custom/partial bindings are preserved or refused for review.
+
+Hosts start at participantSlot−1. The original CurlingStone.Prepare receives the actual roster slot, prepares that participantId/color once and binds the existing cab dashboard before its original truck.Prepare. Earlier stones retain their owner through later turns, contacts and original Restore/guard rollback. CurlingMatch gains only the explicit cab-binding field. The original footprint/team coloring, circular collider, masses, COM, springs, controller identities, ice forces, curl/launch coefficients, AI and scoring are untouched.
+
+The original match layer authority still assigns the current model subtree to layer22 and previous models to layer2. New appearance children follow that same subtree. The real cab/dashboard stays on existing private layer26; the house camera already excludes26 and the cab camera excludes22. No new camera, render callback, input gate or replay backend is introduced. All16 hosts are registered with the existing Session; new matches use the original session and delivery boundaries.
+
+Native filter: `CurlingAppearanceIntegrationTests` (two cases):
+
+- `SevenBodiesOnSixteenRetainedStonesKeepOriginalSixtyFourNwhControllersAndCircularPhysics`: seven bodies across16 explicitly controlled Prepare/Restore owner bindings, duplicate-name persistent profiles, original64 controller/container identities, unchanged circular physical configuration, original footprint, current-body/cab/house layers and dashboard owner, journal neutrality. A separately labeled controlled initial-pose/velocity fixture then requires genuine original PhysX stone callbacks; no synthetic contact/scoring callback is invoked.
+- `OriginalFourAiDeliveryOwnersKeepPriorBodiesAndActualCabOwnerAcrossTurns`: original four AI delivery transitions, all four actual roster owners and retained prior body identities, followed by original rematch. No actor pose, velocity, rule or score injection in this natural-flow case.
+
+Existing Curling physics/guard/scoring smoke and rules tests remain unchanged and should run alongside this slice. Static semantic check:534 cached references, zero errors. No Unity/player/CLEAN/Git or scene invocation was performed here; native and visible acceptance remain pending.
+
+VENDOR ASSETS AUDITED: installed NWH source meshes and64 actual saved controllers/containers; existing Host/Create/Fit/static-wheel and cab adapters. VENDOR ASSETS USED: those original physical actors, owned appearance catalog and existing public wheel/cab APIs. RELEVANT ASSETS NOT USED: fragment recipes/replay adapters unnecessary for Curling's intact retained stones. CUSTOM SYSTEMS CREATED: explicit author and focused fixtures; small original delivery-owner presentation hook. VENDOR SOURCE MODIFIED: none. DUPLICATE VENDOR FUNCTIONALITY CREATED: none.

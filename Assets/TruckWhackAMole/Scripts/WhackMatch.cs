@@ -41,7 +41,12 @@ namespace LWS.TruckWhackAMole
         public override bool BroadcastStandingsVisible => !ReplayControls;
         public override bool UsesAction => false;
         public override string Header => Title + " · " + Mathf.CeilToInt(Mathf.Max(0, rules.Duration - rules.Clock)) + "s · " + PhysicalHits + " WHACKS";
-        public override string Status => Countdown > 0 ? "WATCH THE HOLES!" : "BUMPER CONTACT: +10 NORMAL · +50 GOLDEN STAR · −25 BLACK/RED DECOY";
+        public override string Status => "";
+        public override bool CompactBroadcastStatus=>true;
+        public override bool BroadcastStatusVisible=>!ReplayControls&&!string.IsNullOrEmpty(Status);
+        public override bool CompactViewportHud=>true;
+        public override string ViewportTelemetry(int view)=>Mathf.Max(0,rules.Duration-rules.Clock).ToString("F0")+"s LEFT";
+        public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail)=>TryReadDrivingViewportCard(drivingViews,view,out participant,out score,out detail);
         public override string Help => "Race around36fairground holes and physically bumper-whack giant animated moles before they dive underground. Ordinary brown moles score10, rare golden star moles score50. Black helmet/red-cross decoys deduct25 and blast your real tractor into a bounded cartoon tumble. Your front bumper must touch an exposed target at0.8m/s or faster. Inactive holes, stationary overlap and repeated contact never score. Every emergence has a new one-hit identity. The number of active moles increases and exposed windows shrink over the match. Highest score wins; equal scores share placing and negative scores are possible. Choose2,3or4minutes, up to4human drivers and8competitors, Easy/Normal/Hard AI or AI-only spectating. AI physically drives to emerged targets and can make difficulty-dependent decoy mistakes. Safe recovery never awards points. Shared arena, independent chase/cab, free look, optional AI views, crew identity, shared weather and horn use collection controls. Watch the actual recorded match at results without changing scores.";
         readonly StringBuilder text = new StringBuilder(800);
         readonly float[] stuck = new float[8], reverseUntil = new float[8], recoverAfter = new float[8], nextDecision = new float[8];

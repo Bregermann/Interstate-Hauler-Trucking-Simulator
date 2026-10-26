@@ -41,12 +41,17 @@ namespace LWS.TruckTrailerPlug
         int spawned;
         Vector3 lastImpact;
         string announcement;
+        bool pendingAppearanceRecord;
+        int recordedAppearanceRevision = -1;
+        Renderer[] hiddenReplayRenderers;
+        bool[] hiddenReplayStates;
         public override string Title => "TRUCK TRAILER PLUG";
         public override int MinimumPlayers => 1;
         public override int MaximumPlayers => 4;
         public override int OptionCount => 2;
         public override string OptionLabel => option == 0 ? "THREE DROPS EACH" : "FIVE DROPS EACH";
         public override bool ReplayControls => Phase == TrailerPlugPhase.Replay;
+        public override bool CompactBroadcastStatus => true;
         public override string Help => "SWING SIX TONS. DROP THE TRAILER. PLUG THE HOLE.\n\n" +
             "Your assigned movement inputs pump the established bungee swing. ACTION releases the real hitch, once. The trailer keeps its actual velocity and spin. The truck stays on its bungee. Release timing determines the landing; there is no homing or midair control.\n\n" +
             "100 points per distinct pedestrian physically struck at meaningful speed. Ragdolls cannot score twice. A supported, quiet trailer earns 500–2,000 points for partial coverage, 5,000 for a seal, and 2,000 extra for a centered upright seal. Coverage is measured through the actual trailer colliders after 1.8 seconds of stable observation. Hovering, brushing the rim or ongoing motion cannot bank a plug.\n\n" +
@@ -54,8 +59,9 @@ namespace LWS.TruckTrailerPlug
             "One to four participants take alternating turns. Three or five drops EACH; highest cumulative score wins and ties share victory. Pause/reconnect preserves the hitch, flight, crowd and scores. Recorded replays use actual transforms, never resimulate the result. AI uses the same pump and release controls. Offline only.";
         public override string Header => Title + " · ROUND " + Mathf.Min(rules.Round, rules.Rounds) + "/" + rules.Rounds + " · " + atmosphere.Description;
         public override string Status => Phase == TrailerPlugPhase.CountIn ? "READY · " + Mathf.Max(1, Mathf.CeilToInt(3 - Age)) :
-            Phase == TrailerPlugPhase.Swing ? setup.players[rules.Participant].name + " · PUMP WITH MOVEMENT · ACTION RELEASES · " + Mathf.Max(0, maximumSwingSeconds - Age).ToString("F0") + "s" :
-            Phase == TrailerPlugPhase.Flight ? "TRAILER RELEASED · " + rules.DistinctHits + " DISTINCT IMPACTS · LET THE LANDING SETTLE" : announcement;
+            Phase == TrailerPlugPhase.Swing ? "SWING · " + Mathf.Max(0, maximumSwingSeconds - Age).ToString("F0") + "s LEFT" :
+            Phase == TrailerPlugPhase.Flight ? "RELEASED · " + rules.DistinctHits + " IMPACTS · " + Age.ToString("F0") + "s · " + (rig.Supported ? "SUPPORTED" : "AIRBORNE") :
+            Phase == TrailerPlugPhase.Replay ? "REPLAY · " + replay.Speed.ToString("0.##") + "× · CAMERA " + (replay.Angle + 1) : announcement;
         public override string Standings
         {
             get { text.Clear(); for (int i = 0; i < setup.count; i++) text.Append(setup.players[i].name).Append("  ").Append(rules.score[i]).Append(" PTS · ").Append(rules.attempts[i]).Append('/').Append(rules.Rounds).Append(" DROPS\n"); return text.ToString(); }
@@ -75,9 +81,19 @@ namespace LWS.TruckTrailerPlug
         }
         void BeginAttempt()
         {
+            RestoreReplayVisibility(); replay.End();
             foreach (var pedestrian in crowd) { pedestrian.ragdoll.PrepareForPool(); pedestrian.gameObject.SetActive(false); }
             spawned = 0; Age = totalAge = quiet = nextSpawn = 0; Phase = TrailerPlugPhase.CountIn;
-            rig.truck.slot=rules.Participant; rig.Prepare(); rig.Paint(setup.players[rules.Participant].color); replay.Colorize(new[]{setup.players[rules.Participant].color,Color.white}); replay.ResetRecord();
+            rig.truck.slot=rules.Participant;
+            var player=setup.players[rules.Participant];var host=rig.truck.appearanceHost;
+            if(host!=null)
+            {
+                int revision=host.AppearanceRevision;host.Prepare(player.participantId,player.color);
+                if(revision!=host.AppearanceRevision)foreach(var framing in appearanceFraming??Array.Empty<SportsBroadcastFraming>())if(framing!=null&&framing.session==this)framing.RefreshAppearanceSubjects();
+            }
+            rig.Prepare(); rig.Paint(player.color); replay.Colorize(new[]{player.color,Color.white});
+            pendingAppearanceRecord=host!=null;
+            if(pendingAppearanceRecord)replay.ResetFreshAppearanceRecord();else replay.ResetRecord();
             bubbles.Play(); steam.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); Gate();
         }
         Vector2 AIPump(out bool release)
@@ -105,7 +121,7 @@ namespace LWS.TruckTrailerPlug
             if (!rules.Sealed && spawned < Mathf.Clamp(crowdLimit, 16, TrailerPlugRules.MaximumCrowd) && totalAge >= nextSpawn)
             { Spawn(); nextSpawn = totalAge + Mathf.Lerp(.8f, .18f, Mathf.Clamp01(totalAge / 30)); }
             for(int i=0;i<crowd.Count;i++)if(crowd[i].gameObject.activeSelf&&(!emergences[i].Active||crowd[i].Claimed))crowd[i].Tick(dt);
-            replay.Record(totalAge, 3);
+            CaptureReplay();
             if (Phase == TrailerPlugPhase.Swing)
             {
                 bool release; Vector2 drive;
@@ -159,9 +175,35 @@ namespace LWS.TruckTrailerPlug
         void NextAttempt()
         { if (!rules.Next()) { Phase = TrailerPlugPhase.Complete; EndMatch(); } else BeginAttempt(); }
         void BeginReplay()
-        { rig.Hold(); foreach (var renderer in rig.truck.visuals.GetComponentsInChildren<Renderer>()) renderer.enabled = false; foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = false; replay.Begin(Mathf.Max(0, replay.Duration - 14)); Phase = TrailerPlugPhase.Replay; }
+        {
+            rig.Hold();RestoreReplayVisibility();
+            var renderers=new List<Renderer>(rig.truck.visuals.GetComponentsInChildren<Renderer>(true));renderers.AddRange(rig.trailer.GetComponentsInChildren<Renderer>(true));
+            hiddenReplayRenderers=renderers.ToArray();hiddenReplayStates=new bool[hiddenReplayRenderers.Length];
+            for(int i=0;i<hiddenReplayRenderers.Length;i++){hiddenReplayStates[i]=hiddenReplayRenderers[i].enabled;hiddenReplayRenderers[i].enabled=false;}
+            replay.Begin(Mathf.Max(0, replay.Duration - 14)); Phase = TrailerPlugPhase.Replay;
+        }
         void StopReplay()
-        { replay.End(); foreach (var renderer in rig.truck.visuals.GetComponentsInChildren<Renderer>()) renderer.enabled = true; foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = true; }
+        { replay.End();RestoreReplayVisibility(); }
+        void RestoreReplayVisibility()
+        {
+            if(hiddenReplayRenderers==null)return;
+            if(rig!=null&&rig.truck!=null&&rig.truck.appearanceHost!=null)rig.truck.appearanceHost.ReassertIntactPresentation();
+            for(int i=0;i<hiddenReplayRenderers.Length;i++)if(hiddenReplayRenderers[i]!=null)hiddenReplayRenderers[i].enabled=hiddenReplayStates[i];
+            hiddenReplayRenderers=null;hiddenReplayStates=null;
+        }
+        void CaptureReplay()
+        {
+            if(pendingAppearanceRecord)
+            {
+                // NWH initializes trailer wheel collider children when the
+                // original countdown releases the rig. Refresh both original
+                // source trees only now, immediately before the first sample.
+                var host=rig.truck.appearanceHost;bool changed=host.AppearanceRevision!=recordedAppearanceRevision;
+                if(!replay.RefreshAppearanceSources(new[]{0,1},changed)&&!replay.RefreshAppearanceSources(new[]{0,1},true))throw new InvalidOperationException("Trailer appearance replay requires stopped original tractor/trailer sources.");
+                recordedAppearanceRevision=host.AppearanceRevision;pendingAppearanceRecord=false;replay.ResetRecord();
+            }
+            replay.Record(totalAge,3);
+        }
         public override void ExtraAction(string key)
         {
             if (Phase != TrailerPlugPhase.Replay) return;
@@ -184,7 +226,7 @@ namespace LWS.TruckTrailerPlug
             broadcast.Pose(focus, offset, 65);
         }
         protected override void SetPaused(bool pause) { atmosphere?.Pause(pause); if (pause) voice?.Pause(); else voice?.UnPause(); }
-        protected override void StopGame() { rig?.Hold(); replay?.End(); bubbles?.Stop(); }
+        protected override void StopGame() { RestoreReplayVisibility();pendingAppearanceRecord=false;rig?.Hold(); replay?.End(); bubbles?.Stop(); }
         protected override void StopSounds() { rig?.truck.StopSound(); voice?.Stop(); }
         void StartSamples()
         { for (int x = -7; x <= 7; x++) for (int z = -12; z <= 12; z++) { var p = new Vector2(x / 7f, z / 12f); if (p.sqrMagnitude < .9f) coverageSamples.Add(Vector2.Scale(p, openingRadii)); } }

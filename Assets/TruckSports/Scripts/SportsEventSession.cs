@@ -4,8 +4,15 @@ using UnityEngine.InputSystem;
 using LWS.TruckBowling;
 namespace LWS.TruckSports {
 // Shared local-event lifecycle and source routing. Each sport retains its own physics/rules owner.
-[DefaultExecutionOrder(-100)]public abstract class SportsEventSession:MonoBehaviour {
- LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
+[DefaultExecutionOrder(-100)]public abstract class SportsEventSession:MonoBehaviour,ISportsScorePresentationSource {
+ bool ISportsScorePresentationSource.ScoreRunning=>Running;
+ bool ISportsScorePresentationSource.ScorePaused=>Paused;
+ bool ISportsScorePresentationSource.ScoreFinished=>Finished;
+ bool ISportsScorePresentationSource.ScoreResultPage=>menus.Screen==SportsEventScreen.Result;
+ bool ISportsScorePresentationSource.ScorePlayPage=>menus.Screen==SportsEventScreen.Play;
+ Camera ISportsScorePresentationSource.ScoreCamera(int view)=>cameras!=null&&view>=0&&view<cameras.Length?cameras[view]:null;
+ LWS.TruckSports.SportsParticipantBinding participantBinding;SportsMatchColors matchColors;string participantMatchId;
+ public SportsMatchColors MatchColors=>matchColors;
  public string MatchId=>participantMatchId;
  public SportsScoreJournal ScoreJournal{get;private set;}
  public event Action<SportsScoreEvent> ScoreConfirmed;
@@ -25,11 +32,15 @@ namespace LWS.TruckSports {
   if(!ScoreJournal.TryConfirmOutcome(eventId,setup.players[slot],slot,value,reason,tier,unit,roundEnded,matchEnded,out var receipt))return false;
   ScoreConfirmed?.Invoke(receipt);return true;
  }
- public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
+ public void RefreshParticipants(bool saveEdits=false){using(matchColors?.Suspend()){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,PreferenceKey,summary,setup.players,count);}
 
  // Assigned only in venues that had no existing weather owner. Existing sport-owned weather adapters remain authoritative.
  public SportsChaosWeather presentationWeather;
+ // Explicit opt-in venue bindings. Unauthored/protected sports retain their existing presentation.
+ public SportsTruckAppearanceHost[] appearanceHosts=Array.Empty<SportsTruckAppearanceHost>();
+ public SportsBroadcastFraming[] appearanceFraming=Array.Empty<SportsBroadcastFraming>();
+ public void PrepareAppearances(){foreach(var host in appearanceHosts??Array.Empty<SportsTruckAppearanceHost>()){if(host==null)continue;int slot=host.participantSlot;if(slot>=0&&slot<setup.count){var player=setup.players[slot];host.Prepare(player.participantId,player.color);}else host.RestoreOriginal();}foreach(var views in GetComponentsInChildren<SportsDrivingViews>(true))views.RefreshAppearanceExteriors();foreach(var framing in appearanceFraming??Array.Empty<SportsBroadcastFraming>())if(framing!=null&&framing.session==this)framing.RefreshAppearanceSubjects();}
  public BowlingSetup setup=new BowlingSetup();public SportsEventMenus menus;public SportsSettings settings;public SportsFeedback feedback;public Camera[] cameras;
  public Key[] actionKeys={Key.Space,Key.RightShift,Key.R,Key.U,Key.B,Key.Numpad0,Key.Digit0,Key.PageUp};
  public int option=1,teamA=1,teamB=1,weather;public bool Running{get;private set;}public bool Paused{get;private set;}public bool Finished{get;private set;}public bool Live=>Running&&!Paused&&!Finished;
@@ -37,6 +48,9 @@ namespace LWS.TruckSports {
  public abstract string Title{get;}public abstract string Help{get;}public abstract int MinimumPlayers{get;}public abstract int MaximumPlayers{get;}public virtual int SetupMaximumPlayers=>MaximumPlayers;public virtual int OptionCount=>3;public virtual int WeatherCount=>3;public virtual void RefreshExtraUI(){}public virtual bool TeamSport=>false;public virtual bool UsesAction=>true;
  public abstract string Header{get;}public abstract string Status{get;}public abstract string Standings{get;}public abstract string Results{get;}public virtual string SourcePolicy=>"Whole controllers have one owner; left/right sticks can share one pad.\nChoose AI per slot or ALL AI to spectate. Action bindings are shown with each source.";public virtual string OptionLabel=>"OPTIONS";public virtual bool MultiViewHUD=>false;public virtual bool ReplayControls=>false;public virtual string ViewText(int index)=>Header;public virtual void ExtraAction(string key){}
  public virtual bool SupportsSplitAIViews=>false;public virtual bool AISplitViewsApplicable=>SupportsSplitAIViews;public virtual bool BroadcastStandingsVisible=>true;public virtual bool BroadcastHeaderVisible=>true;public virtual bool BroadcastStatusVisible=>true;
+ // Opt-in compact context: rules remain in Help; only genuine live events use the status plate.
+ public virtual bool CompactBroadcastStatus=>false;
+ protected bool TryReadDrivingViewportCard(SportsDrivingViews views,int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(views==null||views.rally==null||view<0||view>=views.rally.Humans||view>=views.rally.owners.Length)return false;participant=views.rally.owners[view];return participant>=0&&participant<setup.count&&TryReadScoreCard(participant,out score,out detail);}
  public virtual bool BroadcastParticipantActive(int slot)=>true;
  public virtual bool BroadcastFramingApplicable=>!ReplayControls;
  public virtual void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){}
@@ -77,10 +91,10 @@ namespace LWS.TruckSports {
  public bool Ready(int slot){var p=setup.players[slot];return p.source==BowlingSource.AI||p.source==BowlingSource.Keyboard&&Keyboard.current!=null&&Keyboard.current.enabled||p.Controller&&p.pad!=null&&p.pad.added&&p.pad.enabled;}
  public virtual bool ValidateSources(out string reason){if(!setup.Validate(out reason))return false;if(!UsesAction)return true;for(int i=0;i<setup.count;i++){var p=setup.players[i];if(p.source!=BowlingSource.Keyboard)continue;var k=actionKeys[i];if(k==Key.None||k==Key.Escape){reason="Assign an action key; Escape is reserved.";return false;}for(int j=0;j<setup.count;j++){var q=setup.players[j];if(q.source!=BowlingSource.Keyboard||setup.mode==BowlingMode.HotSeat&&setup.sharedHotSeat&&i!=j)continue;if(k==q.forward||k==q.back||k==q.left||k==q.right||i!=j&&k==actionKeys[j]){reason="Action key conflicts with slot "+(j+1);return false;}}}return true;}
  public bool DevicesReady{get{if(!ValidateSources(out _))return false;for(int i=0;i<setup.count;i++)if(!Ready(i))return false;return true;}}public bool AllAI{get{for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)return false;return true;}}
- public void Save(){RefreshParticipants(true);NormalizeSetup();LWS.TruckSports.SportsPrefs.SetString(PreferenceKey,JsonUtility.ToJson(new Saved{setup=setup,actionKeys=actionKeys,option=option,optionVersion=OptionVersion,teamA=teamA,teamB=teamB,weather=weather}));LWS.TruckSports.SportsPrefs.Save();menus?.Dirty();}
- public bool StartMatch(){NormalizeSetup();if(!DevicesReady){menus.Show(SportsEventScreen.Join);return false;}Save();ScoreJournal?.Close();participantMatchId=System.Guid.NewGuid().ToString("N");ScoreJournal=new SportsScoreJournal(gameObject.scene.name,participantMatchId);Time.timeScale=1;Running=true;Paused=Finished=false;BeginGame();if(presentationWeather!=null){presentationWeather.Pause(false);presentationWeather.Configure(participantMatchId.GetHashCode(),0,0);}Gate();menus.Show(SportsEventScreen.Play);return true;}
+ public void Save(){using(matchColors?.Suspend()){RefreshParticipants(true);NormalizeSetup();LWS.TruckSports.SportsPrefs.SetString(PreferenceKey,JsonUtility.ToJson(new Saved{setup=setup,actionKeys=actionKeys,option=option,optionVersion=OptionVersion,teamA=teamA,teamB=teamB,weather=weather}));LWS.TruckSports.SportsPrefs.Save();menus?.Dirty();}}
+ public bool StartMatch(){NormalizeSetup();if(!DevicesReady){menus.Show(SportsEventScreen.Join);return false;}Save();matchColors?.Restore();matchColors=TeamSport?null:new SportsMatchColors(setup.players,setup.count);try{PrepareAppearances();ScoreJournal?.Close();participantMatchId=System.Guid.NewGuid().ToString("N");ScoreJournal=new SportsScoreJournal(gameObject.scene.name,participantMatchId);Time.timeScale=1;Running=true;Paused=Finished=false;BeginGame();if(presentationWeather!=null){presentationWeather.Pause(false);presentationWeather.Configure(participantMatchId.GetHashCode(),0,0);}Gate();menus.Show(SportsEventScreen.Play);return true;}catch{matchColors?.Restore();matchColors=null;throw;}}
  public void EndMatch(){if(Finished)return;ScoreJournal?.Close();StopGame();Finished=true;RecordParticipants(Results,setup.count);feedback.StopAll();StopSounds();menus.Show(SportsEventScreen.Result);feedback.Play(6,0,true);}
- public void SetupScreen(){ScoreJournal?.Close();SetPaused(false);presentationWeather?.Pause(false);StopGame();Running=Paused=Finished=false;Array.Clear(replacementSources,0,replacementSources.Length);Time.timeScale=1;Gate();StopSounds();feedback.StopAll();menus.Show(SportsEventScreen.Setup);}
+ public void SetupScreen(){ScoreJournal?.Close();SetPaused(false);presentationWeather?.Pause(false);StopGame();matchColors?.Restore();matchColors=null;Running=Paused=Finished=false;Array.Clear(replacementSources,0,replacementSources.Length);Time.timeScale=1;Gate();StopSounds();feedback.StopAll();menus.Show(SportsEventScreen.Setup);}
  public void AllBots(){Array.Clear(replacementSources,0,replacementSources.Length);for(int i=0;i<setup.count;i++){setup.players[i].source=BowlingSource.AI;setup.players[i].pad=null;}Save();}
  public void RequestReplacement(int slot){if(slot<0||slot>=setup.count||!setup.players[slot].Controller)return;if(setup.players[slot].pad!=null)replacementSources[slot]=setup.players[slot].pad;setup.players[slot].pad=null;Gate();menus.Dirty();}
  public bool Assign(int slot,Gamepad pad){if(slot<0||slot>=setup.count||!setup.players[slot].Controller||pad==null||!pad.added||!pad.enabled)return false;var p=setup.players[slot];var old=p.pad??replacementSources[slot];int changed=1<<slot,nulls=0;if(old!=null&&setup.mode==BowlingMode.HotSeat&&setup.sharedHotSeat)for(int i=0;i<setup.count;i++)if(setup.players[i].Controller&&(setup.players[i].pad==old||setup.players[i].pad==null&&replacementSources[i]==old))changed|=1<<i;for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0){if(setup.players[i].pad==null)nulls|=1<<i;setup.players[i].pad=pad;}if(!ValidateSources(out _)){for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0)setup.players[i].pad=(nulls&(1<<i))!=0?null:old;return false;}for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0)replacementSources[i]=null;input.Forget(pad);Gate();menus.Dirty();return true;}
@@ -99,7 +113,7 @@ namespace LWS.TruckSports {
  public void Pause(int owner=0,bool disconnected=false){if(!Live)return;modalOwner=Mathf.Clamp(owner,0,setup.count-1);Paused=true;Time.timeScale=0;SetPaused(true);presentationWeather?.Pause(true);Gate();feedback.StopAll();StopSounds();menus.Show(disconnected?SportsEventScreen.Join:SportsEventScreen.Pause);}
  public void Resume(){if(!Running){StartMatch();return;}if(!DevicesReady){menus.Show(SportsEventScreen.Join);return;}SetPaused(false);presentationWeather?.Pause(false);Paused=false;Time.timeScale=1;Gate();menus.Show(SportsEventScreen.Play);}
  public void Pulse(int slot,float amount,float seconds){var p=setup.players[slot];if(p.source==BowlingSource.WholeController)feedback.Pulse(p.pad,amount,seconds);}
- protected virtual void OnEnable(){InputSystem.onDeviceChange+=Changed;}protected virtual void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();StopSounds();}protected virtual void OnDestroy(){ScoreJournal?.Close();Time.timeScale=1;}
+ protected virtual void OnEnable(){InputSystem.onDeviceChange+=Changed;}protected virtual void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();StopSounds();}protected virtual void OnDestroy(){matchColors?.Restore();matchColors=null;ScoreJournal?.Close();Time.timeScale=1;}
  void Changed(InputDevice device,InputDeviceChange change){if(LWS.TruckSports.SportsFocusPolicy.Suspended(device,change))return;menus.Dirty();for(int i=0;i<setup.count;i++)if(setup.players[i].pad==device){input.Forget((Gamepad)device);Gate();if(change==InputDeviceChange.Removed||change==InputDeviceChange.Disconnected||change==InputDeviceChange.Disabled)Pause(i,true);break;}}
  void OnApplicationFocus(bool focus){if(!focus){feedback.StopAll();StopSounds();}}
  void Update(){input.Sample();if(menus.Screen==SportsEventScreen.Join)foreach(var pad in Gamepad.all)if(input.Down(pad,2))for(int i=0;i<setup.count;i++)if(setup.players[i].Controller&&!Ready(i)&&Assign(i,pad))break;

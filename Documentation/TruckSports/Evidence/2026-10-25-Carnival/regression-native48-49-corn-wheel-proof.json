@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "scope": "Cornhole corrected miniature body/wheel fits: native48 failed attempt retained, native49 combined wheel+camera tests passed. Controlled native evidence only; replacement Windows candidate/actual-player reruns are separate and pending. No human visual certification.",
+  "attempts": [
+    {
+      "batch": "Native48",
+      "job": "carnival-fortyeighth-corn-wheels-native",
+      "xmlArtifact": {
+        "name": "carnival-fortyeighth-corn-wheels-native.xml",
+        "sha256": "051ebae76cf7df2d8607026ba0b827c593228bf5e1255f6aa4eec13de6af412e"
+      },
+      "runner": {
+        "exit": 2,
+        "seconds": 135.38,
+        "timedOut": false
+      },
+      "testResult": "Failed(Child)",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "testSeconds": 99.8543841,
+      "cases": [
+        {
+          "name": "CornholeAirborneWheelAlignmentTests.AllSevenCorrectedMiniatureBodiesKeepFourVendorWheelsAttachedOnGroundAndNaturalFlightAcrossRematches",
+          "result": "Failed",
+          "testSeconds": 99.811884
+        }
+      ]
+    },
+    {
+      "batch": "Native49",
+      "job": "carnival-fortyninth-corn-final-native",
+      "xmlArtifact": {
+        "name": "carnival-fortyninth-corn-final-native.xml",
+        "sha256": "5da5f9ee0b5d5788b355d4480e21e9fd90b81288a4f09a07ef8d64b51161c207"
+      },
+      "runner": {
+        "exit": 0,
+        "seconds": 276.91,
+        "timedOut": false
+      },
+      "testResult": "Passed",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "testSeconds": 188.9371775,
+      "cases": [
+        {
+          "name": "CornholeAirborneWheelAlignmentTests.AllSevenCorrectedMiniatureBodiesKeepFourVendorWheelsAttachedOnGroundAndNaturalFlightAcrossRematches",
+          "result": "Passed",
+          "testSeconds": 104.656783
+        },
+        {
+          "name": "CornholeNaturalFlightFramingTests.NativeOneToFourOriginalAiFlightsKeepPrimaryAndBoardInOriginalViews",
+          "result": "Passed",
+          "testSeconds": 84.205414
+        }
+      ]
+    }
+  ],
+  "executionTotalsIncludingRerun": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "uniqueRequirementCountClaimed": false
+  },
+  "latestNative49": {
+    "passed": 2,
+    "failed": 0,
+    "totalLateWheelSamples": 48964,
+    "perBody": [
+      {
+        "bodyId": "semi.standard",
+        "lateWheelSamples": 7420,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.1219288,
+        "maxActualMeshCenterToPivotMeters": 9.536743e-07,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 3.09944153e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "truck.monster",
+        "lateWheelSamples": 6548,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.1320804,
+        "maxActualMeshCenterToPivotMeters": 3.303625e-06,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.298325e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "semi.lowrider",
+        "lateWheelSamples": 7060,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.1308263,
+        "maxActualMeshCenterToPivotMeters": 4.768372e-07,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.357929e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "truck.lifted",
+        "lateWheelSamples": 6580,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.1216444,
+        "maxActualMeshCenterToPivotMeters": 3.303625e-06,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.357929e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "truck.fire",
+        "lateWheelSamples": 7256,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.2441988,
+        "maxActualMeshCenterToPivotMeters": 4.370285e-06,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.357929e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "novelty.hotdog",
+        "lateWheelSamples": 6584,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.2116077,
+        "maxActualMeshCenterToPivotMeters": 5.331202e-07,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.357929e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      },
+      {
+        "bodyId": "novelty.icecream",
+        "lateWheelSamples": 7516,
+        "maxAuthoredBodyAnchorToVendorWheelMeters": 0.2276224,
+        "maxActualMeshCenterToPivotMeters": 4.370285e-06,
+        "maxComputedInertiaAbsoluteDeltaKgM2": 9.357929e-06,
+        "computedInertiaAbsoluteToleranceKgM2": 0.0001
+      }
+    ],
+    "fullOriginalNoAppearanceWarmup": "OriginalHard/Clear/174207 first round,16 actual LaunchCount1 and64 NWH initialized controllers/original mesh colliders. Airborne/parked original fingerprints are compared at corresponding original lifecycle states.",
+    "preservation": "All16original actor/profile IDs and exact authored physics fields/geometry retained across all7body rematches; actual mesh-center/pivot and source/pivot tolerances unchanged."
+  },
+  "native48Failure": {
+    "category": "Computed PhysX implicit inertia float recomputation only, last icecream actor0",
+    "expected": [
+      1.87679958,
+      1.93,
+      0.926799536
+    ],
+    "actual": [
+      1.87681234,
+      1.93,
+      0.926812351
+    ],
+    "maxReportedAxisDeltaKgM2": 1.2755394e-05,
+    "priorAbsoluteToleranceKgM2": 1e-05,
+    "retainedMeaning": "All7 wheel/anchor predicates and14captures completed before the last fingerprint failure; native48 remains failed, not seven test passes."
+  },
+  "native49ComputedInertiaPolicy": {
+    "absolutePerAxisToleranceKgM2": 0.0001,
+    "observedMaximumKgM2": 9.357929e-06,
+    "comparison": "TypedVector3 per-axis; no string rounding; authored fields/IDs/geometry remain exact.",
+    "analyticalOriginalBoxInertiaKgM2": [
+      1.8768,
+      1.93,
+      0.9268
+    ],
+    "analyticalInputs": "Original mass12kg, box size(.7,.36,1.2)m and centerY.14 versus COMY-.02; parallel-axis offset.16m. NWH wheel-collider enable/disable and PhysX derived-value precision are original lifecycle behavior."
+  },
+  "scenePreservation": {
+    "proofArtifact": "corn-fit-repair-scene-preservation-proof.json",
+    "proofSha256": "045db7f54dddba22a96d1bee00aac31aa9b95ce6cd8ed496dc113f65213123f0",
+    "originalYamlDocuments": 11761,
+    "changedHostDocuments": 16,
+    "ownedFitsCorrected": 112,
+    "allOtherDocumentsExact": true,
+    "all61PhysicsDocumentsExact": true,
+    "all3296TransformDocumentsExact": true,
+    "rootAndCleanSceneSha256": "044d7cfb6977b8604a937305e8e4f232a22e158bf9e4cb0592848498e006876f"
+  },
+  "sourceInputs": [
+    {
+      "path": "Assets/TruckCornhole/Scripts/CornholeCamera.cs",
+      "sha256": "fe1ef5cf0408d3b8b71f83bdb32034c8063a3b2ba5b42c23fa24b018d36cf45f"
+    },
+    {
+      "path": "Assets/TruckCornhole/Scripts/CornholeCamera.cs.meta",
+      "sha256": "5a9dff85b86d1586202ddecd921c4b9d0d3bfaeab98082b67463c07b8c34ea73"
+    },
+    {
+      "path": "Assets/TruckSports/Editor/SportsTruckAppearanceCornholeAuthoring.cs",
+      "sha256": "dd9e0150e8d60eb8a3db152d9872db61774c4e375e7ec4046dadd7ed8bc531e9"
+    },
+    {
+      "path": "Assets/TruckSports/Editor/SportsTruckAppearanceCornholeAuthoring.cs.meta",
+      "sha256": "d8f31f03898ceefa0eb6271b76891efe464a609b2e27937f7dad76d4cf2494be"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/CornholeAirborneWheelAlignmentTests.cs",
+      "sha256": "dcd21c58f5d09d87d19f87618cc579df2252096e9efdbca0c805ef644dd0ba1d"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/CornholeAirborneWheelAlignmentTests.cs.meta",
+      "sha256": "61dd743602f5de3f69767c489a275f9b5c6b1c1e02fbfda26ad6b2b6be4965b5"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/CornholeNaturalFlightFramingTests.cs",
+      "sha256": "99817c22752277c32127f130a8179863ba35089bcfd45a78d37bb74662f799f3"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/CornholeNaturalFlightFramingTests.cs.meta",
+      "sha256": "dfec3439c3dd3e8ec71c1f93ff7e19759f44a4396b89890ea9d950e1931ce985"
+    }
+  ],
+  "visualReview": {
+    "contactSheetsActuallyViewed": 4,
+    "originalsSeenViaContactSheets": 14,
+    "originalsAdditionallyOpenedDirectly": 3,
+    "findings": "All7 body types are visible at original miniature scale in ground/air controlled snapshots. Direct hotdog/monster/icecream flight originals no longer show prior4m body-anchor displacement or top-clipped enlarged bodies. Trucks are small in wide shots; detailed wheelwell clearance is not visually certified. Ground firstframes also include distant approach starts and transient prior score receipt; not a clean promotional-camera claim.",
+    "images": [
+      {
+        "file": "novelty.hotdog-ground-1280-controlled.png",
+        "sha256": "2c4bc0e3e26aecf4b31f10bfc96bdda8601b966bc8fce86fd75836da6f0fe100",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-01.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "novelty.hotdog-natural-air-1280-controlled.png",
+        "sha256": "f2121d4bb7aefebe8902aca2fa74b5759f918fb2fccd45a325695946c3f04e3f",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-01.jpg actually viewed through view_image",
+          "Original1280x720 PNG directly opened via view_image"
+        ]
+      },
+      {
+        "file": "novelty.icecream-ground-1280-controlled.png",
+        "sha256": "01ccf51e08d6753ef54a7159b5571425f4a6ff62bb2e9d7aa004c4cc492e9501",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-01.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "novelty.icecream-natural-air-1280-controlled.png",
+        "sha256": "4c347476e9a5cc67d79c6e239a6a9cd7f006ab80333c62f1cfb26c968989b06a",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-01.jpg actually viewed through view_image",
+          "Original1280x720 PNG directly opened via view_image"
+        ]
+      },
+      {
+        "file": "semi.lowrider-ground-1280-controlled.png",
+        "sha256": "ad236c7f1432379c772b4f466c18516ff79482e8436fffa9d6b21fc8786410e7",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-02.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "semi.lowrider-natural-air-1280-controlled.png",
+        "sha256": "56348b76b7dbcc72574f26b7db7ce0907eb5eb91315f2d7ca3f091be9bc51c81",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-02.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "semi.standard-ground-1280-controlled.png",
+        "sha256": "3d1a189ff6a2a3d97f1249927e5db64593a02ce4b7aee827d00c87d9100ac99a",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-02.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "semi.standard-natural-air-1280-controlled.png",
+        "sha256": "549860699b6b7d28497de8c01e670c0f0442d182a818dfaf755961debb934310",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-02.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.fire-ground-1280-controlled.png",
+        "sha256": "872ca8ac877042b88df48c7acbcbae9f38e81f69aa5586ce3954b2531c3ae0f0",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-03.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.fire-natural-air-1280-controlled.png",
+        "sha256": "b5fcd905c3323aa02a6ceac0f063a23ce3a66e52e542a36acadeae04d9f4ee21",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-03.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.lifted-ground-1280-controlled.png",
+        "sha256": "d55e4ad7d8f019b9871788f874cf2078cfb23e38e87e0dd926d9a5865d95739d",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-03.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.lifted-natural-air-1280-controlled.png",
+        "sha256": "023d088c688f349ebc349f7e47d7f749aa50e8ddd30d4afd92bd538a34af5bbf",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-03.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.monster-ground-1280-controlled.png",
+        "sha256": "cf3732d9476e4906c12c08068515e9f170086bef37268a658fd5a3a215099e41",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-04.jpg actually viewed through view_image"
+        ]
+      },
+      {
+        "file": "truck.monster-natural-air-1280-controlled.png",
+        "sha256": "8732d4cfaa1c9098b9ca02e88dd047837625daecd3e78f93a7e989295a82befd",
+        "width": 1280,
+        "height": 720,
+        "viewMethods": [
+          "Analysis-only contact sheet contact-04.jpg actually viewed through view_image",
+          "Original1280x720 PNG directly opened via view_image"
+        ]
+      }
+    ]
+  },
+  "curatedControlledNativeOriginals": [
+    {
+      "artifact": "native49-corn-hotdog-natural-air-720-controlled.png",
+      "sha256": "f2121d4bb7aefebe8902aca2fa74b5759f918fb2fccd45a325695946c3f04e3f",
+      "originalFile": "novelty.hotdog-natural-air-1280-controlled.png",
+      "width": 1280,
+      "height": 720,
+      "captureMethod": "CONTROLLED NATIVE Unity PlayMode original gameplay cameras and UI; SportsControlledCapture. This is not actual Windows ScreenCapture.",
+      "viewMethod": "Original directly inspected via view_image; copied byte-for-byte without crop/resize/filter.",
+      "caption": "hotdog selected miniature body in original natural AI flight (~0.6s), contained inside native controlled frame. Copied wheels appear attached without earlier meter-scale separation; small rendering limits pixel-level wheelwell detail. Numerical49k late samples supply separate alignment evidence."
+    },
+    {
+      "artifact": "native49-corn-monster-natural-air-720-controlled.png",
+      "sha256": "8732d4cfaa1c9098b9ca02e88dd047837625daecd3e78f93a7e989295a82befd",
+      "originalFile": "truck.monster-natural-air-1280-controlled.png",
+      "width": 1280,
+      "height": 720,
+      "captureMethod": "CONTROLLED NATIVE Unity PlayMode original gameplay cameras and UI; SportsControlledCapture. This is not actual Windows ScreenCapture.",
+      "viewMethod": "Original directly inspected via view_image; copied byte-for-byte without crop/resize/filter.",
+      "caption": "monster selected miniature body in original natural AI flight (~0.6s), contained inside native controlled frame. Copied wheels appear attached without earlier meter-scale separation; small rendering limits pixel-level wheelwell detail. Numerical49k late samples supply separate alignment evidence."
+    },
+    {
+      "artifact": "native49-corn-icecream-natural-air-720-controlled.png",
+      "sha256": "4c347476e9a5cc67d79c6e239a6a9cd7f006ab80333c62f1cfb26c968989b06a",
+      "originalFile": "novelty.icecream-natural-air-1280-controlled.png",
+      "width": 1280,
+      "height": 720,
+      "captureMethod": "CONTROLLED NATIVE Unity PlayMode original gameplay cameras and UI; SportsControlledCapture. This is not actual Windows ScreenCapture.",
+      "viewMethod": "Original directly inspected via view_image; copied byte-for-byte without crop/resize/filter.",
+      "caption": "icecream selected miniature body in original natural AI flight (~0.6s), contained inside native controlled frame. Copied wheels appear attached without earlier meter-scale separation; small rendering limits pixel-level wheelwell detail. Numerical49k late samples supply separate alignment evidence."
+    }
+  ],
+  "rawLargeNumericalArtifact": {
+    "name": "all-seven-natural-wheel-centers.json",
+    "sha256": "20f9824cc2bcb76c00e4279a1f8c066e7f75d603f2495bbade6c270525418d31",
+    "bytes": 128040710,
+    "includedRawInPublicEvidence": false
+  },
+  "limits": [
+    "No actual Windows/backbuffer/human/controller/listening/performance/soak acceptance inferred from native tests or images.",
+    "Native49 camera fixture pass is recorded by exact test name; no claim all4AI actors are always close-up in every viewport.",
+    "246dbb earlier Windows passes/captures remain historical and are not relabeled as corrected-fit acceptance.",
+    "No rawlogs/processIDs/fullpaths/private profile identifiers in this sanitized summary."
+  ]
+}

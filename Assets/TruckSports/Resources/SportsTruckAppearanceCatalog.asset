@@ -1,0 +1,825 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e8789bdbfd65b4382bdf492ab9c759, type: 3}
+  m_Name: SportsTruckAppearanceCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsTruckAppearanceCatalog
+  defaultBodyId: semi.standard
+  bodies:
+  - id: semi.standard
+    label: Highway Hauler
+    category: SEMI TRUCKS
+    visualPrefab: {fileID: 1262490822646222209, guid: a059186b63b4c44468d5bebbcd142e7a,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 75566b75d1b1bda4d9f68203f92db231, type: 3}
+    visualEnvelope:
+      m_Center: {x: -0.00000011920929, y: 1.661235, z: 0}
+      m_Extent: {x: 1.4, y: 1.6612351, z: 2.6564264}
+    mounts:
+    - slotId: hat
+      position: {x: -0.00000011920929, y: 3.3424702, z: 1.115699}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: -0.00000011920929, y: 2.0267067, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: -0.00000011920929, y: 0.5499999, z: -2.5564265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.19999988, y: 1.7276843, z: 1.3813417}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -0.98320436, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91519105, y: 0.91519105, z: 0.91519105}
+    - slotId: wheel.1
+      position: {x: 0.99420625, y: 0.45759544, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91519105, y: 0.91519105, z: 0.91519105}
+    - slotId: wheel.2
+      position: {x: -0.7884008, y: 0.56697804, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91519105, y: 0.91519105, z: 0.91519105}
+    - slotId: wheel.3
+      position: {x: 0.7994027, y: 0.56697804, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91519105, y: 0.91519105, z: 0.91519105}
+    wheelRendererNames:
+    - Whl HD FL
+    - Whl HD FR
+    - Whl HD RL
+    - Whl HD RR
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: truck.monster
+    label: Monster Hauler
+    category: MONSTER TRUCKS
+    visualPrefab: {fileID: 7008008083381252595, guid: 1bb28d3e59b57034abb480b65a703b66,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 494ac47b2793e21419739a6a0d4867b8, type: 3}
+    visualEnvelope:
+      m_Center: {x: 0.00000011920929, y: 1.1180868, z: -0.00000023841858}
+      m_Extent: {x: 1.4, y: 1.1180868, z: 2.0598807}
+    mounts:
+    - slotId: hat
+      position: {x: 0.00000011920929, y: 2.2561736, z: 0.8651496}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: 0.00000011920929, y: 1.364066, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: 0.00000011920929, y: 0.55, z: -1.959881}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.20000012, y: 1.1628102, z: 1.0711377}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -1.0477791, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.2578875, y: 1.2578875, z: 1.2578875}
+    - slotId: wheel.1
+      position: {x: 1.0477792, y: 0.6289437, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.2578875, y: 1.2578875, z: 1.2578875}
+    - slotId: wheel.2
+      position: {x: -1.0477791, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.2578875, y: 1.2578875, z: 1.2578875}
+    - slotId: wheel.3
+      position: {x: 1.0477792, y: 0.6289437, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.2578875, y: 1.2578875, z: 1.2578875}
+    wheelRendererNames:
+    - TireFL
+    - TireFR
+    - TireRL
+    - TireRR
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: semi.lowrider
+    label: Chrome Lowrider
+    category: LOWRIDERS
+    visualPrefab: {fileID: 7428086744070652220, guid: 22edfe9336023e44ca454867be9db20c,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 051e01b492e388349be4193707966cfb, type: 3}
+    visualEnvelope:
+      m_Center: {x: -0.00000011920929, y: 1.229314, z: 0}
+      m_Extent: {x: 1.4, y: 1.2293141, z: 2.6564264}
+    mounts:
+    - slotId: hat
+      position: {x: -0.00000011920929, y: 2.4786282, z: 1.115699}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: -0.00000011920929, y: 1.4997631, z: 2.6814265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: -0.00000011920929, y: 0.5499999, z: -2.5564265}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.19999988, y: 1.2784865, z: 1.3813417}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -0.98320436, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91514367, y: 0.91514367, z: 0.91514367}
+    - slotId: wheel.1
+      position: {x: 0.99420625, y: 0.33862063, z: 1.6851906}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91514367, y: 0.91514367, z: 0.91514367}
+    - slotId: wheel.2
+      position: {x: -0.7884008, y: 0.41956374, z: -1.7985795}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91514385, y: 0.91514385, z: 0.91514385}
+    - slotId: wheel.3
+      position: {x: 0.7994027, y: 0.41956374, z: -1.7985762}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.91514385, y: 0.91514385, z: 0.91514385}
+    wheelRendererNames:
+    - Whl HD FL
+    - Whl HD FR
+    - Whl HD RL
+    - Whl HD RR
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: truck.lifted
+    label: Backroad Bruiser
+    category: LIFTED TRUCKS
+    visualPrefab: {fileID: 7326458157387686299, guid: 5def80edecae2b645a773c54b56b5dfa,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 8968d2068bf4d084ebba18ad1ade3636, type: 3}
+    visualEnvelope:
+      m_Center: {x: 0.00000011920929, y: 1.3752466, z: -0.00000023841858}
+      m_Extent: {x: 1.4, y: 1.3752466, z: 2.0598807}
+    mounts:
+    - slotId: hat
+      position: {x: 0.00000011920929, y: 2.7704933, z: 0.8651496}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: 0.00000011920929, y: 1.6778009, z: 2.0848806}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: 0.00000011920929, y: 0.55, z: -1.959881}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.20000012, y: 1.4302565, z: 1.0711377}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -1.0477791, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.5472014, y: 1.5472014, z: 1.5472014}
+    - slotId: wheel.1
+      position: {x: 1.0477792, y: 0.7736007, z: 1.4309369}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.5472014, y: 1.5472014, z: 1.5472014}
+    - slotId: wheel.2
+      position: {x: -1.0477791, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.5472014, y: 1.5472014, z: 1.5472014}
+    - slotId: wheel.3
+      position: {x: 1.0477792, y: 0.7736007, z: -1.4026223}
+      euler: {x: -0, y: 0, z: 0}
+      scale: {x: 1.5472014, y: 1.5472014, z: 1.5472014}
+    wheelRendererNames:
+    - TireFL
+    - TireFR
+    - TireRL
+    - TireRR
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: truck.fire
+    label: Party Fire Engine
+    category: FIRETRUCKS
+    visualPrefab: {fileID: 5643099652244732490, guid: f388d4cbb9e7d7b40b8acf6c53901728,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: a6998f21623b08a47b0558ce632cedfc, type: 3}
+    visualEnvelope:
+      m_Center: {x: -0.00000011920929, y: 1.562643, z: 0}
+      m_Extent: {x: 1.3190118, y: 1.562643, z: 3.7499998}
+    mounts:
+    - slotId: hat
+      position: {x: -0.00000011920929, y: 3.145286, z: 1.5749998}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: -0.00000011920929, y: 1.9064245, z: 3.7749999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: -0.00000011920929, y: 0.55, z: -3.6499999}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.19999988, y: 1.6251487, z: 1.9499998}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -0.96978045, y: 0.4914741, z: 2.3950047}
+      euler: {x: 0.0000024148367, y: 270, z: -0.0000024148364}
+      scale: {x: 0.9760482, y: 0.9760482, z: 0.9760482}
+    - slotId: wheel.1
+      position: {x: 0.96305406, y: 0.4914741, z: 2.3950047}
+      euler: {x: -0, y: 270, z: 180}
+      scale: {x: 0.9760481, y: 0.9760481, z: 0.9760481}
+    - slotId: wheel.2
+      position: {x: -0.86309797, y: 0.4880289, z: -1.5645449}
+      euler: {x: 0.0000072445096, y: 90, z: 180}
+      scale: {x: 0.97605795, y: 0.97605795, z: 0.97605795}
+    - slotId: wheel.3
+      position: {x: 0.8563718, y: 0.4880289, z: -1.5645449}
+      euler: {x: -0.000009659347, y: 90, z: 0}
+      scale: {x: 0.97605777, y: 0.97605777, z: 0.97605777}
+    wheelRendererNames:
+    - Wheels_FL_LOD0
+    - Wheels_FR_LOD0
+    - Wheels_RL_LOD0
+    - Wheels_RR_LOD0
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: novelty.hotdog
+    label: Haul Dog
+    category: NOVELTY TRUCKS
+    visualPrefab: {fileID: 8400056101438965065, guid: 18a69cc7e34725545a80150107e91625,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 3e08d2394bbdd0943a2b92549f05cb03, type: 3}
+    visualEnvelope:
+      m_Center: {x: 0, y: 1.4819294, z: 0}
+      m_Extent: {x: 1.4000001, y: 1.4819295, z: 3.65}
+    mounts:
+    - slotId: hat
+      position: {x: 0, y: 2.983859, z: 1.533}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: 0, y: 1.807954, z: 3.6750002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: 0, y: 0.5499999, z: -3.5500002}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.2, y: 1.5412066, z: 1.898}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -0.99607015, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.927167, y: 0.927167, z: 0.927167}
+    - slotId: wheel.1
+      position: {x: 1.0072162, y: 0.4635834, z: 1.7174126}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.927167, y: 0.927167, z: 0.927167}
+    - slotId: wheel.2
+      position: {x: -0.79871744, y: 0.5743973, z: -1.811945}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.927167, y: 0.927167, z: 0.927167}
+    - slotId: wheel.3
+      position: {x: 0.8098636, y: 0.5743973, z: -1.8119417}
+      euler: {x: 0.000009338114, y: -2.13371e-21, z: -2.6140184e-14}
+      scale: {x: 0.927167, y: 0.927167, z: 0.927167}
+    wheelRendererNames:
+    - Whl HD FL
+    - Whl HD FR
+    - Whl HD RL
+    - Whl HD RR
+    presentationEuler: {x: 0, y: 0, z: 0}
+  - id: novelty.icecream
+    label: Sundae Driver
+    category: ICE CREAM TRUCKS
+    visualPrefab: {fileID: 5844377946665539450, guid: 7a5b56605abedf74eb8430be2ac9842f,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 0449793e622719045ba327080c681a76, type: 3}
+    visualEnvelope:
+      m_Center: {x: 0, y: 2.3507633, z: 0.00000023841858}
+      m_Extent: {x: 1.3675649, y: 2.3507633, z: 3.7499998}
+    mounts:
+    - slotId: hat
+      position: {x: 0, y: 4.7215266, z: 1.575}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.eyes
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.brows
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mouth
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.mustache
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: face.lashes
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: mirrors
+      position: {x: 0, y: 2.8679314, z: 3.775}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: wheels
+      position: {x: 0, y: 0, z: 0}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: rear.ornament
+      position: {x: 0, y: 0.55, z: -3.6499996}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - slotId: dashboard
+      position: {x: 0.2, y: 2.4447937, z: 1.95}
+      euler: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    wheelMounts:
+    - slotId: wheel.0
+      position: {x: -1.0432882, y: 0.41917083, z: 2.7245097}
+      euler: {x: -0, y: 270, z: 180}
+      scale: {x: 0.8383415, y: 0.8383415, z: 0.8383415}
+    - slotId: wheel.1
+      position: {x: 1.04212, y: 0.41917086, z: 2.7245073}
+      euler: {x: 0.000016903854, y: 270, z: 0.000002414836}
+      scale: {x: 0.838341, y: 0.838341, z: 0.838341}
+    - slotId: wheel.2
+      position: {x: -0.87799513, y: 0.41917053, z: -1.7418565}
+      euler: {x: 0.0000072445096, y: 270, z: 180}
+      scale: {x: 0.8383411, y: 0.8383411, z: 0.8383411}
+    - slotId: wheel.3
+      position: {x: 0.8767641, y: 0.41917047, z: -1.7418565}
+      euler: {x: -0, y: 270, z: 0.000009659346}
+      scale: {x: 0.83834165, y: 0.83834165, z: 0.83834165}
+    wheelRendererNames:
+    - Wheels_FL_LOD0
+    - Wheels_FR_LOD0
+    - Wheels_RL_LOD0
+    - Wheels_RR_LOD0
+    presentationEuler: {x: 0, y: 0, z: 0}
+  cosmetics:
+  - id: hat.cowboy
+    label: Highway Cowboy
+    slotId: hat
+    visualPrefab: {fileID: 2212235630340613957, guid: 9dac380c9d55b8c4fb68d4c1774de98f,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 1e922254b333f934cb9128ccaa970535, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.top
+    label: Big Rig Top Hat
+    slotId: hat
+    visualPrefab: {fileID: 4878183653915560443, guid: 893c0f5b662c6774ebb2c70d02ff3166,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 97d70a53385fe9b4f9aebb5342d31263, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.crown
+    label: King of the Highway
+    slotId: hat
+    visualPrefab: {fileID: 120709527988334027, guid: 8189aaaf6a19ca643bf12543eb35a4b9,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 15aa985599c6456438f59b0775e5ca5e, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.wizard
+    label: Midnight Wizard
+    slotId: hat
+    visualPrefab: {fileID: 5327819536788814243, guid: 33852f9df3d908941a3d70f37f0ab592,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 49a5b3c18a85ce24c89f60ed596681a7, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.viking
+    label: Road Viking
+    slotId: hat
+    visualPrefab: {fileID: 7365147009156916527, guid: 8e2ad182b30d32e48be07c2b20517d27,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 5884a50a4c50bc54b9ba15d5e8677fba, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.party
+    label: Never-Ending Party
+    slotId: hat
+    visualPrefab: {fileID: 7912717117689224919, guid: 343af93e031d5ea4ca909f458bdd38ee,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 0f3e5538c47e82f4ea547ffc33819f5e, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.baseball
+    label: Truck Stop Ball Cap
+    slotId: hat
+    visualPrefab: {fileID: 5503069901895947355, guid: 05c18b60d4d9ed14e8454a215d78ca1d,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: eee73e52a1c71ff4e8236737bde9252e, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.hardhat
+    label: Certified Chaos
+    slotId: hat
+    visualPrefab: {fileID: 6180754920092625094, guid: 0f02ebdd2baa2444fa472f678369440d,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 9a320dd8de8b9fa4babcfebdfab3ae95, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.pirate
+    label: Captain Cargo
+    slotId: hat
+    visualPrefab: {fileID: 4626086530910256212, guid: 18fcfec86be0c774c96cdb20af3968b0,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 11a15761897adff43bb7a711ce2cc7ed, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: hat.propeller
+    label: Air Freight Beanie
+    slotId: hat
+    visualPrefab: {fileID: 2249536784476342699, guid: a93e50d821003684da050bbcdbc39491,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: f7a592eff2a0ccd40bddb1729c642e86, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: eyes.friendly
+    label: Bright Eyes
+    slotId: face.eyes
+    visualPrefab: {fileID: 9076940490959405524, guid: 68a5029b0b721f5468d7128d86ac685f,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 784b5c7315fbf5f41ba181218ef47f20, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: eyes.sleepy
+    label: Sleepy Hauler
+    slotId: face.eyes
+    visualPrefab: {fileID: 770290778605909784, guid: 6dd894e9d78aacb44b1abca5b1f9d638,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 6f021150cc55f1a4ab72cbe07366aa84, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: brows.angry
+    label: Determined Brows
+    slotId: face.brows
+    visualPrefab: {fileID: 6452569350691165677, guid: b0e16bb3761af2c4898631dda98e5fb5,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 0494875b44eb8044b94b31eacaed2fed, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mouth.smile
+    label: Highway Grin
+    slotId: face.mouth
+    visualPrefab: {fileID: 8236984622199078120, guid: 03a6fd96deeb046488702394eb23f7ad,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 6cd7c87fc3a465e47887a943fa364185, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mouth.goofy
+    label: Goofy Grille
+    slotId: face.mouth
+    visualPrefab: {fileID: 6768023907176158885, guid: c84a95af612da0740b403f2eb7fe3520,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 256efe0110652e246afb7e7dfca4bc15, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mustache.handlebar
+    label: Chrome Handlebar
+    slotId: face.mustache
+    visualPrefab: {fileID: 128406885934633646, guid: 36f92272a92198247ba3de75421d196a,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: ad7bf573b809e024d9d16eb83dc411d6, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: lashes.long
+    label: Movie Star Lashes
+    slotId: face.lashes
+    visualPrefab: {fileID: 8926736660503684673, guid: 5545ef3e80bfd2f49a10aaa5458c061c,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 819d42618d7e1b14e95a0b38ec713c24, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mirrors.chrome
+    label: Chrome Highway Mirrors
+    slotId: mirrors
+    visualPrefab: {fileID: 2546537999126417138, guid: 958ae151006c3ee4aa1b8d879cfbdbcf,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: e3027826dda36134a9776b321eed08aa, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mirrors.gold
+    label: Golden Oversize Mirrors
+    slotId: mirrors
+    visualPrefab: {fileID: 5047269177480561000, guid: 72cb7058185154243a6741c44ff42df0,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 9fe270461e4866d42849f72b0e338d88, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: mirrors.ruby
+    label: Cherry Mirrors
+    slotId: mirrors
+    visualPrefab: {fileID: 2707696568502220010, guid: 0bc05ba164dcb5647a2097a5975282fc,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 9b1c95988549ae0428c573e62896f565, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: rear.chrome
+    label: Chrome Hitch Ornaments
+    slotId: rear.ornament
+    visualPrefab: {fileID: 1250904728937393615, guid: b73b61be20b113147bf8496a44346663,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: e9db3d6ce07ccf745a85cef6a87e4e63, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: rear.party
+    label: Party Hitch Pompoms
+    slotId: rear.ornament
+    visualPrefab: {fileID: 243001283305668447, guid: a9ad0aeb5ede7cf4d9f97ad9ff4df423,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 0982b2902ccdbf54cab2602d4157daa0, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: dashboard.cat
+    label: Dashboard Cat
+    slotId: dashboard
+    visualPrefab: {fileID: 5548177170132022771, guid: 343f459099c1f7d49b4e9bc7bc3223c6,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: eb541397a246e54459cabec27983bc4e, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: dashboard.wolf
+    label: Dashboard Wolf
+    slotId: dashboard
+    visualPrefab: {fileID: 271536731755261270, guid: 0f4ce5654078b4540a75386c4f230b98,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: f536ab61ecc047544b6a6941658a034a, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 0
+    compatibleBodyIds: []
+  - id: wheels.chrome
+    label: Chrome Road Rims
+    slotId: wheels
+    visualPrefab: {fileID: 2108871111223603340, guid: ab6fb078ad034bf4dbe987ed751e2337,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 6f83a65a445dac4429e90324eb457d06, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 1
+    compatibleBodyIds: []
+  - id: wheels.gold
+    label: Gold Show Rims
+    slotId: wheels
+    visualPrefab: {fileID: 4661972251508147797, guid: 7e54a1592e94a4e47bdc5d774f34d1ad,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: c7d9eae352c6dcc448bb519476fb6555, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 1
+    compatibleBodyIds: []
+  - id: wheels.ruby
+    label: Cherry Painted Rims
+    slotId: wheels
+    visualPrefab: {fileID: 115141998979676713, guid: ba6f2b7f0ac8f7a41935b588abfc976e,
+      type: 3}
+    thumbnail: {fileID: 21300000, guid: 80b4d538d14ebe6478a39f1b3205f5f5, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    rotatesWithWheel: 1
+    compatibleBodyIds: []

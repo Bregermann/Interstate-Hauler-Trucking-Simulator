@@ -25,12 +25,17 @@ namespace LWS.TruckJousting
         public override bool ReplayControls=>review!=null&&review.Playing;
         public override bool MultiViewHUD=>!ReplayControls&&drivingViews!=null&&!drivingViews.NeedsArena;
         public override bool BroadcastStandingsVisible=>!ReplayControls;
-        public override string Header=>Title+(ReplayControls?" · ACTUAL CONTACT REPLAY":" · PASS "+rules.Pass+" / "+rules.PassLimit);
-        public override string Status=>Countdown>0?"READY YOUR LANCE":elapsed<announceUntil?announcement:rules.PassClosed?"PREPARING THE NEXT TOURNAMENT PASS":"ARMOR 1 · CENTRAL SHIELD 2 · CREDITED KNOCKDOWN 3 · "+Mathf.Max(0,passSeconds-rules.Clock).ToString("F0")+"s";
+        public override string Header=>Title+(ReplayControls?" · ACTUAL CONTACT REPLAY":" · PASS "+rules.Pass+" / "+rules.PassLimit+" · "+Mathf.Max(0,passSeconds-rules.Clock).ToString("F0")+"s");
+        public override string Status=>Countdown>0?"":elapsed<announceUntil?announcement:rules.PassClosed?"NEXT PASS":"";
+        public override bool CompactBroadcastStatus=>true;
+        public override bool BroadcastStatusVisible=>!ReplayControls&&!string.IsNullOrEmpty(Status);
+        public override bool CompactViewportHud=>true;
+        public override string ViewportTelemetry(int view)=>"PASS "+rules.Pass+" / "+rules.PassLimit+" · "+Mathf.Max(0,passSeconds-rules.Clock).ToString("F0")+"s";
+        public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail)=>TryReadDrivingViewportCard(drivingViews,view,out participant,out score,out detail);
         public override string Help=>"Two full semi-trucks charge along opposite tournament lanes. Your giant side-mounted lance has a real physical tip: strike the opposing truck's shield. Armor earns1point; the central gold mark earns2. A truck genuinely overturned shortly after a credited hit upgrades that pass to3points. Only one lance hit scores per player per pass. Misses and wall hits earn nothing. Press ACTION to toggle lance aiming: directions then raise/lower and yaw the lance while your last accelerator command is held. Press ACTION again to drive. Aim is limited; steer and accelerate normally in driving mode. Lance tips and splinters react physically and reset each pass. Highest score after three or five passes wins; equal totals share placing. No invisible automatic hits, random knockdowns or AI-only points. Shared/chase/cab views, free look, horn, weather, Your Crew, optional AI cameras and a skippable recorded replay use the collection systems.";
         public override string ControlCaption(int slot)=>base.ControlCaption(slot).Replace(" ACTION"," TOGGLE LANCE AIM")+" · "+(aiming[slot]?"DIRECTIONS: HEIGHT / ANGLE":"DRIVE: STEER / ACCELERATE");
         public override bool TryReadScoreCard(int slot,out string value,out string detail){value=rules.points[slot]+"P";detail=lances[slot].Broken?"LANCE BROKEN · +"+rules.passPoints[slot]:"LANCE "+height[slot].ToString("F1")+"m · "+yaw[slot].ToString("F0")+"deg";return slot<2;}
-        public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail+"\n"+ControlCaption(slot);}
+        public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail;}
         public int ResultPlace(int slot)=>rules.points[1-slot]>rules.points[slot]?2:1;
         public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(ResultPlace(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.points[i]).Append("P · ").Append(rules.hits[i]).Append(" HITS / ").Append(rules.centralHits[i]).Append(" CENTRAL / ").Append(rules.knockdowns[i]).Append(" KNOCKDOWNS\n");return text.ToString();}}
         public override string Results=>(rules.Winner>=0?setup.players[rules.Winner].name+" WINS THE JOUST!":"SHARED TOURNAMENT PLACING")+"\n\n"+Standings;

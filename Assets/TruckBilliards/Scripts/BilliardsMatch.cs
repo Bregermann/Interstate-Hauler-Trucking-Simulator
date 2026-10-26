@@ -12,10 +12,16 @@ namespace LWS.TruckBilliards
   public bool placementValid;public Vector3 placementPosition;public int strikeCount,resolutionCount,physicsStep;
   [System.NonSerialized] public bool smokeInput;
   public float openingBreakBoost=1.65f,maxBreakShotSpeed=24;public float LastStrikeSpeed{get;private set;}public bool LastStrikeOpening{get;private set;}
+  [Range(0,BilliardsRackLayout.MaximumImperfection)]public float rackImperfection=.006f;
+  [Tooltip("0 varies each fresh rack; a nonzero seed reproduces its initial imperfections.")]public int rackSeed;
+  public int LastRackSeed{get;private set;}readonly System.Random rackSeeds=new System.Random();
   float settleTimer,aiPlacementTimer;
   public void FreshMatch(int breaker=0)
   {
-   foreach(var b in balls)b.Restore(b.initial);
+   var authored=new Vector3[balls.Length];var radii=new float[balls.Length];
+   for(int i=0;i<balls.Length;i++){var b=balls[i];authored[i]=b.initial;var scale=b.sphere.transform.lossyScale;radii[i]=b.sphere.radius*Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.y),Mathf.Abs(scale.z));}
+   int seed=rackSeed==0?rackSeeds.Next(1,int.MaxValue):rackSeed;if(rackSeed==0&&seed==LastRackSeed)seed++;LastRackSeed=seed;
+   var rack=BilliardsRackLayout.Generate(authored,radii,LastRackSeed,rackImperfection);for(int i=0;i<balls.Length;i++)balls[i].Restore(rack[i]);
    player.ResetTruck(breaker==0?new Vector3(0,0,-8.3f):new Vector3(4.4f,0,9.5f),breaker==0?Quaternion.identity:Quaternion.Euler(0,180,0));
    ai.ResetTruck(breaker==1?new Vector3(0,0,-8.3f):new Vector3(4.4f,0,9.5f),breaker==1?Quaternion.identity:Quaternion.Euler(0,180,0));
    rules.Reset(breaker,session!=null&&session.IsPractice);if(session!=null)session.ResetAIPlans();else opponent.ResetPlan();HidePlacement();

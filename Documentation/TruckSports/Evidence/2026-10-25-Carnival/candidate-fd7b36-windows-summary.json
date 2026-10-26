@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual Windows Direct3D11 executable acceptance, original AI/physics/setup/rematch/menu flows and real backbuffer captures. Individual visual QA is recorded separately.",
+  "candidate": {
+    "managedSha256": "0d91c74852998563a59cb0446be28d42e05b0003cd7b0ede5511ce1fc03a536d",
+    "buildContentSha256": "fd7b3679d9da26e31c251df04414ce600c4d79c2a5ae1a1b4b219587ff69adff",
+    "files": 547
+  },
+  "build": {
+    "job": "camera-build",
+    "pid": 1292,
+    "exit": 0,
+    "seconds": 288.45,
+    "timeoutSeconds": 1800,
+    "timedOut": false,
+    "canonicalBeforeSha256": "88ae9734f017e2732965a19979635eb3b797fab3cba57c8b3bf8b1b04cbf58bb",
+    "canonicalAfterSha256": "88ae9734f017e2732965a19979635eb3b797fab3cba57c8b3bf8b1b04cbf58bb",
+    "canonicalUnchanged": true
+  },
+  "ownedSourceInputCount": 1421,
+  "sourceManifestSha256": "26d11d8a03f2b74e46fcc72866314334fa7357918ae35b5a047328ab66911ea2",
+  "runs": [
+    {
+      "scope": "core",
+      "process": {
+        "pid": 25500,
+        "exit": 0,
+        "seconds": 129.77,
+        "requestedGraphicsAPI": "d3d11",
+        "managedSha256": "0d91c74852998563a59cb0446be28d42e05b0003cd7b0ede5511ce1fc03a536d",
+        "buildContentSha256": "fd7b3679d9da26e31c251df04414ce600c4d79c2a5ae1a1b4b219587ff69adff",
+        "unchangedBuildContent": true,
+        "unchangedManaged": true,
+        "completedEvidence": true,
+        "checks": 53,
+        "errors": 0,
+        "legacyErrorsOnly": false
+      },
+      "processReceiptSha256": "c069edb6e042f5ab7c647318e2e033beb8d9b72ce5c3e7f463daf81466e86a8e",
+      "resultSha256": "5ce3649e28c00c1fdb6900ee34dfb6d0d7fcbe3194f9eb8e04575e80a51f144f",
+      "actualPngCount": 20
+    },
+    {
+      "scope": "appearance",
+      "process": {
+        "pid": 41524,
+        "exit": 0,
+        "seconds": 221.91,
+        "requestedGraphicsAPI": "d3d11",
+        "managedSha256": "0d91c74852998563a59cb0446be28d42e05b0003cd7b0ede5511ce1fc03a536d",
+        "buildContentSha256": "fd7b3679d9da26e31c251df04414ce600c4d79c2a5ae1a1b4b219587ff69adff",
+        "unchangedBuildContent": true,
+        "unchangedManaged": true,
+        "completedEvidence": true,
+        "checks": 5092,
+        "errors": 0,
+        "legacyErrorsOnly": false
+      },
+      "processReceiptSha256": "3ec3a4e5c40684305e6ff7f4dafa4b83fed8f5c0a7d353761cb57446645d6e9b",
+      "resultSha256": "a2c49e371459802924c658fa182fcad8620b84e52e800fee576d756af70d85db",
+      "actualPngCount": 98
+    },
+    {
+      "scope": "presentation",
+      "process": {
+        "pid": 47700,
+        "exit": 0,
+        "seconds": 288.97,
+        "requestedGraphicsAPI": "d3d11",
+        "managedSha256": "0d91c74852998563a59cb0446be28d42e05b0003cd7b0ede5511ce1fc03a536d",
+        "buildContentSha256": "fd7b3679d9da26e31c251df04414ce600c4d79c2a5ae1a1b4b219587ff69adff",
+        "unchangedBuildContent": true,
+        "unchangedManaged": true,
+        "completedEvidence": true,
+        "checks": 2023,
+        "errors": 0,
+        "legacyErrorsOnly": false
+      },
+      "processReceiptSha256": "c7e1baf28786893b6ad2e0768f03a558e00f042840d690178e4570ae99727d12",
+      "resultSha256": "05f1ab3d9fa512e024223ccbf7f9005a4a0d1a0315d903a5e9f82985f402b702",
+      "actualPngCount": 62
+    }
+  ],
+  "totalCheckExecutions": 7168,
+  "uniqueTestCountNotClaimed": true,
+  "limits": [
+    "No human, physical controller, listening, full-collection, long-soak, FPS/GPU or performance acceptance inferred.",
+    "Actual Windows Target lava fracture was not observed; remains UNVERIFIED_NOT_OBSERVED.",
+    "Candidate246dbb and earlier failed runs are retained; these fresh passes do not relabel them.",
+    "At receipt creation canonical promotion/publication and final visual review remain separate gates."
+  ]
+}

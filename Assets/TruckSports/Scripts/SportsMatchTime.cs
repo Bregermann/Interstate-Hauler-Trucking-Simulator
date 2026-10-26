@@ -20,6 +20,11 @@ namespace LWS.TruckSports
         [HideInInspector] public int setupLayoutVersion;
         [Tooltip("Only authored venue lamps. Concert/show lighting must not be assigned here.")]
         public Light[] nightLights = System.Array.Empty<Light>();
+        [Tooltip("Optional dawn venue illumination. Zero preserves the existing daytime-off policy.")]
+        [Range(0, 1)] public float morningLampMultiplier;
+        [Tooltip("Optional explicit snow binding for reflective outdoor surfaces. Other venues retain their authored lamp power.")]
+        public SportsSnowSurface lampSnowSurface;
+        [Range(0, 1)] public float coveredLampMultiplier = 1;
         public SportsTimeChoice Applied { get; private set; }
         public int Revision { get; private set; }
         WeatherMakerDayNightCycleProfileScript ownedProfile;
@@ -29,6 +34,8 @@ namespace LWS.TruckSports
         bool fillWasEnabled;
         Gradient previousCloudAmbient, ownedCloudAmbient;
         WeatherMakerSkyProfileScript previousSkyProfile, ownedSkyProfile;
+        float appliedLampGain = float.NaN;
+        bool snowPalette;
 
         public void Configure(int seed, string currentMatchId)
         {
@@ -83,11 +90,57 @@ namespace LWS.TruckSports
             }
             if (preserveInteriorAmbient) ownedProfile.AmbientColorMode = WeatherMakerDayNightAmbientColorMode.UnityAmbientSettings;
             // No live shadow proliferation or reflection-probe refresh per frame.
-            bool lampsOn = Applied == SportsTimeChoice.Night || Applied == SportsTimeChoice.Evening;
-            for (int i = 0; i < nightLights.Length; i++) if (nightLights[i] != null) nightLights[i].intensity = lampsOn ? daylightIntensity[i] : 0;
+            appliedLampGain = float.NaN;
+            ApplyVenueLampGain();
+        }
+        public void ApplySnowPalette(bool snow)
+        {
+            if (preserveInteriorAmbient || ownedProfile == null || snowPalette == snow) return;
+            snowPalette = snow;
+            // Forecast profiles do not include day/night gradients. Coordinate
+            // the existing runtime-owned profile through Weather Maker's public
+            // fields, retaining its astronomical clock and all light intensities.
+            // Always derive from the untouched source so forecasts cannot compound.
+            ownedProfile.SunTintColorGradient = SnowGradient(previousProfile.SunTintColorGradient, snow);
+            ownedProfile.DayAmbientColor = SnowGradient(previousProfile.DayAmbientColor, snow);
+            ownedProfile.DayAmbientColorSky = SnowGradient(previousProfile.DayAmbientColorSky, snow);
+            ownedProfile.DayAmbientColorGround = SnowGradient(previousProfile.DayAmbientColorGround, snow);
+            ownedProfile.DayAmbientColorEquator = SnowGradient(previousProfile.DayAmbientColorEquator, snow);
+            ownedProfile.DawnDuskAmbientColor = SnowGradient(previousProfile.DawnDuskAmbientColor, snow);
+            ownedProfile.DawnDuskAmbientColorSky = SnowGradient(previousProfile.DawnDuskAmbientColorSky, snow);
+            ownedProfile.DawnDuskAmbientColorGround = SnowGradient(previousProfile.DawnDuskAmbientColorGround, snow);
+            ownedProfile.DawnDuskAmbientColorEquator = SnowGradient(previousProfile.DawnDuskAmbientColorEquator, snow);
+        }
+        static Gradient SnowGradient(Gradient source, bool snow)
+        {
+            if (!snow) return source;
+            var colors = source.colorKeys;
+            for (int i = 0; i < colors.Length; i++)
+            {
+                Color color = colors[i].color;
+                float value = Mathf.Max(color.r, Mathf.Max(color.g, color.b));
+                colors[i].color = new Color(.82f * value, .91f * value, value, color.a);
+            }
+            var result = new Gradient { mode = source.mode };
+            result.SetKeys(colors, source.alphaKeys);
+            return result;
+        }
+        void ApplyVenueLampGain()
+        {
+            if (daylightIntensity == null) return;
+            float gain = Applied == SportsTimeChoice.Night || Applied == SportsTimeChoice.Evening ? 1 : Applied == SportsTimeChoice.Morning ? morningLampMultiplier : 0;
+            // Weatherade's visible coverage is the authority. Ease the lamps
+            // down as reflective snow covers the road, retaining the clear-road
+            // setting and avoiding a second weather or exposure manager.
+            if (lampSnowSurface != null)
+                gain *= Mathf.SmoothStep(1, coveredLampMultiplier, Mathf.Clamp01(lampSnowSurface.Coverage * 2));
+            if (Mathf.Abs(gain - appliedLampGain) < .001f) return;
+            appliedLampGain = gain;
+            for (int i = 0; i < nightLights.Length; i++) if (nightLights[i] != null) nightLights[i].intensity = daylightIntensity[i] * gain;
         }
         void LateUpdate()
         {
+            ApplyVenueLampGain();
             // A 3D venue can use an orthographic broadcast lens. The vendor's
             // SunForCamera lookup still requires an orthographic celestial entry.
             // Mirror its own astronomical sun into a non-illuminating lookup light;

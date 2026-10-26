@@ -1,0 +1,1318 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-10-25T21:09:05.710857+00:00",
+  "scope": "Applied release export and source reconciliation; not a gameplay acceptance report.",
+  "sourceReceipts": [
+    {
+      "artifact": "carnival-release-export-applied.json",
+      "sha256": "4db0ebf9d9d5575d09116cb022782cc974e1efbba6951291f148ae180993a6be"
+    },
+    {
+      "artifact": "applied-receipt.json",
+      "sha256": "18bc937d895e527e295bc11ce317a5c39ffa6e61c7ce114ea3c944cbf5cf2fcc"
+    },
+    {
+      "artifact": "host-pending-baseline.json",
+      "sha256": "b1adddb9f603ecedf3642e757650ebfdb38745b0b0289f287ec8d079ddd3d303"
+    },
+    {
+      "artifact": "normalization-receipt.json",
+      "sha256": "a8f741efcfa07d77bf34788b210b35a19bf6eb23512cfa8337e33b9678dd3a06"
+    },
+    {
+      "artifact": "cc0-bird-importer-export-applied.json",
+      "sha256": "cdf4a15f4e8c6f16f81aece4cdef0cd4aaf9b0618af0c036c13dd684498e906e"
+    }
+  ],
+  "sceneExport": {
+    "applied": true,
+    "sceneCount": 57,
+    "writtenFileCount": 57,
+    "separateOwnedAssetWriteCount": 0,
+    "originalPhysicsRecordObservationsUnchanged": 22862,
+    "originalRecordObservations": 634421,
+    "addedRecords": 228,
+    "exactOriginalLightSerializationsPreserved": 8,
+    "deliberatePresentationChanges": "Explicit shared Cornhole target/approach transforms, 2304 FieldGoal crowd poses and UI bindings; original surviving collider/rigidbody/joint records preserved by export guards.",
+    "currentRootSceneHashesMatchingAppliedReceipt": 46,
+    "currentRootSceneHashesMatchingLatestAppliedReceipts": 57,
+    "currentRootSceneHashesDifferentFromReceipt": [
+      "Assets/TruckTerrierRacing/Scenes/TruckTerrierRacing.unity",
+      "Assets/TruckMinefield/Scenes/TruckMinefield.unity",
+      "Assets/TruckMattressRacing/Scenes/TruckMattressRacing.unity",
+      "Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity",
+      "Assets/TruckBogSnorkelling/Scenes/TruckBogSnorkelling.unity",
+      "Assets/TruckTargetLaunch/Scenes/TruckTargetLaunch.unity",
+      "Assets/TruckTugOfWar/Scenes/TruckTugOfWar.unity",
+      "Assets/TruckHotPotato/Scenes/TruckHotPotato.unity",
+      "Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity",
+      "Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity",
+      "Assets/TruckFrogger/Scenes/TruckFrogger.unity"
+    ],
+    "currentRootDifferenceStatus": "Eleven scene hashes superseded by the separately applied exact-alignment receipt summarized below.",
+    "scenes": [
+      {
+        "path": "Assets/TruckBilliards/Scenes/TruckBilliards.unity",
+        "beforeSha256": "402908047d3eb48772288e7452e8344d5344c476367e0319d12459f4c53539c3",
+        "exportedSha256": "fe0e2cb1bfdba25aa0bafa8a094a0b3398f5eb6113cc94dcbadd3fde9f9c40c6",
+        "currentRootSha256": "fe0e2cb1bfdba25aa0bafa8a094a0b3398f5eb6113cc94dcbadd3fde9f9c40c6",
+        "latestAppliedReceiptSha256": "fe0e2cb1bfdba25aa0bafa8a094a0b3398f5eb6113cc94dcbadd3fde9f9c40c6",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 43,
+        "originalRecordCount": 2432,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckHockey/Scenes/TruckHockey.unity",
+        "beforeSha256": "c497ecd3fb6969e5b701e3b35cfe498ad03d11f3000c2495ed89325801baa6af",
+        "exportedSha256": "de1ecde224bade6a6ef137be070462ed00f6b96b22d99a550b8a904f48761462",
+        "currentRootSha256": "de1ecde224bade6a6ef137be070462ed00f6b96b22d99a550b8a904f48761462",
+        "latestAppliedReceiptSha256": "de1ecde224bade6a6ef137be070462ed00f6b96b22d99a550b8a904f48761462",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 97,
+        "originalRecordCount": 4810,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBowling/Scenes/TruckBowling.unity",
+        "beforeSha256": "8e0c567fc50d43f73c4f92b8bd8399817e3a74b8816af23ad477efd22014f428",
+        "exportedSha256": "eeaf63fc7f15c781058034a3258bc2bb2512ed5d7507274c4f03d041f0317516",
+        "currentRootSha256": "eeaf63fc7f15c781058034a3258bc2bb2512ed5d7507274c4f03d041f0317516",
+        "latestAppliedReceiptSha256": "eeaf63fc7f15c781058034a3258bc2bb2512ed5d7507274c4f03d041f0317516",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 144,
+        "originalRecordCount": 6239,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckAirHockey/Scenes/TruckAirHockey.unity",
+        "beforeSha256": "3035632b85ffa24783ae7be5bbfca05c23a8e8794fe066dbbce39af97e985215",
+        "exportedSha256": "bbd5512b8dd9a8d1194f517f8c76effa923333af56f6ce4195b042bfe7900770",
+        "currentRootSha256": "bbd5512b8dd9a8d1194f517f8c76effa923333af56f6ce4195b042bfe7900770",
+        "latestAppliedReceiptSha256": "bbd5512b8dd9a8d1194f517f8c76effa923333af56f6ce4195b042bfe7900770",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 73,
+        "originalRecordCount": 1972,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckWallball/Scenes/TruckWallball.unity",
+        "beforeSha256": "83d30bcf5ab308ce51518b51ec7f0a8937732555221e2b38986c8545edaad7eb",
+        "exportedSha256": "57f51011a140c9ae11cc04d7d853f4fc2a5c50cd9d003f3ddb5220fdb71d5a4c",
+        "currentRootSha256": "57f51011a140c9ae11cc04d7d853f4fc2a5c50cd9d003f3ddb5220fdb71d5a4c",
+        "latestAppliedReceiptSha256": "57f51011a140c9ae11cc04d7d853f4fc2a5c50cd9d003f3ddb5220fdb71d5a4c",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 25,
+        "originalRecordCount": 4418,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckCornhole/Scenes/TruckCornhole.unity",
+        "beforeSha256": "d7830c869d3dcfef87765678cfea9546c209e7c03e1f8a1fc1f12414b2cf1c66",
+        "exportedSha256": "209deb03a6b7efb908211139b88779d190fce882117c6a811c4ebf44eae4bcb6",
+        "currentRootSha256": "209deb03a6b7efb908211139b88779d190fce882117c6a811c4ebf44eae4bcb6",
+        "latestAppliedReceiptSha256": "209deb03a6b7efb908211139b88779d190fce882117c6a811c4ebf44eae4bcb6",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 61,
+        "originalRecordCount": 11757,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckCheeseRolling/Scenes/TruckCheeseRolling.unity",
+        "beforeSha256": "bc9fe04976eed3d4518a325f5744940b7362970380f3f77737646a8f36bfade9",
+        "exportedSha256": "8d5280cfb415afe44ba2370501594c97e822176474f213f36938ce2f4f50402f",
+        "currentRootSha256": "8d5280cfb415afe44ba2370501594c97e822176474f213f36938ce2f4f50402f",
+        "latestAppliedReceiptSha256": "8d5280cfb415afe44ba2370501594c97e822176474f213f36938ce2f4f50402f",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 118,
+        "originalRecordCount": 7110,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckDockDiving/Scenes/TruckDockDiving.unity",
+        "beforeSha256": "d0ca87a7b7dfa49f775f3048f1f774569ee3b927313f27c82ea8f495c50e6475",
+        "exportedSha256": "7622ee281da241a7fb7db6434208ba4b2ead00af122e510bb6a1478f8368fc4d",
+        "currentRootSha256": "7622ee281da241a7fb7db6434208ba4b2ead00af122e510bb6a1478f8368fc4d",
+        "latestAppliedReceiptSha256": "7622ee281da241a7fb7db6434208ba4b2ead00af122e510bb6a1478f8368fc4d",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 62,
+        "originalRecordCount": 19907,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckKeepaway/Scenes/TruckKeepaway.unity",
+        "beforeSha256": "b31fc3419c7349d6faf3aa86ff2d42b7c773679279fb65ac741bdfcb7c990baa",
+        "exportedSha256": "47de80a0401b41cf4668663dc05f4bc6187d3cce8bb6478c2f092c387d9da9d9",
+        "currentRootSha256": "47de80a0401b41cf4668663dc05f4bc6187d3cce8bb6478c2f092c387d9da9d9",
+        "latestAppliedReceiptSha256": "47de80a0401b41cf4668663dc05f4bc6187d3cce8bb6478c2f092c387d9da9d9",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 237,
+        "originalRecordCount": 7125,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckKeepaway/Scenes/TruckKeepawayFirstPerson.unity",
+        "beforeSha256": "f3251d359221f8e4bd576c94c8825b040b0f4bf045923d20c6078270450e797e",
+        "exportedSha256": "4f1cd96de398529d1d251e7103d5b2a7015b6a9e7df37ea152c461c1e4a127ef",
+        "currentRootSha256": "4f1cd96de398529d1d251e7103d5b2a7015b6a9e7df37ea152c461c1e4a127ef",
+        "latestAppliedReceiptSha256": "4f1cd96de398529d1d251e7103d5b2a7015b6a9e7df37ea152c461c1e4a127ef",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 237,
+        "originalRecordCount": 7121,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckCurling/Scenes/TruckCurling.unity",
+        "beforeSha256": "986002ea740a53511187986ebc0bd27a1be70023d1624c233a5aad69299725a1",
+        "exportedSha256": "8d14dc169ef8ae89c6b20dc2442590386d3b242a77e07ef283267692dbc338fb",
+        "currentRootSha256": "8d14dc169ef8ae89c6b20dc2442590386d3b242a77e07ef283267692dbc338fb",
+        "latestAppliedReceiptSha256": "8d14dc169ef8ae89c6b20dc2442590386d3b242a77e07ef283267692dbc338fb",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 40,
+        "originalRecordCount": 6571,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBaseJumping/Scenes/TruckBaseJumping.unity",
+        "beforeSha256": "cfafc8f02f1794e837fd7c26333c772578754074e91b6916a3d12e5cb6e18e9f",
+        "exportedSha256": "53f7f46c0ba059d6e8c34b12a4caaa5ada602845741452aafc6d3251769b72e0",
+        "currentRootSha256": "53f7f46c0ba059d6e8c34b12a4caaa5ada602845741452aafc6d3251769b72e0",
+        "latestAppliedReceiptSha256": "53f7f46c0ba059d6e8c34b12a4caaa5ada602845741452aafc6d3251769b72e0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 92,
+        "originalRecordCount": 6116,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scenes/TruckTerrierRacing.unity",
+        "beforeSha256": "dfa8472195c2077dd5165a1bca8b7bbb5601eb126b7bfe0878e063dc212d022a",
+        "exportedSha256": "1fc7cf1038ffb45df04506b62439237bfe1398f82e4761a74c89a143f4a86ddf",
+        "currentRootSha256": "759afa4baf36e8e637aa4ea63e41d403fa8230e07ef683e78bc119ecb4326cbc",
+        "latestAppliedReceiptSha256": "759afa4baf36e8e637aa4ea63e41d403fa8230e07ef683e78bc119ecb4326cbc",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 698,
+        "originalRecordCount": 15603,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckMinefield/Scenes/TruckMinefield.unity",
+        "beforeSha256": "ac26f35f3b183ab6d5c5de5d0baf481c22a1f4cc75ac629732067d4e8b4e62d5",
+        "exportedSha256": "4c3b45c7d561991b6ef114ab98937a6d04b74ae5681bfe75fc4565d3772fb1c3",
+        "currentRootSha256": "b9cfd6b07b5521595bda7430cf245e65c10339b107e03c4488ef080fbb922cc0",
+        "latestAppliedReceiptSha256": "b9cfd6b07b5521595bda7430cf245e65c10339b107e03c4488ef080fbb922cc0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 656,
+        "originalRecordCount": 20596,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Scenes/TruckMattressRacing.unity",
+        "beforeSha256": "3f12fe9ba94fab9b8980614779c4ad4cfdb602847825826d5bab71c4290b478a",
+        "exportedSha256": "30bacf631d291ca36f477ba54f19b04349279e8528348ac2f62f765ed821adff",
+        "currentRootSha256": "fa06ae99d6e7bf8daf3d8db0b236389669492eeeae0dba6743f5e098b094e9b8",
+        "latestAppliedReceiptSha256": "fa06ae99d6e7bf8daf3d8db0b236389669492eeeae0dba6743f5e098b094e9b8",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 353,
+        "originalRecordCount": 12803,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity",
+        "beforeSha256": "579c468a825466e6ee8781262cb4cf5cd019377f591bc447351162ba0f78cd59",
+        "exportedSha256": "b247de39dd5428b9f39168e6b4f43cc8a54c68f4fbee112d6c4b381d549a1a9a",
+        "currentRootSha256": "d6b5305e6e61b1e3091c6cfe12f47d5b2fd83044bac10b589401aa2ba04d0c85",
+        "latestAppliedReceiptSha256": "d6b5305e6e61b1e3091c6cfe12f47d5b2fd83044bac10b589401aa2ba04d0c85",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 76,
+        "originalRecordCount": 7804,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckMusicalParking/Scenes/TruckMusicalParking.unity",
+        "beforeSha256": "20911a3acf6aed0bc233f4cbad7738f5deedc069513949c09b811b6937ec3441",
+        "exportedSha256": "037063bffd0026e33a5fd583864480afacf5b0d096882b46e7bb776f95d566f7",
+        "currentRootSha256": "037063bffd0026e33a5fd583864480afacf5b0d096882b46e7bb776f95d566f7",
+        "latestAppliedReceiptSha256": "037063bffd0026e33a5fd583864480afacf5b0d096882b46e7bb776f95d566f7",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 26,
+        "originalRecordCount": 6276,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckGiantSwing/Scenes/TruckGiantSwing.unity",
+        "beforeSha256": "67085846c8a606c06b234e19b0c92796d2030e46e4ab14c0c92fe9fc18e2eefd",
+        "exportedSha256": "2da4d93a069fda368e189256a1b77d7ef903e441c099ce9600d0d6fe7c4100d3",
+        "currentRootSha256": "2da4d93a069fda368e189256a1b77d7ef903e441c099ce9600d0d6fe7c4100d3",
+        "latestAppliedReceiptSha256": "2da4d93a069fda368e189256a1b77d7ef903e441c099ce9600d0d6fe7c4100d3",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 15,
+        "originalRecordCount": 4054,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBuzkashi/Scenes/TruckBuzkashi.unity",
+        "beforeSha256": "bddbab33e9213128144568ff4c70036e6a3bb482eada9da6076030dc1c50d0f7",
+        "exportedSha256": "20acbed7ebca4c9fd6f9de96e202fcb0bf0d0144a4e68df47a1beaf180827af7",
+        "currentRootSha256": "20acbed7ebca4c9fd6f9de96e202fcb0bf0d0144a4e68df47a1beaf180827af7",
+        "latestAppliedReceiptSha256": "20acbed7ebca4c9fd6f9de96e202fcb0bf0d0144a4e68df47a1beaf180827af7",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 34,
+        "originalRecordCount": 5538,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBogSnorkelling/Scenes/TruckBogSnorkelling.unity",
+        "beforeSha256": "f7ecd09819d9ee73d1f9ce44d8ded611f81d89c8264d0005798de1194554cf6e",
+        "exportedSha256": "a48577c46a2be6d3f19a974d036b6992bd60a651f08de52c4cb7afd5115d2e57",
+        "currentRootSha256": "6ae8c597854d9f67d2de075b16ed3404470f993ead36813fed90d6aa3b874dc3",
+        "latestAppliedReceiptSha256": "6ae8c597854d9f67d2de075b16ed3404470f993ead36813fed90d6aa3b874dc3",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 44,
+        "originalRecordCount": 11317,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBungeeDemolition/Scenes/TruckBungeeDemolition.unity",
+        "beforeSha256": "7421e475326628188b9ba399142a8c4f99ed45aee5371eee15f89252295de3e9",
+        "exportedSha256": "7d39534498dcd106d34a3150a4d99de4c2df2d3807aa654cf67e84c2da21910b",
+        "currentRootSha256": "7d39534498dcd106d34a3150a4d99de4c2df2d3807aa654cf67e84c2da21910b",
+        "latestAppliedReceiptSha256": "7d39534498dcd106d34a3150a4d99de4c2df2d3807aa654cf67e84c2da21910b",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 38,
+        "originalRecordCount": 4854,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFishing/Scenes/TruckFishing.unity",
+        "beforeSha256": "934f2267f0f6fed1a1b112db54a89d27277c69db86c59b497d0d11c338379757",
+        "exportedSha256": "83f4ff15a21f646b36bbda3093ceb7b07bb74e760d93bdfebe1d73079f521c2f",
+        "currentRootSha256": "83f4ff15a21f646b36bbda3093ceb7b07bb74e760d93bdfebe1d73079f521c2f",
+        "latestAppliedReceiptSha256": "83f4ff15a21f646b36bbda3093ceb7b07bb74e760d93bdfebe1d73079f521c2f",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 25,
+        "originalRecordCount": 5796,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSumo/Scenes/TruckSumo.unity",
+        "beforeSha256": "3a0227e99f4f02d5afff7908c1249030a129e2535c6dc5ec3534632d14e8b75f",
+        "exportedSha256": "1ba201757dd9a0050707037f8bf2d3b6a3e7d02b05030552f38a65f79764383f",
+        "currentRootSha256": "1ba201757dd9a0050707037f8bf2d3b6a3e7d02b05030552f38a65f79764383f",
+        "latestAppliedReceiptSha256": "1ba201757dd9a0050707037f8bf2d3b6a3e7d02b05030552f38a65f79764383f",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 15,
+        "originalRecordCount": 4802,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Scenes/TruckTargetLaunch.unity",
+        "beforeSha256": "4c2546b0e36af319fb246184541ebffc10e6ebcadd2b7bb6eda5031d658545fe",
+        "exportedSha256": "bec69c479234d186846f1a6d7f6bd43242b3839a02704aa87a139a786cecedf6",
+        "currentRootSha256": "7f7870d7a2ad1f8bc2e2ebd74eb332163ea840995ba20926973b6521464f2bd0",
+        "latestAppliedReceiptSha256": "7f7870d7a2ad1f8bc2e2ebd74eb332163ea840995ba20926973b6521464f2bd0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 113,
+        "originalRecordCount": 5447,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity",
+        "beforeSha256": "e97b4a15807b6a4d198d128ff70b327a3cb012a04a611d853b39a80cec3925cb",
+        "exportedSha256": "967a29c6dc6dd0049eb78f1a1b8370577f1b0c7acce33146cd59b6a1c32be4ec",
+        "currentRootSha256": "967a29c6dc6dd0049eb78f1a1b8370577f1b0c7acce33146cd59b6a1c32be4ec",
+        "latestAppliedReceiptSha256": "967a29c6dc6dd0049eb78f1a1b8370577f1b0c7acce33146cd59b6a1c32be4ec",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 46,
+        "originalRecordCount": 34687,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckBeerPong/Scenes/TruckBeerPong.unity",
+        "beforeSha256": "d00550f41cee79b9533c6d2e7461f7fefb6ce3e8b3913ed8fde9e77b43355c55",
+        "exportedSha256": "e4db94fc1031d87f919ec418a309fede652bc7209f624bc090b3e556f4c4ba98",
+        "currentRootSha256": "e4db94fc1031d87f919ec418a309fede652bc7209f624bc090b3e556f4c4ba98",
+        "latestAppliedReceiptSha256": "e4db94fc1031d87f919ec418a309fede652bc7209f624bc090b3e556f4c4ba98",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 26,
+        "originalRecordCount": 16244,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckPoker/Scenes/TruckPoker.unity",
+        "beforeSha256": "a89babf05d2d1de6534534cb44ce497bbea8f7460de0c4292d8bd4cd243ac918",
+        "exportedSha256": "22d61a9b1e0a69ade746fbddb888d3ddcd17c456e1b3206fb942331275ef844d",
+        "currentRootSha256": "22d61a9b1e0a69ade746fbddb888d3ddcd17c456e1b3206fb942331275ef844d",
+        "latestAppliedReceiptSha256": "22d61a9b1e0a69ade746fbddb888d3ddcd17c456e1b3206fb942331275ef844d",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 1,
+        "originalRecordCount": 10982,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTugOfWar/Scenes/TruckTugOfWar.unity",
+        "beforeSha256": "f39d9594d20fb36e3e813260be7324db6d59149a817abe23cbb435e52ddc03b4",
+        "exportedSha256": "4d554a14a2b2498aebc57a5e68196cbc05e0931605382a629c3c4fbcf55ecd58",
+        "currentRootSha256": "c4c5f2c909fb42b3cfe5010f84dc494d03e03538b6ace0cd853cff751df0cfdd",
+        "latestAppliedReceiptSha256": "c4c5f2c909fb42b3cfe5010f84dc494d03e03538b6ace0cd853cff751df0cfdd",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 218,
+        "originalRecordCount": 6829,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSkeeBall/Scenes/TruckSkeeBall.unity",
+        "beforeSha256": "2abb6956b1dd6c3dee7693da1fc38c211bae0e4d126a6d0e23d3520bc8e63ce7",
+        "exportedSha256": "6178a2e5f53fd67f1af286cee9681659df62ac04bb9d03e5855f29b0ac9fac58",
+        "currentRootSha256": "6178a2e5f53fd67f1af286cee9681659df62ac04bb9d03e5855f29b0ac9fac58",
+        "latestAppliedReceiptSha256": "6178a2e5f53fd67f1af286cee9681659df62ac04bb9d03e5855f29b0ac9fac58",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 181,
+        "originalRecordCount": 6423,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckLogRolling/Scenes/TruckLogRolling.unity",
+        "beforeSha256": "c98219c9ade8a29e9146d6626dd06ad1a51d0fe4b7e44ee8c949390b894b3725",
+        "exportedSha256": "fb99839069c48c1bdcb3bc83f511bfea0d681d0134b626d14f3e72199857aca1",
+        "currentRootSha256": "fb99839069c48c1bdcb3bc83f511bfea0d681d0134b626d14f3e72199857aca1",
+        "latestAppliedReceiptSha256": "fb99839069c48c1bdcb3bc83f511bfea0d681d0134b626d14f3e72199857aca1",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 16,
+        "originalRecordCount": 4739,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTrampolineDodgeball/Scenes/TruckTrampolineDodgeball.unity",
+        "beforeSha256": "5f2a9c51fef8cf42dcbf501cefc43469944499b106f40303caa22fe4ae5e6447",
+        "exportedSha256": "39d193605b53431caa24f9f96be0868cbd56f5b58f8761c66b0af8989a080e9e",
+        "currentRootSha256": "39d193605b53431caa24f9f96be0868cbd56f5b58f8761c66b0af8989a080e9e",
+        "latestAppliedReceiptSha256": "39d193605b53431caa24f9f96be0868cbd56f5b58f8761c66b0af8989a080e9e",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 85,
+        "originalRecordCount": 6833,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scenes/TruckDemolitionDerby.unity",
+        "beforeSha256": "d985b9f3f19536cff6540b0fe7830a4776e0bc66dbf97c8464689c0b5407216b",
+        "exportedSha256": "b5b3b66ca1e3fff3da023d1868c601723c52bdeeee7002685fc60ea43a4e3f17",
+        "currentRootSha256": "b5b3b66ca1e3fff3da023d1868c601723c52bdeeee7002685fc60ea43a4e3f17",
+        "latestAppliedReceiptSha256": "b5b3b66ca1e3fff3da023d1868c601723c52bdeeee7002685fc60ea43a4e3f17",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 360,
+        "originalRecordCount": 10827,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckKickball/Scenes/TruckKickball.unity",
+        "beforeSha256": "35139c898dc36c176ffb65d3a51607767b4086ed73ce6d8be585506b35c49952",
+        "exportedSha256": "a729d9c14494518c14e19c3ffeb1431efa0effc03365bd28e57f2f5f6ae2edc0",
+        "currentRootSha256": "a729d9c14494518c14e19c3ffeb1431efa0effc03365bd28e57f2f5f6ae2edc0",
+        "latestAppliedReceiptSha256": "a729d9c14494518c14e19c3ffeb1431efa0effc03365bd28e57f2f5f6ae2edc0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 92,
+        "originalRecordCount": 17256,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckDanceOff/Scenes/TruckDanceOff.unity",
+        "beforeSha256": "e2a72ee37fd57f8e31a80f5ed63bde7c6e021bd481afa7a963bca201baa8162e",
+        "exportedSha256": "0b30f8f3663c167e276f0b408bb04d04fe1d0fca51a97e4ba2087e10fee9743a",
+        "currentRootSha256": "0b30f8f3663c167e276f0b408bb04d04fe1d0fca51a97e4ba2087e10fee9743a",
+        "latestAppliedReceiptSha256": "0b30f8f3663c167e276f0b408bb04d04fe1d0fca51a97e4ba2087e10fee9743a",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 14,
+        "originalRecordCount": 15925,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckLimbo/Scenes/TruckLimbo.unity",
+        "beforeSha256": "42f91117fc45f9b4a4e5ceeab97d7cbaa157ba368d2cddd7993fe08efe60000d",
+        "exportedSha256": "958bba92b153cb30154bc093012d8a338a23e5cb15f02c1c39d88921d8f52939",
+        "currentRootSha256": "958bba92b153cb30154bc093012d8a338a23e5cb15f02c1c39d88921d8f52939",
+        "latestAppliedReceiptSha256": "958bba92b153cb30154bc093012d8a338a23e5cb15f02c1c39d88921d8f52939",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 119,
+        "originalRecordCount": 17664,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSkyTow/Scenes/TruckSkyTow.unity",
+        "beforeSha256": "817e16996647d204a0262c5e893e397f7e6e7a7ad3b93f74218f9b5d8a34f895",
+        "exportedSha256": "f982cb29f0df769791ef798e81a095598fa3f9edc5ee2daa7714427a246d2855",
+        "currentRootSha256": "f982cb29f0df769791ef798e81a095598fa3f9edc5ee2daa7714427a246d2855",
+        "latestAppliedReceiptSha256": "f982cb29f0df769791ef798e81a095598fa3f9edc5ee2daa7714427a246d2855",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 26,
+        "originalRecordCount": 8764,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity",
+        "beforeSha256": "f950a908dce196861c54b1a8402d2b2aeaf0eca900b182f1c988ef45325328bf",
+        "exportedSha256": "87a91a42fe4e2e1ab875db3bdb5208654191c0ea8aa40badd320d07b37326665",
+        "currentRootSha256": "87a91a42fe4e2e1ab875db3bdb5208654191c0ea8aa40badd320d07b37326665",
+        "latestAppliedReceiptSha256": "87a91a42fe4e2e1ab875db3bdb5208654191c0ea8aa40badd320d07b37326665",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 19,
+        "originalRecordCount": 4388,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFareFight/Scenes/TruckFareFight.unity",
+        "beforeSha256": "d44c1c7e06ae9d77dc0f8343f7290f56bef614405a5b26f19447fbb6b63c757f",
+        "exportedSha256": "923e3e3890b5ebaaff9d48dd66ec2c36f2f02099753ba94f685d6a2cfef17baf",
+        "currentRootSha256": "923e3e3890b5ebaaff9d48dd66ec2c36f2f02099753ba94f685d6a2cfef17baf",
+        "latestAppliedReceiptSha256": "923e3e3890b5ebaaff9d48dd66ec2c36f2f02099753ba94f685d6a2cfef17baf",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 345,
+        "originalRecordCount": 9963,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSnake/Scenes/TruckSnake.unity",
+        "beforeSha256": "b43193fb14951290a21f325d8e6527d414fe3da37a4d9589aa2bc5238c1ad7ae",
+        "exportedSha256": "c5cf907c52936a759480e5ed82e8ecdd61ff903bc51d5c359a04a0b77fe01b33",
+        "currentRootSha256": "c5cf907c52936a759480e5ed82e8ecdd61ff903bc51d5c359a04a0b77fe01b33",
+        "latestAppliedReceiptSha256": "c5cf907c52936a759480e5ed82e8ecdd61ff903bc51d5c359a04a0b77fe01b33",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 830,
+        "originalRecordCount": 20652,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity",
+        "beforeSha256": "3bca7337aec371688a85e70fda93fbdebf415e75cf81e72cba0bae4ace01dff7",
+        "exportedSha256": "1c2453970ecfc58c85e8aef9e111868029da2b48fb032acdca6cdda1408cdba7",
+        "currentRootSha256": "1c2453970ecfc58c85e8aef9e111868029da2b48fb032acdca6cdda1408cdba7",
+        "latestAppliedReceiptSha256": "1c2453970ecfc58c85e8aef9e111868029da2b48fb032acdca6cdda1408cdba7",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 345,
+        "originalRecordCount": 11236,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckHotPotato/Scenes/TruckHotPotato.unity",
+        "beforeSha256": "0a83b269ebb04064bdcc7647b76888331deb92aea7d62496ad1eafe8131b97c8",
+        "exportedSha256": "f678639b3320274a2369d17bfd73980403be97583cc057a3bc3439659698f7bf",
+        "currentRootSha256": "3919405602b8263e0930ccbc43d0566a1ee6f9fff7fcf064126bf063c022aba4",
+        "latestAppliedReceiptSha256": "3919405602b8263e0930ccbc43d0566a1ee6f9fff7fcf064126bf063c022aba4",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 312,
+        "originalRecordCount": 10960,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 6
+      },
+      {
+        "path": "Assets/TruckBalloonBattle/Scenes/TruckBalloonBattle.unity",
+        "beforeSha256": "47e20d79b0ace2138eeb4f3a8e64657739f23615707dce31d3f2ed8d41588fd3",
+        "exportedSha256": "5678afa6bfe64f7917bfe3e4d631b52643708ef26bae0f08bfd7a97bdc3861fc",
+        "currentRootSha256": "5678afa6bfe64f7917bfe3e4d631b52643708ef26bae0f08bfd7a97bdc3861fc",
+        "latestAppliedReceiptSha256": "5678afa6bfe64f7917bfe3e4d631b52643708ef26bae0f08bfd7a97bdc3861fc",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 329,
+        "originalRecordCount": 10222,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity",
+        "beforeSha256": "5a39a73ae1590f13d7638f36a8efd2472f1f00fd55c5c38ea7a2abc01daca24d",
+        "exportedSha256": "7404f4b55eb6807b43f72c50a8d4d338eded8c017bc8a21e7476814992850592",
+        "currentRootSha256": "055534845527b758d39ea356bffa74171bb43577806145d77040acc17295ae3e",
+        "latestAppliedReceiptSha256": "055534845527b758d39ea356bffa74171bb43577806145d77040acc17295ae3e",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 447,
+        "originalRecordCount": 11828,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 2
+      },
+      {
+        "path": "Assets/TruckKingOfTheHill/Scenes/TruckKingOfTheHill.unity",
+        "beforeSha256": "779cabb399035422891978c56ac067d8782baf640aa58277ff6df644bf08cc24",
+        "exportedSha256": "a8e6d78003af617c197d58f16b96729680b619eb8ca0da1a68a4063a10799817",
+        "currentRootSha256": "a8e6d78003af617c197d58f16b96729680b619eb8ca0da1a68a4063a10799817",
+        "latestAppliedReceiptSha256": "a8e6d78003af617c197d58f16b96729680b619eb8ca0da1a68a4063a10799817",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 247,
+        "originalRecordCount": 5751,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSeesaw/Scenes/TruckSeesaw.unity",
+        "beforeSha256": "02c2538c7581ff635c882eeb4bc19cca2134ae6cdc4b7b2913621bb7f03cc6e8",
+        "exportedSha256": "5864310d0851a31cd746758ded786b0fd3722f93d54fa7a16807e935be3cd544",
+        "currentRootSha256": "5864310d0851a31cd746758ded786b0fd3722f93d54fa7a16807e935be3cd544",
+        "latestAppliedReceiptSha256": "5864310d0851a31cd746758ded786b0fd3722f93d54fa7a16807e935be3cd544",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 111,
+        "originalRecordCount": 5820,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity",
+        "beforeSha256": "bd1a4935e82325a1af13b253518db7c4d2da1510ffd110460e00b5d268192894",
+        "exportedSha256": "0ef371d6f946a0e84169719d9ec39d1d647b7fe538782b534ea803cdf0d1d06b",
+        "currentRootSha256": "5abc457b1e9f21b93a9ce0f09717d0ab16ec8cfe94d956f789bb30a6ccbc9cb3",
+        "latestAppliedReceiptSha256": "5abc457b1e9f21b93a9ce0f09717d0ab16ec8cfe94d956f789bb30a6ccbc9cb3",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 261,
+        "originalRecordCount": 6389,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckTetherball/Scenes/TruckTetherball.unity",
+        "beforeSha256": "febc15834dc628cdaaca56666cd023a217f326eed40a0ae619e8e14807d5844f",
+        "exportedSha256": "8ab602ae30dfb17748a90c86cf20eb5b31e842cfd277393f6bf495827737e6d1",
+        "currentRootSha256": "8ab602ae30dfb17748a90c86cf20eb5b31e842cfd277393f6bf495827737e6d1",
+        "latestAppliedReceiptSha256": "8ab602ae30dfb17748a90c86cf20eb5b31e842cfd277393f6bf495827737e6d1",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 142,
+        "originalRecordCount": 9977,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckJousting/Scenes/TruckJousting.unity",
+        "beforeSha256": "71b98b39946c6ac8f0bdba13bf55ce38b628d4cc31242e4cf8a55ea093d74c43",
+        "exportedSha256": "b9884220c5a28caf0f84c7f5c42a447da861b494bfbfa2069ed7ec6705d522b0",
+        "currentRootSha256": "b9884220c5a28caf0f84c7f5c42a447da861b494bfbfa2069ed7ec6705d522b0",
+        "latestAppliedReceiptSha256": "b9884220c5a28caf0f84c7f5c42a447da861b494bfbfa2069ed7ec6705d522b0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 285,
+        "originalRecordCount": 10657,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckMagnetMayhem/Scenes/TruckMagnetMayhem.unity",
+        "beforeSha256": "aa72b328893273c43d93bf6d36943ebdae6fb04076e0dce60240180d05adf72b",
+        "exportedSha256": "d077d31c0b9257d464165f5084f839c7d26e9a43c65b8d56bf987126c60816e0",
+        "currentRootSha256": "d077d31c0b9257d464165f5084f839c7d26e9a43c65b8d56bf987126c60816e0",
+        "latestAppliedReceiptSha256": "d077d31c0b9257d464165f5084f839c7d26e9a43c65b8d56bf987126c60816e0",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 313,
+        "originalRecordCount": 7878,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckVolleyball/Scenes/TruckVolleyball.unity",
+        "beforeSha256": "20e9e7288c9a751b4c56afeb4a545feaea39ce7996bd657548fd4d5c5e4985cd",
+        "exportedSha256": "577e99a9ed1e5d32eb1d8ba465e6d4cc442922320abf21e085844f677dc6ba23",
+        "currentRootSha256": "577e99a9ed1e5d32eb1d8ba465e6d4cc442922320abf21e085844f677dc6ba23",
+        "latestAppliedReceiptSha256": "577e99a9ed1e5d32eb1d8ba465e6d4cc442922320abf21e085844f677dc6ba23",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 215,
+        "originalRecordCount": 6164,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFreezeTag/Scenes/TruckFreezeTag.unity",
+        "beforeSha256": "ef213959ea4931face89766415e47bf85805fc7dd3d3f36849619bcb3d275617",
+        "exportedSha256": "fca2788262b717ec617b1fb5b7c2549a2bdee78b5918f0a1fdc450ea9a00bc78",
+        "currentRootSha256": "fca2788262b717ec617b1fb5b7c2549a2bdee78b5918f0a1fdc450ea9a00bc78",
+        "latestAppliedReceiptSha256": "fca2788262b717ec617b1fb5b7c2549a2bdee78b5918f0a1fdc450ea9a00bc78",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 224,
+        "originalRecordCount": 6566,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity",
+        "beforeSha256": "f11932bc3d0307b17f9f6d291594aa9b0cbec9355ba17cd0ae7fbdff8052d8dc",
+        "exportedSha256": "743ab4eebb6929a95fb98a3123d344cf260a1e1d558d40cc590f2269b1bc361c",
+        "currentRootSha256": "743ab4eebb6929a95fb98a3123d344cf260a1e1d558d40cc590f2269b1bc361c",
+        "latestAppliedReceiptSha256": "743ab4eebb6929a95fb98a3123d344cf260a1e1d558d40cc590f2269b1bc361c",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 860,
+        "originalRecordCount": 9217,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity",
+        "beforeSha256": "41119abb7f2508664cd93838fddca5c8d6a9b5ae58cb524e5f3a5ef6e0906df5",
+        "exportedSha256": "00985f0a4982bf363ff0e94e684e469a828e17d978665c7ce8d6ac69e1481ada",
+        "currentRootSha256": "00985f0a4982bf363ff0e94e684e469a828e17d978665c7ce8d6ac69e1481ada",
+        "latestAppliedReceiptSha256": "00985f0a4982bf363ff0e94e684e469a828e17d978665c7ce8d6ac69e1481ada",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 926,
+        "originalRecordCount": 12280,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity",
+        "beforeSha256": "b490069edca6fdae89f98c523852dd615794322e6286cd7046fbfce93db2a1fc",
+        "exportedSha256": "dfdca2b1a6d7910ee60b2db0da68c95d4c459b59df3876dc833d5cc9a8a178ba",
+        "currentRootSha256": "dfdca2b1a6d7910ee60b2db0da68c95d4c459b59df3876dc833d5cc9a8a178ba",
+        "latestAppliedReceiptSha256": "dfdca2b1a6d7910ee60b2db0da68c95d4c459b59df3876dc833d5cc9a8a178ba",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 9908,
+        "originalRecordCount": 72914,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckFrogger/Scenes/TruckFrogger.unity",
+        "beforeSha256": "99f99d7a7aa3b0b4c5d61ce7280390f7c8acf2a7e95e5b2654bc6fd7c3ecf60c",
+        "exportedSha256": "c6f4173bfffb10c995f52d69fa7de6d9df2f01b556b93c2b8b5a4eed2e6dd5a9",
+        "currentRootSha256": "8de42e3c87373374262098edeaefec02ad006c6c1058a4182e0fbacc4aec95f4",
+        "latestAppliedReceiptSha256": "8de42e3c87373374262098edeaefec02ad006c6c1058a4182e0fbacc4aec95f4",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": false,
+        "originalPhysicsRecordsUnchanged": 1410,
+        "originalRecordCount": 19771,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity",
+        "beforeSha256": "48efbc0dcbfbb4446bf12c4d188f6d8b929ff6d742576168c83822b83c5db5e5",
+        "exportedSha256": "b81f5d611ab4a7f28c6fae618786b9d18a42aff2418e2d865959e016e2437c2d",
+        "currentRootSha256": "b81f5d611ab4a7f28c6fae618786b9d18a42aff2418e2d865959e016e2437c2d",
+        "latestAppliedReceiptSha256": "b81f5d611ab4a7f28c6fae618786b9d18a42aff2418e2d865959e016e2437c2d",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 509,
+        "originalRecordCount": 12734,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      },
+      {
+        "path": "Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity",
+        "beforeSha256": "fa32055c28ead3fb8c4fb8b1f9444e6bfc8ee0e947461a5b807b283833db2730",
+        "exportedSha256": "c1e5a221b2f47ac87655f1a5c4c220a22202e422db6da98887543a3298b294bb",
+        "currentRootSha256": "c1e5a221b2f47ac87655f1a5c4c220a22202e422db6da98887543a3298b294bb",
+        "latestAppliedReceiptSha256": "c1e5a221b2f47ac87655f1a5c4c220a22202e422db6da98887543a3298b294bb",
+        "rootMatchesLatestAppliedReceiptNow": true,
+        "rootMatchesExportReceiptNow": true,
+        "originalPhysicsRecordsUnchanged": 318,
+        "originalRecordCount": 21413,
+        "addedRecordCount": 4,
+        "exactOriginalLightSerializationsPreserved": 0
+      }
+    ]
+  },
+  "postExportSceneExactAlignment": {
+    "applied": true,
+    "rootOnly": true,
+    "sceneCount": 11,
+    "lightFloatBitEquivalentRecords": 8,
+    "singleCycleParticleRecords": 39,
+    "allOtherRecordsIncludingPhysicsByteExact": true,
+    "fullRootBackupsVerifiedBeforeAnyWrite": true,
+    "noCleanOrGitOrOtherSourceAssetWrites": true,
+    "indexUnchanged": true,
+    "scope": "Eight float32-equivalent light serializations and39 repeatInterval spellings on ParticleSystem records whose cycleCount is always1; other records including physics byte exact.",
+    "singleCycleParticleGuardVerified": true,
+    "files": [
+      {
+        "path": "Assets/TruckTerrierRacing/Scenes/TruckTerrierRacing.unity",
+        "beforeSha256": "1fc7cf1038ffb45df04506b62439237bfe1398f82e4761a74c89a143f4a86ddf",
+        "afterSha256": "759afa4baf36e8e637aa4ea63e41d403fa8230e07ef683e78bc119ecb4326cbc",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 698
+      },
+      {
+        "path": "Assets/TruckMinefield/Scenes/TruckMinefield.unity",
+        "beforeSha256": "4c3b45c7d561991b6ef114ab98937a6d04b74ae5681bfe75fc4565d3772fb1c3",
+        "afterSha256": "b9cfd6b07b5521595bda7430cf245e65c10339b107e03c4488ef080fbb922cc0",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 656
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Scenes/TruckMattressRacing.unity",
+        "beforeSha256": "30bacf631d291ca36f477ba54f19b04349279e8528348ac2f62f765ed821adff",
+        "afterSha256": "fa06ae99d6e7bf8daf3d8db0b236389669492eeeae0dba6743f5e098b094e9b8",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 353
+      },
+      {
+        "path": "Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity",
+        "beforeSha256": "b247de39dd5428b9f39168e6b4f43cc8a54c68f4fbee112d6c4b381d549a1a9a",
+        "afterSha256": "d6b5305e6e61b1e3091c6cfe12f47d5b2fd83044bac10b589401aa2ba04d0c85",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 76
+      },
+      {
+        "path": "Assets/TruckBogSnorkelling/Scenes/TruckBogSnorkelling.unity",
+        "beforeSha256": "a48577c46a2be6d3f19a974d036b6992bd60a651f08de52c4cb7afd5115d2e57",
+        "afterSha256": "6ae8c597854d9f67d2de075b16ed3404470f993ead36813fed90d6aa3b874dc3",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 44
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Scenes/TruckTargetLaunch.unity",
+        "beforeSha256": "bec69c479234d186846f1a6d7f6bd43242b3839a02704aa87a139a786cecedf6",
+        "afterSha256": "7f7870d7a2ad1f8bc2e2ebd74eb332163ea840995ba20926973b6521464f2bd0",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 113
+      },
+      {
+        "path": "Assets/TruckTugOfWar/Scenes/TruckTugOfWar.unity",
+        "beforeSha256": "4d554a14a2b2498aebc57a5e68196cbc05e0931605382a629c3c4fbcf55ecd58",
+        "afterSha256": "c4c5f2c909fb42b3cfe5010f84dc494d03e03538b6ace0cd853cff751df0cfdd",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 218
+      },
+      {
+        "path": "Assets/TruckHotPotato/Scenes/TruckHotPotato.unity",
+        "beforeSha256": "f678639b3320274a2369d17bfd73980403be97583cc057a3bc3439659698f7bf",
+        "afterSha256": "3919405602b8263e0930ccbc43d0566a1ee6f9fff7fcf064126bf063c022aba4",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 312
+      },
+      {
+        "path": "Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity",
+        "beforeSha256": "7404f4b55eb6807b43f72c50a8d4d338eded8c017bc8a21e7476814992850592",
+        "afterSha256": "055534845527b758d39ea356bffa74171bb43577806145d77040acc17295ae3e",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 447
+      },
+      {
+        "path": "Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity",
+        "beforeSha256": "0ef371d6f946a0e84169719d9ec39d1d647b7fe538782b534ea803cdf0d1d06b",
+        "afterSha256": "5abc457b1e9f21b93a9ce0f09717d0ab16ec8cfe94d956f789bb30a6ccbc9cb3",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 261
+      },
+      {
+        "path": "Assets/TruckFrogger/Scenes/TruckFrogger.unity",
+        "beforeSha256": "c6f4173bfffb10c995f52d69fa7de6d9df2f01b556b93c2b8b5a4eed2e6dd5a9",
+        "afterSha256": "8de42e3c87373374262098edeaefec02ad006c6c1058a4182e0fbacc4aec95f4",
+        "recordedRootAndCleanAfterEqual": true,
+        "rootMatchesReceiptNow": true,
+        "physicsRecordsByteExact": 1410
+      }
+    ]
+  },
+  "unrelatedBaselineGuard": {
+    "protectedFileCount": 925,
+    "appliedReceiptRecordsUnchanged": 925,
+    "currentRehashMismatchCount": 0,
+    "selection": "Original baseline excluding only the two Oct21 request documents.",
+    "changedPaths": []
+  },
+  "existingAssetPreservation": {
+    "receiptRetainedOriginalAssetCount": 486,
+    "currentRootMismatchCount": 0,
+    "policy": "Existing materials/assets outside the explicit authoring scope retained; private licensed derivatives stay excluded from public payload."
+  },
+  "sourceLineEndingReconciliation": {
+    "count": 52,
+    "applied": true,
+    "rootOnly": true,
+    "copiedExactCleanBytes": true,
+    "noCleanWrites": true,
+    "noGitCallsOrWrites": true,
+    "noScenesAssetsOtherSourcesModified": true,
+    "indexUnchanged": true,
+    "gitHeadFileUnchanged": true,
+    "scope": "Previously reviewed line-ending-only source differences; original byte backups retained privately.",
+    "files": [
+      {
+        "path": "Assets/TruckBeerPong/Editor/PongModels.cs",
+        "beforeSha256": "ffe0055234cda63509bd9030e7caa72895986da6f9baa0de5287df73f05384a0",
+        "afterSha256": "98c3b48ea78b26b8ec56622c6678f8aba47b1988c8090fc9fc0f1054cf784ce8",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckBeerPong/Editor/PongPreviewAuthoring.cs",
+        "beforeSha256": "3c3c2a76238cbd46d5fe41003ccbc73a453156ea18a2a0cc23c37ca49f0e86b5",
+        "afterSha256": "99977f2ac850b5afd34f8b96f2bca9ffad4a3d17ff74e87cf45b17c22de7beb8",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckBeerPong/Scripts/PongCup.cs",
+        "beforeSha256": "ab4c66c0cbd579d3db842ad2015023b61e245914bd8c8538ba2b3586a14aec92",
+        "afterSha256": "5aa287560fa93935f6dc4b13343a0f5ef7042d10f6fd9b0f788b98e82cdf96c9",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckBeerPong/Scripts/PongShot.cs",
+        "beforeSha256": "6e88dfe8c15923a1830f51e251cca14bd7db2e6b2a57c1e7bed1348db111f4d2",
+        "afterSha256": "b9d2b6860ef0f7e27107576939ef346f5fe5650f0e4e62c932c261d6b1c74321",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckBowling/Scripts/BowlingReboundProbe.cs",
+        "beforeSha256": "5063fae13e737624858e13fd2123feef334f3bf5d053bee81f06f656b3649216",
+        "afterSha256": "43ab0017cd3f5c45734efa60168789c7ec4199457c88b57d9747e2559c470869",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckBungeeDemolition/Editor/BungeeExpansionAuthoring.cs",
+        "beforeSha256": "3368398dc5cd678485653796cd4d95c727627d36e5e46be8d35043f1ef575237",
+        "afterSha256": "bad5d73cf0f2bc7b9a0c116aaafcdd7a863279f0ac9337b514ce56407ddaa9fd",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckCheeseRolling/Editor/CheeseRepairAuthoring.cs",
+        "beforeSha256": "e1fc7f33521bb4846efb8cf8bb9c975f773c17ac888dcc095f83be50bb1c39cc",
+        "afterSha256": "8971b7e523c7511ca8b2efc834540fe11c5cda60a0af61db7e57619158aa1aed",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckCurling/Editor/CurlingRepairAuthoring.cs",
+        "beforeSha256": "3a027a652f8ff0424018ff0967ca3547e2e76b2b5c1bf719d37aca806c30761f",
+        "afterSha256": "639da16f09c50bed52aabc90c3b30fa46650fc19ac3b8df429d2f511e71037a8",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scripts/DerbyDamageReplay.cs",
+        "beforeSha256": "996819b8725369be7d6195159be9d4e498dcc834d73d19320f8682925a6d6dc9",
+        "afterSha256": "f297aa2e00ddb53ef7d4920809e7da363506416bcf4aeaab1b2ef701586fd8f5",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scripts/DerbyFxReplay.cs",
+        "beforeSha256": "52f9d3dea95e2c5e4002e1d4d0c588d0e63319f8235823c0f5d8dd05ca18cc47",
+        "afterSha256": "f5d927dd1346cd66877e18ccc6220d2ae8b22add376151f81a3f1940be7ac71a",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scripts/DerbyMirrors.cs",
+        "beforeSha256": "54ea8409d69f5265032311f20b5ac03a0402032f8a94df444c786f07132cabae",
+        "afterSha256": "4749710dec0c3de4284d02227de4e1600bc3aa2c9597c36d877eb0e4547db92e",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scripts/DerbyPoseBridge.cs",
+        "beforeSha256": "b7ac48cc9c5ce818748df451214e5b5ac0ca7688e9e20442c9cc32570de7581c",
+        "afterSha256": "4c4bd390f4af626cb68402df86c30681cf6b4564496f716613622257930aebf0",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckDemolitionDerby/Scripts/DerbyProps.cs",
+        "beforeSha256": "4b6cb2f84af501370b6c87969d708c73d4e4817709560ebc041e308a6445e6d9",
+        "afterSha256": "b76ecf8a525cf715361aa630928b8fe79bc15560fab32a52db20b422d5281e90",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckKeepaway/Scripts/KeepawayPauseProbe.cs",
+        "beforeSha256": "6157ba487d3bf1b51a496c0b9445c740f8a8a8d6ea1ad7f26c50f4948304fe51",
+        "afterSha256": "b3fa9942d432ebea186fe0064412ade5c83fb880e66f030b54c8492fe6c461de",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Editor/MattressPillowAuthoring.cs",
+        "beforeSha256": "758765792a9ada9a707f8ffeb527ed8ae3e0dacaad1bf0fd9b6f0b9e9c9b696a",
+        "afterSha256": "0110a9ae1b93a4cf3a2ddbbdf9f7b033bb078e2fd9fbd6a0a6a23895a452da0d",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Scripts/MattressObstacle.cs",
+        "beforeSha256": "b1ad41a38cb456650bad875ec73feb9d373867ce7f4fc5036b2791427b8a3b34",
+        "afterSha256": "07ed45ecf881f79d962d7e2332202a9877c527e2f2965c08a3effbb64709ca1b",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Scripts/MattressWalker.cs",
+        "beforeSha256": "439f3024fd72cab81ddf88f11fdc207f801c05b41939603a4daa384b750b33cd",
+        "afterSha256": "aa47a19a4a2390d60ab86c65c02a5c779b915a55fbd7fa97ba06e66499584b03",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckMattressRacing/Scripts/MattressWorld.cs",
+        "beforeSha256": "3e5ba5808484bc7b61b64d657b27c28e07e05bd18cdda55de2cba274108c98e8",
+        "afterSha256": "37323f7148c6968cb7789eac7a7770f559d6bc7f286c19bd8c7a6459afb9ef79",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckPoker/Editor/PokerRepairAuthoring.cs",
+        "beforeSha256": "01cfce1d455618ed0e7aa344beb3a8640f4a1ea647e8284bb87adca1128d03cf",
+        "afterSha256": "5582cb6e7482e8ee3679c887352b06e8128a890462a322bfb7f1aa362824b5c2",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckPoker/Scripts/PokerPolicy.cs",
+        "beforeSha256": "e284c8bb72d5474a71882ca79c93d7eb9b52a367d17dff66174c2d94f27d711c",
+        "afterSha256": "c706cf18009965f2f19a90cda433c71e7c3e9744cc71ae9738ee736012705daa",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckPoker/Scripts/PokerPots.cs",
+        "beforeSha256": "0e5f1025d97d8fe0c0a753518c6186ac40a425969a4872e9793afb1333542ef4",
+        "afterSha256": "9d1986af51f1df64905fc491ced63d96a45aaf131a61fd65a206070527ff8db1",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Editor/SheepMotionAuthoring.cs",
+        "beforeSha256": "3cd001c7b654c56a2dd5bfe1b9e5f19aa9a416fdbe501284cfdd1ec8b30847f3",
+        "afterSha256": "6b864508cc454e9e13f66417b1b5cf8bbcf0430837f791e24274430f0c3828e4",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Editor/SportsBrandAuthoring.cs",
+        "beforeSha256": "8298df8f510d1218e7d2dcaa92c6fc259aea49e7622aa09927b18496d16fb146",
+        "afterSha256": "fae7c2c0ddbab54fe993c07782f9a35b73121b11299e28ffa6547f52b0b82d9c",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Editor/SportsEasyRoadsAuthoring.cs",
+        "beforeSha256": "8919cc8e309e1983538dbd67e78004ebe388d0d5993ce04ba55af05c02b2e918",
+        "afterSha256": "842375f0f40555f8c9fdc1408b82eee2829d3409b7afed5596b2a3c830e8fc69",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Editor/SportsParticipantAuthoring.cs",
+        "beforeSha256": "35c026361926a7cbc6e002c1a0fa2d6849ee4cb750b3c281aee1b726754213e9",
+        "afterSha256": "b75bfc23a5371c25c8a75b781cfeb8ca8b397d14692ba7dc73c5c82df37e3ef4",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Editor/SportsWeatherPresetsAuthoring.cs",
+        "beforeSha256": "1cb75659d10bff51d01d78c7bda3161c253eb735b4fa8227bf91f49b734d36b6",
+        "afterSha256": "115efbdc05f2edd30b9d3fdab3ce0f00828d24d2958404f85a48711ba5aa5077",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsBroadcastPage.cs",
+        "beforeSha256": "c16405c27bd0519e5499ca017149d03341dba08324699f3a9660fa35c754e667",
+        "afterSha256": "db865818c810e1690e31e9c85a8aad0f30f9e5da56cedca3551cb1a9ecc10033",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsBroadcastPlate.cs",
+        "beforeSha256": "24c956710d7d474f075d59e412eafc46fe9aea7a77fd9b1fc0c0b1eb5e14b23f",
+        "afterSha256": "a1fe6f13806177658d76414bdee86d68c4584778bb1972a46d8dc96459fee8e9",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsMeasure.cs",
+        "beforeSha256": "f24e8cc62b2cd48a70afedfd20378d7e5b912d5b7ade8b96333c2cb7f212bb8b",
+        "afterSha256": "614c4c335570010849f57c593eec1c07540b842d4b7ef5bcf60236001a478571",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsMenuMotion.cs",
+        "beforeSha256": "868f4eb93040191d38aed638cf1d864adf47329a437b42ff18d94c14ab542048",
+        "afterSha256": "d1da10832bb56d16a3da750b45b62435f92667f92cff41ca73f6a91526609937",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsNwhDamageAdapter.cs",
+        "beforeSha256": "0fbcbe486f7d82df5e4ebfd0f83801da24c713c18b8cdfe13b1f3337fa1b3367",
+        "afterSha256": "ebf260e66974b1ce6d723c92884c6cf6e7d7d55715d8cf02bb35a93975da8dcb",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsParticipantChecks.cs",
+        "beforeSha256": "f3deb3a3cd1ffd00510a3ed3b3fb2210c41de0d45af176206073358616f8930d",
+        "afterSha256": "704e2a682d9fb6904051925d2e81710e7e5ba9d1e5cc3bde94de09aa62b1b765",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsParticipantProbe.cs",
+        "beforeSha256": "0eefd0ee63ba5840ae32c9422f2cc3cc2e13351ce815c1a8aba1ec5f40f0fe43",
+        "afterSha256": "ca215257f2f313cffc0d02451c9335766bdfdb9f4356a6513e246c422d88c4fe",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsPrefs.cs",
+        "beforeSha256": "986dd360267e980820772143bc0d3474bcfb194cf91deb96ef7b5771e2f1cd15",
+        "afterSha256": "fddc7598a81265d0c20c6427ca908b76d64e4ca2f67ca5a595a2c15d540e1434",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsProductionTour.cs",
+        "beforeSha256": "4e1b67d1cb05bba09005a0d60e22398e1d3aaec8a6d88c0c7c117aac598d3ce2",
+        "afterSha256": "c9b237ee92ea20eb1c3d928410893330fb76b55c56d036dcaa24fed3b769157b",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsSheepMotion.cs",
+        "beforeSha256": "a20f28ac0ab5330af8251e3402bf2235cf6bb37029fecd0fe2b547bfd118ce8d",
+        "afterSha256": "dcb34f2a1cb633fad1fd8b1ec3880e1ff09e4c8b7465750839ecb7e4f08f7d25",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSports/Scripts/SportsWeatherPresets.cs",
+        "beforeSha256": "6b8c280d7e7bd86561460b32420ed33d8dbbd874de20814e3a111172c5db2a51",
+        "afterSha256": "5f97a9566d5927d0d36ed597db35b976473a5b35f0add451a716c9bb0242343d",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSumo/Editor/SumoPreviewAuthoring.cs",
+        "beforeSha256": "f3d053c281520f1dffd2ecb828305203dc15711d0d151b1f6264f2ed87250924",
+        "afterSha256": "6198857c31d0cb29adbfe3ef39e25dbe9162cc09d38708b85cf204a58fedb158",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckSumo/Editor/SumoRepairAuthoring.cs",
+        "beforeSha256": "73615e861b3c41464c5501f32b4ca46880486f5cab3a49cd73bb084454f6431e",
+        "afterSha256": "5e507df07ca63a8320d1e891f05afcc9d1bf101fa3a9cefdd116c2f79b322a20",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Editor/TargetFixtures.cs",
+        "beforeSha256": "c0540da0c022f31056aa298bbea03ff0a1140723a1ad4014217d018b8e474e57",
+        "afterSha256": "a45283270977adaa2148649613432551c5e93e5003673adbe568e2f7c30d399e",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Editor/TargetPreviewAuthoring.cs",
+        "beforeSha256": "db0846dac4b15ae3be14b4b8d4205568f97fc4ec24812ed013319f9508e7e1a7",
+        "afterSha256": "800e4f8fa79fc725939eea4a83f87831465638a890a4e13d56dd83da72dfb5e4",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Editor/TargetRepairAuthoring.cs",
+        "beforeSha256": "8651d00febea5bcf0aacd44fa7a3fe3343c6b73f4a1f792b5d7b54f83ddb68d7",
+        "afterSha256": "d6cc80a0e5488b6a6bccaad234664b7c7321778c2970023815a09edb28084c65",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Scripts/TargetRangeProbe.cs",
+        "beforeSha256": "6f40ee1e393e589891628d073dc3b1a94ba1371020462f434fcd5effb56d9686",
+        "afterSha256": "ff7491f48dfd578b3f17ad9ee1d33dc2a090d618a8d2823426ee900aa4db0c6b",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTargetLaunch/Scripts/TargetRepairProbe.cs",
+        "beforeSha256": "50f39bf4d189d3ed579374abd4d2036b61d362dc3ab7bb37496770dc35848729",
+        "afterSha256": "5b9483583638b9cbb592b93a0167240e01be2ba71f190b9acb4666df179f6f4c",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scripts/TerrierCreamSurface.cs",
+        "beforeSha256": "9216aa776df5799d478e758144797c63fd2cbf81fd086dae1051473a7dff9057",
+        "afterSha256": "35b1265342ec586d6ee4244a5ab30b14d2125f5f2c6b06286ffffd78f67953fd",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scripts/TerrierDessert.cs",
+        "beforeSha256": "eb0f0e0ec9eae88a3bae3a8b7497a1176f492897969af519e6b437875715674e",
+        "afterSha256": "b8f450ed04e230b1d73bb78fb343f46e51c6ee7ea9631ca1a76667c83bd60aec",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scripts/TerrierLavaSurface.cs",
+        "beforeSha256": "f22a07321d39d8307e67d78fd0a78d3d9cf3dbd23d22f974f5d43adb1b4b05ac",
+        "afterSha256": "ee4f194f9cc6ef58e820ffdcd4abeba4e68e3324df10b3e50c66a97d6986471a",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scripts/TerrierSmoke.cs",
+        "beforeSha256": "830fe4e8c3b5f2c4245a0d5bcfd2fd25fa091542c9812964bb27970f548a0f0c",
+        "afterSha256": "8024d865dd8dec3ad9a63bce7441831f338fcc349ea63511f929afada81122a8",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTerrierRacing/Scripts/TerrierVolcano.cs",
+        "beforeSha256": "b10ddaf2208950c5e8c5957ce090aac6ca14322f7b1ec35195a3fd523306a74c",
+        "afterSha256": "4e152715da2ef745b2ecfb36b3afd406b95ec6c932ae39a31293d583d8a07256",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckTugOfWar/Editor/TugProductionAuthoring.cs",
+        "beforeSha256": "454adf018a56b057c8acd066ed13a344e4827ddc31bbc0a871432d8f37194ffc",
+        "afterSha256": "dbd5ef19bb39f2c75629de6762436ce9afe865d8f0c2fd6a409b5aff47d5a4b8",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckWallball/Editor/WallballProductionAuthoring.cs",
+        "beforeSha256": "150b2130bbd42f560ae03e6e0090a7c5b84fad505117fed25912c45bfde69c5a",
+        "afterSha256": "30aceee3b79bb05d252de009f44d7a940018bd57682ec40c70298032d7a02c50",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      },
+      {
+        "path": "Assets/TruckWifeCarrying/Scripts/WifeCourse.cs",
+        "beforeSha256": "2a62b5f71b79f986454b477b248920c5f5c0587ef7925ddf166a743b3e4969a0",
+        "afterSha256": "e363b6643a1018f62dd9202de7f339def94307a4e658c53147144e0f2bbfc5eb",
+        "receiptRootAndCleanEqual": true,
+        "rootMatchesReceiptNow": true
+      }
+    ]
+  },
+  "cc0ImporterReconciliation": {
+    "count": 2,
+    "files": [
+      {
+        "path": "Assets/TruckBaseJumping/ThirdParty/QuaterniusBirds/Eagle.fbx.meta",
+        "license": "CC0-1.0",
+        "beforeSha256": "44b7049af3012b2b4e59f55c9455ebdd5a163b18ea1ffab4069362a0618a4f9f",
+        "afterSha256": "fd25d6722369b208dffc2d3c48b0705572985cd79859c39ec2448e2f27ac77c2",
+        "rootMatchesReceiptNow": true,
+        "originalGuidRetained": true
+      },
+      {
+        "path": "Assets/TruckBaseJumping/ThirdParty/QuaterniusBirds/bird.fbx.meta",
+        "license": "CC0-1.0",
+        "beforeSha256": "711621f20bf4568dd80d3f87fe53058715e86a77f089b6a58b1ec4aa402d228f",
+        "afterSha256": "6f935e14b0b0071963b2d94d4f17084aa42118902733d7ef20be94c16fd91757",
+        "rootMatchesReceiptNow": true,
+        "originalGuidRetained": true
+      }
+    ],
+    "scope": "Only CC0 bird importer metadata, preserving original GUIDs; no commercial FBX/animation payload copied into evidence."
+  },
+  "limits": [
+    "Byte and serialized-record preservation checks do not establish visual/gameplay correctness.",
+    "Root/CLEAN equality is recorded by the separate applied alignment receipt; this packager independently reads current Root hashes only.",
+    "Excluded legacy mode source and private licensed payload are not expanded into public evidence.",
+    "No Unity, CLEAN writes, Git mutation or publication was performed by evidence packaging."
+  ]
+}

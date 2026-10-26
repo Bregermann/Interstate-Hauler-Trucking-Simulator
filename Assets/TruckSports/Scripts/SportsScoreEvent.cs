@@ -7,6 +7,20 @@ namespace LWS.TruckSports
     public enum SportsScoreTier { Small, Major, RoundWinner, MatchChampion }
     public enum SportsScoreKind { Points, Outcome }
 
+    // Read-only presentation contract; each original sport retains its own lifecycle/rules.
+    public interface ISportsScorePresentationSource
+    {
+        string MatchId { get; }
+        event Action<SportsScoreEvent> ScoreConfirmed;
+        bool ScoreRunning { get; }
+        bool ScorePaused { get; }
+        bool ScoreFinished { get; }
+        bool ScoreResultPage { get; }
+        bool ScorePlayPage { get; }
+        Camera ScoreCamera(int view);
+        bool TryReadViewportCard(int view, out int participant, out string score, out string detail);
+    }
+
     // Immutable presentation receipt. Gameplay owns the award and supplied total.
     public sealed class SportsScoreEvent
     {

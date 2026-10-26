@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "status": "FAILED_NOT_PROMOTED",
+  "sourceRun": "Carnival060-f2eac0-presentation",
+  "processReceipt": {
+    "artifact": "process.json",
+    "sha256": "987a430170ae9a98d157e564800b88cc346ee9844ada4fb9832304651599b36e"
+  },
+  "resultArtifact": {
+    "artifact": "result.txt",
+    "sha256": "3f26f0319c1f77c01b103cc1ba497c7df5104836cb6cced777cb61f902bf2dce"
+  },
+  "completedRunReceipt": {
+    "exit": 2,
+    "seconds": 224.1,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "66b0704e402c44bd7cf5176deed5947e047160a0bb372f5e0c99919a8bcd73cc",
+    "buildContentSha256": "f2eac05aa4188edc2ba8557aae36ccd103640020255f29be8239c1c7bec7e245",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 1378,
+    "errors": 18,
+    "legacyErrorsOnly": false
+  },
+  "probeSeconds": 219.78,
+  "coverage": {
+    "requestedVenuesIncludingOptionalNinja": 13,
+    "visitedVenues": 9,
+    "reportedCases": 24,
+    "capturedPngs": 48,
+    "boundedAbort": true
+  },
+  "failureCategories": {
+    "fieldGoalLiveExteriorCheckedDuringActualReplay": 1,
+    "floorIsLavaFramingEnvelope": 16,
+    "unvisitedVenueAssertion": 1,
+    "runtimeErrorOrExceptionCallbacks": 0
+  },
+  "findings": [
+    "Both Field Goal frames.tsv captures report REPLAY. Original BeginReplay intentionally hides live visuals; exact1080 capture directly inspected and selected hotdog appears in actual scoreboard replay. Probe source repair pending native validates recorded source0 geometry/material/paint/current owner.",
+    "Floor Is Lava source investigation distinguishes genuine sibling-composed-body framing-cache omission from enabled zero-scale pooled fragment renderers. Runtime cache correction is independently owned; no final fix acceptance inferred.",
+    "Old abort used total failed checks including pure assertions, causing early exit after9venues. Probe correction preserves every failed check/exit2 and aborts only actual runtime Error/Exception callback flood."
+  ],
+  "remainingWork": "Targeted native validation and fresh candidate build plus actual Windows reruns are required. No overall release acceptance is packaged.",
+  "limits": [
+    "Core53/0 and appearance5092/0 are separate completed evidence on this failed candidate.",
+    "Appearance98-image visual review remains tied only to this candidate.",
+    "No human, hardware, audio or performance acceptance.",
+    "No rawlogs/stacks/commandlines/processIDs included."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Publication helper unit/temp-Git regressions only; no root index mutation, network operation, or publication performed.",
+  "command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "Tools/TruckSports",
+    "-p",
+    "TestPublicationScope.py"
+  ],
+  "exit": 0,
+  "tests": 10,
+  "failures": 0,
+  "seconds": 3.419,
+  "sourceFiles": [
+    {
+      "path": "Tools/TruckSports/PublishScopedSports.py",
+      "sha256": "1cdc7978a69f2e2cc8129e980ceab86e18a26519d7554ffd9a8127d972013bef"
+    },
+    {
+      "path": "Tools/TruckSports/TestPublicationScope.py",
+      "sha256": "4bd8e974703ac3f6115b81da866756a7173e0d8f43ae2cbea161936cf0b20bef"
+    }
+  ],
+  "observations": "Expected CRLF-to-LF notices occurred only in disposable test repositories. Actual Root source line endings were not rewritten."
+}

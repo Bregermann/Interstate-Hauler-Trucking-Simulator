@@ -41,9 +41,14 @@ namespace LWS.TruckSeesaw
         public override bool MultiViewHUD => !ReplayControls && drivingViews != null && !drivingViews.NeedsArena;
         public override bool BroadcastStandingsVisible => !ReplayControls;
         public override bool ParticipantLocked(int slot) => !rules.alive[slot];
-        public override string Header => Title + (ReplayControls ? " · RECORDED REPLAY" : " · HEAT " + (rules.Heat+1) + " / " + rules.HeatCount + " · " + Tilt.ToString("F0") + "° TILT");
-        public override string Status => Countdown > 0 ? "BALANCE THE LOAD · GO IN " + Mathf.CeilToInt(Countdown) : rules.HeatComplete ? (rules.HeatWinner < 0 ? "SHARED SURVIVAL HEAT" : setup.players[rules.HeatWinner].name + " IS LAST TRUCK STANDING!") : Tilt > 17 ? "BOARD TIPPING · SHIFT WEIGHT UPHILL!" : "STAY ON THE BOARD · " + Mathf.Max(0,rules.HeatSeconds-rules.Clock).ToString("F0") + "s";
+        public override string Header => Title + (ReplayControls ? " · RECORDED REPLAY" : " · HEAT " + (rules.Heat+1) + " / " + rules.HeatCount + " · " + Tilt.ToString("F0") + "° TILT · " + Mathf.Max(0,rules.HeatSeconds-rules.Clock).ToString("F0") + "s");
+        public override string Status => Countdown > 0 ? "" : rules.HeatComplete ? (rules.HeatWinner < 0 ? "SHARED SURVIVAL HEAT" : setup.players[rules.HeatWinner].name + " · LAST TRUCK STANDING") : Tilt > 17 ? "BOARD TIPPING" : "";
         public override string ControlCaption(int slot) => base.ControlCaption(slot).Replace(" ACTION"," RECOVER");
+        public override bool CompactBroadcastStatus=>true;
+        public override bool BroadcastStatusVisible=>!ReplayControls&&!string.IsNullOrEmpty(Status);
+        public override bool CompactViewportHud=>true;
+        public override string ViewportTelemetry(int view)=>Tilt.ToString("F0")+"° TILT · "+Mathf.Max(0,rules.HeatSeconds-rules.Clock).ToString("F0")+"s";
+        public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail)=>TryReadDrivingViewportCard(drivingViews,view,out participant,out score,out detail);
         public override string Help => "Balance a giant suspended deck above the quarry. Drive uphill to counter a tilt, spread out, and ram rivals toward the edges. Earn +1 for every 15 seconds survived, +2 when you help level a heavily tilted board by moving uphill, +3 for a credited knockoff, and +5 for sole survival. Heats last up to 90 seconds. If several trucks survive the timer, they share the heat without a sole-survivor bonus. Choose one, three or five heats; highest total wins and equal totals share placing. Solo is a 90-second balance challenge. Falling trucks crash into the quarry. RECOVER works only when you are stuck or overturned on the board. Choose a shared arena, chase or full-cab view; camera switch, free look, horn and actual device bindings are shown in Pause. Your Crew names/colors, selected weather and optional AI cameras carry through the match. Watch the final moments again from Results.";
         readonly FareFightRoute[] drivers = new FareFightRoute[4];
         readonly bool[] recoverySample = new bool[4], armed = new bool[4], crashed = new bool[4];
@@ -52,7 +57,7 @@ namespace LWS.TruckSeesaw
         readonly StringBuilder text = new StringBuilder(500);
         float aftermath;
         public override bool TryReadScoreCard(int slot,out string value,out string detail)
-        { value=rules.scores[slot]+"P"; detail=!rules.alive[slot]?"QUARRY DROP":armed[slot]?"SHIFT UPHILL FOR +2":rules.knockoffs[slot]+" KNOCKOFFS · "+rules.recoveries[slot]+" SAVES"; return slot<setup.count; }
+        { value=rules.scores[slot]+"P"; detail=!rules.alive[slot]?"QUARRY DROP":armed[slot]?"UNBALANCED":rules.knockoffs[slot]+" KNOCKOFFS · "+rules.recoveries[slot]+" SAVES"; return slot<setup.count; }
         public override string ViewText(int view) {int slot=drivingViews.rally.owners[view]; TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail+"\n"+Status;}
         public override string Standings {get {text.Clear();for(int i=0;i<setup.count;i++)text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.scores[i]).Append("PTS · ").Append(rules.heatWins[i]).Append(" HEATS · ").Append(rules.knockoffs[i]).Append(" KNOCKOFFS · ").Append(rules.recoveries[i]).Append(" SAVES\n");return text.ToString();}}
         public override string Results => "QUARRY WOBBLE RESULTS\n\n"+Standings;

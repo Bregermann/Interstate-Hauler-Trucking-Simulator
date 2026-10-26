@@ -24,21 +24,22 @@ namespace LWS.TruckSports
         public RowView[] rows = Array.Empty<RowView>();
         string shownMatch;
         bool legacyEnabled;
+        TMP_Text OriginalResult => menus != null ? menus.result : source != null ? source.OriginalResult : null;
         public SportsResultsSnapshot Snapshot { get; private set; }
         public bool Displaying => Snapshot != null && visibility.alpha > .99f;
-        void OnEnable() { shownMatch = null; Snapshot = null; if (menus != null) legacyEnabled = menus.result.enabled; if (visibility != null) visibility.alpha = 0; }
+        void OnEnable() { shownMatch = null; Snapshot = null; if (OriginalResult != null) legacyEnabled = OriginalResult.enabled; if (visibility != null) visibility.alpha = 0; }
         void OnDisable()
         {
             foreach (var row in rows) { row.rect.DOKill(); row.visibility.DOKill(); row.value.DOKill(); }
             if (visibility != null) visibility.DOKill();
-            if (menus != null && menus.result != null) menus.result.enabled = legacyEnabled;
+            if (OriginalResult != null) OriginalResult.enabled = legacyEnabled;
             Snapshot = null;
         }
         void LateUpdate()
         {
-            if (source == null || menus == null || source.session == null || menus.Screen != SportsEventScreen.Result || !source.session.Finished || shownMatch == source.session.MatchId) return;
+            if (source == null || !source.ResultReady || shownMatch == source.MatchId) return;
             if (!source.TryCapture(out var snapshot) || snapshot.Rows.Count > rows.Length) return;
-            Render(snapshot); shownMatch = source.session.MatchId;
+            Render(snapshot); shownMatch = source.MatchId;
         }
         public void CompleteAnimations()
         {
@@ -47,7 +48,7 @@ namespace LWS.TruckSports
         }
         void Render(SportsResultsSnapshot snapshot)
         {
-            Snapshot = snapshot; menus.result.enabled = false;
+            Snapshot = snapshot; OriginalResult.enabled = false;
             heading.text = Escape(snapshot.Heading); summary.text = Escape(snapshot.Summary);
             bool winners = false; foreach (var entry in snapshot.Rows) winners |= entry.Winner;
             heading.color = winners ? new Color(1, .8f, .28f) : SportsBroadcastCanvas.Cream;

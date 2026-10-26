@@ -1,0 +1,640 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "ACTUAL_WINDOWS_BACKBUFFER_VISUAL_REVIEW",
+  "candidate": {
+    "buildContentSha256": "fd7b3679d9da26e31c251df04414ce600c4d79c2a5ae1a1b4b219587ff69adff",
+    "managedSha256": "0d91c74852998563a59cb0446be28d42e05b0003cd7b0ede5511ce1fc03a536d"
+  },
+  "scope": "Read-only visual review of completed fd7 Windows presentation output. Curated images are byte-exact ScreenCapture originals, with no image edits or substituted native renders.",
+  "verdict": "No new blocking visual defect observed in this captured presentation set. Automated candidate gates passed; promotion/publication remain lead decisions.",
+  "completedAutomatedReceipts": {
+    "core": {
+      "receipt": "Carnival060-fd7b36-core/process.json",
+      "receiptSha256": "c069edb6e042f5ab7c647318e2e033beb8d9b72ce5c3e7f463daf81466e86a8e",
+      "checks": 53,
+      "errors": 0,
+      "exit": 0,
+      "seconds": 129.77,
+      "unchangedBuildContent": true,
+      "unchangedManaged": true
+    },
+    "appearance": {
+      "receipt": "Carnival060-fd7b36-appearance/process.json",
+      "receiptSha256": "3ec3a4e5c40684305e6ff7f4dafa4b83fed8f5c0a7d353761cb57446645d6e9b",
+      "checks": 5092,
+      "errors": 0,
+      "exit": 0,
+      "seconds": 221.91,
+      "unchangedBuildContent": true,
+      "unchangedManaged": true
+    },
+    "presentation": {
+      "receipt": "Carnival060-fd7b36-presentation/process.json",
+      "receiptSha256": "c7e1baf28786893b6ad2e0768f03a558e00f042840d690178e4570ae99727d12",
+      "checks": 2023,
+      "errors": 0,
+      "exit": 0,
+      "seconds": 288.97,
+      "unchangedBuildContent": true,
+      "unchangedManaged": true
+    }
+  },
+  "checkExecutions": 7168,
+  "presentation": {
+    "checks": 2023,
+    "errors": 0,
+    "runtimeErrors": 0,
+    "scenes": 13,
+    "cases": 31,
+    "screenshots": 62,
+    "resolutions": {
+      "1280x720": 31,
+      "1920x1080": 31
+    },
+    "venues": {
+      "TruckAvalancheEscape": 4,
+      "TruckBungeeDemolition": 4,
+      "TruckCornhole": 10,
+      "TruckDockDiving": 2,
+      "TruckFieldGoal": 2,
+      "TruckFloorIsLava": 4,
+      "TruckGiantSwing": 2,
+      "TruckNinjaWarrior": 2,
+      "TruckRedLightGreenLight": 4,
+      "TruckSkyTow": 10,
+      "TruckTargetLaunch": 10,
+      "TruckVolleyball": 4,
+      "TruckWhackAMole": 4
+    }
+  },
+  "reviewMethod": {
+    "all62": "Viewed every image in eight final labelled contact sheets, plus direct originals for the critical subjects below. Contact sheets are derived QA aids under Logs, not curated evidence originals.",
+    "directPresentationOriginals": [
+      "TruckCornhole-shared-AI-roster-4-1280x720.png",
+      "TruckCornhole-shared-AI-roster-4-1920x1080.png",
+      "TruckFieldGoal-shared-AI-roster-4-1280x720.png",
+      "TruckFieldGoal-shared-AI-roster-4-1920x1080.png",
+      "TruckSkyTow-actual-AI-views-1-1920x1080.png",
+      "TruckNinjaWarrior-shared-AI-roster-4-1280x720.png",
+      "TruckNinjaWarrior-shared-AI-roster-4-1920x1080.png"
+    ],
+    "contactSheets": [
+      {
+        "file": "contact-01.png",
+        "sha256": "4d6914fd3707e27d4c119df0ce8ba9696c5da8583c632ca829ba1cb09fe6523a"
+      },
+      {
+        "file": "contact-02.png",
+        "sha256": "cecf5f62097a3ce3e1ed993fab5a326ac74c6f8fd81eded12221c8acfe3acf23"
+      },
+      {
+        "file": "contact-03.png",
+        "sha256": "21ad4aa24a29477a6fac6b0ca3a67455655652c1a4c8e339ec94453035b60205"
+      },
+      {
+        "file": "contact-04.png",
+        "sha256": "71d5fef75294d4d53887e707b5e6126b62274496c8138fdc75b3722347fdcc11"
+      },
+      {
+        "file": "contact-05.png",
+        "sha256": "5f49739d14154cb852a63aa4c927c6cf32ff9ceb81ce5a430b7e2854720056a4"
+      },
+      {
+        "file": "contact-06.png",
+        "sha256": "4063738fabb586597ed135961236218dace2c0557ada89ea44fa50491dd5809b"
+      },
+      {
+        "file": "contact-07.png",
+        "sha256": "e047d3cd390760621bab9ba0db5925ec6b8c6f2adb0e4cf2f84c5e5e975d9980"
+      },
+      {
+        "file": "contact-08.png",
+        "sha256": "4428e126284473bc6a46cd4d324b73f22aba17c1c8afba991facc78e03a946f6"
+      }
+    ]
+  },
+  "venueObservations": {
+    "TruckAvalancheEscape": "Snow course, actual trucks and participant/time context present in shared and split views.",
+    "TruckCornhole": "All shared/cab cases populated. Direct shared720/1080 show focused exterior fully in frame, attached wheels and clear board/hole. Cab views retain their intentional first-person ownership; no exterior requirement imposed on cabs.",
+    "TruckDockDiving": "Original replay scene and actual banked score/distance presentation visible.",
+    "TruckFieldGoal": "Recorded selected hotdog visible on stadium replay screen; typed recorded ownership evidence reports source0 to ghost0 hierarchy/mesh/material/paint agreement with 50 matching visible meshes. Hidden live source is intentional Replay state.",
+    "TruckFloorIsLava": "Visible selected bodies/platforms and actual participant cards present in both layouts. Zero-scale invisible-fragment probe issue is separate from visible rendering; no runtime camera change was needed.",
+    "TruckGiantSwing": "Current pumping state and original vehicle/course present; capture is not a completed-attempt claim.",
+    "TruckNinjaWarrior": "Direct720/1080 show selected hotdog truck on actual tilting-step platform; participant/current-course/time text readable. Early-state capture is not course completion.",
+    "TruckRedLightGreenLight": "Course signals and actual phase/participant progress display present; captured green and imminent-red states differ naturally.",
+    "TruckSkyTow": "One-to-four actual AI view counts and shared view populated after original restart flow. One shared720 frame has a nearby foreground ring crossing much of the scene; shared1080 is clear. No new blocker concluded from this transient course occlusion.",
+    "TruckTargetLaunch": "Target rings, selected vehicles, wind/current-state readouts and bright lava presentation visible. No natural lava fracture observed in the separate appearance sample; remains UNVERIFIED_NOT_OBSERVED.",
+    "TruckVolleyball": "Actual court, ball and team scorebug present in shared and AI views; no touches/hits debug panel observed.",
+    "TruckWhackAMole": "Actual moles/course, participant points and remaining-time/context cards present in shared and split views.",
+    "TruckBungeeDemolition": "Actual dangling truck and subsequent award state populated; existing wide city split-view composition retained."
+  },
+  "supplementalAppearanceDirectReview": [
+    {
+      "run": "appearance",
+      "file": "TruckSkeeBall-actual-AI-natural-1280x720.png",
+      "sha256": "ba67c7b2c08f291293f7a75dd98ad3bb2c1745660ee83095caee14c035f3d582",
+      "width": 1280,
+      "height": 720,
+      "review": "Direct original inspected. Four actual feeds populated; retro dark/stippled palette retains ramps, rings and selected-truck detail, with crisp HUD. These images are not part of the 62 presentation images."
+    },
+    {
+      "run": "appearance",
+      "file": "TruckSkeeBall-actual-AI-rematch-1920x1080.png",
+      "sha256": "be39aae7b0f9863dea90ba0406ca337be8e4f13e61f84ad27b6aaea3d15a879a",
+      "width": 1920,
+      "height": 1080,
+      "review": "Direct original inspected. Four actual feeds populated; retro dark/stippled palette retains ramps, rings and selected-truck detail, with crisp HUD. These images are not part of the 62 presentation images."
+    }
+  ],
+  "nativeWindowsDistinction": {
+    "native49": "Separate controlled native proof: eight natural original shared/cab cases, 77/77 primary exterior samples and 32032/32032 primary corners; not Windows or physical-human evidence. Its controlled PNGs remain separately labelled native49-...-controlled.",
+    "native46": "Valid prior camera failure retained: shared primary clipping14/19,14/19,14/19,15/20 samples. Corrected miniature body fits alone did not remove that spectator framing defect.",
+    "currentWindows": "Current fd7 Windows originals visibly confirm corrected miniature body/wheel fit and focused spectator composition. These images have later live capture ages and are not reused Native49 images.",
+    "earlierFailures": "Prior 4c runtime-restart failure, f2 probe-assertion failures and246 visually rejected Cornhole captures remain historical evidence; passing counters did not overwrite those failures."
+  },
+  "limits": [
+    "Original AI and backbuffer captures do not constitute physical-human/controller/wheel-input, listening, performance/FPS/GPU, profile-soak or full-match acceptance.",
+    "Natural Target lava fracture remains UNVERIFIED_NOT_OBSERVED (one separate appearance sample, zero observed lava contacts).",
+    "Derby retains an honest original-sport-truck fallback; it is outside this thirteen-scene presentation set.",
+    "Bear and excluded Plow/Cab Chaos requirements are not validated by these runs.",
+    "Screenshots sample current moments; they do not prove every possible animation, camera pose or match outcome."
+  ],
+  "curatedWindowsOriginals": [
+    {
+      "file": "candidate-fd7b36-cornhole-shared-natural-1080.png",
+      "source": "TruckCornhole-shared-AI-roster-4-1920x1080.png",
+      "sha256": "b4d4f763c7182342c018b989d2fbc486d47e371fd2abb25c9ffafe92d966304f",
+      "byteExactOriginal": true,
+      "evidenceKind": "ACTUAL_WINDOWS_BACKBUFFER",
+      "caption": "ACTUAL WINDOWS D3D11: original four-AI natural flight, focused red miniature truck fully within frame with wheel visuals adjoining the body and target board/hole visible. Other airborne trucks provide context. This is a later live capture than the controlled Native49 frame."
+    },
+    {
+      "file": "candidate-fd7b36-fieldgoal-recorded-hotdog-1080.png",
+      "source": "TruckFieldGoal-shared-AI-roster-4-1920x1080.png",
+      "sha256": "9db5871da3a7241f7326343e4cb4c8a42d3975d6f69cd7d3f37ba7028464c719",
+      "byteExactOriginal": true,
+      "evidenceKind": "ACTUAL_WINDOWS_BACKBUFFER",
+      "caption": "ACTUAL WINDOWS D3D11: original Field Goal replay shows the recorded hotdog truck on the stadium screen, with real attempt score, 33-yard distance and replay state. Live source is intentionally hidden during replay; typed evidence reports 50 matching recorded selected-model meshes."
+    },
+    {
+      "file": "candidate-fd7b36-sky-restart-oneview-1080.png",
+      "source": "TruckSkyTow-actual-AI-views-1-1920x1080.png",
+      "sha256": "22c8933a6949233cb1d3ba994ea711b8ebdbfdde6e5fc34a406f807c37d13c1d",
+      "byteExactOriginal": true,
+      "evidenceKind": "ACTUAL_WINDOWS_BACKBUFFER",
+      "caption": "ACTUAL WINDOWS D3D11: one-owner SkyTow view after the original count/restart sequence, showing the truck, cable, boat, rings and snowy harbor. Captured current state; no completed-match claim."
+    },
+    {
+      "file": "candidate-fd7b36-ninja-natural-1080.png",
+      "source": "TruckNinjaWarrior-shared-AI-roster-4-1920x1080.png",
+      "sha256": "d77bec16c12314d2215f1864a70223695081ab4b4977f48b1c0bc8e7cf9c3ee7",
+      "byteExactOriginal": true,
+      "evidenceKind": "ACTUAL_WINDOWS_BACKBUFFER",
+      "caption": "ACTUAL WINDOWS D3D11: selected hotdog truck on the current tilting-step course, with actual participant cards and running clock. Captured early current state; no course-completion claim."
+    }
+  ],
+  "presentationImageManifest": [
+    {
+      "file": "TruckAvalancheEscape-actual-AI-views-12-1280x720.png",
+      "sha256": "a264b023df4ead2db8ca4990a39bfc80ec9ce5411b92538c7bc163c326c73774",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckAvalancheEscape-actual-AI-views-12-1920x1080.png",
+      "sha256": "faca14d204307f3fa738324f9540b4cadc5e8c0fdc139d749ba9b8e43043a64f",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckAvalancheEscape-shared-AI-roster-12-1280x720.png",
+      "sha256": "490beb63433f198a1d6a68b9705b1fff0e4f0d82ff492473ab721997d94cf617",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckAvalancheEscape-shared-AI-roster-12-1920x1080.png",
+      "sha256": "b1f9a3f315341087a43ee83b224f8b80486daecb461ad14bc31cb98fdf199ac9",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckBungeeDemolition-actual-AI-views-4-1280x720.png",
+      "sha256": "4baa1b98f122b76add3a98855aba2dcf04905a30e2012d030f05d5b69df45980",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckBungeeDemolition-actual-AI-views-4-1920x1080.png",
+      "sha256": "3a12732883499088d2eb8f3981469d9f17b63ba4159f4ce7c3549a31afcd82ef",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckBungeeDemolition-shared-AI-roster-4-1280x720.png",
+      "sha256": "4e12a4bcb5e968f999caf6b8ccaf01648aaf98ca6774234872f75ee434ee1c96",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckBungeeDemolition-shared-AI-roster-4-1920x1080.png",
+      "sha256": "fc705470bd2964f24c6438f88d9bd9e81712b803a742ac88452104443c816b8b",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-1-1280x720.png",
+      "sha256": "2a78bbaf0e8d91ed3538e1abca893ef956af5723968fc28a3da1d26dc2ac1afc",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-1-1920x1080.png",
+      "sha256": "8c74abc2029c8c67abfbbf81f72dbb5e8d839a6c82286573d2a94b882c177600",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-2-1280x720.png",
+      "sha256": "42dcaa6a9bed02f0d28856a99ea5aa65c1e3501b154798b799118ff8b02594b9",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-2-1920x1080.png",
+      "sha256": "24a2adb6b5ed79429d19504e4e06a3bdf5c49025e734fc7889c8975b9c42e487",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-3-1280x720.png",
+      "sha256": "5648c3381e9ccda0d408c2f87def0ade1b97c1d18f715a172bcf09823dfcca17",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-3-1920x1080.png",
+      "sha256": "b810d3d16e0a714dee480e6f03ea9f9aed87f1f8d46b49d16909d04ccaa1892f",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-4-1280x720.png",
+      "sha256": "453a47bde80dd1f722d746d54e5a5b1f3ea0f2591e59b175a2b2a30957631365",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-actual-AI-views-4-1920x1080.png",
+      "sha256": "c1e38c4d4de98351ba6638930b61d02b2d3da89c5cf9ce862ffaebd4bcd0aa9b",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-shared-AI-roster-4-1280x720.png",
+      "sha256": "4f6aad484210eb71588e4e582cda50b50ae5ab4442136f63ffd5e044115d1317",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckCornhole-shared-AI-roster-4-1920x1080.png",
+      "sha256": "b4d4f763c7182342c018b989d2fbc486d47e371fd2abb25c9ffafe92d966304f",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckDockDiving-shared-AI-roster-4-1280x720.png",
+      "sha256": "b5900686bf671aef35d6ae480f572a7b2f22a959da8d0a729fefab1ffb94151d",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckDockDiving-shared-AI-roster-4-1920x1080.png",
+      "sha256": "b73e31bb586a85cb41b3186007aa037cbf7fdfe2dcdb3a8290ca76347288b12e",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFieldGoal-shared-AI-roster-4-1280x720.png",
+      "sha256": "237e581553173ca52fe093314b0cefbc5bc1dd1f46d792fbcc11f5c0cbe1cbf4",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFieldGoal-shared-AI-roster-4-1920x1080.png",
+      "sha256": "9db5871da3a7241f7326343e4cb4c8a42d3975d6f69cd7d3f37ba7028464c719",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFloorIsLava-actual-AI-views-8-1280x720.png",
+      "sha256": "1992ea817b905be368bd180835f870ba8e1e544a7c5bf6aa3dc0fd6979cef5cc",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFloorIsLava-actual-AI-views-8-1920x1080.png",
+      "sha256": "26b3cd52916913de00286085f0e2c230467f1fac2f0fc2693a05ce467e833a15",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFloorIsLava-shared-AI-roster-8-1280x720.png",
+      "sha256": "bbe80750fb11ddab9ffb5d005ab59123722061542c350f317776ddd5b644bc8a",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckFloorIsLava-shared-AI-roster-8-1920x1080.png",
+      "sha256": "870bca0a135ec68895aea3649eb9bf509c61dc67ae4ee30f05bc6f8b87a511fc",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckGiantSwing-shared-AI-roster-4-1280x720.png",
+      "sha256": "06f840b5711b3d82637a9b382e9516ef3c07b651a8b5ec5ab5e6e1ac9a67fd72",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckGiantSwing-shared-AI-roster-4-1920x1080.png",
+      "sha256": "7be8afcf53b85a5064a6b244d951b7842d25abaa25e935a764729ba5cee9299c",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckNinjaWarrior-shared-AI-roster-4-1280x720.png",
+      "sha256": "789e45fa0c70bc365a8e45a93d921d4f708b774add3c2631a16bd4a153da9455",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckNinjaWarrior-shared-AI-roster-4-1920x1080.png",
+      "sha256": "d77bec16c12314d2215f1864a70223695081ab4b4977f48b1c0bc8e7cf9c3ee7",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckRedLightGreenLight-actual-AI-views-12-1280x720.png",
+      "sha256": "a2c4cf67bb6e5ee69e482e5fd3eae22182e3d826ca8d623cb306df977eaeac64",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckRedLightGreenLight-actual-AI-views-12-1920x1080.png",
+      "sha256": "34f68d248638e13393268bc97ffa93a2220f2b444bce7e4088f9db9efead758f",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckRedLightGreenLight-shared-AI-roster-12-1280x720.png",
+      "sha256": "007dbd0f751ed99f6d460999939ea8d1d4d55df7da69f30fe240acc28dc1823b",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckRedLightGreenLight-shared-AI-roster-12-1920x1080.png",
+      "sha256": "bb79296acc70008e7526dd4420f4bbaf285d188ca82e6ac2ab6c7c9026e2d1ba",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-1-1280x720.png",
+      "sha256": "a013f8f834e03a100e698a37cd5b27d4843d5818aeac9b720b49b7ad936f9552",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-1-1920x1080.png",
+      "sha256": "22c8933a6949233cb1d3ba994ea711b8ebdbfdde6e5fc34a406f807c37d13c1d",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-2-1280x720.png",
+      "sha256": "d087a9d59cfcc821bf249b91d5c6a8b635f3e2d6654d707c6fce908f6220203b",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-2-1920x1080.png",
+      "sha256": "83ed542927f4d94057b85bfda5d893b7f34bc75727bc504d7d44005a34268e06",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-3-1280x720.png",
+      "sha256": "47f11758a44df1ce9f7ebfd5b4a67022f3b4a7358f92824a83257f8ed8c34695",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-3-1920x1080.png",
+      "sha256": "67991116903d224af260fe8941d2132698f0146d64e97632197734271bbf6d5e",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-4-1280x720.png",
+      "sha256": "a4d21bbef2e44af9205b5e36e284fca77a7d99efe1bdb0a5d2f7caa033779ce0",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-actual-AI-views-4-1920x1080.png",
+      "sha256": "7bd57f2df1ba15fff5e564c9f031957e01991e9558661303a47063d0fd5566a6",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-shared-AI-roster-4-1280x720.png",
+      "sha256": "c1e52bb767787837237788c40cdc962596a72f8f25f0958c9d7287019f7abc7d",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckSkyTow-shared-AI-roster-4-1920x1080.png",
+      "sha256": "3590c2b7840741b32daa125c2b8f7b7e269b144f9bfaeddc8020459563727ae1",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-1-1280x720.png",
+      "sha256": "7936e11d95b66ead8f06fc6db81b7087617ca09fb78fb5525cfbce46775e1b40",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-1-1920x1080.png",
+      "sha256": "7d81ea8c259a697c9e5f029f3b5ffeb3ce480c074f1466492c1a87dc4a366bee",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-2-1280x720.png",
+      "sha256": "9c23c1151202ad7e1e87df7879eefedb2a2022c0684af774fde78a39f92b673a",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-2-1920x1080.png",
+      "sha256": "d159ed8eb5dba5bfe0fa971d182bb7407099a8f3333f8b49a4d6e7b3fb563f93",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-3-1280x720.png",
+      "sha256": "4c4b578152b14d0be2034881864e751c7824c2c3380dd432028b6d3b68a05d37",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-3-1920x1080.png",
+      "sha256": "412908ffdb7a92e98449f449feb1a18d7e24afedded05defd56c1a2f8bf8a14e",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-4-1280x720.png",
+      "sha256": "6649733db9c5d887fcb6e43da12ba01ea3cba8adb7ea048f78665edf03faf587",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-actual-AI-views-4-1920x1080.png",
+      "sha256": "34541736758ee16037bbf2bcc7bc9e9a78a31091f15035c08ed88cb60bf86c89",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-shared-AI-roster-4-1280x720.png",
+      "sha256": "bae1b115de7f0ac34bce7f26e05a7f739fa7b360e24322ee9093a81860880c69",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckTargetLaunch-shared-AI-roster-4-1920x1080.png",
+      "sha256": "6368b9289428150ad2b12c048bd9acc5b1986e373eecd86aa82b2250b3f77fbb",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckVolleyball-actual-AI-views-8-1280x720.png",
+      "sha256": "bba606e05d70fd8c4674343205d53add3da565fd04444f926ace98a39b266cc9",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckVolleyball-actual-AI-views-8-1920x1080.png",
+      "sha256": "6d2dd62cdc1a5ba6d960994ae78a804414476d01e605bb38cca6b6c9840419a5",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckVolleyball-shared-AI-roster-8-1280x720.png",
+      "sha256": "3ceef0031be295affaea2892a8b40839484dd59493178343d25c163bd627fbab",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckVolleyball-shared-AI-roster-8-1920x1080.png",
+      "sha256": "d89ad0c43b73baf7a95a0587e03c443a49adc2ad8f4a54512a1c0a73b001f526",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckWhackAMole-actual-AI-views-8-1280x720.png",
+      "sha256": "3b1182a5fbd6f21050c8f0a9a2e3ef249e0d2b64057561ffbdb7463c8a0df934",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckWhackAMole-actual-AI-views-8-1920x1080.png",
+      "sha256": "fe86b0c7fe55389c9699dbcc8960d3aa3131c58235b1bf2896b04d704bb1740b",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckWhackAMole-shared-AI-roster-8-1280x720.png",
+      "sha256": "419cf48f420622192d894bf883438a4d925cef2ac58f20b845ff235ae6e3180d",
+      "width": 1280,
+      "height": 720,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    },
+    {
+      "file": "TruckWhackAMole-shared-AI-roster-8-1920x1080.png",
+      "sha256": "603c1e930fa8e47399c5e1651253e22408e472c1a23bbea64c5e59da7bfb84ac",
+      "width": 1920,
+      "height": 1080,
+      "review": "Viewed in final eight-sheet contact review; critical originals also inspected directly as listed."
+    }
+  ],
+  "vendorDisclosure": {
+    "VENDOR ASSETS AUDITED": "Existing project runtime presentation and vendor-backed integrations; no new asset/source audit required for read-only capture QA.",
+    "VENDOR ASSETS USED": "Existing NWH, Heat/TMP/DOTween, weather/appearance and licensed scene content as rendered by the exact candidate.",
+    "RELEVANT ASSETS NOT USED": "No additional asset/tool substituted for the actual Windows captures.",
+    "CUSTOM SYSTEMS CREATED": "Sanitized QA receipt and image manifest only.",
+    "VENDOR SOURCE MODIFIED": "None.",
+    "DUPLICATE VENDOR FUNCTIONALITY CREATED": "None."
+  }
+}

@@ -88,6 +88,9 @@ namespace LWS.TruckBilliards
             powerText.text = "SHOT POWER " + Mathf.RoundToInt(strength) + "% · " + (truck.Armed ? "READY" : "DISARMED");
             speedText.text = (Mathf.Abs(truck.Speed) * 2.236936f).ToString("0.0") + " MPH";
             bindings.text = session.Bindings(owner).Replace('\n', ' ');
+            // Actual assigned bindings remain in setup/help. Active play keeps
+            // the existing power, speed, turn and outcome cards instead.
+            bindings.gameObject.SetActive(false);
             if (lastTurn != active)
             {
                 ResetPulse(); lastTurn = active;

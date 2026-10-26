@@ -1,0 +1,3671 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-10-25T21:08:59.722327+00:00",
+  "scope": "Retained native16\u201337 continuation artifacts only.",
+  "countingPolicy": [
+    "Per-XML counters are actual executions, including reruns; their sum is NOT unique tests or accepted requirements.",
+    "Every retained failed XML/case observation remains present. Latest status is matched by exact NUnit case name only.",
+    "Renamed/retired cases with no later exact-name observation are historical evidence, not automatic current product failures.",
+    "Authoring markers/runner exits are separate from test passes. Missing XML never counts as a pass.",
+    "A passing targeted native run does not establish actual Windows, human, hardware, audio, performance or whole-release acceptance."
+  ],
+  "retainedXmlFiles": 46,
+  "executionTotalsIncludingRepeatedCases": {
+    "total": 396,
+    "passed": 313,
+    "failed": 83,
+    "inconclusive": 0,
+    "skipped": 0
+  },
+  "receiptXmlCounterDiscrepancies": [],
+  "batches": [
+    {
+      "batch": 16,
+      "artifactPrefix": "carnival-sixteenth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-sixteenth-author.log",
+          "sha256": "1df79ce9d2c9794a48771738b627625e3b09d9f3d9efa43f797a0c0a0eabe3fc",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 17,
+      "artifactPrefix": "carnival-seventeenth",
+      "runnerReceipt": {
+        "artifact": "carnival-seventeenth-native-results.json",
+        "sha256": "e4b772f05c64ef5b573008bd7001e5819127454f5cfa1d3f20133e85c77aa689"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-seventeenth-hud-followups-native.xml",
+          "sha256": "59cb30464a288ccece67bec6952349b76b49260de5f871da7e83d63eaeb45e74",
+          "result": "Passed",
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 121.5147924,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-seventeenth-independent-native.xml",
+          "sha256": "bcc2a63db79548835b7f2f896a6b2fcfc35eb87d0e73ac89a56ca32056ab74fa",
+          "result": "Failed(Child)",
+          "total": 12,
+          "passed": 9,
+          "failed": 3,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 68.6512996,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "HotPotatoHumanArenaCameraPlayModeTests.OriginalEliminationDropsHumanSmoothlyPauseHoldsAndRematchReacquires",
+            "HotPotatoHumanArenaCameraPlayModeTests.SharedOwnershipReleasesForOriginalSplitCabAiOnlyAndRecordedReview",
+            "TrailerPlugAppearanceIntegrationTests.AllSevenSharedTurnBodiesKeepMatchedPhysicalHitchTrailerBungeeAndSavedIdentity"
+          ]
+        },
+        {
+          "artifact": "carnival-seventeenth-snow-geometry-native.xml",
+          "sha256": "f71e4cb4e4baa1e894f374822466e335381cf6265db84b596af1068697a66424",
+          "result": "Passed",
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 0.3832229,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 18,
+      "artifactPrefix": "carnival-eighteenth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-eighteenth-author-recipes.log",
+          "sha256": "b57a20b620d4003648281b9f31e7b2c65cb4e600d5244b4132c3b218352325ab",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 19,
+      "artifactPrefix": "carnival-nineteenth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-nineteenth-author-fare-snake-hosts.log",
+          "sha256": "b8751dd821475d5d677a91a48c33c62ea7e17fcbad318c21f6a58006395ae575",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": true,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 20,
+      "artifactPrefix": "carnival-twentieth",
+      "runnerReceipt": {
+        "artifact": "carnival-twentieth-native-results.json",
+        "sha256": "2f177d012e856c8ab8aaa53689f5e867dfaaab4a45856e498ba51925f8d50ed2"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentieth-corn-regression-native.xml",
+          "sha256": "3f59397ee16e105d9a76b1dc43246f1e54cc76586afe2960fb197de81a64893a",
+          "result": "Failed(Child)",
+          "total": 9,
+          "passed": 8,
+          "failed": 1,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 217.7975823,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "CornholeSharedGardenPlayModeTests.OriginalOneToFourViewportsAndBoundedSixteenTruckReplayHideLiveOpponentsAndKeepPrivateCabs"
+          ]
+        },
+        {
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "sha256": "7e7934ef44fb96ef66b8a0e06d60ea9d5c2fdd2c05ff0eb2eb28b1ce4c1847e6",
+          "result": "Failed(Child)",
+          "total": 13,
+          "passed": 8,
+          "failed": 5,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 185.0210352,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "ArenaAppearanceIntegrationTests.LogFourBodiesRefreshOnlyTruckReplayTreesAndPreserveActualBuoyancyLogAndBraceAuthority",
+            "ArenaAppearanceIntegrationTests.WallballEightActualBodiesPreserveNwhContactBallJumpAndServeAcrossRematch",
+            "CornholeAppearanceIntegrationTests.SevenBodiesKeepSixteenPhysicalOwnersPrivateCabsAndExistingPoseBudgetAcrossRematches",
+            "LaunchFourAppearanceIntegrationTests.SevenBodiesAcrossFourOriginalLaunchVenuesKeepPhysicsEquipmentProfilesAndGhostRoots",
+            "LaunchFourAppearanceIntegrationTests.SkyFourOriginalOwnersRefreshRecordedModelsWithoutChangingTowOrRecordedBoatRoots"
+          ]
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentieth-author-fare-snake-hosts.log",
+          "sha256": "d418b6279492c3966421ca58947c0735b6391847a1edf585dff98fe8dbe71bfa",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentieth-author-snow-banks.log",
+          "sha256": "06622d05073c90e7c11b85bf8f32937b75930698e387577b6b573541ccb1019c",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentieth-author-trailer-host.log",
+          "sha256": "500be7af81e5722a32ccf0175cc190dc1529dc04640be30d6ad1ca1e061d34aa",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 21,
+      "artifactPrefix": "carnival-twentyfirst",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyfirst-author-appearance-boundaries.log",
+          "sha256": "561ea625165d520cec06d245ee093d79e03dbaa8f52ee06e972dfabc000e9b51",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": true,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 22,
+      "artifactPrefix": "carnival-twentysecond",
+      "runnerReceipt": {
+        "artifact": "carnival-twentysecond-native-results.json",
+        "sha256": "2b48fe8e09db37c077bfcaf6206a95d6eef3a6f7bb9b8ef3b53d5ae8f0256d47"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentysecond-static-wheel-native.xml",
+          "sha256": "ed3446b89f236436f79e000781b2ae29de7d95de9feebe6582242503104578ed",
+          "result": "Passed",
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 1.1798974,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentysecond-author-appearance-boundaries.log",
+          "sha256": "35bf0326a65980558b17b16c3c02008339f312c512ebc0cd1c804a2c51c63e3a",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentysecond-author-private-fragments.log",
+          "sha256": "6f9028fb4d52554f17edbf86462754668f8a87ff5476b05de8ae5bec641b69dd",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 23,
+      "artifactPrefix": "carnival-twentythird",
+      "runnerReceipt": {
+        "artifact": "carnival-twentythird-native-results.json",
+        "sha256": "4fbb61495c7a4ca901d31620733cba851fc5d208162cf845452a728caba0c1eb"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "sha256": "763545a21704e1c723f72728a7364416aefe56c1d234ff3fff7c729e567aaa5b",
+          "result": "Failed(Child)",
+          "total": 10,
+          "passed": 2,
+          "failed": 8,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 74.3082199,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "BurstAppearanceIntegrationTests.AvalancheTwelveOriginalRavineAndSelectedBodyFragments",
+            "BurstAppearanceIntegrationTests.HotEightOriginalFuseAndSelectedBodyFragments",
+            "BurstAppearanceIntegrationTests.LavaEightActualSurfaceCrossingAndSelectedBodyFragments",
+            "BurstAppearanceIntegrationTests.RedTwelveOriginalBoundaryAndSelectedBodyFragments",
+            "BurstAppearanceIntegrationTests.SeesawFourActualQuarryImpactAndSelectedBodyFragments",
+            "CornholeAppearanceIntegrationTests.SevenBodiesKeepSixteenPhysicalOwnersPrivateCabsAndExistingPoseBudgetAcrossRematches",
+            "CurlingAppearanceIntegrationTests.OriginalFourAiDeliveryOwnersKeepPriorBodiesAndActualCabOwnerAcrossTurns",
+            "CurlingAppearanceIntegrationTests.SevenBodiesOnSixteenRetainedStonesKeepOriginalSixtyFourNwhControllersAndCircularPhysics"
+          ]
+        },
+        {
+          "artifact": "carnival-twentythird-private-geometry-native.xml",
+          "sha256": "4787c32e541cf32e80dd6315e2ec561dba68ad5f802228515eccdb2dcc543963",
+          "result": "Failed(Child)",
+          "total": 10,
+          "passed": 9,
+          "failed": 1,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 15.7383613,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckFragmentRecipeTests.ActualMonsterPropShaftCutRepairsOnlyInvalidGeneratedTangentsPreservingFiniteAtlasSurfaceData"
+          ]
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentythird-author-known-partial.log",
+          "sha256": "25f649868752746d30c344dd3f33cfc84282d79353a0e6ea37f4671ca8e9f151",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentythird-author-private-fragments.log",
+          "sha256": "9e4d7278037a02279a85acc78f401644f94accb87c859cb8f4cb83ad4830dedf",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 24,
+      "artifactPrefix": "carnival-twentyfourth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyfourth-author-curling.log",
+          "sha256": "c8c6bedcc3d9d18302c57c2f688b6770dfaaa3880505f6c4c40776b651f4914b",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentyfourth-author-private-fragments.log",
+          "sha256": "1689b528fb4e9e533dc04f1f82ba18d6e33c4329fa66eb70767e9222fcf25115",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 25,
+      "artifactPrefix": "carnival-twentyfifth",
+      "runnerReceipt": {
+        "artifact": "carnival-twentyfifth-native-results.json",
+        "sha256": "41d914253b730697b07f829cf54544b2714d0d0248c551915ee3fd77db83f35a"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentyfifth-appearance-native.xml",
+          "sha256": "87f80102f926e5027aa6abac775677977cd40f90e8f640870c4d1715345897db",
+          "result": "Passed",
+          "total": 13,
+          "passed": 13,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 122.3819333,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-twentyfifth-geometry-native.xml",
+          "sha256": "2031a23fc911123aa82bddb23ddb13093afe46923849c2fc82540a599d23e9c9",
+          "result": "Passed",
+          "total": 15,
+          "passed": 15,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 21.7839795,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-twentyfifth-replay-native.xml",
+          "sha256": "c668b368f464091f908fcc873e7fb0dd9f7bc57f258eee5415f784df321a5b07",
+          "result": "Passed",
+          "total": 7,
+          "passed": 7,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 394.6202399,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-twentyfifth-snow-native.xml",
+          "sha256": "45d65c1d17b1e3e470372aa942b905577bc07a17e0490a07eafc4e6b0c68f173",
+          "result": "Failed(Child)",
+          "total": 1,
+          "passed": 0,
+          "failed": 1,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 89.2298118,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "KickballShoveledSnowTests.RealSnowAndBlizzardKeepOriginalBasesAndRoutesClearAcrossDayNightAndRematch"
+          ]
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyfifth-author-appearance-fit-ui.log",
+          "sha256": "df129779c9623844a052c435dcea1971ab14a83908baa5d300572902f7609169",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 26,
+      "artifactPrefix": "carnival-twentysixth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentysixth-author-snow-v2.log",
+          "sha256": "2741e23e1affc946312958b580fd3044c20cba6f2948631bacb3c409e029b221",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 27,
+      "artifactPrefix": "carnival-twentyseventh",
+      "runnerReceipt": {
+        "artifact": "carnival-twentyseventh-native-results.json",
+        "sha256": "2f4ea87d403e86124f0a4c92f5873a7b3043c440b1fe54fb6caadf8c3a0dc7e0"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "sha256": "047a643645024b60cd9747f02d0a4353e6b6d42b5f66f05c4b41b3fdcad17f45",
+          "result": "Failed(Child)",
+          "total": 17,
+          "passed": 0,
+          "failed": 17,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 28.9985556,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckCompatibilityMenuTests.AirHockeyFixedTwoSetupReportsUseActualStaticHostArray",
+            "TruckCompatibilityMenuTests.AirHockeyMatchEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.BeerPongSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.BilliardsHotSeatKeepsFixedSideHostsAndPracticeUsesOnlySideZero",
+            "TruckCompatibilityMenuTests.BilliardsRouterEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.CurlingSetupUsesOnlyAProvenEquivalentSixteenStoneTemplate",
+            "TruckCompatibilityMenuTests.EightDriversPageByStableIdAndAllReadoutsLeaveProfilesAndModelsUntouched",
+            "TruckCompatibilityMenuTests.FieldGoalSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.HockeyFixedSixSetupReportsUseActualStaticHostArray",
+            "TruckCompatibilityMenuTests.HockeyMatchEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.PokerSetupReportsUseActualEightSeatedHostArray",
+            "TruckCompatibilityMenuTests.SessionGamepadBackAndSetupDisconnectKeepTheUnderlyingPageAndIdentity",
+            "TruckCompatibilityMenuTests.SwingSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.TrailerSharedTurnReportUsesActualHostAndAbortRestoresExactMenuState",
+            "TruckCompatibilityMenuTests.TugLocalEightSetupReportsStayPureAfterOriginalBurstZeroesTheVisuals",
+            "TruckCompatibilityMenuTests.UnmappedSportDraftReportsOriginalAndNestedBackNeverCancelsShopOrSetup",
+            "TruckCompatibilityMenuTests.WallballMatchEscapeClosesOnlyHeatModal"
+          ]
+        },
+        {
+          "artifact": "carnival-twentyseventh-fit-policy-native.xml",
+          "sha256": "a5f37e909dc50b8086b27dd9ba65c1107059354c6181774692bdc22f263b4177",
+          "result": "Failed(Child)",
+          "total": 14,
+          "passed": 12,
+          "failed": 2,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 10.4613458,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckFragmentOwnerBindingTests.ActualOriginalSourceBodyAndExplicitEventTruckOwnersKeepDistinctValidatedWheelAuthorities(False)",
+            "TruckFragmentOwnerBindingTests.ActualOriginalSourceBodyAndExplicitEventTruckOwnersKeepDistinctValidatedWheelAuthorities(True)"
+          ]
+        },
+        {
+          "artifact": "carnival-twentyseventh-snow-native.xml",
+          "sha256": "b0926de077574fc531261adf792842a3816629a6f20ad51181a7a96e1d54601b",
+          "result": "Passed",
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 35.1278288,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+          "sha256": "3f93fc061a7662e279aabade28239d3b4e07871385aedc56e2d3547375fa6cbf",
+          "result": "Passed",
+          "total": 7,
+          "passed": 7,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 87.2905279,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyseventh-author-fit-layout.log",
+          "sha256": "1811ab6c12dd00ce1982dac89f6d0eaaaa782f0e7778d24d9beebbd8c1938c4b",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "ArgumentException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 28,
+      "artifactPrefix": "carnival-twentyeighth",
+      "runnerReceipt": null,
+      "tests": [],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyeighth-author-keep-mattress.log",
+          "sha256": "af5d5b26f7d8557a45f837d9d27ecf2234b49c1eac5dec6fec21178a54f51304",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        },
+        {
+          "artifact": "carnival-twentyeighth-author-tug-fit.log",
+          "sha256": "fca77aa7d8525c0db69c1967397bcf9245710ffa2fc4350c5f2581f0302f7607",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": [],
+      "testEvidenceStatus": "No retained native test XML for this numbered batch; no tests counted."
+    },
+    {
+      "batch": 29,
+      "artifactPrefix": "carnival-twentyninth",
+      "runnerReceipt": {
+        "artifact": "carnival-twentyninth-native-results.json",
+        "sha256": "f1b1c569c6acb8fb4046f9db5405ca4c0ff17def08d10b9f0000f0bda1fde52e"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "sha256": "cd3b2d7211f8400bf7111a2c2187f9ce111d66b74ba5bec7afd89d0a281719e9",
+          "result": "Failed(Child)",
+          "total": 17,
+          "passed": 0,
+          "failed": 17,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 37.24168,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckCompatibilityMenuTests.AirHockeyFixedTwoSetupReportsUseActualStaticHostArray",
+            "TruckCompatibilityMenuTests.AirHockeyMatchEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.BeerPongSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.BilliardsHotSeatKeepsFixedSideHostsAndPracticeUsesOnlySideZero",
+            "TruckCompatibilityMenuTests.BilliardsRouterEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.CurlingSetupUsesOnlyAProvenEquivalentSixteenStoneTemplate",
+            "TruckCompatibilityMenuTests.EightDriversPageByStableIdAndAllReadoutsLeaveProfilesAndModelsUntouched",
+            "TruckCompatibilityMenuTests.FieldGoalSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.HockeyFixedSixSetupReportsUseActualStaticHostArray",
+            "TruckCompatibilityMenuTests.HockeyMatchEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.PokerSetupReportsUseActualEightSeatedHostArray",
+            "TruckCompatibilityMenuTests.SessionGamepadBackAndSetupDisconnectKeepTheUnderlyingPageAndIdentity",
+            "TruckCompatibilityMenuTests.SwingSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+            "TruckCompatibilityMenuTests.TrailerSharedTurnReportUsesActualHostAndAbortRestoresExactMenuState",
+            "TruckCompatibilityMenuTests.TugLocalEightSetupReportsStayPureAfterOriginalBurstZeroesTheVisuals",
+            "TruckCompatibilityMenuTests.UnmappedSportDraftReportsOriginalAndNestedBackNeverCancelsShopOrSetup",
+            "TruckCompatibilityMenuTests.WallballMatchEscapeClosesOnlyHeatModal"
+          ]
+        },
+        {
+          "artifact": "carnival-twentyninth-limbo-kick-native.xml",
+          "sha256": "d927e36e90f3ce2a9fb24633403114601ef257aa5aa71699caa26673eaf19716",
+          "result": "Failed(Child)",
+          "total": 2,
+          "passed": 0,
+          "failed": 2,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 12.0312989,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "LimboKickballAppearanceIntegrationTests.KickballTwelveBodiesPreserveCradlesTeamBandsCabHidingAndThirteenthBallReplay",
+            "LimboKickballAppearanceIntegrationTests.LimboEightBodiesRetainActualCompressionClearanceAndInterleavedPhysicalBars"
+          ]
+        },
+        {
+          "artifact": "carnival-twentyninth-mine-dodge-native.xml",
+          "sha256": "62b0bd76bf1a56dc0155935b6ad68f00fa67e337c00e9c3f276ebc75dcacb363",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 14.7704928,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-twentyninth-owner-policy-native.xml",
+          "sha256": "ece82e1fd8fbe91762fa4f4644f4ce631b17ce69009afd15c53dfddf7cb2a555",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 5.2314811,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-twentyninth-author-limbo-kick.log",
+          "sha256": "26b699e3d825b21da5f665250b5db38b0c5f314fe1fc375094b3053fdefed9be",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-twentyninth-author-mine-dodge.log",
+          "sha256": "fa38e074c0737909ec98946f96dbef5dd5deff6be38355036f4727c58849ea16",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 30,
+      "artifactPrefix": "carnival-thirtieth",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtieth-native-results.json",
+        "sha256": "b5953859f79099a359cdd81c939feeb1f8766690e24058da5a57cf3fc8a85ddb"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtieth-fit-menu-native.xml",
+          "sha256": "3366a50217ee4b06d2a70a1a17ffa543814bdf4c2312d6b9dfde4be0e0e81d8d",
+          "result": "Passed",
+          "total": 17,
+          "passed": 17,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 48.55323,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "sha256": "00708179603c39725cc1ce661bcc8575de91ce2af022909544c8741a277445c2",
+          "result": "Failed(Child)",
+          "total": 8,
+          "passed": 1,
+          "failed": 7,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 10.317295,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckCompatibilityFixedOwnerLifecycleTests.DodgeballEightFixedTeamOwnersRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.KeepawayCabFourRealOwnersRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.KeepawayFourRealOwnersRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.KickballTwelveRoleIndependentOwnersRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.LimboEightLocalResetOrderedHostsRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.MattressEightStaticWheelOwnersRemainPureAcrossRematch",
+            "TruckCompatibilityFixedOwnerLifecycleTests.MinefieldEightRealOwnersRemainPureAcrossRematch"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtieth-fixed-policy-native.xml",
+          "sha256": "45ce522e2037d977d0803f7394924a8b983cb796446baafc97ce5d3217a90e3c",
+          "result": "Failed(Child)",
+          "total": 8,
+          "passed": 5,
+          "failed": 3,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 13.9207936,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckKeepaway\",4)",
+            "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckKeepawayFirstPerson\",4)",
+            "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckMattressRacing\",8)"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "sha256": "f198ad1b278d78cd96d4d191833645e04eb369e63089daae7b9a67b43a0901c1",
+          "result": "Failed(Child)",
+          "total": 5,
+          "passed": 0,
+          "failed": 5,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 7.7302963,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "CheeseAppearanceIntegrationTests.FourScoringParticipantsUseAllSevenBodiesAfterRealGridResetWithoutChangingTwelveBackgroundRigs",
+            "CheeseAppearanceIntegrationTests.ParticipantCountChangesRestoreInactiveMarkedRigsWithoutAssigningBackgroundIdentities",
+            "KeepawayMattressAppearanceIntegrationTests.KeepawayArenaFourBodiesRetainBallRespawnAndLayerAuthority",
+            "KeepawayMattressAppearanceIntegrationTests.KeepawayFirstPersonFourBodiesRetainActualCabOwnerAndMasks",
+            "KeepawayMattressAppearanceIntegrationTests.MattressEightBodiesRetainDisabledWheelsClothPadAndNinthWorldReplay"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtieth-limbo-kick-native.xml",
+          "sha256": "f97d61e14f4f34c06119bc6090a417f236fa6f6b222f3ed1d47812e3c44536e6",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 11.1154346,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtieth-skee-native.xml",
+          "sha256": "53fa5568f2fed930f5c23a9a80a26a2bffb550f380990e63549ef496b7e9657d",
+          "result": "Failed(Child)",
+          "total": 6,
+          "passed": 4,
+          "failed": 2,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 29.8816512,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "SkeeAppearanceIntegrationTests.EightHotseatProfilesFollowActualDeliveryReviewHandoffsOnTheSamePhysicalLane",
+            "SkeeAppearanceIntegrationTests.FourIndependentLanesUseSelectedBodiesWithoutChangingPhysicalRingRulesCabLayersOrReplayRoots"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtieth-terrier-native.xml",
+          "sha256": "1e955718e04a4a2a56393b014ca78a3700d09653345c61d169d14e09c99f5f68",
+          "result": "Failed(Child)",
+          "total": 4,
+          "passed": 0,
+          "failed": 4,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 6.4219733,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TerrierAppearanceIntegrationTests.ClearAndSnowRefreshActualIndexedMetadataOnceWithoutChangingExistingPoseBuffersOrTimes",
+            "TerrierAppearanceIntegrationTests.GenuineTwelveAiFinishCreamLoserWreckReplayAndFreshHeatKeepSelectedBodies",
+            "TerrierAppearanceIntegrationTests.OneToFourActualAssignedCabOwnersKeepPrivateExteriorMasksDashboardOwnershipAndSpectatorCleanup",
+            "TerrierAppearanceIntegrationTests.SevenBodiesKeepTwelveOriginalOwnersSame144EmitBodiesAndFixed34PlusFourChannels"
+          ]
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtieth-author-cheese.log",
+          "sha256": "82e05aa0ab39343ace31775993ddb5b0f8514b4948c47fcfc3a7cf181e497cd6",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtieth-author-dock-settings.log",
+          "sha256": "0c603fc9d5c6fb163389cb37d73db83fd987d5e3a18587af6cc11acbf701c094",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtieth-author-fixed-fit.log",
+          "sha256": "84e59832d700b27c0b0de52c9f82f13e190ebd2a1cd023ac3d3e8ce9f25b2566",
+          "runnerExit": 1,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        },
+        {
+          "artifact": "carnival-thirtieth-author-keep-mattress.log",
+          "sha256": "288768b501d33be285172b5b8f02f9568cd541c61bdebcd26eab014e42d4833e",
+          "runnerExit": 1,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        },
+        {
+          "artifact": "carnival-thirtieth-author-skee.log",
+          "sha256": "21fd88b5761e9e2dc1dc69f230037394548503d22ec8a0bd4c3c97144133400c",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtieth-author-terrier.log",
+          "sha256": "e499e9c07869be8dd2b90483fc6f15b38ae6bfaad9e44a682c2102ce25212e8b",
+          "runnerExit": 1,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "InvalidOperationException"
+            ]
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 31,
+      "artifactPrefix": "carnival-thirtyfirst",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtyfirst-native-results.json",
+        "sha256": "f1d9629df5b113081e00871c2ca3f131830be6799f84a6f5c682f03684f912ba"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtyfirst-dock-geometry-native.xml",
+          "sha256": "f298071010f52cc8e0209c728f0158ad164f0243827bb2a65eeea614fc922bb8",
+          "result": "Failed(Child)",
+          "total": 10,
+          "passed": 9,
+          "failed": 1,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 1.2060885,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"novelty.hotdog\")"
+          ]
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtyfirst-author-dock-recipes.log",
+          "sha256": "4f8e54deaa11039c112c9e931a279df2077fc716776152a84ccee18965a39d51",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 32,
+      "artifactPrefix": "carnival-thirtysecond",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtysecond-native-results.json",
+        "sha256": "a07d4bf06a576a06499375a98507f257a1043052f0bcfa228cae739ec1708f5f"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtysecond-alias-native.xml",
+          "sha256": "b2ed15c0f1d9baf5de0fe336619f02a61d6f5fc5427fe166addce054352b898d",
+          "result": "Passed",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 0.0810769,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtysecond-keep-cheese-native.xml",
+          "sha256": "b5c724df9491a4edd82211f45bace063003386d0f12c5c170eddbcf1d0ad9aea",
+          "result": "Failed(Child)",
+          "total": 5,
+          "passed": 4,
+          "failed": 1,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 13.6846274,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "CheeseAppearanceIntegrationTests.FourScoringParticipantsUseAllSevenBodiesAfterRealGridResetWithoutChangingTwelveBackgroundRigs"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtysecond-skee-native.xml",
+          "sha256": "4fa242148d775c71c255d60e1b74c3f40a8bcbd72977621e364907d5d028ffad",
+          "result": "Passed",
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 32.5252333,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtysecond-terrier-native.xml",
+          "sha256": "b935185b4d6131e8b9b5a3cb38b9a84ae0f5c27d6feb54196c8b25b51f776f35",
+          "result": "Passed",
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 53.5350825,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtysecond-author-available-fit.log",
+          "sha256": "1460265f7c812bb1b24c1f1f3d61b2ba598256843ef7dfbe3dbddd22029ad6a8",
+          "runnerExit": 1,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": false,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": [
+              "ArgumentException"
+            ]
+          }
+        },
+        {
+          "artifact": "carnival-thirtysecond-author-keep-mattress.log",
+          "sha256": "f1f13577286ec378b12fdafdf2444ba6c16bcc8a323b97a3fe6a14a08148f739",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtysecond-author-terrier.log",
+          "sha256": "91353c7e6df09bab8295c78598eaf3994f05750b13460bf09ba705fdb066daaa",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 33,
+      "artifactPrefix": "carnival-thirtythird",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtythird-native-results.json",
+        "sha256": "930b45033be209e75bfbcfc79e5d9bed209f8250a638efb7bfe4d62b77aba8c0"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtythird-cheese-native.xml",
+          "sha256": "97b26460da39c1a52e61f792e12552570dcd8a6c6f71e8dcfefa2e0a8a8f8703",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 8.1858779,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+          "sha256": "852e78f39a1cf4f93fc81f1c192064e2c042f19ce7fae79912627435e417cd16",
+          "result": "Passed",
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 18.1122168,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtythird-fit-policy-native.xml",
+          "sha256": "b9a59b550aaaff7b06635285e3e9ecc6383957c51fcb41f2aa8a1011a2d4ee9d",
+          "result": "Passed",
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 16.9455263,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtythird-author-available-fit.log",
+          "sha256": "4f20ff641f39518c38d846ac8a31a1cad9b242a9b816eb3a5732da83a7f24b60",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 34,
+      "artifactPrefix": "carnival-thirtyfourth",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtyfourth-native-results.json",
+        "sha256": "86a4bc9c437bbd10f3b855ea48d62fdce0b59f8d619befe7245255e0bf1aac70"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtyfourth-dock-appearance-native.xml",
+          "sha256": "312309ec7464dad17b97d22e9b4ab044fd83d38c02d361bbd51cfbd31c693c02",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 13.5072651,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyfourth-dock-fit-lifecycle-native.xml",
+          "sha256": "4914e4e4d780e859c8c4b79deca896dd8f18a0e96f93c289c4ea7f7658c9e6a8",
+          "result": "Passed",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 2.8463304,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyfourth-dock-fit-policy-native.xml",
+          "sha256": "efc95102fb25e89885d32462d812043d79e78b839c6287d9d719e8140da56cd2",
+          "result": "Passed",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 2.4538489,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+          "sha256": "fb9c9e97e6c3b956af0d0ce5af1b055c18d71315e6c333b5caab55e95daa1981",
+          "result": "Passed",
+          "total": 12,
+          "passed": 12,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 1.3396845,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyfourth-dock-vendor-on-native.xml",
+          "sha256": "f26f4d69901a5d29df2df4db6580b47696ac7c8ddac55d6076dd821f9d485c3b",
+          "result": "Passed",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 0.2430813,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtyfourth-author-dock-fit.log",
+          "sha256": "2a413eb8eeb5bf6997c7a4ea89ed257fc7cdef2101105c9913262300d0f4d16d",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtyfourth-author-dock-owners.log",
+          "sha256": "7a5f3f0d267db1cba24a76009d40a845bc83333da0a60187231879b754cbc449",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        },
+        {
+          "artifact": "carnival-thirtyfourth-author-hotdog-repair.log",
+          "sha256": "d49a6296072bee402d0730f4f4ad58cdfb802c4dc0560a3f88575c3b0ee0e9cf",
+          "runnerExit": 0,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 35,
+      "artifactPrefix": "carnival-thirtyfifth",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtyfifth-native-results.json",
+        "sha256": "d86fbe62f6b9a695bd3f6f7440505bdfec7d0da10c257dfacdeb4a42935191e9"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtyfifth-menu-native.xml",
+          "sha256": "c176f341a99a8d9a6d68713206562d5ae2ed50c842e5eb249a0776a62e83e2fa",
+          "result": "Passed",
+          "total": 17,
+          "passed": 17,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 51.8710547,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyfifth-report-native.xml",
+          "sha256": "803aebf5c364c1a28ade715a458cd265109626500a9a5c8bd6423018f0a6701e",
+          "result": "Passed",
+          "total": 15,
+          "passed": 15,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 8.8910519,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 36,
+      "artifactPrefix": "carnival-thirtysixth",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtysixth-native-results.json",
+        "sha256": "2a06d7bc58ea6b0d4a2f2dac40400f0fddcb537abef13c63df5a50c82d7d34e5"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtysixth-menu-native.xml",
+          "sha256": "140d5b81cdf1361c5ac9d879fd26a295eb510fbc33ec39ab2b969bad71285b84",
+          "result": "Failed(Child)",
+          "total": 17,
+          "passed": 14,
+          "failed": 3,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 37.1943045,
+          "runnerExit": 2,
+          "failedCaseNames": [
+            "TruckCompatibilityMenuTests.EightDriversPageByStableIdAndAllReadoutsLeaveProfilesAndModelsUntouched",
+            "TruckCompatibilityMenuTests.HockeyMatchEscapeClosesOnlyHeatModal",
+            "TruckCompatibilityMenuTests.UnmappedSportDraftReportsOriginalAndNestedBackNeverCancelsShopOrSetup"
+          ]
+        },
+        {
+          "artifact": "carnival-thirtysixth-release-report-native.xml",
+          "sha256": "252c59e07269daec7c02f899bf07046db21d3d93664d2567dff61a32ec045bad",
+          "result": "Passed",
+          "total": 28,
+          "passed": 28,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 13.110537,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtysixth-author-summary-backings.log",
+          "sha256": "9ac0b0916a9160625bb7e114e01858befbaa65b2dd46c37d064886d27d25318c",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    },
+    {
+      "batch": 37,
+      "artifactPrefix": "carnival-thirtyseventh",
+      "runnerReceipt": {
+        "artifact": "carnival-thirtyseventh-native-results.json",
+        "sha256": "72ba933d3ca53e24d8f48827bfd374a81fdf1d906338628e6b854d8fbba26d09"
+      },
+      "tests": [
+        {
+          "artifact": "carnival-thirtyseventh-menu-native.xml",
+          "sha256": "8bfc48f4b339cae7e045aceb3bbcb4cb0a5697fc219f11d0be6ffdd6665fd756",
+          "result": "Passed",
+          "total": 18,
+          "passed": 18,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 53.6801692,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        },
+        {
+          "artifact": "carnival-thirtyseventh-report-native.xml",
+          "sha256": "bea3ddd02c73fa9bb6928d9f4989692b034d51c6945cdc36ff3b673821e41eca",
+          "result": "Passed",
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "inconclusive": 0,
+          "skipped": 0,
+          "durationSeconds": 12.8136359,
+          "runnerExit": 0,
+          "failedCaseNames": []
+        }
+      ],
+      "authoringObservations": [
+        {
+          "artifact": "carnival-thirtyseventh-author-corn-fit.log",
+          "sha256": "77bff0af9e19723da9068aef8a3bed228b9e82c8094cf7a1fc3c3352e67609a1",
+          "runnerExit": null,
+          "signalsOnlyNotTestPasses": {
+            "successfulBatchExitMarker": true,
+            "compilerErrorMarker": false,
+            "abortedBatchMarker": false,
+            "exceptionTypeMarkers": []
+          }
+        }
+      ],
+      "receiptJobsWithoutMatchingTestXmlOrAuthorLog": []
+    }
+  ],
+  "latestAndRerunIndexByExactCaseName": [
+    {
+      "case": "ArenaAppearanceIntegrationTests.LogFourBodiesRefreshOnlyTruckReplayTreesAndPreserveActualBuoyancyLogAndBraceAuthority",
+      "latestSameNameObservation": {
+        "batch": 23,
+        "artifact": "carnival-twentythird-integrated-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "ArenaAppearanceIntegrationTests.WallballEightActualBodiesPreserveNwhContactBallJumpAndServeAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 23,
+        "artifact": "carnival-twentythird-integrated-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "BurstAppearanceIntegrationTests.AvalancheTwelveOriginalRavineAndSelectedBodyFragments",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "BurstAppearanceIntegrationTests.HotEightOriginalFuseAndSelectedBodyFragments",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "BurstAppearanceIntegrationTests.LavaEightActualSurfaceCrossingAndSelectedBodyFragments",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "BurstAppearanceIntegrationTests.RedTwelveOriginalBoundaryAndSelectedBodyFragments",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "BurstAppearanceIntegrationTests.SeesawFourActualQuarryImpactAndSelectedBodyFragments",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CarnivalLaunchHudFivePlayModeTests.NaturalOriginalAiFlightValuesRemainReadOnlyAcrossTheFiveModes",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-hud-followups-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CarnivalLaunchHudFivePlayModeTests.OriginalFiveModesKeepOneToFourRostersActualOwnersCompactViewsAndReplayActionsAt720And1080",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-hud-followups-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CarnivalLaunchHudFivePlayModeTests.SuppliedNonzeroRenderValuesBindTypedUnitsStateAndWindWithoutPublishingScores",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-hud-followups-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CarnivalLegacyHudCleanupTests.HockeyKeepsTeamScoresClockAndContextWithoutEmptyFooter",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-hud-followups-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CheeseAppearanceIntegrationTests.FourScoringParticipantsUseAllSevenBodiesAfterRealGridResetWithoutChangingTwelveBackgroundRigs",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-cheese-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 32,
+          "artifact": "carnival-thirtysecond-keep-cheese-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CheeseAppearanceIntegrationTests.ParticipantCountChangesRestoreInactiveMarkedRigsWithoutAssigningBackgroundIdentities",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-cheese-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CornholeAppearanceIntegrationTests.NaturalFourAiDeliveriesRetainSelectedBodiesMakeRealPileupsAndReplayAllOwners",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeAppearanceIntegrationTests.SevenBodiesKeepSixteenPhysicalOwnersPrivateCabsAndExistingPoseBudgetAcrossRematches",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CornholeCarnivalLifecycleTests.EffectiveHeadwindIsTenMphForNativeFlightAiPredictionAndExistingWindDisplayOnly",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeCarnivalLifecycleTests.NativeWholeHoleAndLowerGroundMissStayAtTheirActualFinalPosesUntilRoundClear",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeCarnivalLifecycleTests.OriginalConcurrentLaunchesIgnoreAirbornePairsThenDeferOverlapAndKeepNativeLandingImpactsEnabled",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeCompactHudPlayModeTests.OneToFourAndSingleCameraRosterKeepOwnedCardsCompactWindBottomRightActionsAndFallback",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeCompactHudPlayModeTests.OriginalNaturalApproachReplayAndWholeRoundBankDriveCompactScoresWithoutNewReceipts",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeSharedGardenPlayModeTests.ControlledCrossOwnerNativePushCanRevokeARealProvisionalBoardPointWithoutInventedPoints",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeSharedGardenPlayModeTests.GardenUsesActualHumanWalkIdleAndReactionClipsAtDocumentedMiniatureArtScaleWithSafeCleanup",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeSharedGardenPlayModeTests.NaturalFourOriginalAiApproachesShareTheActualBoardMakeCrossOwnerContactsAndBankOnce",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-corn-regression-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "CornholeSharedGardenPlayModeTests.OriginalOneToFourViewportsAndBoundedSixteenTruckReplayHideLiveOpponentsAndKeepPrivateCabs",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-corn-regression-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CurlingAppearanceIntegrationTests.OriginalFourAiDeliveryOwnersKeepPriorBodiesAndActualCabOwnerAcrossTurns",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "CurlingAppearanceIntegrationTests.SevenBodiesOnSixteenRetainedStonesKeepOriginalSixtyFourNwhControllersAndCircularPhysics",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-integrated-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "DockAppearanceIntegrationTests.OriginalAiLaunchWaterLockFourRecordedAnglesAndNextActualOwnerRetainSelectedRendering",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockAppearanceIntegrationTests.SevenBodiesNineOriginalActorsKeepPhysicalConfigurationAndExactOriginalLocalSeparation",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockCoplanarOwnershipTests.ActualHotdogRightDoorMaterialTwoPreservesSourceAreaAndUnchangedCapsWithoutDuplicatingOriginalQuad209",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-vendor-on-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockCoplanarOwnershipTests.VendorOnBandFacesBelongOnceBySignedCentroidAndExactPlaneBelongsOnlyToOriginalUpper",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-vendor-on-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"novelty.hotdog\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 31,
+          "artifact": "carnival-thirtyfirst-dock-geometry-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"novelty.icecream\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"semi.lowrider\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"semi.standard\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"truck.fire\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"truck.lifted\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.ActualPrivateYRecipesPreserveSourceAreasMaterialsPlaneCapsAndSelectedIcecreamLod0Uv1(\"truck.monster\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.AmbiguousOverlappingUv0NormalSurfacesWithConflictingExtraDataAreRefused",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.UncutSurfaceRetainsEveryOriginalAttributeExactly",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "DockSplitRecipeTests.VendorHorizontalCutReconstructsActualExtraUvAndColorsWithIndependentCapChannels",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "HotPotatoHumanArenaCameraPlayModeTests.DistantAiCannotEnlargeMandatoryHumanShotAndMovingHumanExpandsImmediately",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "HotPotatoHumanArenaCameraPlayModeTests.OneToFourAssignedHumansAndCarrierHaveAllRendererCornersAt720And1080",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "HotPotatoHumanArenaCameraPlayModeTests.OriginalEliminationDropsHumanSmoothlyPauseHoldsAndRematchReacquires",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 17,
+          "artifact": "carnival-seventeenth-independent-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "HotPotatoHumanArenaCameraPlayModeTests.SharedOwnershipReleasesForOriginalSplitCabAiOnlyAndRecordedReview",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 17,
+          "artifact": "carnival-seventeenth-independent-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "KeepawayMattressAppearanceIntegrationTests.KeepawayArenaFourBodiesRetainBallRespawnAndLayerAuthority",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-keep-cheese-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "KeepawayMattressAppearanceIntegrationTests.KeepawayFirstPersonFourBodiesRetainActualCabOwnerAndMasks",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-keep-cheese-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "KeepawayMattressAppearanceIntegrationTests.MattressEightBodiesRetainDisabledWheelsClothPadAndNinthWorldReplay",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-keep-cheese-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-keep-cheese-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "KickballShoveledSnowTests.PendingSnowPresentationConvergesWhileOriginalGameplayIsPausedAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-snow-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballShoveledSnowTests.RealSnowAndBlizzardKeepOriginalBasesAndRoutesClearAcrossDayNightAndRematch",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-snow-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 25,
+          "artifact": "carnival-twentyfifth-snow-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.ExactMigrationGuardRejectsSingleBitVertexTriangleNormalAndExtraChannelEdits",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.NewBanksAreBroadLowBrokenAndOutsideTheActualUnchangedClearedMeshes",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.PackedBankDetailReusesInstalledNonTessellatedSnowAndRefusesCustomMaterialChanges",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.SavedOwnedAssetsMatchOnlyTheExactLegacyOrExactRefinedOutput",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-snow-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.SavedOwnedAssetsMatchOnlyTheExactLegacyV1OrV2Output",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "KickballSnowBankGeometryTests.V1AndV2SignaturesRefuseEvenSingleBitCustomChanges",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "LaunchFourAppearanceIntegrationTests.RealAiAttemptsReplayAllAnglesAndPrepareNextActualTurnOwner",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "LaunchFourAppearanceIntegrationTests.SevenBodiesAcrossFourOriginalLaunchVenuesKeepPhysicsEquipmentProfilesAndGhostRoots",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-replay-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "LaunchFourAppearanceIntegrationTests.SkyFourOriginalOwnersRefreshRecordedModelsWithoutChangingTowOrRecordedBoatRoots",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-snow-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 20,
+          "artifact": "carnival-twentieth-intact-appearance-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "LegacyFacadeAppearanceIntegrationTests.FareFourBodiesPreserveCabsJugGpsAndExistingRecordedReview",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-independent-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "LegacyFacadeAppearanceIntegrationTests.SnakeFourBodiesPreserveActualFifthWheelConvoyAndPhysicalEnvelope",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-independent-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "LimboKickballAppearanceIntegrationTests.KickballTwelveBodiesPreserveCradlesTeamBandsCabHidingAndThirteenthBallReplay",
+      "latestSameNameObservation": {
+        "batch": 30,
+        "artifact": "carnival-thirtieth-limbo-kick-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-limbo-kick-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "LimboKickballAppearanceIntegrationTests.LimboEightBodiesRetainActualCompressionClearanceAndInterleavedPhysicalBars",
+      "latestSameNameObservation": {
+        "batch": 30,
+        "artifact": "carnival-thirtieth-limbo-kick-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-limbo-kick-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "MineDodgeAppearanceIntegrationTests.DodgeballEightBodiesPreserveStrikeHaloTeamTrimAndThreeOriginalBallReplayTrees",
+      "latestSameNameObservation": {
+        "batch": 29,
+        "artifact": "carnival-twentyninth-mine-dodge-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "MineDodgeAppearanceIntegrationTests.MinefieldEightBodiesRetainActualMinesRestRulesAndEightVisualReplayRoots",
+      "latestSameNameObservation": {
+        "batch": 29,
+        "artifact": "carnival-twentyninth-mine-dodge-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SkeeAppearanceIntegrationTests.EightHotseatProfilesFollowActualDeliveryReviewHandoffsOnTheSamePhysicalLane",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-skee-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "SkeeAppearanceIntegrationTests.FourIndependentLanesUseSelectedBodiesWithoutChangingPhysicalRingRulesCabLayersOrReplayRoots",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-skee-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "SkeeCarnivalPlayModeTests.ActualOpeningKeepsOriginalOnceOnlyAwardAndIndependentLaneRematch",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SkeeCarnivalPlayModeTests.OriginalAiUsesRealRampAndNewReturnWithoutInjectedTrajectoryOrScores",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SkeeCarnivalPlayModeTests.PhysicalMissRestsInZeroTrayAndRealSideNetPreventsGuardEscape",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SkeeCarnivalPlayModeTests.PixelFeedsCoverOneToFourViewportsResizeAndRestoreCamerasCanvasAndWeather",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-skee-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.EmptyOrMultilineReleaseLabelsAreRejectedWithoutEditingTheResource",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.ExistingBuildScopeAppliesReleaseVersionAndRestoresExactHostOnSuccessAndFailure(False)",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.ExistingBuildScopeAppliesReleaseVersionAndRestoresExactHostOnSuccessAndFailure(True)",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.ExistingDeliberateFailureFixtureAlsoChecksTheReleaseVersion",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\" 0.6.0\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\"0.-6.0\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\"0.6\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\"0.6.0-alpha\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\"0.6.0.1\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(\"00.6.0\")",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.InvalidOrAmbiguousVersionsRefuseBeforeBuildScope(null)",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "SportsReleaseMetadataTests.OwnedCarnivalResourceIsAlphaZeroSixAndDoesNotChangeHostVersion",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "StaticSportAppearanceIntegrationTests.AirHockeyTwoBodiesRetainActualMalletPuckAndCenterwallPhysics",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "StaticSportAppearanceIntegrationTests.BilliardsTwoColliderFreeBodiesRetainActualSweepTurnAndRackAuthority",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "StaticSportAppearanceIntegrationTests.HockeySixBodiesRetainActualSticksContactAndOriginalPlanarDrive",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "StaticSportAppearanceIntegrationTests.PokerEightBodiesKeepRealSelectedLookPivotAndPrivateTableDealerAuthority",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TargetAppearanceIntegrationTests.ActualLavaTriggerEmitsSelectedBodyOnceAndRecordsOriginalDebrisWithoutChangingScoreAuthority",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TargetAppearanceIntegrationTests.SevenSelectedBodiesUseSameFortyEightPiecesOriginalEmitAndPreservedNineReplayRoots",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TerrierAppearanceIntegrationTests.ClearAndSnowRefreshActualIndexedMetadataOnceWithoutChangingExistingPoseBuffersOrTimes",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-terrier-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-terrier-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TerrierAppearanceIntegrationTests.GenuineTwelveAiFinishCreamLoserWreckReplayAndFreshHeatKeepSelectedBodies",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-terrier-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-terrier-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TerrierAppearanceIntegrationTests.OneToFourActualAssignedCabOwnersKeepPrivateExteriorMasksDashboardOwnershipAndSpectatorCleanup",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-terrier-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-terrier-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TerrierAppearanceIntegrationTests.SevenBodiesKeepTwelveOriginalOwnersSame144EmitBodiesAndFixed34PlusFourChannels",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-terrier-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-terrier-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TerrierReplayAuthorPreflightTests.OriginalInstantiateRootAliasPreservesAllThirtyFourExactChildMeshChannels",
+      "latestSameNameObservation": {
+        "batch": 32,
+        "artifact": "carnival-thirtysecond-alias-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TrailerPlugAppearanceIntegrationTests.AllSevenSharedTurnBodiesKeepMatchedPhysicalHitchTrailerBungeeAndSavedIdentity",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 17,
+          "artifact": "carnival-seventeenth-independent-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TrailerPlugAppearanceIntegrationTests.AlternatingOwnersRefreshBothRecordedTreesAndRestoreExactLiveVisibilityOnSkipAndSetup",
+      "latestSameNameObservation": {
+        "batch": 20,
+        "artifact": "carnival-twentieth-intact-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TrailerPlugCouplingRegressionTests.LargerNativeAssemblyRemainsReadableInTheSwingCamera",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-independent-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TrailerPlugCouplingRegressionTests.NativeHitchStaysAlignedThenDetachesWithoutChangingMomentumAcrossRepeatedStarts",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-independent-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TrailerPlugCouplingRegressionTests.SavedMatchedModelsKeepNativeProportionsAndPhysicalHoleMatchesCoverage",
+      "latestSameNameObservation": {
+        "batch": 17,
+        "artifact": "carnival-seventeenth-independent-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityCheeseLifecycleTests.ActualFourCheeseParticipantReportsNeverBorrowTheTwelveBackgroundTrucks",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityCheeseReportTests.OnlyFourRegisteredCheeseOwnersCanFillAnOwnedAllNullMap",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityCornholeLifecycleTests.AllFourSavedCornholeOwnersHaveHonestSupportedSetupReportsWithoutPreparingAnyOfSixteenActors",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityCornholeReportTests.FourCoursesMayUseOnlyTheirOwnProvenEquivalentDeliveryTemplateAndRefusePartialOrUnequalMaps",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.DodgeballEightFixedTeamOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.KeepawayCabFourRealOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.KeepawayFourRealOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.KickballTwelveRoleIndependentOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.LimboEightLocalResetOrderedHostsRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.MattressEightStaticWheelOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerLifecycleTests.MinefieldEightRealOwnersRemainPureAcrossRematch",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-lifecycle-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckKeepaway\",4)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-policy-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckKeepawayFirstPerson\",4)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-policy-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckKickball\",12)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckLimbo\",8)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckMattressRacing\",8)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 30,
+          "artifact": "carnival-thirtieth-fixed-policy-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckMinefield\",8)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityFixedOwnerReportTests.OnlyOwnedAllNullMapsUpgradeAndEveryFixedPhysicalOwnerIsProven(\"TruckTrampolineDodgeball\",8)",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityLocalOwnerLifecycleTests.DockReportsEverySetupDriverAgainstTheActualValidatedSplitTurnHost",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityLocalOwnerLifecycleTests.TerrierReportsAllTwelveActualBridgeOwnersWithoutBuildingHeatOrWreckPools",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityLocalOwnerReportTests.LocalOwnersAndRealRecipesPermitOnlyTheOwnedDefaultSetupBinding(\"TruckDockDiving\")",
+      "latestSameNameObservation": {
+        "batch": 34,
+        "artifact": "carnival-thirtyfourth-dock-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityLocalOwnerReportTests.LocalOwnersAndRealRecipesPermitOnlyTheOwnedDefaultSetupBinding(\"TruckTerrierRacing\")",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.AirHockeyFixedTwoSetupReportsUseActualStaticHostArray",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.AirHockeyMatchEscapeClosesOnlyHeatModal",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.BeerPongSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.BilliardsHotSeatKeepsFixedSideHostsAndPracticeUsesOnlySideZero",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.BilliardsRouterEscapeClosesOnlyHeatModal",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.CurlingSetupUsesOnlyAProvenEquivalentSixteenStoneTemplate",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.EightDriversPageByStableIdAndAllReadoutsLeaveProfilesAndModelsUntouched",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 36,
+          "artifact": "carnival-thirtysixth-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.FieldGoalSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.HockeyFixedSixSetupReportsUseActualStaticHostArray",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.HockeyMatchEscapeClosesOnlyHeatModal",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 36,
+          "artifact": "carnival-thirtysixth-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.PokerSetupReportsUseActualEightSeatedHostArray",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.SessionGamepadBackAndSetupDisconnectKeepTheUnderlyingPageAndIdentity",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.SwingSetupEvaluatesEveryDriverAgainstTheActualSharedTurnHost",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.TrailerSharedTurnReportUsesActualHostAndAbortRestoresExactMenuState",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.TugLocalEightSetupReportsStayPureAfterOriginalBurstZeroesTheVisuals",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.UnmappedSportDraftReportsOriginalAndNestedBackNeverCancelsShopOrSetup",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 36,
+          "artifact": "carnival-thirtysixth-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityMenuTests.WallballMatchEscapeClosesOnlyHeatModal",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-menu-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-menu-native.xml",
+          "result": "Failed"
+        },
+        {
+          "batch": 29,
+          "artifact": "carnival-twentyninth-fit-menu-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckCompatibilityReportTests.AuthoredTmpWidthFitsTheOriginalFallbackOnOnePageAtTheUnchangedFontSize",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.ExistingCustomizerOpenStaysUniqueAndSportEntryHasDistinctName",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.HeadlessEmptyPriorSetupSkipsRestoreAndValidInteractiveSetupStillRestores",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.HighTitleUsesReviewedUpperStripAndFullyObstructedLayoutsRefuseWithoutMovingAnything",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.LongIdsAndUnicodeGraphemesSurviveFallbackWrappingAndPaginationExactly",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.RegisteredAuthorTargetsExcludeBothProtectedPlowingScenesBeforeOpening",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.SavedHockeyFitRowClearsTheOriginalHighTitleAndLogo",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.SavedHostEvaluationMatchesAuthorityWithoutPreparingModelsOrChangingPreferences",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.StaticOwnerMapUpgradeProvesActualHostsAndRefusesPartialCustomSlotOrFitChanges(\"TruckAirHockey\")",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.StaticOwnerMapUpgradeProvesActualHostsAndRefusesPartialCustomSlotOrFitChanges(\"TruckBilliards\")",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.StaticOwnerMapUpgradeProvesActualHostsAndRefusesPartialCustomSlotOrFitChanges(\"TruckHockey\")",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.StaticOwnerMapUpgradeProvesActualHostsAndRefusesPartialCustomSlotOrFitChanges(\"TruckPoker\")",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.TugLocalMapChecksOriginalWheelPiecesAndRefusesPartialOrBorrowedOwnership",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.UnboundOriginalFallbackRetainsEveryLongStableIdAndSavedVariantAcrossPages",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilityReportTests.WordBoundariesRetainWholeProseAndEveryOriginalWhitespaceCharacter",
+      "latestSameNameObservation": {
+        "batch": 37,
+        "artifact": "carnival-thirtyseventh-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilitySkeeLifecycleTests.EveryActiveSkeeSetupIdUsesTheEquivalentTemplateWithoutReassigningCurrentLaneOwner",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-lifecycle-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilitySkeeReportTests.FourEquivalentOriginalLanesMaySupplyOnlyAnOwnedReadOnlySkeeTemplate",
+      "latestSameNameObservation": {
+        "batch": 33,
+        "artifact": "carnival-thirtythird-fit-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckCompatibilitySummaryBackingTests.OwnedRoundedBackingAddsContrastWithoutChangingOriginalGeometryArtOrTextAndRefusesEdits",
+      "latestSameNameObservation": {
+        "batch": 36,
+        "artifact": "carnival-thirtysixth-release-report-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentOwnerBindingTests.ActualOriginalSourceBodyAndExplicitEventTruckOwnersKeepDistinctValidatedWheelAuthorities(False)",
+      "latestSameNameObservation": {
+        "batch": 29,
+        "artifact": "carnival-twentyninth-owner-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-policy-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckFragmentOwnerBindingTests.ActualOriginalSourceBodyAndExplicitEventTruckOwnersKeepDistinctValidatedWheelAuthorities(True)",
+      "latestSameNameObservation": {
+        "batch": 29,
+        "artifact": "carnival-twentyninth-owner-policy-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 27,
+          "artifact": "carnival-twentyseventh-fit-policy-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckFragmentRecipeTests.ActualMonsterPropShaftCutRepairsOnlyInvalidGeneratedTangentsPreservingFiniteAtlasSurfaceData",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [
+        {
+          "batch": 23,
+          "artifact": "carnival-twentythird-private-geometry-native.xml",
+          "result": "Failed"
+        }
+      ],
+      "passingRerunAfterEarlierFailure": true
+    },
+    {
+      "case": "TruckFragmentRecipeTests.OwnedCleanupDropsOnlyZeroAreaFacesAndRetainsExactSurvivingAtlasAndHardEdgeAttributes",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"novelty.hotdog\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"novelty.icecream\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"semi.lowrider\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"semi.standard\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"truck.fire\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"truck.lifted\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.PrivateVendorRecipePreservesEveryOriginalMaterialSurfaceUvAndEightBodyRegions(\"truck.monster\")",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckFragmentRecipeTests.VendorCollinearBarycentricFailureIsExcludedBeforeActualOwnedSliceWithoutChangingSource",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-geometry-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.ActualCatalogStaticDefaultsAndCosmeticsFollowOnlyOriginalMeshCentersWithPureReportParity(0.1f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.ActualCatalogStaticDefaultsAndCosmeticsFollowOnlyOriginalMeshCentersWithPureReportParity(0.55f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.ActualCatalogStaticDefaultsAndCosmeticsFollowOnlyOriginalMeshCentersWithPureReportParity(1.0f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.ExistingSavedUnitNwhHostKeepsItsOriginalControllerPosePathAndPhysicalConfiguration",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.InvalidNonuniformAndNonfiniteGeometryFailsClosed",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.LocalDiameterFitRetainsProportionsAcrossUnitPassengerAndMiniatureScale(0.1f,0.06f,0.01f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.LocalDiameterFitRetainsProportionsAcrossUnitPassengerAndMiniatureScale(0.55f,0.33f,0.055f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TruckStaticWheelPoseTests.LocalDiameterFitRetainsProportionsAcrossUnitPassengerAndMiniatureScale(1.0f,0.6f,0.1f)",
+      "latestSameNameObservation": {
+        "batch": 22,
+        "artifact": "carnival-twentysecond-static-wheel-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TugAppearanceIntegrationTests.ActualOriginalLedgeLossAndLavaFallBurstSelectedBodyThenUseOriginalRecordedReplayAndPause",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "TugAppearanceIntegrationTests.SevenBodiesUseExactExistingEventTruckWreckPiecesAndRecoverChangedBodyAfterZeroScaleRematch",
+      "latestSameNameObservation": {
+        "batch": 27,
+        "artifact": "carnival-twentyseventh-tug-burst-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "WifeAppearanceIntegrationTests.ActualRoleSwapAndInactivePairVisibilityKeepIndependentProfilesAndOriginalPhysicalCarryJoint",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    },
+    {
+      "case": "WifeAppearanceIntegrationTests.AllSevenDriverAndSmallerPassengerBodiesRetainActualCradlePhysicsAndScaleAwareWheelCenters",
+      "latestSameNameObservation": {
+        "batch": 25,
+        "artifact": "carnival-twentyfifth-appearance-native.xml",
+        "result": "Passed"
+      },
+      "earlierFailedObservations": [],
+      "passingRerunAfterEarlierFailure": false
+    }
+  ],
+  "windowsEvidence": "Excluded pending final actual receipts; no partial Windows run packaged as complete.",
+  "sanitization": "No raw XML/logs, failure messages/stacks, process IDs, workstation roots, participant IDs or command lines included."
+}

@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 sys.dont_write_bytecode = True
 from BuildIdentity import snapshot
+from WorkspaceProcessSafety import workspace_process
 
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / "Logs/TruckSports/PlaytestRepair"
@@ -62,9 +63,9 @@ def main():
     # A manually launched archived build elsewhere does not hold these files.
     # Never close it. Unknown paths and other Editors still conservatively block.
     # Only the exact coordinated independent batch-build PID can be exempted.
-    running = [p for p in observed if (concurrent_build is None or p['ProcessId'] != concurrent_build['pid']) and (p['Name'] == 'Unity.exe' or not p.get('ExecutablePath') or Path(p['ExecutablePath']).resolve().is_relative_to(ROOT.resolve()))]
+    running = [p for p in observed if (concurrent_build is None or p['ProcessId'] != concurrent_build['pid']) and workspace_process(p, ROOT)]
     if running:
-        raise RuntimeError("Wait for the workspace Editor/player to close before promotion: " + json.dumps(running))
+        raise RuntimeError("Wait for the workspace Editor/player to close before promotion: " + json.dumps([dict(pid=p['ProcessId'], name=p['Name']) for p in running]))
     runs = [("FinalCamera33", 693), ("FinalSkyGateNormals", 10), ("FinalFareCabViews", 30), ("FinalMineProgressHUD", 52)]
     if args.run:
         assert all(re.fullmatch(r"[A-Za-z0-9_-]+:[1-9][0-9]*", item) for item in args.run)
@@ -104,6 +105,7 @@ def main():
     assert digest(destination / "TruckSports_Data/Managed/Assembly-CSharp.dll") == expected
     assert snapshot(destination)[0] == args.content_sha
     receipt = dict(managedSha256=expected, buildContentSha256=args.content_sha, verifiedFiles=count, destination=str(destination), priorBuild=str(backup), source=str(source), acceptanceRuns=runs)
+    receipt['unrelatedEditorProcessesIgnored'] = [dict(pid=p['ProcessId']) for p in observed if p['Name'] == 'Unity.exe' and not workspace_process(p, ROOT)]
     if concurrent_build is not None:
         receipt['concurrentIndependentBatchBuild'] = concurrent_build
     (LOG / ("canonical-build-promotion-" + args.content_sha + ".json")).write_text(json.dumps(receipt, indent=2))

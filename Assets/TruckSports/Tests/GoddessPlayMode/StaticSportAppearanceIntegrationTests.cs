@@ -1,0 +1,59 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using NUnit.Framework;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+public sealed class StaticSportAppearanceIntegrationTests
+{
+    const BindingFlags Any=BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;
+    static Type Sports(string name)=>Type.GetType("LWS.TruckSports."+name+", Assembly-CSharp",true);
+    static object Get(object owner,string name)=>owner.GetType().GetField(name,Any) is FieldInfo field?field.GetValue(owner):owner.GetType().GetProperty(name,Any).GetValue(owner);
+    static void Set(object owner,string name,object value)=>owner.GetType().GetField(name,Any).SetValue(owner,value);
+    static object Call(object owner,string name,params object[] args)=>owner.GetType().GetMethods(Any).Single(method=>method.Name==name&&method.GetParameters().Length==args.Length).Invoke(owner,args);
+    static object Registry(string name,params object[] args)=>Sports("SportsParticipantRegistry").GetMethod(name).Invoke(null,args);
+    Component match;IDisposable lease;GameObject isolation;string family;object[] hosts,players;Transform[] actors;string[] ids;
+    [TearDown]public void Cleanup(){Time.timeScale=1;if(match!=null){if(family=="Poker")Call(match,"SetupScreen");else if(family=="Billiards")Call(match,"Show",Enum.Parse(Get(match,"Screen").GetType(),"Setup"));else Call(match,"ChangeSetup");}if(isolation!=null)UnityEngine.Object.DestroyImmediate(isolation);Registry("ForgetCache");lease?.Dispose();lease=null;}
+    IEnumerator Load(string sport)
+    {
+        family=sport;lease=(IDisposable)Sports("SportsPrefs").GetMethod("IsolateValidation").Invoke(null,new object[]{"StaticSportAppearance"+sport+Guid.NewGuid().ToString("N")});Registry("ForgetCache");isolation=new GameObject("Explicit static sport appearance native fixture");UnityEngine.Object.DontDestroyOnLoad(isolation);isolation.AddComponent(Sports("SportsProbeInputIsolation"));string type=sport=="Billiards"?"LWS.TruckBilliards.BilliardsSession":sport=="Hockey"?"LWS.TruckHockey.HockeyMatch":sport=="AirHockey"?"LWS.TruckAirHockey.AirHockeyMatch":"LWS.TruckPoker.PokerMatch";EditorSceneManager.LoadSceneInPlayMode("Assets/Truck"+sport+"/Scenes/Truck"+sport+".unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;yield return null;match=(Component)UnityEngine.Object.FindAnyObjectByType(Type.GetType(type+", Assembly-CSharp",true));Assert.That(match,Is.Not.Null);
+        if(sport=="Poker"){Call(match,"AllBots");Set(Get(match,"setup"),"count",8);Call(match,"NormalizeSetup");players=((Array)Get(Get(match,"setup"),"players")).Cast<object>().Take(8).ToArray();actors=(Transform[])Get(match,"avatars");}
+        else{players=((Array)Get(match,"players")).Cast<object>().ToArray();foreach(var player in players){string source=sport=="Billiards"?"control":"source";Set(player,source,Enum.Parse(Get(player,source).GetType(),"AI"));}if(sport=="Billiards"){Set(match,"mode",Enum.Parse(Get(match,"mode").GetType(),"AIVsAI"));actors=players.Select(player=>((Component)Get(player,"truck")).transform).ToArray();}else actors=((Array)Get(match,"trucks")).Cast<Component>().Select(truck=>truck.transform).ToArray();}
+        hosts=((Array)Get(match,"appearanceHosts")).Cast<object>().ToArray();Assert.That(hosts.Length,Is.EqualTo(sport=="Poker"?8:sport=="Hockey"?6:2),"Invoke BindMissingStaticSportHosts first.");ids=new string[hosts.Length];for(int i=0;i<hosts.Length;i++){Assert.That(((Component)hosts[i]).transform,Is.SameAs(actors[i]));Assert.That(Get(hosts[i],"participantSlot"),Is.EqualTo(i));Assert.That(((Array)Get(hosts[i],"wheels")),Is.Empty);Assert.That(((Array)Get(hosts[i],"staticWheelPoses")).Length,Is.EqualTo(4));ids[i]=(string)Get(Registry("Create","Same Static Driver"),"id");Registry("UseInSeat",i,ids[i]);Save(ids[i],i%2==0?"truck.fire":"novelty.icecream");}Call(match,"RefreshParticipants",false);
+    }
+    static void Save(string id,string body){var draft=Registry("GetAppearance",id);Set(draft,"bodyId",body);((IList)Get(draft,"selections")).Clear();Registry("TrySetAppearance",id,draft);Registry("ForgetCache");Assert.That(Get(Registry("GetAppearance",id),"bodyId"),Is.EqualTo(body));}
+    IEnumerable<Component> PhysicalParts()=>actors.Concat(hosts.SelectMany(host=>(Transform[])Get(host,"protectedRoots"))).Distinct().SelectMany(root=>root.GetComponentsInChildren<Component>(true)).Where(component=>component is Rigidbody||component is Collider).Distinct();
+    static string Config(Component component){if(component is Rigidbody body)return body.mass+":"+body.centerOfMass.ToString("R")+":"+body.linearDamping+":"+body.angularDamping+":"+body.constraints;var shape=(Collider)component;string text=shape.isTrigger+":"+(shape.sharedMaterial!=null?shape.sharedMaterial.GetInstanceID():0);if(shape is BoxCollider box)text+=":"+box.center.ToString("R")+":"+box.size.ToString("R");if(shape is SphereCollider sphere)text+=":"+sphere.center.ToString("R")+":"+sphere.radius;return text;}
+    Dictionary<Component,string> PhysicsSnapshot()=>PhysicalParts().ToDictionary(component=>component,Config);
+    void AssertPhysical(Dictionary<Component,string> original){CollectionAssert.AreEquivalent(original.Keys,PhysicalParts());foreach(var pair in original)Assert.That(Config(pair.Key),Is.EqualTo(pair.Value),"Original sport physical configuration changed: "+pair.Key.name);foreach(var actor in actors)Assert.That(actor.GetComponentsInChildren<Component>(true).Any(component=>component!=null&&component.GetType().FullName=="NWH.WheelController3D.WheelController"),Is.False,"A static sport must not acquire a vehicle controller.");}
+    void Start(){Assert.That(family=="Hockey"||family=="AirHockey"?Call(match,"StartMatch",false):Call(match,"StartMatch"),Is.EqualTo(true));((Behaviour)match).enabled=false;if(family=="Hockey"||family=="AirHockey")Call(match,"Freeze",true);}
+    void Prepare(){if(family=="Poker"){Call(match,"PrepareAppearances");Call(Get(match,"presentation"),"ResetTable");}else if(family=="Hockey"){Call(match,"ApplyIdentity");Call(match,"ResetPositions");}else if(family=="AirHockey")Call(match,"ResetPositions");else Call(match,"ApplyIdentity");}
+    string PokerRules(object table)=>Get(table,"HandNumber")+"/"+string.Join(",",Enumerable.Range(0,8).Select(slot=>(int)Call(table,"Stack",slot)))+"/"+string.Join(",",Enumerable.Range(0,8).Select(slot=>(int)Call(table,"Bet",slot)))+"/"+string.Join(",",(int[])Get(table,"PublicBoard"))+"/"+string.Join(";",Enumerable.Range(0,8).Select(slot=>string.Join(",",(int[])Call(table,"OwnHand",slot))));
+    IEnumerator Exercise(string sport)
+    {
+        yield return Load(sport);var before=PhysicsSnapshot();var protectedRefs=hosts.SelectMany(host=>(Transform[])Get(host,"protectedRoots")).Distinct().ToArray();var sourceWheels=hosts.Select(host=>((Array)Get(host,"staticWheelPoses")).Cast<object>().Select(pose=>(Transform)Get(pose,"source")).ToArray()).ToArray();Start();AssertPhysical(before);var physical=PhysicsSnapshot();var table=family=="Poker"?Get(match,"Table"):null;string tableState=table!=null?PokerRules(table):null;var presentation=family=="Poker"?Get(match,"presentation"):null;var gestures=presentation!=null?((Transform[])Get(presentation,"expressions")).ToArray():null;var dealer=presentation!=null?Get(presentation,"dealer"):null;var cards=presentation!=null?((Array)Get(presentation,"seatCards")).Cast<object>().ToArray():null;
+        foreach(string body in new[]{"truck.fire","truck.monster","truck.lifted","semi.lowrider","novelty.hotdog","novelty.icecream","semi.standard"})
+        {
+            Save(ids[0],body);Call(match,"RefreshParticipants",false);Prepare();AssertPhysical(physical);CollectionAssert.AreEqual(protectedRefs,hosts.SelectMany(host=>(Transform[])Get(host,"protectedRoots")).Distinct());
+            for(int i=0;i<hosts.Length;i++)
+            {
+                Assert.That(Get(hosts[i],"ProfileId"),Is.EqualTo(ids[i]));Assert.That(Get(hosts[i],"EffectiveBodyId"),Is.EqualTo(i==0?body:i%2==0?"truck.fire":"novelty.icecream"));var model=(Transform)Get(hosts[i],"AppearanceRoot");Assert.That(model,Is.Not.Null);Assert.That(model.GetComponentsInChildren<Rigidbody>(true),Is.Empty);Assert.That(model.GetComponentsInChildren<Collider>(true),Is.Empty);Assert.That(((Renderer[])Get(hosts[i],"originalBodyRenderers")).All(renderer=>!renderer.enabled),Is.True);Assert.That(((Renderer[])Get(hosts[i],"originalWheelRenderers")).All(renderer=>!renderer.enabled),Is.True);var catalog=Get(hosts[i],"catalog");var actualBody=Call(catalog,"FindBody",Get(hosts[i],"EffectiveBodyId"));var expected=((GameObject)Get(actualBody,"visualPrefab")).GetComponentsInChildren<Renderer>(true);var actual=(Renderer[])Get(hosts[i],"paintRenderers");Assert.That(actual.Length,Is.EqualTo(expected.Length));for(int r=0;r<actual.Length;r++)CollectionAssert.AreEqual(expected[r].sharedMaterials,actual[r].sharedMaterials,"Legacy identity painting must not clone/recolor selected body chrome/glass materials.");Call(hosts[i],"LateUpdate");foreach(var wheel in ((IEnumerable)Get(hosts[i],"wheelVisuals")).Cast<object>()){var source=(Transform)Get(wheel,"source");Assert.That(sourceWheels[i].Contains(source),Is.True);Assert.That(Vector3.Distance(((Transform)Get(wheel,"visual")).position,source.TransformPoint((Vector3)Get(wheel,"localCenter"))+actors[i].up*(float)Get(wheel,"verticalOffset")),Is.LessThan(3e-5));}
+            }
+            if(table!=null){Assert.That(Get(match,"Table"),Is.SameAs(table));Assert.That(PokerRules(table),Is.EqualTo(tableState));CollectionAssert.AreEqual(gestures,(Transform[])Get(presentation,"expressions"));Assert.That(Get(presentation,"dealer"),Is.SameAs(dealer));CollectionAssert.AreEqual(cards,((Array)Get(presentation,"seatCards")).Cast<object>());var heads=(Transform[])Get(presentation,"heads");for(int i=0;i<8;i++)Assert.That(heads[i],Is.SameAs(((Transform)Get(hosts[i],"AppearanceRoot")).Find("Body and semantic mounts")));foreach(var pane in (Array)Get(presentation,"panes"))foreach(var card in (Array)Get(pane,"own"))Assert.That(Get(card,"HasPrivateDisplayData"),Is.EqualTo(false));}
+        }
+        int revision=(int)Get(hosts[0],"AppearanceRevision");if(family=="Poker"){Call(match,"SetupScreen");Assert.That(Call(match,"StartMatch"),Is.EqualTo(true));}else if(family=="Billiards")Call(match,"RestartSeries");else if(family=="Hockey")Call(match,"Restart");else Assert.That(Call(match,"StartMatch",true),Is.EqualTo(true));Assert.That(Get(hosts[0],"AppearanceRevision"),Is.EqualTo(revision));AssertPhysical(physical);
+        TestContext.WriteLine("STATIC_SPORT_APPEARANCE "+family+" actual saved owners="+hosts.Length+" all7 bodies; actual original wheel transforms/centers and immutable physical/contact/equipment refs, original material identities, stable duplicate-name IDs/rematch; "+(table!=null?"selected-body semantic look cache and original private table/cards/dealer/gesture refs preserved":"original sport drive/strike/serve authority retained")+". Controlled native appearance samples, no complete match/art/hardware acceptance claim.");
+    }
+    [UnityTest,Timeout(180000)]public IEnumerator HockeySixBodiesRetainActualSticksContactAndOriginalPlanarDrive(){yield return Exercise("Hockey");}
+    [UnityTest,Timeout(180000)]public IEnumerator AirHockeyTwoBodiesRetainActualMalletPuckAndCenterwallPhysics(){yield return Exercise("AirHockey");}
+    [UnityTest,Timeout(180000)]public IEnumerator BilliardsTwoColliderFreeBodiesRetainActualSweepTurnAndRackAuthority(){yield return Exercise("Billiards");}
+    [UnityTest,Timeout(180000)]public IEnumerator PokerEightBodiesKeepRealSelectedLookPivotAndPrivateTableDealerAuthority(){yield return Exercise("Poker");}
+}
+#endif

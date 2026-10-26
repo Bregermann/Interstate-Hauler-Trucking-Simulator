@@ -9,6 +9,8 @@ namespace LWS.TruckHotPotato
     public sealed class HotPotatoRules
     {
         public float minimumFuse = 12, maximumFuse = 20, transferCooldown = .7f;
+        public int transferPoints = 3;
+        public int TransferPoints => Math.Max(1, transferPoints);
         public int Count { get; private set; }
         public int Carrier { get; private set; } = -1;
         public int Winner { get; private set; } = -1;
@@ -23,7 +25,6 @@ namespace LWS.TruckHotPotato
         public event Action<HotPotatoAwardKind, string, int, int, int> Awarded;
         void Award(HotPotatoAwardKind kind, string id, int slot, int amount)
         { scores[slot] += amount; Awarded?.Invoke(kind, id, slot, amount, scores[slot]); }
-        readonly bool[] creditedThisCycle = new bool[8];
         readonly float[,] lastContact = new float[8, 8];
         readonly bool[,] pending = new bool[8, 8];
         Random random;
@@ -64,7 +65,7 @@ namespace LWS.TruckHotPotato
                     int a = Math.Min(Carrier, other), b = Math.Max(Carrier, other);
                     if (other == Carrier || !alive[other] || !pending[a, b]) continue;
                     int prior = Carrier; Carrier = other; Transfers++; passes[prior]++;
-                    if (!creditedThisCycle[prior]) { creditedThisCycle[prior] = true; Award(HotPotatoAwardKind.Pass, "cycle:" + Cycle + ":pass:" + prior, prior, 10); }
+                    Award(HotPotatoAwardKind.Pass, "cycle:" + Cycle + ":transfer:" + Transfers, prior, TransferPoints);
                     nextTransfer = Clock + transferCooldown; break;
                 }
             Array.Clear(pending, 0, pending.Length);
@@ -84,7 +85,6 @@ namespace LWS.TruckHotPotato
             for (int i = 0; i < Count; i++) if (alive[i] && choice-- == 0) { Carrier = i; break; }
             Fuse = minimumFuse + (float)random.NextDouble() * Math.Max(0, maximumFuse - minimumFuse);
             nextTransfer = Clock + transferCooldown;
-            Array.Clear(creditedThisCycle, 0, creditedThisCycle.Length);
         }
         public int AliveCount() { int count = 0; for (int i = 0; i < Count; i++) if (alive[i]) count++; return count; }
     }

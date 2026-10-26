@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-10-25T21:36:49.260113+00:00",
+  "scope": "Supplement to continuation-preservation-summary; twoformat-only source EOF trims and oneFishing scene quotedtext whitespace alignment. No semantic/gameplay/color/physics change claimed.",
+  "receipts": [
+    {
+      "artifact": "carnival-source-eof-root-trim.json",
+      "sha256": "d3cc90f72bfba0d3956c79315311fe5870c6f7c3211a9f4e558caafec484e588"
+    },
+    {
+      "artifact": "carnival-fishing-flow-text-normalization.json",
+      "sha256": "c1c7373fd15d08267e85252dda8bc1889057a282cbd3a1119c30905c472ba432"
+    }
+  ],
+  "sourceEofTrims": {
+    "count": 2,
+    "scope": "Only extra finalemptylines removed from2C#sources; originalCLEAN bytes unchanged. Native39frozeninputhashes match trimmedRoot.",
+    "files": [
+      {
+        "path": "Assets/TruckSnake/Scripts/SnakeMatch.cs",
+        "beforeSha256": "566f8fca4b262c1aac413b863cbcd211f65cfa0eaa2c0a2dcc154f44d4ce3a00",
+        "afterSha256": "e8c24c09e6f5e8f58f1887684c607781b4ef1b33bb96b411c45cf4e3c6e40ddf",
+        "onlyExtraFinalEmptyLinesRemoved": true,
+        "cleanUnmodified": true,
+        "currentRootMatchesAfterReceipt": true
+      },
+      {
+        "path": "Assets/TruckSports/Tests/GoddessPlayMode/RedLightCarnivalVenueTests.cs",
+        "beforeSha256": "f217ea2184da9cc27ad60589110afad0fed287b531df9757cfb6bff2fcdce85c",
+        "afterSha256": "ba757412278eeade98370f460ebc57b0f14a9500b2ae7dcc731a0950dcf122c7",
+        "onlyExtraFinalEmptyLinesRemoved": true,
+        "cleanUnmodified": true,
+        "currentRootMatchesAfterReceipt": true
+      }
+    ]
+  },
+  "fishingQuotedTextAlignment": {
+    "path": "Assets/TruckFishing/Scenes/TruckFishing.unity",
+    "beforeSha256": "83f4ff15a21f646b36bbda3093ceb7b07bb74e760d93bdfebe1d73079f521c2f",
+    "afterSha256": "a16a3cd73ed92d77832c9c922b2cfaf1e67aed46c0f3eddc11d26714b5e62a0b",
+    "changedComponentKind": 114,
+    "parsedWholeComponentIdentical": true,
+    "allOtherYamlRecordsByteExact": true,
+    "rootAndCandidateExactRecordedByReceipt": true,
+    "currentRootMatchesReceipt": true,
+    "backupsVerifiedByReceipt": true,
+    "change": "Only two trailing spaces removed from wrapped quoted m_text source line. Parsed entireMonoBehaviour114 and folded text unchanged."
+  },
+  "backupPolicyReportedByLead": "Original source/scene backups retained outside CLEAN.",
+  "limits": [
+    "Formatting preservation is not gameplay/runtime acceptance.",
+    "LatestFishing SHA supersedes earlier scene-export/format receipt SHA for thissamepath; earlierreceipts remain historicalevidence.",
+    "No Unity/CLEANwrites/Git/code/ledgerchanges performed by thispackager.",
+    "Replacementbuildidentity andactualWindowsevidence remain pending."
+  ]
+}

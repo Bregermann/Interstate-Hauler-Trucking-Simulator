@@ -17,6 +17,6 @@ namespace LWS.TruckSports {
    return root.gameObject;
   }
   static Transform Tree(Transform source,Transform parent,Dictionary<Transform,Transform> map){var copy=new GameObject(source.name).transform;copy.SetParent(parent,false);copy.localPosition=parent==null?source.position:source.localPosition;copy.localRotation=parent==null?source.rotation:source.localRotation;copy.localScale=parent==null?source.lossyScale:source.localScale;map.Add(source,copy);foreach(Transform child in source)Tree(child,copy,map);copy.gameObject.SetActive(source.gameObject.activeSelf);return copy;}
-  static void Apply(Renderer source,Renderer target){target.sharedMaterials=source.sharedMaterials;target.enabled=source.enabled;target.shadowCastingMode=source.shadowCastingMode;target.receiveShadows=source.receiveShadows;var block=new MaterialPropertyBlock();source.GetPropertyBlock(block);target.SetPropertyBlock(block);}
+  static void Apply(Renderer source,Renderer target){target.sharedMaterials=source.sharedMaterials;target.enabled=source.enabled;target.shadowCastingMode=source.shadowCastingMode;target.receiveShadows=source.receiveShadows;var block=new MaterialPropertyBlock();source.GetPropertyBlock(block);target.SetPropertyBlock(block);for(int index=0;index<source.sharedMaterials.Length;index++){block.Clear();source.GetPropertyBlock(block,index);if(!block.isEmpty)target.SetPropertyBlock(block,index);}}
  }
 }

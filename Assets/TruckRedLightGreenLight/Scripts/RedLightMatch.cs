@@ -57,7 +57,7 @@ namespace LWS.TruckRedLightGreenLight
         public override bool MultiViewHUD => (review == null || !review.Playing) && drivingViews != null && !drivingViews.NeedsArena;
         public override bool ReplayControls => review != null && review.Playing;
         public override bool BroadcastStandingsVisible => !ReplayControls;
-        public override string Help => "Race to the checkered line. GREEN means drive. The giant master's laugh is your ONE-SECOND warning to brake before RED: there is no yellow light. Deliberate forward/backward movement, creeping or continued rolling on red causes one huge truck-shattering explosion. Small suspension jitter and motion caused entirely by another truck's measured impact do not count. A collision gives no blanket immunity to throttle-driven travel. Your whole truck must clear the finish inside the track. First legal finisher wins; remaining racers have ten seconds to place. If nobody legally finishes, the results say so. Twelve competitors, up to four local humans, real AI braking and difficulty, shared/chase/cab views and optional AI cameras. Use the existing throttle/brake/steer bindings; reverse requires braking first. Horn remains independent. Camera/free-look settings and actual device prompts are in pause/help. Selected weather persists across individual eliminations. Rematch restores all trucks, debris, signals and countdown.";
+        public override string Help => "Race to the checkered line. GREEN means drive. The giant master's laugh is your ONE-SECOND warning to brake before RED: there is no yellow light. On RED, actively brake without accelerating and you are safe even while sliding on snow or ice. Accelerator input violates RED even from rest or while also braking; pressing both cannot cancel into a safe neutral. Unbraked rolling or creeping still violates RED. Small suspension jitter and motion caused entirely by another truck's measured impact do not count. Genuine violations cause one huge truck-shattering explosion. Your whole truck must clear the finish inside the track. First legal finisher wins; remaining racers have ten seconds to place. If nobody legally finishes, the results say so. Twelve competitors, up to four local humans, real AI braking and difficulty, shared/chase/cab views and optional AI cameras. Use the existing throttle/brake/steer bindings or ACTION handbrake. During RED, brake-only holds the NWH truck instead of requesting automatic reverse. Horn remains independent. Camera/free-look settings and actual device prompts are in pause/help. Selected weather persists across individual eliminations. Rematch restores all trucks, debris, signals and countdown.";
         public override string Header => ReplayControls ? Title + " · RECORDED REPLAY" : Title + " · " + PhaseLabel + " · " + Mathf.Max(0, rules.Elapsed - 3).ToString("F0") + "s ELAPSED";
         public override string Status => noticeTime > 0 ? notice : rules.Phase == RedLightPhase.Complete ? "RACE COMPLETE" : rules.Phase == RedLightPhase.LaughWarning ? "THE LAUGH! BRAKE NOW — RED IN ONE SECOND" : rules.Phase == RedLightPhase.Red ? "RED LIGHT · STOP" : "GREEN LIGHT · GET TO THE FINISH";
         string PhaseLabel => rules.Phase == RedLightPhase.Complete ? "RACE COMPLETE" : rules.Phase == RedLightPhase.Countdown ? Mathf.CeilToInt(3 - rules.PhaseTime).ToString() : rules.Phase == RedLightPhase.Red ? "RED LIGHT" : "GREEN LIGHT";
@@ -72,6 +72,7 @@ namespace LWS.TruckRedLightGreenLight
 
         readonly Vector3[] previous = new Vector3[12];
         readonly float[] lastThrottle = new float[12], reactionAt = new float[12], previousRear = new float[12];
+        readonly bool[] lastAccelerating = new bool[12], lastBraking = new bool[12];
         MaterialPropertyBlock tint;
         readonly StringBuilder text = new StringBuilder(600);
         RedLightPhase presentedPhase = (RedLightPhase)(-1);
@@ -108,6 +109,7 @@ namespace LWS.TruckRedLightGreenLight
                 trucks[i].tractorMotor.vehicle.brakes.maxTorque = competitionBrakeTorque;
                 trucks[i].Prepare(Grid(i), Quaternion.identity);
                 previous[i] = trucks[i].body.position; previousRear[i] = Rear(trucks[i]); lastThrottle[i] = 0;
+                lastAccelerating[i] = lastBraking[i] = false;
                 reactionAt[i] = .12f + .11f * (2 - (int)setup.players[i].difficulty) + (i % 3) * .035f;
                 Brake(trucks[i]);
             }
@@ -132,11 +134,11 @@ namespace LWS.TruckRedLightGreenLight
                 if (rules.outcomes[i] != RedLightOutcome.Racing) continue;
                 var t = trucks[i]; var p = t.body.position; var velocity = t.body.linearVelocity;
                 Vector2 now = new Vector2(p.x, p.z), before = new Vector2(previous[i].x, previous[i].z);
-                bool violation = rules.Observe(i, now, before, new Vector2(velocity.x, velocity.z), Vector3.Dot(velocity, t.transform.forward), lastThrottle[i], t.tractorMotor.Grounded, dt);
+                bool violation = rules.ObserveWithIntent(i, now, before, new Vector2(velocity.x, velocity.z), lastAccelerating[i], lastBraking[i], t.tractorMotor.Grounded, dt);
                 if (violation)
                 {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                    Debug.Log("RLGL_VIOLATION slot=" + i + " phase=" + rules.Phase + " clock=" + rules.Elapsed.ToString("F3") + " phaseTime=" + rules.PhaseTime.ToString("F3") + " position=" + p.ToString("F4") + " previous=" + previous[i].ToString("F4") + " velocity=" + velocity.ToString("F4") + " command=" + lastThrottle[i] + " brake=" + t.tractorMotor.vehicle.input.states.brakes + " handbrake=" + t.tractorMotor.vehicle.input.states.handbrake + " grounded=" + t.tractorMotor.Grounded + " reason=" + rules.reasons[i]);
+                    Debug.Log("RLGL_VIOLATION slot=" + i + " phase=" + rules.Phase + " clock=" + rules.Elapsed.ToString("F3") + " phaseTime=" + rules.PhaseTime.ToString("F3") + " position=" + p.ToString("F4") + " previous=" + previous[i].ToString("F4") + " velocity=" + velocity.ToString("F4") + " command=" + lastThrottle[i] + " acceleratorIntent=" + lastAccelerating[i] + " brakeIntent=" + lastBraking[i] + " brake=" + t.tractorMotor.vehicle.input.states.brakes + " handbrake=" + t.tractorMotor.vehicle.input.states.handbrake + " grounded=" + t.tractorMotor.Grounded + " reason=" + rules.reasons[i]);
 #endif
                     Explode(i);
                 }
@@ -160,14 +162,41 @@ namespace LWS.TruckRedLightGreenLight
                 { if (rules.outcomes[i] == RedLightOutcome.Finished && Rear(trucks[i]) < finishZ + 22) trucks[i].TickDrive(new Vector2(0, .35f)); else Brake(trucks[i]); continue; }
                 var command = setup.players[i].source == BowlingSource.AI ? Bot(i) : commands[i];
                 if (rules.Phase == RedLightPhase.Countdown) command = new Vector2(0, -1);
+                ReadDriverIntent(i, command, out lastAccelerating[i], out lastBraking[i]);
                 trucks[i].tractorMotor.gripScale = atmosphere.Grip;
                 trucks[i].TickDrive(command); lastThrottle[i] = command.y;
                 // At rest a brake input must hold, rather than ask an automatic
                 // transmission to select reverse and create a false violation.
                 bool botBraking = setup.players[i].source == BowlingSource.AI && command.y < -.1f;
-                if (rules.Phase == RedLightPhase.Countdown || botBraking || setup.players[i].source != BowlingSource.AI && ActionHeld(i))
+                bool handbrake = setup.players[i].source != BowlingSource.AI && setup.players[i].released && ActionHeld(i);
+                if (rules.Phase == RedLightPhase.Countdown || botBraking || handbrake || rules.Phase == RedLightPhase.Red && lastBraking[i] && !lastAccelerating[i])
                 { Brake(trucks[i]); lastThrottle[i] = 0; }
             }
+        }
+
+        void ReadDriverIntent(int slot, Vector2 command, out bool accelerating, out bool braking)
+        {
+            const float deadzone = .12f;
+            accelerating = braking = false;
+            var player = setup.players[slot];
+            if (player.source == BowlingSource.AI) { accelerating = command.y > deadzone; braking = command.y < -deadzone; return; }
+            if (!player.released || !Ready(slot)) return;
+            if (player.source == BowlingSource.Keyboard)
+            {
+                accelerating = SportsDeviceInput.KeyHeld(player.forward);
+                braking = SportsDeviceInput.KeyHeld(player.back);
+            }
+            else if (player.source == BowlingSource.WholeController)
+            {
+                accelerating = player.pad.rightTrigger.ReadValue() > deadzone;
+                braking = player.pad.leftTrigger.ReadValue() > deadzone;
+            }
+            else
+            {
+                float y = player.source == BowlingSource.RightStick ? player.pad.rightStick.ReadValue().y : player.pad.leftStick.ReadValue().y;
+                accelerating = y > deadzone; braking = y < -deadzone;
+            }
+            braking |= ActionHeld(slot);
         }
 
         Vector2 Bot(int slot)
@@ -185,14 +214,17 @@ namespace LWS.TruckRedLightGreenLight
         {
             if (!truck.Powered || truck.tractorMotor == null) return;
             var input = truck.tractorMotor.vehicle.input;
+            var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
             input.states.throttle = input.states.throttleRaw = 0;
             // NWH Auto D/N/R interprets a held service brake at rest as reverse.
             // Handbrake holds the settled truck without feeding that reverse
             // request. Keep ordinary service braking while actually slowing.
             bool slowing = truck.body.linearVelocity.sqrMagnitude > .25f;
-            input.states.brakes = input.states.brakesRaw = slowing ? 1 : 0;
+            // NWH swaps service brake into throttle in reverse. On RED the
+            // handbrake must hold that residual reverse slide without powering it.
+            bool reverseOnRed = rules.Phase == RedLightPhase.Red && transmission.Gear < 0;
+            input.states.brakes = input.states.brakesRaw = slowing && !reverseOnRed ? 1 : 0;
             input.states.handbrake = input.states.handbrakeRaw = 1;
-            var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
             if (!slowing && transmission.Gear < 0) transmission.ShiftInto(0, true);
         }
         void Announce(string message, int cue)

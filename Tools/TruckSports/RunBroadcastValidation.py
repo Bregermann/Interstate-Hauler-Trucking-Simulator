@@ -47,8 +47,19 @@ def record_build():
     folder = ROOT / "Builds/TruckSportsCamera"
     managed = hashlib.sha256((folder / "TruckSports_Data/Managed/Assembly-CSharp.dll").read_bytes()).hexdigest()
     content, files = snapshot(folder)
+    # Check existing provenance before writing either manifest. A wrong output
+    # path must never replace the source record of an older retained artifact.
+    inputs = (LOG / "camera-source-sync.json").read_bytes()
+    manifest = LOG / ("build-" + content + "-sources.json")
+    archive = LOG / ("build-" + content + "-sources.zip")
+    if manifest.exists():
+        assert manifest.read_bytes() == inputs, "Existing build inputs differ; inspect the actual output before replacing provenance"
+    if archive.exists():
+        with zipfile.ZipFile(archive) as prior:
+            assert prior.read("inputs.json") == inputs, "Existing archived inputs differ; inspect the actual build output"
     (LOG / ("build-" + content + "-files.json")).write_text(json.dumps(files, indent=2), encoding="utf-8")
-    shutil.copy2(LOG / "camera-source-sync.json", LOG / ("build-" + content + "-sources.json"))
+    if not manifest.exists():
+        manifest.write_bytes(inputs)
     retain_sources(content)
     identity = dict(managedSha256=managed, buildContentSha256=content, files=len(files))
     (LOG / "current-camera-build.json").write_text(json.dumps(identity, indent=2), encoding="utf-8")
@@ -89,7 +100,43 @@ def sync(deferred_path=None):
     print("Synced", len(sources), "scoped sources; excluded pre-existing pending work.", flush=True)
 
 
-def run(name, arguments):
+def validate_candidate_build_arguments(arguments):
+    """Resolve through project junctions before Unity can write any output."""
+    if arguments.count("-tsBuildOutput") != 1:
+        raise ValueError("A validation build requires one explicit -tsBuildOutput candidate path")
+    index = arguments.index("-tsBuildOutput")
+    if index + 1 >= len(arguments):
+        raise ValueError("Missing candidate build output")
+    requested = Path(arguments[index + 1])
+    output = (requested if requested.is_absolute() else CLEAN / requested).resolve()
+    expected = (ROOT / "Builds/TruckSportsCamera/TruckSports.exe").resolve()
+    canonical = (ROOT / "Builds/TruckSports/TruckSports.exe").resolve()
+    if output != expected or output == canonical:
+        raise ValueError("Validation builds may write only the resolved TruckSportsCamera candidate")
+    return output
+
+
+def wait_owned_editor(process, timeout_seconds):
+    """Only the Popen handle created here may be terminated; never enumerate/kill Editors."""
+    if not isinstance(timeout_seconds, (int, float)) or not 0 < timeout_seconds <= 7200:
+        raise ValueError("Use an explicit positive bounded validation deadline")
+    try:
+        return process.wait(timeout=timeout_seconds), False
+    except subprocess.TimeoutExpired:
+        process.terminate()
+        try:
+            code = process.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            code = process.wait(timeout=15)
+        return code, True
+
+
+def run(name, arguments, timeout_seconds=None):
+    canonical_before = None
+    if name == "camera-build":
+        validate_candidate_build_arguments(arguments)
+        canonical_before = snapshot(ROOT / "Builds/TruckSports")[0]
     started = time.monotonic()
     previous_log = LOG / (name + ".log")
     if previous_log.exists():
@@ -104,15 +151,21 @@ def run(name, arguments):
     command = [UNITY, "-batchmode", "-projectPath", str(CLEAN), *arguments, "-logFile", str(LOG / (name + ".log"))]
     process = subprocess.Popen(command, cwd=ROOT)
     print(name, "Editor PID", process.pid, flush=True)
-    code = process.wait()
-    receipt = dict(job=name, pid=process.pid, exit=code, seconds=round(time.monotonic()-started, 2))
+    deadline = timeout_seconds if timeout_seconds is not None else 1800 if name == "camera-build" else 900 if "-runTests" in arguments else 1200
+    code, timed_out = wait_owned_editor(process, deadline)
+    receipt = dict(job=name, pid=process.pid, exit=code, seconds=round(time.monotonic()-started, 2), timeoutSeconds=deadline, timedOut=timed_out)
     path = LOG / "camera-validation-processes.json"
     records = json.loads(path.read_text()) if path.exists() else []
     records.append(receipt)
     path.write_text(json.dumps(records, indent=2))
     print(json.dumps(receipt), flush=True)
-    if code:
-        raise SystemExit(code)
+    if canonical_before is not None:
+        canonical_after = snapshot(ROOT / "Builds/TruckSports")[0]
+        receipt.update(canonicalBeforeSha256=canonical_before, canonicalAfterSha256=canonical_after, canonicalUnchanged=canonical_after == canonical_before)
+        path.write_text(json.dumps(records, indent=2))
+        assert canonical_after == canonical_before, "Canonical build changed during validation; retain output and investigate before delivery"
+    if code or timed_out:
+        raise SystemExit(124 if timed_out else code)
     if name == "camera-build":
         record_build()
 

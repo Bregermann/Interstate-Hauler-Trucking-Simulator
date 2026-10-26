@@ -11,9 +11,11 @@ namespace LWS.TruckSports
         public SportsRallyViews rally;
         public bool minimalDistance;
         SportsRallyViews Roster=>views!=null?views.rally:rally;
+        bool ReplacedByCompactCard=>match!=null&&match.CompactBroadcastStatus&&match.CompactViewportHud;
         readonly Image[] portraits = new Image[4], stripes = new Image[4];
         void Start()
         {
+            if(ReplacedByCompactCard)return;
             var sprite = Resources.Load<Sprite>("Broadcast truck portrait");
             for (int i = 0; i < 4; i++)
             {
@@ -38,7 +40,7 @@ namespace LWS.TruckSports
         {
             for (int view = 0; view < 4; view++) if (portraits[view] != null)
             {
-                bool active = match.MultiViewHUD && Roster!=null&&view < Roster.Humans;
+                bool active = !ReplacedByCompactCard&&match.MultiViewHUD && Roster!=null&&view < Roster.Humans;
                 portraits[view].gameObject.SetActive(active); stripes[view].gameObject.SetActive(active);
                 if (!active) continue;
                 var color = match.setup.players[Roster.owners[view]].color;

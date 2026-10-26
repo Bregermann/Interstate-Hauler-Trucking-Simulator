@@ -10,6 +10,9 @@ namespace LWS.TruckFloorIsLava
 {
     public sealed class LavaMatch : SportsEventSession
     {
+        public override bool CompactBroadcastStatus=>true;
+        public override bool CompactViewportHud=>true;
+        public override bool BroadcastStatusVisible=>!string.IsNullOrEmpty(Status);
  public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot];
  public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=f.Nearest(f.RequestedFocus);a.primary=slot;if(slot>=0&&target[slot]>=0&&target[slot]<platforms.Length)a.Objective(platforms[target[slot]].transform.position,2);a.reason="SURVIVING TRUCK / NEXT PLATFORM";}
         public SportsEventTruck[] trucks;
@@ -50,7 +53,8 @@ namespace LWS.TruckFloorIsLava
         public override bool BroadcastStandingsVisible=>!ReplayControls;
         public override bool ParticipantLocked(int slot)=>!rules.alive[slot];
         public override string Header=>Title+(ReplayControls?" · RECORDED REPLAY":" · "+AliveCount()+" SURVIVORS · "+rules.Available()+" PLATFORMS LEFT");
-        public override string Status=>Countdown>0?"FIND YOUR ESCAPE ROUTE":rules.Complete?(rules.Winner>=0?setup.players[rules.Winner].name+" IS LAST TRUCK STANDING!":"SIMULTANEOUS FINAL LAVA IMPACTS · SHARED PLACING"):"TOUCH STARTS THE WARNING · JUMP THE GAPS · RAM RIVALS OFF";
+        public override string Status=>Countdown>0?"READY · "+Mathf.CeilToInt(Countdown):rules.Complete?(rules.Winner>=0?setup.players[rules.Winner].name+" IS LAST TRUCK STANDING!":"FINAL LAVA IMPACTS · SHARED PLACING"):PlatformWarning();
+        string PlatformWarning(){float remaining=float.PositiveInfinity;for(int slot=0;slot<setup.count;slot++){int floor=current[slot];if(rules.alive[slot]&&floor>=0&&floor<rules.platforms.Length&&rules.platforms[floor]==LavaPlatformState.Warning)remaining=Mathf.Min(remaining,rules.Remaining(floor));}return remaining<=2?"PLATFORM COLLAPSE · "+remaining.ToString("F1")+"s":"";}
         public override string ControlCaption(int slot)=>base.ControlCaption(slot).Replace(" ACTION"," JUMP");
         public override string Help=>"Eight trucks scramble across a finite network of platforms above molten lava. Touching a platform starts its warning: orange becomes red, cracks appear, then the whole platform physically falls. Escape before it drops. Use JUMP to clear gaps; it only works from a supported upright truck and needs a short recharge. Narrow, moving, tilting, short-warning and temporary-safe platforms offer different risks. Ramming is allowed. Survival decides placement; +1 per 15 seconds, +1 for a recent credited knockoff and +5 for the last survivor are bonus statistics. Simultaneous final lava impacts share placing. Solo continues until your actual lava impact. Choose longer, standard or fast warnings. Shared/chase/full cab, camera switch, free look, horn, Your Crew, selected weather and optional AI views use the collection controls. Rematch restores the entire arena. Watch the final escape sequence again from Results.";
         readonly int[] current=new int[8],target=new int[8];
@@ -66,7 +70,9 @@ namespace LWS.TruckFloorIsLava
         int AliveCount(){int count=0;for(int i=0;i<setup.count;i++)if(rules.alive[i])count++;return count;}
         public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans<=4)return true;reason="Up to four local humans; assign the remaining trucks to AI.";return false;}
         public override bool TryReadScoreCard(int slot,out string value,out string detail){value=rules.scores[slot]+"P";detail=rules.survived[slot].ToString("F0")+"s · "+(rules.alive[slot]?"LIVE":"LAVA")+" · K"+rules.knockoffs[slot];return slot<setup.count;}
-        public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var value,out var detail);string floor=Countdown>0?"SETTLING FOR START":current[slot]>=0?"FLOOR: "+rules.Remaining(current[slot]).ToString("F1")+"s":"AIRBORNE";return setup.players[slot].name+" · "+value+"\n"+detail+"\n"+floor+" · "+(rules.Clock<jumpAt[slot]?"JUMP "+(jumpAt[slot]-rules.Clock).ToString("F1")+"s":"JUMP READY");}
+        public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail)=>TryReadDrivingViewportCard(drivingViews,view,out participant,out score,out detail);
+        public override string ViewportTelemetry(int view){int slot=drivingViews.rally.owners[view];if(Countdown>0)return "READY · "+Mathf.CeilToInt(Countdown);if(!rules.alive[slot])return "LAVA · "+rules.survived[slot].ToString("F1")+"s SURVIVED";int floor=current[slot];string state=floor<0||floor>=rules.platforms.Length?"AIRBORNE":rules.platforms[floor]==LavaPlatformState.Falling?"FLOOR FALLING":rules.platforms[floor]==LavaPlatformState.Warning?"FLOOR "+rules.Remaining(floor).ToString("F1")+"s":"STABLE FLOOR";return state+" · "+(rules.Clock<jumpAt[slot]?"JUMP "+(jumpAt[slot]-rules.Clock).ToString("F1")+"s":"JUMP READY");}
+        public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var value,out var detail);return setup.players[slot].name+" · "+value+"\n"+detail+"\n"+ViewportTelemetry(view);}
         public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++)text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.survived[i].ToString("F1")).Append("s · ").Append(rules.scores[i]).Append("P · ").Append(rules.knockoffs[i]).Append(" KNOCKOFFS\n");return text.ToString();}}
         public override string Results=>(rules.Winner>=0?setup.players[rules.Winner].name+" SURVIVES!":"SURVIVAL RESULTS")+"\n\n"+Standings;
         public Vector3 Grid(int slot)=>platforms[12].transform.position+new Vector3((slot%4-1.5f)*9,.65f,slot<4?-8:8);

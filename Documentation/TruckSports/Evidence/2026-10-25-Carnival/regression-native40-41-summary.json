@@ -1,0 +1,405 @@
+{
+  "schemaVersion": 1,
+  "scope": "Native40/41 diagnostic and probe-policy followup; no overall release or replacement Windows pass.",
+  "attempts": [
+    {
+      "batch": 40,
+      "job": "carnival-fortieth-floor-before-native",
+      "runner": {
+        "exit": 2,
+        "seconds": 59.71,
+        "timedOut": false
+      },
+      "xml": {
+        "artifact": "carnival-fortieth-floor-before-native.xml",
+        "sha256": "c89cb54fbfbe8393b7cbe93882a290eab214ec5fe3c95c24ba75226b4030c4d3",
+        "result": "Failed(Child)",
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "testSeconds": 6.5219242
+      },
+      "cases": [
+        {
+          "name": "FloorAppearanceFramingTests.NativeEightActualBodiesAreIncludedByOriginalFramingInSharedAndSplitViews",
+          "result": "Failed",
+          "seconds": 6.480954
+        }
+      ]
+    },
+    {
+      "batch": 40,
+      "job": "carnival-fortieth-probe-policy-native",
+      "runner": {
+        "exit": 0,
+        "seconds": 26.42,
+        "timedOut": false
+      },
+      "xml": {
+        "artifact": "carnival-fortieth-probe-policy-native.xml",
+        "sha256": "993f87fba712c3dba2b5a893ff70a4d7ac5be782800df384d79397abfa080583",
+        "result": "Passed",
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "testSeconds": 0.0911609
+      },
+      "cases": [
+        {
+          "name": "CarnivalPresentationProbePolicyTests.ActualMeshPredicateRejectsEnabledZeroScalePoolWithoutDroppingLiveComposedGeometry",
+          "result": "Passed",
+          "seconds": 0.014286
+        },
+        {
+          "name": "CarnivalPresentationProbePolicyTests.AssertionFailuresRetainFailureExitButOnlyActualRuntimeFloodStopsRemainingVenues",
+          "result": "Passed",
+          "seconds": 0.005215
+        },
+        {
+          "name": "CarnivalPresentationProbePolicyTests.HiddenLiveSelectedBodyRequiresMatchingOriginalRecordedHierarchyMaterialsAndPerSlotPaint(False)",
+          "result": "Passed",
+          "seconds": 0.015483
+        },
+        {
+          "name": "CarnivalPresentationProbePolicyTests.HiddenLiveSelectedBodyRequiresMatchingOriginalRecordedHierarchyMaterialsAndPerSlotPaint(True)",
+          "result": "Passed",
+          "seconds": 0.000655
+        }
+      ]
+    },
+    {
+      "batch": 41,
+      "job": "carnival-fortyfirst-floor-before-native",
+      "runner": {
+        "exit": 0,
+        "seconds": 54.34,
+        "timedOut": false
+      },
+      "xml": {
+        "artifact": "carnival-fortyfirst-floor-before-native.xml",
+        "sha256": "5f4157933a372996406d7eaadc02e7c0d835fd51da68507aa716cb47474e0e68",
+        "result": "Passed",
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "testSeconds": 20.5867276
+      },
+      "cases": [
+        {
+          "name": "FloorAppearanceFramingTests.NativeEightActualBodiesAreIncludedByOriginalFramingInSharedAndSplitViews",
+          "result": "Passed",
+          "seconds": 20.546164
+        }
+      ]
+    }
+  ],
+  "executionTotalsIncludingRerun": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "skipped": 0
+  },
+  "latestResults": {
+    "probePolicy": {
+      "passed": 4,
+      "failed": 0,
+      "batch": 40
+    },
+    "originalRuntimeFloorFramingDiagnostic": {
+      "passed": 1,
+      "failed": 0,
+      "batch": 41
+    }
+  },
+  "failedAttemptExplanation": "Native40 Floor diagnostic failed before measurements because reflection helper selected overloaded Show by name/arity only; Sequence contains more than one matching element. Native41 fixture helper uses actual parameter-type compatibility. No native40 numerical framing data is inferred.",
+  "refutedHypothesis": {
+    "hypothesis": "Selected Burst body is a sibling outside original visuals and absent from framing cache.",
+    "result": "REFUTED_IN_EXERCISED_FLOOR_SAVED_SCENE",
+    "evidence": "Original visuals is the actor root; all8 selected AppearanceRoot composed renderers are descendants. Both native shared/split samples show zero outsideComposed and zero outsideVisibleExterior with original runtime.",
+    "actualProbeIssue": "ExteriorRenderers also includes disabled originals and enabled zero-scale fragment-pool meshes. Old probe accepted enabled/active pools without nonzero scale/size guards; renderer.bounds then was unsuitable for visible-body containment. Revised ActualRenderedMesh excludes invisible pool entries, matching original framing policy.",
+    "runtimeFramingSource": {
+      "path": "Assets/TruckSports/Scripts/SportsBroadcastFraming.cs",
+      "sha256": "2cec3bd308afcb1bd1a56f7d16825821550223817f910645d798f466db572dc8",
+      "modifiedForThisFollowup": false
+    }
+  },
+  "numericalEvidence": [
+    {
+      "artifact": "shared-eight-original-ai.json",
+      "sha256": "2cdc885c6b420649998ad5c39199235f777524d256dd8d75e4fb446cdff59e31",
+      "slots": [
+        {
+          "slot": 0,
+          "body": "truck.monster",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        },
+        {
+          "slot": 1,
+          "body": "novelty.icecream",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 82,
+          "visibleComposedRendererCount": 9,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 44
+        },
+        {
+          "slot": 2,
+          "body": "truck.lifted",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        },
+        {
+          "slot": 3,
+          "body": "truck.fire",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 70,
+          "visibleComposedRendererCount": 6,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 32
+        },
+        {
+          "slot": 4,
+          "body": "novelty.hotdog",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 159,
+          "visibleComposedRendererCount": 47,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 121
+        },
+        {
+          "slot": 5,
+          "body": "semi.lowrider",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 139,
+          "visibleComposedRendererCount": 33,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 101
+        },
+        {
+          "slot": 6,
+          "body": "semi.standard",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 139,
+          "visibleComposedRendererCount": 33,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 101
+        },
+        {
+          "slot": 7,
+          "body": "truck.monster",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        }
+      ],
+      "assignedOwnerOrSharedPrimaryProjectionChecks": [
+        {
+          "slot": 1,
+          "camera": 0,
+          "owner": false,
+          "primary": true,
+          "cornersInsideFrustum": 72,
+          "totalCorners": 72
+        }
+      ],
+      "projectionScope": "Other participants may be outside an unassigned split viewport; no all-participants-in-every-viewport claim."
+    },
+    {
+      "artifact": "split-eight-original-ai.json",
+      "sha256": "84af6558425cbf3e8d63a1d1b8a33f493678c1f4689d663369a7c1c0b72483fa",
+      "slots": [
+        {
+          "slot": 0,
+          "body": "truck.monster",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        },
+        {
+          "slot": 1,
+          "body": "novelty.icecream",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 82,
+          "visibleComposedRendererCount": 9,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 44
+        },
+        {
+          "slot": 2,
+          "body": "truck.lifted",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        },
+        {
+          "slot": 3,
+          "body": "truck.fire",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 70,
+          "visibleComposedRendererCount": 6,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 32
+        },
+        {
+          "slot": 4,
+          "body": "novelty.hotdog",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 159,
+          "visibleComposedRendererCount": 47,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 121
+        },
+        {
+          "slot": 5,
+          "body": "semi.lowrider",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 139,
+          "visibleComposedRendererCount": 33,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 101
+        },
+        {
+          "slot": 6,
+          "body": "semi.standard",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 139,
+          "visibleComposedRendererCount": 33,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 101
+        },
+        {
+          "slot": 7,
+          "body": "truck.monster",
+          "outsideComposed": 0,
+          "outsideVisibleExterior": 0,
+          "invisibleExterior": 146,
+          "visibleComposedRendererCount": 56,
+          "allComposedUnderOriginalVisuals": true,
+          "zeroScaleExterior": 108
+        }
+      ],
+      "assignedOwnerOrSharedPrimaryProjectionChecks": [
+        {
+          "slot": 0,
+          "camera": 0,
+          "owner": true,
+          "primary": false,
+          "cornersInsideFrustum": 448,
+          "totalCorners": 448
+        },
+        {
+          "slot": 1,
+          "camera": 1,
+          "owner": true,
+          "primary": true,
+          "cornersInsideFrustum": 72,
+          "totalCorners": 72
+        },
+        {
+          "slot": 2,
+          "camera": 2,
+          "owner": true,
+          "primary": false,
+          "cornersInsideFrustum": 448,
+          "totalCorners": 448
+        },
+        {
+          "slot": 3,
+          "camera": 3,
+          "owner": true,
+          "primary": false,
+          "cornersInsideFrustum": 48,
+          "totalCorners": 48
+        }
+      ],
+      "projectionScope": "Other participants may be outside an unassigned split viewport; no all-participants-in-every-viewport claim."
+    }
+  ],
+  "sourceInputs": [
+    {
+      "artifact": "carnival-fortieth-native-source-inputs.json",
+      "sha256": "9845c80458f77b32c2527a5e961b611e009bb37060769b6093678ee76ca66111",
+      "inputs": [
+        {
+          "path": "Assets/TruckSports/Tests/GoddessPlayMode/FloorAppearanceFramingTests.cs",
+          "sha256": "a96b5967426a0e56b23b91f241be6a689440b83d842205dcd7d56350a06e3e4f"
+        },
+        {
+          "path": "Assets/TruckSports/Tests/GoddessPlayMode/FloorAppearanceFramingTests.cs.meta",
+          "sha256": "9e5d8706fed77da7a710b6d553e9cd950c663df0033fde91f26430bdf6f7b419"
+        },
+        {
+          "path": "Assets/TruckSports/Scripts/SportsCarnivalPresentationWindowsProbe.cs",
+          "sha256": "07b40ed6f40a6764d8ab1f06efa55a9117c7c7f5fa1bca23bf6b35b5208a5e5c"
+        },
+        {
+          "path": "Assets/TruckSports/Tests/PresentationEditMode/CarnivalPresentationProbePolicyTests.cs",
+          "sha256": "a4d52ea60a5f3c1243e4ea7f8ac03eea500df94ee52cf39598b8fb14ab46976a"
+        },
+        {
+          "path": "Assets/TruckSports/Tests/PresentationEditMode/CarnivalPresentationProbePolicyTests.cs.meta",
+          "sha256": "b1ba81485feac728845a587cfd8ba66d72177f0c0be038f59768f28babf981f0"
+        }
+      ]
+    },
+    {
+      "artifact": "carnival-fortyfirst-native-source-inputs.json",
+      "sha256": "ee2e74f4dc1dc4d3693e93aa5dac8ace3f2dcd9c702ce4231cda2b7da24c236f",
+      "inputs": [
+        {
+          "path": "Assets/TruckSports/Tests/GoddessPlayMode/FloorAppearanceFramingTests.cs",
+          "sha256": "388ce9e1ff9a91b045503634680d1f3c6331024880ba8ef980add0160a4381f8"
+        },
+        {
+          "path": "Assets/TruckSports/Tests/GoddessPlayMode/FloorAppearanceFramingTests.cs.meta",
+          "sha256": "9e5d8706fed77da7a710b6d553e9cd950c663df0033fde91f26430bdf6f7b419"
+        }
+      ]
+    }
+  ],
+  "priorWindowsFailureRetained": {
+    "artifact": "failed-presentation-f2eac0.json",
+    "sha256": "3549f0b33368fb3ed7ebddf8a3cd6235a7e3684847d90f481b2fec807dc9e257",
+    "checks": 1378,
+    "errors": 18,
+    "runtimeErrorCallbacks": 0,
+    "status": "FAILED_NOT_PROMOTED"
+  },
+  "remainingAcceptance": "Fresh build identity and fresh core/appearance/all13-venue presentation Windows receipts remain required; probe-policy native pass does not relabel failed f2 Windows run.",
+  "limits": [
+    "Native numerical geometry/frustum checks are not human visual approval or continuous race/AI quality acceptance.",
+    "No vendor/gameplay/camera/runtime-framing source changes.",
+    "No rawlogs, stacktraces, processIDs, commandlines or private profile identifiers included."
+  ]
+}

@@ -16,7 +16,7 @@ namespace LWS.TruckHockey
         public Image[] portraits,stripes,setupPortraits;
         public TMP_Text[] resultTeams;
         public static readonly Color Blue=new Color(.2f,.72f,1),Orange=new Color(1,.49f,.14f);
-        int lastBlue=-1,lastOrange=-1;HockeyPhase lastPhase;float next;
+        int lastBlue=-1,lastOrange=-1;HockeyPhase lastPhase;float next;bool obsoleteRuleChecked;
         public static Color TeamColor(int team)=>team==0?Blue:Orange;
         public static string SourceLabel(HockeyPlayer player)
         {
@@ -33,6 +33,7 @@ namespace LWS.TruckHockey
         public void Refresh()
         {
             if(menus==null||menus.match==null||scoreBug==null)return;
+            if(!obsoleteRuleChecked){var obsolete=scoreBug.Find("Hockey scoring rule");if(obsolete!=null)obsolete.gameObject.SetActive(false);obsoleteRuleChecked=true;}
             var match=menus.match;var rules=match.rules;
             for(int i=0;i<6;i++)
             {
@@ -58,6 +59,8 @@ namespace LWS.TruckHockey
             string notice=phase==HockeyPhase.Pregame||phase==HockeyPhase.Faceoff?(match.Notice.StartsWith("PUCK RECOVERY")?"PUCK RECOVERY · ":"FACEOFF · ")+Mathf.Max(1,Mathf.CeilToInt(rules.PhaseTimer)):phase==HockeyPhase.Goal?match.Notice:rules.Overtime?"SUDDEN DEATH":"";
             menus.messageText.text=notice;menus.messageText.color=phase==HockeyPhase.Goal?TeamColor(rules.LastScorer):SportsBroadcastCanvas.Cream;noticePlate.gameObject.SetActive(notice.Length>0);
             menus.controlsText.text="3v3 · DRIVE INTO THE PUCK    |    "+rules.Goals+" GOALS    |    ESC / START · PAUSE";
+            menus.controlsText.gameObject.SetActive(false);
+            if(menus.controlsText.transform.parent.name=="Hockey compact footer")menus.controlsText.transform.parent.gameObject.SetActive(false);
             if(menus.Screen==HockeyScreen.Match&&lastBlue>=0&&(lastBlue!=rules.Score[0]||lastOrange!=rules.Score[1]))
             {
                 menus.scoreText.transform.DOKill();menus.scoreText.transform.localScale=Vector3.one;

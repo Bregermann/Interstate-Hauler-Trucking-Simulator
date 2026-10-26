@@ -15,6 +15,7 @@ namespace LWS.TruckBowling
         public ProgressBar[] progress;
         readonly int[] previousTotals = { -1, -1, -1, -1 };
         readonly Tween[] pulses = new Tween[4];
+        readonly bool[] compactTelemetry = new bool[4];
         public void RefreshLane(int index)
         {
             var lane = menus.match.lanes[index]; var player = lane.Owner; var score = player.score;
@@ -32,11 +33,17 @@ namespace LWS.TruckBowling
                     pulses[index] = totals[index].transform.DOPunchScale(Vector3.one * .055f, .3f, 2, .4f).SetUpdate(true);
                 previousTotals[index] = total;
             }
-            string menuHint = player.Controller ? "START · PAUSE / SCORECARD" : "TAB SCORECARD · ESC PAUSE";
-            menus.guidance[index].text = lane.Phase == BowlingPhase.Approach ? "LINE UP · BUILD SPEED\n" + menus.DeviceName(lane.ownerSlot)
-                : lane.Phase == BowlingPhase.Rolling ? "COMMITTED · ONE PASS · " + (Mathf.Abs(lane.truck.Speed) * 2.236936f).ToString("0") + " MPH\n" + menuHint
-                : lane.Phase == BowlingPhase.Replay ? "RECORDED REPLAY · " + lane.highlights.replay.Speed.ToString("0.##") + "× · CAMERA " + (lane.highlights.replay.Angle + 1) + "\nLEFT/RIGHT VIEW · UP/DOWN SPEED · FWD+BACK / TRIGGERS SKIP"
-                : lane.Phase == BowlingPhase.Finished ? "LANE COMPLETE · OTHER PLAYERS CONTINUE"
+            if(!compactTelemetry[index])
+            {
+                var footer=menus.guidance[index].rectTransform.parent as RectTransform;
+                footer.anchorMin=footer.anchorMax=footer.pivot=new Vector2(.5f,0);footer.anchoredPosition=new Vector2(0,12);footer.sizeDelta=new Vector2(520,44);
+                var label=menus.guidance[index];label.rectTransform.anchorMin=Vector2.zero;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.offsetMin=new Vector2(8,2);label.rectTransform.offsetMax=new Vector2(-8,-2);label.alignment=TextAlignmentOptions.Center;
+                compactTelemetry[index]=true;
+            }
+            menus.guidance[index].text = lane.Phase == BowlingPhase.Approach ? (Mathf.Abs(lane.truck.Speed)*2.236936f).ToString("0")+" MPH · APPROACH"
+                : lane.Phase == BowlingPhase.Rolling ? (Mathf.Abs(lane.truck.Speed) * 2.236936f).ToString("0") + " MPH · PIN ACTION"
+                : lane.Phase == BowlingPhase.Replay ? "REPLAY · " + lane.highlights.replay.Speed.ToString("0.##") + "× · CAMERA " + (lane.highlights.replay.Angle + 1)
+                : lane.Phase == BowlingPhase.Finished ? "LANE COMPLETE"
                 : "PINSETTER · SCORE LOCKED";
             menus.popups[index].text = lane.highlights != null && lane.highlights.group.alpha > .01f ? ""
                 : lane.Phase >= BowlingPhase.Popup && lane.Phase <= BowlingPhase.Setting ? lane.Result : "";

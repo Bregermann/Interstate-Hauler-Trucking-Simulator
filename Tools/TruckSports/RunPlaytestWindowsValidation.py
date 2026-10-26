@@ -65,6 +65,7 @@ def main():
         # Accept only the explicitly requested existing probe's own terminal
         # signature. Never treat an arbitrary ERRORS=0 line as completion.
         protected_footers = {
+            "-tsCornholeHole": r"(?m)^ERRORS=(\d+) CHECKS=(\d+) PID=(\d+)\. Real PhysX drops through unchanged opening; injected launch setup, not human throws\.$",
             "-tsPong": r"ERRORS=(\d+)\. Native physical NWH approach, charge/release, once-only spring, hollow cup contacts and penetration\. No human/hardware/GPU acceptance claim\.",
             "-tsParking": r"ERRORS=(\d+)\. Actual NWH/PhysX, autonomous AI matches and native music/pause observation; no hardware/human or subjective audio validation\.",
             "-tsBuzkashi": r"ERRORS=(\d+)\. Native NWH/PhysX six-truck five-minute play, physical cargo constraint and complete match; no human/hardware validation\.",
@@ -84,6 +85,10 @@ def main():
         signature = protected_footers.get(args.flag)
         if signature:
             legacy = re.search(signature, evidence)
+            if legacy and args.flag == "-tsCornholeHole":
+                observed_checks = len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE))
+                if int(legacy[2]) != observed_checks or int(legacy[3]) != process.pid:
+                    legacy = None
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)

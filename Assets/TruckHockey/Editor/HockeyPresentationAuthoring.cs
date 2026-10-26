@@ -40,6 +40,7 @@ namespace LWS.TruckHockey.Editor
             if(menus.presentation!=null)
             {
                 bool changed=RetireLegacyOverlay(menus);changed|=ImproveContrast(menus);
+                var obsolete=menus.presentation.scoreBug!=null?menus.presentation.scoreBug.Find("Hockey scoring rule"):null;if(obsolete!=null&&obsolete.gameObject.activeSelf){obsolete.gameObject.SetActive(false);changed=true;}
                 if(changed){EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);}
                 Debug.Log("HOCKEY_PRESENTATION preserved existing authored presentation");return;
             }
@@ -53,7 +54,6 @@ namespace LWS.TruckHockey.Editor
             p.orangeTitle=Label("Orange team title",bug,"ORANGE",new Vector2(200,38),new Vector2(269,13),30,true);p.orangeTitle.color=HockeyPresentation.Orange;
             Move(menus.scoreText,bug,new Vector2(220,58),new Vector2(0,10),45);Move(menus.clockText,bug,new Vector2(190,28),new Vector2(0,-30),23);
             p.matchType=Label("Match type",bug,"TRUCK HOCKEY · 3v3",new Vector2(230,25),new Vector2(-269,-24),20);
-            Label("Hockey scoring rule",bug,"DRIVE · HIT · SCORE",new Vector2(230,25),new Vector2(269,-24),20);
             var notice=Plate("Hockey phase notice",hud,new Vector2(1020,54),new Vector2(.5f,1),new Vector2(0,-126),SportsBroadcastCanvas.Ink).rectTransform;p.noticePlate=notice;
             Move(menus.messageText,notice,new Vector2(984,46),Vector2.zero,27);
             var roster=Rect("Hockey participant row",hud,new Vector2(1860,96),new Vector2(.5f,0),new Vector2(0,42));

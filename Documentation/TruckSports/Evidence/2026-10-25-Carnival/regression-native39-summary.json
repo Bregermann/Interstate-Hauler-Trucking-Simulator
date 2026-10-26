@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "generatedUtc": "2026-10-25T21:36:49.239811+00:00",
+  "scope": "Native39 LaunchFour/three natural same-body owner handoffs, independent from native38 prior14executions.",
+  "sourceReceipts": [
+    {
+      "artifact": "carnival-thirtyninth-native-results.json",
+      "sha256": "d01c84b42187ed793eaddff402c2d1312fbd6481b0b2b177c5749880e8e0fe55"
+    },
+    {
+      "artifact": "carnival-thirtyninth-native-source-inputs.json",
+      "sha256": "ee64b7f0411545a75a112ffd68c6c8c2f78da81b9eba15d24fb9c0a36a46d50f"
+    },
+    {
+      "artifact": "carnival-thirtyninth-owner-native.xml",
+      "sha256": "39942daede18cfcc28c7f810e3f2f7b984e4c2dbcb790664ec0018f37fa2e659"
+    }
+  ],
+  "frozenSourceInputs": [
+    {
+      "path": "Assets/TruckSports/Scripts/SportsLaunchAppearanceBoundary.cs",
+      "sha256": "75e69dc13ec4bc44742c2525feaef1c4bccec038a144a43c89e9f86f324077a3"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsLaunchAppearanceBoundary.cs.meta",
+      "sha256": "78fb8a1c7f9a3db1cc6be9b4bba98f382fa2c1def778ee58f81cfff400c02d8b"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/LaunchFourAppearanceIntegrationTests.cs",
+      "sha256": "76f15e34ca27341f7585ac52c02c309fb7c5365f7a32419993d84e534a023872"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/LaunchFourAppearanceIntegrationTests.cs.meta",
+      "sha256": "d0af71f89f2824b2f0282844b1bc32e10334babef946b879e78fc57eb509e9a8"
+    },
+    {
+      "path": "Assets/TruckSnake/Scripts/SnakeMatch.cs",
+      "sha256": "e8c24c09e6f5e8f58f1887684c607781b4ef1b33bb96b411c45cf4e3c6e40ddf"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/RedLightCarnivalVenueTests.cs",
+      "sha256": "ba757412278eeade98370f460ebc57b0f14a9500b2ae7dcc731a0950dcf122c7"
+    }
+  ],
+  "nativeResult": {
+    "job": "carnival-thirtyninth-owner-native",
+    "result": "Passed",
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0,
+    "testDurationSeconds": 202.4372686,
+    "runnerReceipt": {
+      "exit": 0,
+      "seconds": 240.69,
+      "timeoutSeconds": 1500,
+      "timedOut": false
+    },
+    "cases": [
+      {
+        "case": "LaunchFourAppearanceIntegrationTests.RealAiAttemptsReplayAllAnglesAndPrepareNextActualTurnOwner",
+        "result": "Passed"
+      },
+      {
+        "case": "LaunchFourAppearanceIntegrationTests.RealAiSameBodyDifferentOwnersReplaceTransformsAndRecordTheirOwnCurrentHierarchy",
+        "result": "Passed"
+      },
+      {
+        "case": "LaunchFourAppearanceIntegrationTests.SevenBodiesAcrossFourOriginalLaunchVenuesKeepPhysicsEquipmentProfilesAndGhostRoots",
+        "result": "Passed"
+      },
+      {
+        "case": "LaunchFourAppearanceIntegrationTests.SkyFourOriginalOwnersRefreshRecordedModelsWithoutChangingTowOrRecordedBoatRoots",
+        "result": "Passed"
+      }
+    ]
+  },
+  "sameBodyDifferentProfileProof": {
+    "body": "novelty.icecream",
+    "modes": [
+      {
+        "mode": "TruckGiantSwing",
+        "genuineSecondOwnerRecordedFrames": 4
+      },
+      {
+        "mode": "TruckFieldGoal",
+        "genuineSecondOwnerRecordedFrames": 4
+      },
+      {
+        "mode": "TruckBeerPong",
+        "genuineSecondOwnerRecordedFrames": 4
+      }
+    ],
+    "assertedByPassingTest": [
+      "Two distinct participantIDs use the samebody and equal descendant-name topology.",
+      "Original AI firstattempt reaches genuine replay, all3existing camera angles exercised, originalrules naturallyadvance to secondowner.",
+      "Oldcomposedmodel is disposed and newmodel instance replacesit. Everycached live transform belongs to the fresh source hierarchy, no stale/null references.",
+      "Secondowner native simulation writes several samples; ghostroots, saved appearance drafts and original physical configuration remain intact.",
+      "Controlled recorded-view exercise over genuine secondowner samples retains original pose/time buffers/framecount, physicsandscore receipt count."
+    ],
+    "notClaimed": "Controlled secondowner recorded-view is not a completed secondattempt, injected outcome, Windows/human replay test or whole-release acceptance."
+  },
+  "batch38Plus39ExecutionCount": {
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "meaning": "14+4targetedcase executions, including previously repeatedLaunchFour cases; NOT18unique requirements."
+  },
+  "retainedEvidence": [
+    "failed-presentation-4c8917.json",
+    "regression-native38-summary.json",
+    "Old4c8917appearance98PNGs and exacthash visual-review record"
+  ],
+  "releaseStatus": "Replacement build pending exactidentity; all3fresh actualWindows stages must rerun. No overallrelease/promotion claim.",
+  "sanitization": "Mode names/recordedframecounts only copied from proofoutput; actualparticipantIDs, objectinstanceIDs, rawlogs/stacks, processIDs and commandlines excluded."
+}
