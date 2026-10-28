@@ -30,7 +30,7 @@ Targeted native checks:31EditMode policy/original-score tests,1controlled mist d
 
 ## Delivery and limits
 
-The canonical Windows destination is `Builds/TruckSports/TruckSports.exe`, with all643 companion files. The exact tested artifact is installed with643verified files; the prior Windows6 build remains recoverable. Scoped Git publication is recorded separately after it completes. Prior0.6/0.7 builds and the full-session candidate remain recoverable. No blanket claim covers every historical requirement, every rules variant, physical hardware, listening, human playtesting, indefinite memory stability or isolated performance budgets. Seven obsolete APV GUIDs remain in26 classified inactive fields.
+The canonical Windows destination is `Builds/TruckSports/TruckSports.exe`, with all643 companion files. The exact tested artifact is installed with643verified files; the prior Windows6 build remains recoverable. The34-file release payload is verified on both public branches at 9e654097e38559147da46afe7842dac59331470a; private preservation is 951cf709b441536b663db1a2d0430ac58f73bd0d. All925protected files remain exact. [Delivery receipt](Evidence/Alpha07Refresh/GitPublication.json). Prior0.6/0.7 builds and the full-session candidate remain recoverable. No blanket claim covers every historical requirement, every rules variant, physical hardware, listening, human playtesting, indefinite memory stability or isolated performance budgets. Seven obsolete APV GUIDs remain in26 classified inactive fields.
 
 ## VENDOR ASSETS AUDITED
 
