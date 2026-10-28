@@ -13,10 +13,33 @@ public sealed class SportsBroadcastCanvas:MonoBehaviour {
   foreach(var image in GetComponentsInChildren<UnityEngine.UI.Image>(true)){if(image.sprite!=null||image.GetComponentInParent<TMP_InputField>()!=null)continue;string name=image.name;if(name=="Accent"||name=="Handle")image.color=Orange;else if(name=="Card"||name.Contains("backing")||name.Contains("backplate")||name.Contains("broadcast rail"))image.color=Ink;var button=image.GetComponent<LWS.TruckBilliards.BilliardsButtonVisual>();if(button!=null){button.normal=Raised;button.highlight=new Color(.65f,.20f,.035f,.99f);image.color=button.normal;}if(button!=null||name=="Card"||name.Contains("Sport Card")||name.Contains("broadcast rail")){var plate=image.GetComponent<SportsBroadcastPlate>();if(plate==null)plate=image.gameObject.AddComponent<SportsBroadcastPlate>();plate.cut=name.Contains("Card")?18:10;plate.accent=button==null;}}
   if(eventMenus!=null){Stretch(eventMenus.hud.GetComponent<RectTransform>());var page=eventMenus.pages[(int)SportsEventScreen.Play].GetComponent<RectTransform>();Stretch(page);var rail=eventMenus.header.transform.parent.GetComponent<RectTransform>();rail.anchorMin=new Vector2(0,1);rail.anchorMax=new Vector2(1,1);rail.pivot=new Vector2(.5f,1);rail.anchoredPosition=new Vector2(0,-12);rail.sizeDelta=new Vector2(-28,46);Stretch(eventMenus.header.rectTransform,10,4);eventMenus.header.fontSizeMax=25;eventMenus.header.fontSizeMin=21;
    var standing=eventMenus.standings.rectTransform;standing.anchorMin=standing.anchorMax=new Vector2(0,1);standing.pivot=new Vector2(0,1);standing.anchoredPosition=new Vector2(18,-78);standing.sizeDelta=new Vector2(345,Mathf.Min(760,eventMenus.match.MaximumPlayers*68+30));eventMenus.standings.fontSizeMax=23;eventMenus.standings.fontSizeMin=20;eventMenus.standings.alignment=TextAlignmentOptions.TopLeft;
-   var status=eventMenus.status.rectTransform;bool compactContext=eventMenus.match.CompactBroadcastStatus;status.anchorMin=compactContext?new Vector2(.5f,0):new Vector2(0,0);status.anchorMax=compactContext?new Vector2(.5f,0):new Vector2(1,0);status.pivot=new Vector2(.5f,0);status.anchoredPosition=new Vector2(0,compactContext?86:12);status.sizeDelta=compactContext?new Vector2(600,48):new Vector2(-40,52);eventMenus.status.fontSizeMax=25;eventMenus.status.fontSizeMin=21;if(eventMenus.match.BroadcastStatusVisible||compactContext)StatusPlate(status);if(!eventMenus.match.BroadcastStatusVisible){status.gameObject.SetActive(false);var obsolete=status.parent.Find("Broadcast status backplate");if(obsolete!=null)obsolete.gameObject.SetActive(false);}
+   var status=eventMenus.status.rectTransform;bool compactContext=eventMenus.match.CompactBroadcastStatus;status.anchorMin=compactContext?new Vector2(.5f,0):new Vector2(0,0);status.anchorMax=compactContext?new Vector2(.5f,0):new Vector2(1,0);status.pivot=new Vector2(.5f,0);status.anchoredPosition=new Vector2(0,12);status.sizeDelta=compactContext?new Vector2(600,48):new Vector2(-40,52);eventMenus.status.fontSizeMax=25;eventMenus.status.fontSizeMin=21;if(eventMenus.match.BroadcastStatusVisible||compactContext)StatusPlate(status);if(!eventMenus.match.BroadcastStatusVisible){status.gameObject.SetActive(false);var obsolete=status.parent.Find("Broadcast status backplate");if(obsolete!=null)obsolete.gameObject.SetActive(false);}
+   LayoutImpossiblePages();
    for(int i=0;i<eventMenus.viewPanels.Length;i++){var t=eventMenus.viewTexts[i];t.rectTransform.anchorMin=t.rectTransform.anchorMax=new Vector2(0,1);t.rectTransform.pivot=new Vector2(0,1);t.rectTransform.anchoredPosition=new Vector2(18,-14);t.rectTransform.sizeDelta=new Vector2(730,105);t.fontSizeMax=24;t.fontSizeMin=20;var backing=t.transform.parent.Find("View data backing")?.GetComponent<RectTransform>();if(backing!=null){backing.anchorMin=backing.anchorMax=new Vector2(0,1);backing.pivot=new Vector2(0,1);backing.anchoredPosition=new Vector2(8,-7);backing.sizeDelta=new Vector2(750,120);}}
    var scores=GetComponent<SportsBroadcastScores>();if(scores==null)scores=gameObject.AddComponent<SportsBroadcastScores>();scores.menus=eventMenus;scores.headingFont=headingFont;scores.bodyFont=bodyFont;
    if(eventMenus.match.CompactViewportHud){var compact=GetComponent<SportsCompactViewportHud>();if(compact==null)compact=gameObject.AddComponent<SportsCompactViewportHud>();compact.menus=eventMenus;}
+  }
+ }
+ // The new workshops retain their original Heat controls and callbacks. Only
+ // their owned page rectangles move; existing sport pages are untouched.
+ void LayoutImpossiblePages(){
+  string scene=eventMenus.match.gameObject.scene.name;
+  if(scene=="TruckNestBuilding"){
+   var page=eventMenus.pages[(int)SportsEventScreen.Pause];
+   string[] order={"resume","help","settings","restart","front"};
+   foreach(var action in page.GetComponentsInChildren<SportsMenuAction>(true)){
+    int index=System.Array.IndexOf(order,action.action);
+    if(index>=0)action.GetComponent<RectTransform>().anchoredPosition=new Vector2(0,175-index*72);
+    else if(action.action=="drivingview")action.GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-195);
+   }
+  }
+  if(scene=="TruckOrchestra"){
+   var info=eventMenus.setupInfo.rectTransform;info.anchoredPosition=new Vector2(350,60);info.sizeDelta=new Vector2(620,150);
+   eventMenus.setupInfo.alignment=TextAlignmentOptions.TopLeft;
+   // Original footer HELP top=-358; calibration bottom=-369 overlapped it.
+   // Preserve the existing Heat button and callback, with a four-pixel gap.
+   foreach(var action in eventMenus.pages[(int)SportsEventScreen.Setup].GetComponentsInChildren<SportsMenuAction>(true))
+    if(action.action=="dance-calibrate")action.GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-335);
   }
  }
  void StatusPlate(RectTransform status){var found=status.parent.Find("Broadcast status backplate");if(found==null){var g=new GameObject("Broadcast status backplate",typeof(RectTransform),typeof(Image));g.transform.SetParent(status.parent,false);statusBackdrop=g.GetComponent<RectTransform>();var image=g.GetComponent<Image>();image.color=Ink;image.raycastTarget=false;g.AddComponent<SportsBroadcastPlate>().cut=8;}else statusBackdrop=found.GetComponent<RectTransform>();statusBackdrop.anchorMin=status.anchorMin;statusBackdrop.anchorMax=status.anchorMax;statusBackdrop.pivot=status.pivot;statusBackdrop.anchoredPosition=status.anchoredPosition;statusBackdrop.sizeDelta=status.sizeDelta;statusBackdrop.SetSiblingIndex(Mathf.Max(0,status.GetSiblingIndex()-(statusBackdrop.GetSiblingIndex()<status.GetSiblingIndex()?1:0)));}

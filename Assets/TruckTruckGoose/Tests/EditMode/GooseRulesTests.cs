@@ -1,0 +1,9 @@
+using NUnit.Framework;
+using LWS.TruckTruckGoose;
+public sealed class GooseRulesTests
+{
+    static void Lap(GooseRules rules,int slot,int direction,int steps=36){for(int i=1;i<=steps;i++)rules.Observe(slot,GooseRules.Wrap(direction*i*10),true);}
+    [TestCase(8)][TestCase(10)][TestCase(12)]public void ActualOppositeLoopAndSlowBayAreRequiredForOneClaim(int count){var r=new GooseRules(count,3);Assert.That(r.Select(1,0,0,false),Is.False);Assert.That(r.Select(1,0,0,true),Is.True);Assert.That(r.Claim(0,true,0,true),Is.False);Lap(r,0,1);Lap(r,1,-1);Assert.That(r.Progress(0),Is.EqualTo(360));Assert.That(r.Progress(1),Is.EqualTo(360));Assert.That(r.Claim(0,false,0,true),Is.False);Assert.That(r.Claim(0,true,5,true),Is.False);Assert.That(r.Claim(0,true,0,false),Is.False);Assert.That(r.Claim(0,true,double.NaN,true),Is.False);Assert.That(r.Claim(0,true,2,true),Is.True);Assert.That(r.Claim(1,true,0,true),Is.False);Assert.That(r.Scores[0],Is.EqualTo(1));Assert.That(r.NextRound(),Is.True);Assert.That(r.Picker,Is.EqualTo(1));Assert.That(r.Round,Is.EqualTo(2));}
+    [Test]public void CenterCutsTeleportAndBacktrackingCannotFarmProgress(){var r=new GooseRules(8,1);r.Select(1,0,0,true);r.Observe(0,10,true);r.Observe(0,0,true);Assert.That(r.Progress(0),Is.Zero);r.Observe(0,10,true);r.Observe(0,80,false);Assert.That(r.Progress(0),Is.Zero);r.Observe(0,90,true);Assert.That(r.Progress(0),Is.EqualTo(10));r.Observe(0,170,true);Assert.That(r.Progress(0),Is.Zero);Assert.That(r.Claim(0,true,0,true),Is.False);}
+    [Test]public void RecoveryRetainsOnlyEarnedProgressAndFinalRoundCloses(){var r=new GooseRules(8,1);r.Select(1,0,0,true);Lap(r,1,-1);r.Recover(1,0);Assert.That(r.Progress(1),Is.EqualTo(348));Assert.That(r.Claim(1,true,0,true),Is.False);r.Observe(1,-10,true);Assert.That(r.Claim(1,true,0,true),Is.True);Assert.That(r.NextRound(),Is.False);Assert.That(r.Phase,Is.EqualTo(GooseRules.Stage.Complete));Assert.That(r.Scores[1],Is.EqualTo(1));}
+}

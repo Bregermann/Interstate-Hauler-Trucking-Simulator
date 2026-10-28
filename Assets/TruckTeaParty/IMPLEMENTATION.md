@@ -1,0 +1,26 @@
+# Truck Tea Party — source handoff, native acceptance pending
+
+Exact archived Impossible Games Game11. Explicit new-scene entry: `LWS.TruckTeaParty.Editor.TeaAuthoring.Create`, which reuses the established dirty-scene/new-path guard and refuses overwrite. No scene author, Unity Editor, player or native test was executed by this source handoff.
+
+Four original full NWH tractors use existing Session, profiles/colors, driving views, Cinemachine, compact typed cards and Heat/DOTween confirmation. Kinematic PhysX shoulder/elbow/wrist links extend the existing Egg&Spoon physical tool foundation; the wrist follows actual truck displacement and slews locally at bounded speed. Native wrist overlap qualifies pickup, and a joint preserves the vessel's current relative pose. No vehicle or carried-vessel teleport is used during play. Pour control tips around the actual held spout direction even after a different approach heading. Fresh-owner extra-input gates and keyboard-conflict validation preserve source ownership.
+
+Eight finite real teapots contain3.6 units each;12 actual hollow cups target0.85 units. The actual spout trajectory is sampled ballistically against native colliders/receiver openings; missed streams/overflow/tipped cups lose actual volume. A round-aperture guard excludes the square trigger's corners. Real impacts feed CoreCollapse's single health authority and release pooled physical porcelain shards atomically. A cup scores only after release, native support contact on its correct guest table and0.6seconds of upright stable settlement. Precision, intact state and actual spills affect score; no collection/pouring/proximity points. An actual nearby completed wrist bow adds one courtesy receipt. AI uses the same pickup, physical stream, release, native table and gesture gates. Three cups per guest are finite; broken cups are lost, not automatically replaced. Timed results/rematch preserve proper identities and reset lives/volume/journal.
+
+The author builds a textured English lawn/paths, clipped hedges,80 modeled flowering rose plants, working bounded-particle tiered fountain, gilded lanterns, decorated preparation benches and licensed restaurant tables with original scalloped cloth details. Original glazed cobalt floral porcelain, curved hollow spouts/handles/gilt rims, fancy hat/bow-tie gear and the articulated tool are saved owned art.16 actual rigged/animated Taxi/UTS guests/attendants use existing Stadium reactions; no frozen sliding humans. Every selected body remains the existing appearance system's responsibility; equipment is passed explicitly to the lead's original binding author after first scene save.
+
+The small Tea-owned serving-domain helpers expose actual vessel/arm/receiver/impact/liquid behavior for Bake-Off reuse. They do not add a vehicle, weather, UI, navigation, persistence or backend framework.
+
+## Validation and limits
+
+Cached Roslyn runtime/editor/tests compile EXIT0; tests emit2 obsolete FindObjectsByType warnings.12 exact NUnit rules methods pass in a managed harness outside Unity. Native3 fixtures are authored but UNRUN: natural four-AI collect/pour/settle/serve/bow/full result/pause/rematch with4second failure telemetry; controlled actual-spout hit/miss/spill and physical ground-impact breakage after a real AI pickup;1–4 actual view/card owners plus four software controllers with physical wrist response. Captures use SportsControlledCapture.Save, exact720/1080 PNG checks and CONTROLLED NATIVE labels. They are not actual GameView, Windows, physical-device or human acceptance.
+
+Lead must execute authoring, dependency audit, native fixtures and review actual geometry/lighting/physics/AI/animation/camera/audio at720/1080. Common weather/time/appearance/camera/logo/registry/menu screenshot/release integration remains lead-owned. No finished-release, human/device/listening/performance/soak claim is made.
+
+## Vendor accounting
+
+- VENDOR ASSETS AUDITED: NWH full tractor, CoreCollapse public damage/support, existing Egg&Spoon tool and ImpossibleBalanceArt.Lathe/RoundedBlock, BeerPong hollow rolled-lip cup, installed Modern Resaturant art, available authorized Asset Store cache, Vista garden foundations, UTS/Taxi/FieldGoal animation and crowd, Heat/TMP/DOTween/Cinemachine.
+- VENDOR ASSETS USED: NWH, CoreCollapse damage, Heat/TMP/DOTween, Cinemachine and existing Session/driving/profile/appearance/crowd/tool/mesh foundations; licensed restaurant tables and existing garden/water/audio materials. Actual cache contains the already-installed restaurant pack; no additional porcelain/teapot asset was found or imported.
+- RELEVANT ASSETS NOT USED: BeerPong cup is oversized red plastic with sport-specific scoring; its hollow profile informs the new original porcelain. Restaurant art has no serving/liquid/etiquette API. Finished Burger/Pizza props cannot substitute for required physical food preparation. No commercial expensive fluid simulation is needed for this practical bounded stream.
+- CUSTOM SYSTEMS CREATED: Tea service/precision/courtesy/life rules, narrow physical serving domain adapters, original missing porcelain/garden/tool art, guarded author and focused fixtures.
+- VENDOR SOURCE MODIFIED: None.
+- DUPLICATE VENDOR FUNCTIONALITY CREATED: None; established vehicle/UI/camera/profile/health authorities remain owners.

@@ -1,0 +1,43 @@
+{
+  "vendorAssetsAudited": [
+    "Installed ShipContainerPack URP variants and original mesh/material hierarchy",
+    "NWH full tractor Sports facade and Fare Fight authored prefab",
+    "Public TugMatch.Rope SpringJoint constructor; SkyTow and TetherCable joint/rope presentation",
+    "CoreCollapse Structural.Support and Bungee integration",
+    "Installed Hivemind/JC_LP_MegaCity warehouse, construction/scaffold props and real Taxi humanoid clips",
+    "Existing SportsEventSession/input/views/profile/score lifecycle and Heat UI"
+  ],
+  "vendorAssetsUsed": [
+    "Assets/ShipContainerPack/URP/Prefabs/ShipContainerRed_URP.prefab",
+    "Assets/ShipContainerPack/URP/Prefabs/ShipContainerGray_URP.prefab",
+    "Assets/ShipContainerPack/URP/Prefabs/ShipContainerBlue_URP.prefab",
+    "Assets/Hivemind/ModularWarehouse/URP/Art/Prefabs/SM_Floor_Concrete_600_A.prefab",
+    "Assets/JC_LP_MegaCity/Prefabs/Buildings/SM_Buildings_Warehouse_01.prefab",
+    "Assets/ScaffoldsPack/URP/Prefabs/SM_StairTower.prefab",
+    "Assets/ConstructionPropsBundle/URP/Prefabs/SM_CableReel01 Variant.prefab",
+    "Assets/ConstructionPropsBundle/URP/Prefabs/SM_BoxesPack01 Variant.prefab",
+    "Assets/ConstructionPropsBundle/URP/Prefabs/SM_Pallet Variant.prefab",
+    "Assets/JC_LP_MegaCity/Prefabs/FloorProps/SM_FloorProps_Fence_01.prefab",
+    "Assets/TruckFareFight/Prefabs/Fare Fight Taxi Tractor.prefab",
+    "Assets/TruckDockDiving/Materials/Pool water.mat",
+    "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/business01_m.FBX",
+    "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/business01_f.FBX",
+    "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/idle1.FBX",
+    "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/cheer.FBX",
+    "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/shout.FBX"
+  ],
+  "relevantAssetsNotUsed": {
+    "CoreCollapse": "Its declared support-capacity graph calls Collapser.ReceiveAllDamage to replace structural modules. Jenga requires freely movable, unbroken dynamic containers whose loss is observed after actual PhysX falling; no damage graph or precomputed collapse is used.",
+    "Complete crane/winch controller": "No complete suitable installed crane/winch controller was found in the bounded audit. Existing Tug SpringJoint and PhysX kinematic motor/joint foundations are reused, with mode-owned reel and crane sequence semantics."
+  },
+  "customSystemsCreated": [
+    "Legal tower occupancy/turn and real-collapse attribution",
+    "Mode-owned physical extraction observation and reel/tension coordination over existing Tug joint",
+    "Moving kinematic crane spreader and physical grip: load stays dynamic, then actual released rest gates credit",
+    "New industrial port author and fixed-owner NWH selection/control adapter"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "ownership": "Installed licensed assets referenced in place. No imports, source-prefab edits or raw-asset copies. No existing Goose/Guess or 0.6 source changes.",
+  "validation": "Source compilation and engine-free actual C# rule checks only. Scene generation, NWH/PhysX/crane native tests, visual acceptance and real devices are pending lead-exclusive Unity execution."
+}

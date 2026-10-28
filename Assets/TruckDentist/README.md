@@ -1,0 +1,23 @@
+# Truck Dentist — source handoff
+
+Exact GAME12: four original full NWH tractors perform precise work inside an enormous playful, non-graphic cartoon mouth/clinic. The existing articulated serving arm supplies physical shoulder/elbow/wrist machinery; six original modeled interchangeable tools provide toothbrush, drill, forceps, air, water and cleaner/filling polisher. Native selected-tip collisions/overlaps, real tip speed and native impulse/force gate treatment. Water/air use optimized local contact jets; brushing/drilling/polishing use real physical tip collisions. No contact timer can extract a tooth: a native forceps overlap attaches a current-pose joint and an actual physical pull must break the finite socket joint. One CoreCollapse authority owns actual damaged tooth health/collapse; bounded pooled enamel chips are harmless/non-graphic.
+
+Each owner has actual dirty/cavity/loose/healthy teeth. Correct ordered rinse/brush/clean/dry, cavity drilling/rinse/filling/dry, and rinsed loose-tooth extraction bank once. Wrong dangerous tools, excessive native force and fast impacts cost points; healthy teeth must be protected. AI selects the same tools and drives/moves the original truck/arm through those same actual contacts. Three/five/seven finite180second checkups, actual results, pause, fresh input gates, profiles, one-to-four local owners and rematch use the existing Session foundations. Read-only typed cards retain actual score/procedure/tool/target context. Full controls are in Help.
+
+The original clinic includes sculpted cusp/root tooth art, gums/tongue, a giant animated cosmetic jaw/eyes/blinking patient, colored clinic panels, machined instruments and examination lights. Patient pose animation and DOTween reactions are cosmetic only; they never move the truck floor, physical teeth or official outcomes. Actual rigged UTS/Taxi attendants use the existing stadium controller. Installed restaurant hardware is reused as sterilizer-cabinet venue art; it is not claimed to be a dental pack.
+
+Author: `LWS.TruckDentist.Editor.DentistAuthoring.Create`, explicit NEW-scene only, refuses overwrite/dirty scene. Calls lead common appearance binder only after first save; the existing gear root excludes original truck art. Lead retains common weather/time/SRS, registry/menu/logo and native execution. No Unity, scenes, player or Git were invoked/edited by this source author.
+
+Validation: cached runtime/editor/test C# compilation exit0;14 real NUnit pure methods pass outside Unity, covering ordered care, proper targets, force/speed, healthy penalties, actual-grip prerequisite, once-only scoring, ownership, rounds/ties/reset. Three native fixtures are supplied but UNRUN: natural four-AI all-six-tool care/real extraction/patient animation/full results/pause/rematch; real native healthy-water versus wrong-drill and actual clamped socket pull; one-to-four views and four explicit software pads. Controlled720/1080 captures are Camera.Render/UI composites, not actual GameView/Windows/human acceptance. Native physical force limits, vehicle/arm reach, authored geometry, patient visuals, physical hardware, listening and performance await lead validation. All test assembly names are explicitly unique Dentist names and GUIDs are32hex.
+
+VENDOR ASSETS AUDITED: NWH and original Fare Fight tractor/driver; CoreCollapse public damage/support; Tea physical arm/contact toolkit; Heat/TMP/DOTween; installed/cached dental/clinic/tooth/mouth searches; actual restaurant fixture prefab and rigged UTS/Taxi crowd/animation/audio assets.
+
+VENDOR ASSETS USED: original NWH truck/controller/power/body reset and shared input/DrivingViews/profile authority; CoreCollapse damage/support; existing Tea physical articulated machinery and Heat serving HUD; Heat/TMP/DOTween notification/patient reaction foundation; restaurant venue hardware, rigged crowd/controller and existing NWH motor/owned wind/receipt sounds.
+
+RELEVANT ASSETS NOT USED: scoped installed/cached search found no dedicated dental/tooth/clinic pack (Residential House was only a filename substring match, not dental art). Existing restaurant assets provide venue art, not dental procedures or a patient. No custom replacement for NWH, UI, global weather, camera, persistence or traffic was created.
+
+CUSTOM SYSTEMS CREATED: dental procedure/precision/penalty/round rules, typed selected-tip native contact adapter, actual socket/extraction lifecycle, original six tool/tooth/clinic/patient art and cosmetic animation, mode-only physical AI orchestration, guarded new-scene author and targeted pure/native fixtures.
+
+VENDOR SOURCE MODIFIED: None.
+
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None. Dental semantics and missing art extend existing authorities.

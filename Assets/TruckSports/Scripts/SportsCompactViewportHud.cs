@@ -74,7 +74,7 @@ namespace LWS.TruckSports
                 string telemetry=match.ViewportTelemetry(view);bool hasTelemetry=!string.IsNullOrEmpty(telemetry);
                 bool hasDetail=!string.IsNullOrEmpty(detail);card.root.sizeDelta=hasTelemetry?new Vector2(340,116):hasDetail?new Vector2(270,76):new Vector2(230,72);card.name.rectTransform.sizeDelta=new Vector2(hasTelemetry?316:hasDetail?246:206,match.CompactBroadcastStatus?28:26);card.score.rectTransform.sizeDelta=new Vector2(hasDetail?94:166,28);card.detail.rectTransform.sizeDelta=new Vector2(hasTelemetry?178:108,hasTelemetry?48:34);card.telemetry.text=telemetry;card.telemetry.gameObject.SetActive(hasTelemetry);
                 menus.viewTexts[view].gameObject.SetActive(false);var obsolete=menus.viewPanels[view].Find("View data backing");if(obsolete!=null)obsolete.gameObject.SetActive(false);
-                var anchor=InnerAnchor(match.cameras[view].rect);card.root.anchorMin=card.root.anchorMax=card.root.pivot=anchor;
+                var anchor=match.ViewportCardAnchor(view,match.cameras[view].rect);card.root.anchorMin=card.root.anchorMax=card.root.pivot=anchor;
                 card.root.anchoredPosition=new Vector2(anchor.x<.01f?10:anchor.x>.99f?-10:0,anchor.y<.01f?10:anchor.y>.99f?-10:0);
                 var color=match.ViewportCardColor(view,owner);card.name.text=match.ViewportCardLabel(view,owner);card.name.color=card.stripe.color=color;card.portrait.color=Color.Lerp(color,Color.white,.3f);
                 if(card.previous!=null&&card.previous!=score){card.score.transform.DOKill();card.score.transform.localScale=Vector3.one;card.score.transform.DOPunchScale(Vector3.one*.12f,.25f,2,.4f).SetUpdate(true).SetLink(card.root.gameObject);}

@@ -132,6 +132,20 @@ def wait_owned_editor(process, timeout_seconds):
         return code, True
 
 
+def require_nonempty_unity_test_result(arguments):
+    """A successful Editor exit with an empty filter is not an executed test."""
+    if "-runTests" not in arguments:
+        return None
+    if "-testResults" not in arguments:
+        raise ValueError("Scoped Unity tests require an explicit results path")
+    result = Path(arguments[arguments.index("-testResults") + 1])
+    tree = ET.parse(result).getroot()
+    executed = int(tree.attrib.get("passed", "0")) + int(tree.attrib.get("failed", "0"))
+    if executed <= 0:
+        raise ValueError("Unity executed zero tests; check the filter and test-assembly platform classification: " + str(result))
+    return executed
+
+
 def run(name, arguments, timeout_seconds=None):
     canonical_before = None
     if name == "camera-build":
@@ -166,6 +180,16 @@ def run(name, arguments, timeout_seconds=None):
         assert canonical_after == canonical_before, "Canonical build changed during validation; retain output and investigate before delivery"
     if code or timed_out:
         raise SystemExit(124 if timed_out else code)
+    try:
+        executed = require_nonempty_unity_test_result(arguments)
+    except (ValueError, OSError, ET.ParseError) as error:
+        receipt["testExecutionGate"] = dict(passed=False, reason=str(error))
+        path.write_text(json.dumps(records, indent=2))
+        print("UNITY_TEST_EXECUTION_GATE_FAILED " + str(error), flush=True)
+        raise SystemExit(2)
+    if executed is not None:
+        receipt["testExecutionGate"] = dict(passed=True, executed=executed)
+        path.write_text(json.dumps(records, indent=2))
     if name == "camera-build":
         record_build()
 

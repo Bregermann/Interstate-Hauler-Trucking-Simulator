@@ -52,6 +52,11 @@ namespace LWS.TruckSports.Editor
             foreach (string sheet in new[] { "Classics", "Events", "Newcomers" })
                 foreach (var sprite in AssetDatabase.LoadAllAssetsAtPath("Assets/TruckSports/Art/SportIcons/" + sheet + ".png").OfType<Sprite>()) icons[sprite.name] = sprite;
             var snakeIcon=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/TruckSnake/Art/Truck Snake Icon.png");if(snakeIcon!=null)icons["sport-snake"]=snakeIcon;
+            foreach (var entry in SportsImpossibleGames.All)
+            {
+                var original = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/TruckSports/Art/Icons/Impossible07/" + entry.scene + ".png");
+                if (original != null) icons["sport-" + entry.key] = original;
+            }
             var subtitle=front.pages[1].transform.Find("Subtitle")?.GetComponent<TMP_Text>();if(subtitle!=null){Position(subtitle.rectTransform,new Vector2(1400,32),new Vector2(0,330));subtitle.fontSizeMax=22;subtitle.fontSizeMin=19;subtitle.color=new Color(.66f,.75f,.82f);}
             int missing = 0, updated = 0;
             var cards = front.catalogue.cards.ToList();
@@ -108,6 +113,7 @@ namespace LWS.TruckSports.Editor
         { rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f,.5f); rect.sizeDelta = size; rect.anchoredPosition = position; }
         public static string SceneFor(string key)
         {
+            if (SportsImpossibleGames.TryFindKey(key, out var impossible)) return impossible.scene;
             var map = new Dictionary<string,string> {
                 {"basejump","TruckBaseJumping"},{"cheese","TruckCheeseRolling"},{"dock","TruckDockDiving"},{"terrier","TruckTerrierRacing"},
                 {"mattress","TruckMattressRacing"},{"wife","TruckWifeCarrying"},{"parking","TruckMusicalParking"},{"swing","TruckGiantSwing"},

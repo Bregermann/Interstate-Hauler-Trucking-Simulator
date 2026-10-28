@@ -1,0 +1,12 @@
+using System;
+using System.Linq;
+using NUnit.Framework;
+using LWS.TruckGuessThat;
+public sealed class GuessRulesTests
+{
+    public static GuessIdentity[] Fixture()=>Enumerable.Range(0,24).Select(i=>new GuessIdentity{id="id."+i,name="Truck "+i,body="body."+(i/4),hat="hat."+(i%4),eyes="eyes."+(i%2),mouth="mouth."+(i%3),mirrors="mirror."+(i%3),wheels="wheel."+((i/4+i)%3)}).ToArray();
+    [Test]public void EveryAnswerIsTruthfulAndOnlyIncompatibleCandidatesFold(){var r=new GuessRules(Fixture(),4,1024);for(int turn=0;turn<12&&r.Winner<0;turn++){int seat=r.Turn;var before=r.PublicCandidates(seat);int q=GuessDeduction.BestQuestion(r.Identities,r.Questions,before,n=>r.CanAsk(seat,n));if(q<0)break;Assert.That(r.Ask(seat,q,out var answer),Is.True);Assert.That(answer.yes,Is.EqualTo(r.Questions[q].Matches(r.Identities[r.OwnerSecret(answer.target)])));foreach(int i in before)Assert.That(r.Candidate(seat,i),Is.EqualTo(r.Questions[q].Matches(r.Identities[i])==answer.yes));Assert.That(r.Candidate(seat,r.OwnerSecret(answer.target)),Is.True);Assert.That(r.Ask(seat,q,out _),Is.False);r.Next();}}
+    [Test]public void PublicDeductionDoesNotDependOnDifferentHiddenSecrets(){var a=new GuessRules(Fixture(),2,11);var b=new GuessRules(Fixture(),2,87);int qa=GuessDeduction.BestQuestion(a.Identities,a.Questions,a.PublicCandidates(0),q=>a.CanAsk(0,q));int qb=GuessDeduction.BestQuestion(b.Identities,b.Questions,b.PublicCandidates(0),q=>b.CanAsk(0,q));Assert.That(qa,Is.EqualTo(qb));Assert.That(typeof(GuessDeduction).GetMethods().Single(m=>m.Name=="BestQuestion").GetParameters().Any(p=>p.ParameterType==typeof(GuessRules)),Is.False);}
+    [TestCase(2)][TestCase(3)][TestCase(4)]public void ReproducibleAiCanDeduceThroughActualAnswersWithoutSecretAccess(int count){var r=new GuessRules(Fixture(),count,511);for(int n=0;n<100&&r.Winner<0;n++){int[] choices=r.PublicCandidates(r.Turn);int q=GuessDeduction.BestQuestion(r.Identities,r.Questions,choices,k=>r.CanAsk(r.Turn,k));if(choices.Length==1||q<0)Assert.That(r.Guess(r.Turn,choices[0],out _),Is.True);else Assert.That(r.Ask(r.Turn,q,out _),Is.True);r.Next();}Assert.That(r.Winner,Is.GreaterThanOrEqualTo(0));Assert.That(r.Turns,Is.LessThan(32));}
+    [Test]public void WrongGuessCostsTurnNeverWinsAndIsRemoved(){var r=new GuessRules(Fixture(),2,1);int wrong=(r.OwnerSecret(1)+1)%24;Assert.That(r.Guess(0,wrong,out bool correct),Is.True);Assert.That(correct,Is.False);Assert.That(r.Candidate(0,wrong),Is.False);Assert.That(r.Winner,Is.EqualTo(-1));r.Next();Assert.That(r.Turn,Is.EqualTo(1));}
+}

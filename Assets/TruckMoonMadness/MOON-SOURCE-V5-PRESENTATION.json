@@ -1,0 +1,51 @@
+{
+  "scope": "MOON-SOURCE-V5-PRESENTATION; preceding frozen/native handoffs preserved",
+  "review": "Logs/TruckSports/Impossible07/ControlledVisualReview-JengaV6-MoonV1/visual-review-and-bounded-repair.json",
+  "reviewSha256": "0a08af9db9b3249eafa3f0ec5c99424b4bcf37210cc90fbba4648d91ae166a81",
+  "changes": [
+    "Correct countdown contract only; original clock/control/scoring/physics untouched.",
+    "Explicit eight-label render repair using existing public per-camera billboard; root caller opens/saves after all-label preflight.",
+    "Two new native countdown/sign/HUD cases; old split capture waits completed UI frames/tween afterResume; all original physics thresholds and V4diagnostic preserved."
+  ],
+  "authorEntry": "LWS.TruckMoonMadness.Editor.MoonPresentationAuthoring.RepairOpenOwnedHabitatLabels",
+  "filters": [
+    "MoonPlayModeTests.OriginalCountdownShowsThreeTwoOneGoThenHidesAndRepeatsAfterRematch",
+    "MoonPlayModeTests.ActualOneThroughFourChaseSignsStayBoundedAndSettledHudRetainsItsOwner"
+  ],
+  "validation": "PASS13MoonsourceCS/543actualcachedreferences/0semanticerrors. New native/render/art-author execution UNRUN; no Windows/human acceptance.",
+  "files": [
+    {
+      "path": "Assets/TruckMoonMadness/Scripts/MoonMatch.cs",
+      "sha256": "2341819b9a8935a54349d91ff0967016ff6a045f4c280d197ae0098602120464",
+      "bytes": 17943,
+      "previousSha256": "404d80d805f460d767ab0c76511fe45f87efe0576b8e16aceff6c670b317c4a6"
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Editor/MoonAuthoring.cs",
+      "sha256": "e9c1e52e600c3bd5fc5fd17dd1676aa4796e855839dcee6ca3919b4478bbcb7a",
+      "bytes": 26590,
+      "previousSha256": "5377694e6537cdfa0e0e5f24fabf6a3bbbe0e88d6cc0cf8800882349eee32cd9"
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Editor/MoonPresentationAuthoring.cs",
+      "sha256": "5852a80ef2388493515f4bcb0e02b36773abcd285a3d0f47b0d3862351de32df",
+      "bytes": 4081
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Editor/MoonPresentationAuthoring.cs.meta",
+      "sha256": "a6e70e077cb2c27020ef312c8708aedb6bc2b51864678495276767fc1036e340",
+      "bytes": 254
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Tests/PlayMode/MoonPlayModeTests.cs",
+      "sha256": "d1e8aead7cfe8757b575b77e054a3da12fcb31c90d723ffc204336b5c53e6fbc",
+      "bytes": 30087,
+      "previousSha256": "ab260a8479a4b5b7c044d1137da5f6a118bf7a9e5be40edc08be9d49d36bbb00"
+    },
+    {
+      "path": "Assets/TruckMoonMadness/MOON-SOURCE-V5-PRESENTATION.json.meta",
+      "sha256": "43b0962babe8cdf2d24bc95381d08b947c9a6d9ea27bc2d561864007530f10ce",
+      "bytes": 62
+    }
+  ]
+}

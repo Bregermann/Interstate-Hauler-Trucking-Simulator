@@ -1,0 +1,92 @@
+{
+  "scope": "Test-only correction of two invalid geometry expectations; production V10/V9 bytes unchanged. No Unity/CLEAN/scene/Git/ledger/vendor edits.",
+  "evidence": {
+    "path": "Logs/TruckSports/Impossible07/impossible07-v24-actual-withdrawal-and-spreader-geometry.xml",
+    "sha256": "7dd371079a368ca39f5b907564a1287c828f11bb727f1601cabacaca6a415658",
+    "bytes": 4914
+  },
+  "actualResult": "Sphere-anchor case PASS; old combined withdrawal fixture FAIL dotDown0. No scene-author/native runtime execution after geometry gate failure. XML does not identify center iteration, so fixture now exposes each exact center as separate native test case plus actual MTV/depth output.",
+  "reason": "Exact oldcenter0 native V8 DOWN/.06879087 geometry remains strict. Raising center .25 makes sphere y1.218791 within actual box vertical span at its x-min face; left escape .25 is shorter than down .318791, so applying original DOWN to corrected geometry is invalid. Real lateral escape can also already leave most of radius-expanded footprint; requiring an additional>.1m side motion is artificial. Runtime chooses real ComputePenetration direction and has neither hard-coded assumption.",
+  "criteria": "Separate TestCase(0)/TestCase(.25) retain real initial overlap, originalcenter0 DOWN>.99/exact.068791\u00b11e-5, native normal unit length/positive depth, strictly nonincreasing overlap throughout bounded escape, actual expanded-footprint exit, and actual no-recross ComputePenetration checks at every side/up/above-load step. Original box pose/size and sphere radius/enabled/solid unchanged. Added actual centerOffset/MTV/depth telemetry.",
+  "filter": "ArchaeologyWithdrawalGeometryTests",
+  "validation": "Cached semantic diagnostics PASS129actualC# (27owned/100immutablevendor/2dependencies)/557actualreferences/0errors/noemission. Native rerun UNRUN by agent.",
+  "files": [
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyWithdrawalGeometryTests.cs",
+      "sha256": "4e51dcb462736ea6427e2b03d314485460ccded312b8d40f3880bb22612cec6e",
+      "bytes": 4508
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyWithdrawalGeometryTests.cs.meta",
+      "sha256": "ee1a6e42132675e9ea09124d6513f4884affe97458bcf35537cebdb49f9d0699",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/ARCHAEOLOGY-WITHDRAWAL-FIXTURE-V11.json.meta",
+      "sha256": "063bb50d3f2d4627ef01c37a96db3365b5b5def524d03cf2be02a3083d20241b",
+      "bytes": 62
+    }
+  ],
+  "protectedProductionAndTests": [
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyEquipment.cs",
+      "sha256": "6e7213d04b702a1673da544d33f8bf0a2bfda280b7de35c3912ed424c539460d",
+      "bytes": 2200
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyEquipment.Withdrawal.cs",
+      "sha256": "24a6f6934eff2b3edc8d4c582ff0a3099dcb47b152008e77f52564dac18eb42c",
+      "bytes": 4819
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyArtifact.cs",
+      "sha256": "03228db51717b2ac5bb9704617ff607b7796d3aebfae34bc9095a2fe3f05b755",
+      "bytes": 2550
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMatch.cs",
+      "sha256": "a980760aedfcc668b9961863e1b45a1efa468e674a811cd3bd43ac5e3ea0a9ae",
+      "bytes": 20857
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyAuthoring.cs",
+      "sha256": "d2989ac9a190c9f13e3289e8ad14ff81927e5cd4dfdda86c5cd97211aa6a6c2d",
+      "bytes": 28003
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologySpreaderColliderAuthoring.cs",
+      "sha256": "a47bc88e13575335a617d18fb4f1f468997ef25fcd1372ce0553b8b44e6fac1d",
+      "bytes": 3202
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologySpreaderColliderTests.cs",
+      "sha256": "1aa3bca7d4698ee7c33753827a6da6e2a445a58455aaff88c97cc669037ebf25",
+      "bytes": 3033
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyHoistContactProbe.cs",
+      "sha256": "ac73ff4bb33b6cfb91a81314fd49fe3b1d6afb029fbb1eaa7910ea63551b6700",
+      "bytes": 7416
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyFootprintPlayModeTests.cs",
+      "sha256": "e735a746f07205b32e3de90bd6bf43a33196a1944e7573ad5ac19aa81779ea5c",
+      "bytes": 13072
+    }
+  ],
+  "vendorAssetsAudited": [
+    "Native Unity ComputePenetration result and exact sphere/box poses",
+    "Existing mode withdrawal uses actual returned minimum-translation direction"
+  ],
+  "vendorAssetsUsed": [
+    "Existing native PhysX penetration queries"
+  ],
+  "relevantAssetsNotUsed": [
+    "Runtime changes unnecessary for a fixed DOWN expectation present only in fixture"
+  ],
+  "customSystemsCreated": [
+    "No new runtime system; corrected measured-geometry test cases only"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false
+}

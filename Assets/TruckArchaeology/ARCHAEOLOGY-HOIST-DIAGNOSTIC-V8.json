@@ -1,0 +1,87 @@
+{
+  "scope": "Read-onlytestinstrumentation+boundedfirstactualrelease measurement. AllproductionArchaeologyV7/runtime/Jenga/exposure/score/physics unchanged. No Unity/CLEAN/Git/scene/ledgerwrites.",
+  "actualEvidence": {
+    "xml": {
+      "path": "Logs/TruckSports/Impossible07/impossible07-v19-archaeology-real-residual-surface-cut-and-native-load.xml",
+      "sha256": "68e284221873c343e13786a00837f0d3a4a47ee7ad2d5a926ef7beffc982bad9",
+      "bytes": 916199
+    },
+    "trajectory": "359.68Lifting/Approach bodyy2.450/vy-.193 with genuineDiggerMeshcenterfloor1.134.363.72LowerPickup bodyshovedsideways/up toy3.704, preservation.886->.651.367.74bodybelow-41 whileterrainstillqueryableabove. Thenfreefall;0loads. No assumption of noflooratrelease.",
+    "source": "OriginalJenga spreader hasnoCollider; Archaeology adds solidSphere radius.25center0 butusesoriginaltop-anchorLowerPickup. This geometricallyoverlaps beforegrip; actualfirstreleasecollisions/impulsesnotyetmeasured. No bedrockfix applied."
+  },
+  "filter": "ArchaeologyFootprintPlayModeTests.ReadOnlyFirstPhysicalExposureCraneHeadContactsJointsAndRealFloorTrajectory",
+  "boundedRun": "Same real controlled9wellsetup andoriginalAIwithoriginalfixedstep/timeScale8. Stop after10simsecondsfromactualdynamicrelease orbodybeloworiginalTerrainminY-2,75realpostsetupcap. Reportsmeasurementonly; noPhysicalLoad/full600acceptance inferred. Strongoriginalresidualloadcase remainsalloriginalcriteria and gains earlybelowworldfailureinstead90secondchase.",
+  "telemetry": "Newprobe fixedorder2000 capturesfirst10actualsimseconds at.05siminterval plusrealcollision/jointbreak callbacks. Actual spherelocalcenter/radius/worldcenter/bottom vs pickuporigin, head/artifactnativeoverlapdepth/normal, bodypose/v/av/CCD/collisionenabled/layers, cranestage/pickups/releases/actualjointconnectedbody, headandterraincontacts/impulses/separations, worldy24down100actualfloorhits withpair/layerignorechecks. Durable unique first-release-native-contact-and-floor.txt; no state mutations.",
+  "validation": "PASS125actualCS=23owned+100immutablevendor+2deps/557cachedactualreferences/0errors,noemission. NativeV8UNRUN.",
+  "vendorAssetsAudited": [
+    "ActualDigger terraincollider release-ray evidence",
+    "OriginalJenga collider-free spreader/topanchor and Archeology solid sphere center",
+    "CurrentNWH/actualrigidbody/collider/physicsquery APIs"
+  ],
+  "vendorAssetsUsed": [
+    "Existing actualDigger/NWH/crane lifecycle",
+    "Unity realCollision/ComputePenetration/Raycast/jointcallbacks"
+  ],
+  "relevantAssetsNotUsed": {
+    "Bedrock/bodyfreezing/teleport/forces": "Notjustifiedbeforeactualcontactdata; actualfloorpresentatrelease."
+  },
+  "customSystemsCreated": [
+    "Test-only firstrelease/contact/floor observer and boundedmeasuremententry"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyFootprintPlayModeTests.cs",
+      "sha256": "a97c784014ec3f1762360bf0732e40c8459009241abe5227dc8c85b1004efce3",
+      "bytes": 11232
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyHoistContactProbe.cs",
+      "sha256": "3b794a7b3ff4715d0406d3a1ca522dd1a87bd97ea3ff33905b4ac29f9dd566de",
+      "bytes": 6319
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyHoistContactProbe.cs.meta",
+      "sha256": "eaade04f924fa4b22f5afeba80fc70242cfce033972ce68b14a1166729356437",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/ARCHAEOLOGY-HOIST-DIAGNOSTIC-V8.json.meta",
+      "sha256": "33552b34c6ee3c69dec4fd0a29b280b5ea2bf2d56f068f71dc246107dd0b8fc1",
+      "bytes": 62
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyTerrain.cs",
+      "sha256": "8b2b784a1db6d0c3c59c500ba3d34d89dc579c65cce7b8206eb4134d673e6875",
+      "bytes": 11093
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyArtifact.cs",
+      "sha256": "8309bda72b6e860a707e38ec0373cd3c88491d63ff7e1a705d0b66242b7dc9a9",
+      "bytes": 2488
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyEquipment.cs",
+      "sha256": "0700a3a453a8147e34b69c6f73e7b2ea702fae7ef1c0163b83c89070e6b287cc",
+      "bytes": 2123
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMatch.cs",
+      "sha256": "578a8cde93962790b9165f7260252c8bda89678f916258b3131fb4934481f6ff",
+      "bytes": 19483
+    },
+    {
+      "path": "Assets/TruckJenga/Scripts/JengaCrane.cs",
+      "sha256": "301319d1bc46fb67dce70f71fc5dbcc0b26f1ee6d3d064bf675604dc4e517ebb",
+      "bytes": 4499
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyPlayModeTests.cs",
+      "sha256": "e9c09e8afb79873be7917eee4036e1d77bcab4aeb09348be77b5a0aa007062aa",
+      "bytes": 12921
+    }
+  ]
+}

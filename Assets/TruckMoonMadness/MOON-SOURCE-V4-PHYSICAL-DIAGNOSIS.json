@@ -1,0 +1,44 @@
+{
+  "scope": "Moon V4 narrow physical fixture correction and bounded read-only Editor telemetry; V1/V2/V3 archived inputs unchanged",
+  "retainedEvidence": "impossible07-moon-v1.xml:2/5pass; natural real300s finished with1delivery and failed>1 requirement; controlled initial real contact failed; original chassis-only gravity failure retained. V3COM discrimination remains pending.",
+  "correctedAudit": "First controlled approach was already powered:true, second collision actor powered:false. Earlier first-power diagnosis was corrected before intake. No claimed confirmed cause of missed contact without rerun.",
+  "changes": [
+    "First approach retains neutral owned keyboard +powered original wheels, uses original fullassembly AddAssemblyVelocity forboth root/Cab and actual static terrain/physical collider envelope+1m gap. Second collision truck also powered and fullassembly impulse. Actual contact callbacks/Collect/drop/meteor assertions remain strict.",
+    "Original natural full300s test remains strict >1 delivery, actual totalcollections/score/finish; TestContext.Progress changed to durable Debug.Log.",
+    "New65s original AI diagnostic records all8 actual poses/commands/signed speed/gear/ground contacts/AI goals+NavMesh waypoints; all5 flags poses/contacts/real joint anchor/held time/ownstation inclusion/rack distance every5s. Conditional Editor observer has no Player simulation side effects.",
+    "Same original dynamic2body COM acceleration\u00b1.05 and individual velocity/jointgeometry logs from V3 retained unchanged; existing physical torque/fuel/nohover checks unchanged."
+  ],
+  "shortDiagnosticFilter": "MoonPlayModeTests.NaturalEightAiBoundedPhysicalDeliveryDiagnostic",
+  "contactFilter": "MoonPlayModeTests.RealCargoCollisionCanDetachOnceAndMeteorWarningPrecedesActualPhysicalImpact",
+  "gravityFilter": "MoonPlayModeTests.ActualOriginalAssemblyFallsAtOneSixthGravityAndFiniteJetsCannotHover",
+  "validation": "PASS12sourceCS/543actual cachedreferences/0semanticerrors, no emission; actual new diagnostic/contact/COM native reruns UNRUN. No AI/vehicle/gravity/score/terrain tuning.",
+  "files": [
+    {
+      "path": "Assets/TruckMoonMadness/Scripts/MoonMatch.cs",
+      "sha256": "404d80d805f460d767ab0c76511fe45f87efe0576b8e16aceff6c670b317c4a6",
+      "bytes": 17927,
+      "previousSha256": "59c8e7d45c0636d6373cb6a93f79658e11530d51d2b6f6ec835be84063eb87dc"
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Tests/PlayMode/MoonPlayModeTests.cs",
+      "sha256": "ab260a8479a4b5b7c044d1137da5f6a118bf7a9e5be40edc08be9d49d36bbb00",
+      "bytes": 23651,
+      "previousSha256": "492da075b7dabf517d176936c2eaec4d83690ba65e9d5b6c1a70178a3d763fc3"
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Scripts/MoonPhysicalDiagnostics.cs",
+      "sha256": "74a5522b0cbde50f380116ac3018957723c135766933e122af3f5149a1b738c1",
+      "bytes": 1975
+    },
+    {
+      "path": "Assets/TruckMoonMadness/Scripts/MoonPhysicalDiagnostics.cs.meta",
+      "sha256": "e1d9496636353ce893557625e82550015ed8a03e7bdff66994ee590486ed22f2",
+      "bytes": 254
+    },
+    {
+      "path": "Assets/TruckMoonMadness/MOON-SOURCE-V4-PHYSICAL-DIAGNOSIS.json.meta",
+      "sha256": "a6e48068d3a9a0cff0c68236318df275ea5513fce743c3ec813c9e0aa9f5ed6a",
+      "bytes": 62
+    }
+  ]
+}

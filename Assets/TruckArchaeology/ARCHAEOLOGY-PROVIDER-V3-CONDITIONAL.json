@@ -1,0 +1,99 @@
+{
+  "scope": "CONDITIONAL source preparation only. Do not configure CLEAN saved scene until separate actual start diagnostic confirms all mandatory fields initialized with only provider null.",
+  "diagnosticFirst": {
+    "manifest": "Assets/TruckArchaeology/ARCHAEOLOGY-STARTUP-DIAGNOSTIC-V2.json",
+    "sha256": "8dcc96340d3929348eae008c619cdccb7db8a4a108304b014e11a90f6f41ab5d",
+    "filter": "ArchaeologyStartupDiagnostics.ActualOriginalStartButtonReportsEveryVenueAndVendorInitializationGateWithoutWaitOrOverride"
+  },
+  "sourceFacts": [
+    "VendorIsInitialized requires optional provider, while VoxelChunk selects actual vendorMarchingCubesPolygonizer fallback if null. No concrete default provider ships in the cached base package.",
+    "The provider is the supported APolygonizerProvider extension point. NewPolygonizer returns exactly new vendorMarchingCubesPolygonizer() with original default style. Its default class constructor lazily allocates job buffers only inBuildMesh, so adapterInit has no additional state.",
+    "GetMaterials returnsnull deliberately: DiggerSystemEditor.IsBlockMaterial uses nonnull to select an entirely different block pipeline; null preserves existing nativeURP cutter/mesh materials."
+  ],
+  "author": "LWS.TruckArchaeology.Editor.ArchaeologyDiggerProviderAuthoring.InstallOnOpenOriginalScene",
+  "authorSafety": "Root opens exact savedscene, invokes guardedone-component integration, saves aftersuccess. Authoritself never opens/saves/calls Init/rebuildsdata. All actualmaster/system/runtime/sameScene/terrain/dataID/path/originalresolution/collider/URPmaterial/venue/noexistingprovider checks before only AddComponent. Existing custom/partial provider refuses. New-scene author invokes same helper after original Digger setup.",
+  "changes": [
+    "One mode-owned vendor default factory, no custom algorithm/voxel/terrain/collider/runtime backend.",
+    "Guarded original savedmaster one-component configuration +same guard for future explicit new-scene author.",
+    "New native actualbutton/realvendorcut/collider/URPmaterial/exactfactory/rematch regression. Original4native tests and9rules unchanged."
+  ],
+  "unchanged": [
+    "ArchaeologyTerrain.Ready and Awake/persistence prefix, Match.BeginGame, all original gameplay/physics/AI/score controls, original100vendorC# files and rawSDK bytes, sharedfiles/settings/defines, original4native tests."
+  ],
+  "nativeFilters": [
+    "ArchaeologyStartupDiagnostics.ActualOriginalStartButtonReportsEveryVenueAndVendorInitializationGateWithoutWaitOrOverride",
+    "ArchaeologyVendorProviderTests.SupportedDefaultFactoryKeepsRealReadyUrpExcavationColliderAndRematchWithoutBypass",
+    "ArchaeologyPlayModeTests.ActualDiggerCutsVisibleTerrainAndRebuildsRealColliderWithoutHidingArtifactOrScoring"
+  ],
+  "nativeContract": "No fixtureReadywait/Init/flag override. Exact vendordefault returntype, normalURP material identities, originalrealStartMatch,8actualvendorCut operations, physical rebuiltvoxelcollider depth>1m, zeroscore/falsefindings, originalrematchrestorewithin.02m and same actualbodies/provider/materials. Full4AI lifecycle and actualWindows disk persistence stillseparate.",
+  "validation": "PASS118actualsources(16own+100unmodifiedvendor+2existing)/557actualcachedrefs/0errors, noemission. Native/authorUNRUN; conditionaluntilactualdiagnostic. No signaturestubs.",
+  "protectedHashes": {
+    "Assets/TruckArchaeology/Scripts/ArchaeologyMatch.cs": "3fd3cdec288b2128f8bf160a5e862ef2e2fe52fb568803a59c98daf357c7d5f1",
+    "Assets/TruckArchaeology/Scripts/ArchaeologyTerrain.cs": "6c233d5f28b952333f1851650c1ca7b492bc5844acfd028defd0afd75b20db1e",
+    "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyPlayModeTests.cs": "e9c09e8afb79873be7917eee4036e1d77bcab4aeb09348be77b5a0aa007062aa",
+    "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyRulesTests.cs": "f30c0ddee9a48850d43544b192a7e2b52361af609e72a47934d1e0445df91ba3"
+  },
+  "vendorAssetsAudited": [
+    "ActualcachedDiggerSystem.IsInitialized/Reload, DiggerMasterRuntime.Awake/Init/SetPersistencePrefix, VoxelChunkdefaultfallback, APolygonizerProviderpublicextension, vendorMarchingCubesPolygonizer constructor/jobs, DiggerSystemEditor ordinaryURP/block material branch"
+  ],
+  "vendorAssetsUsed": [
+    "UnmodifiedDiggerdefaultMarchingCubesPolygonizer andAPolygonizerProviderextension",
+    "ExistingactualDiggerURP17terrain/meshshaders+materialsandstandardruntime",
+    "OriginalNWH/fullphysics/session/controls+frozenexistingCrane"
+  ],
+  "relevantAssetsNotUsed": {
+    "CustomReadyoverride": "Rejected; originalvendorandmode predicates retained.",
+    "Customterrain/polygonizer/physics": "Rejected; factorydelegatesactualvendorimplementation.",
+    "Newpersistencebackend": "Rejected; vendorWindowsdiskpathandsharedPixelCrushersadapterunchanged."
+  },
+  "customSystemsCreated": [
+    "Mode-owned vendor defaultfactoryconfiguration adapter",
+    "Guardedsinglecomponentoriginalmasterauthor",
+    "Actualstartup/deformation/collider/rematchregression"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyDefaultPolygonizerProvider.cs",
+      "sha256": "1c770244ef867203295f1ee746eb53f2f8caf5fe4883e8fb704aeab6204f710a",
+      "bytes": 1137
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyDefaultPolygonizerProvider.cs.meta",
+      "sha256": "e8a27a446a1afad214e2525fc4d1b80669e6539cd9fe3546a511bbb9c9341f62",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyDiggerProviderAuthoring.cs",
+      "sha256": "1ba5e72932a35dfd8ff0969eb168c99fd63a7fa679b0c8c8c681b430d9f852ea",
+      "bytes": 4716
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyDiggerProviderAuthoring.cs.meta",
+      "sha256": "5ef65af1bcf66bb00967744b13a31b2003d169fb0e17536bd8c58384bbb6d833",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyAuthoring.cs",
+      "sha256": "8b14a5daa7a58c2e7e9014344c649882c054631c01ea5f041c238cf07fc7fbdb",
+      "bytes": 27942,
+      "previousSha256": "638d29d0560eadfcb6e85bb51c82803c1ea167c9a4b57dd4f781e06a56db55fc"
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyVendorProviderTests.cs",
+      "sha256": "6b4a0d6e81d1bddfd7d79f504f1e65731a802a860c52f664445be04bc6108022",
+      "bytes": 5822
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyVendorProviderTests.cs.meta",
+      "sha256": "a6d2b71f9cf896bbb5f4721a37d764c8a091b9cbbf0798d761824496d12a72f8",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/ARCHAEOLOGY-PROVIDER-V3-CONDITIONAL.json.meta",
+      "sha256": "dad7f44be888068307c82a0cccc2553c35dbdb06cb233920f4c9612443d9c613",
+      "bytes": 62
+    }
+  ]
+}

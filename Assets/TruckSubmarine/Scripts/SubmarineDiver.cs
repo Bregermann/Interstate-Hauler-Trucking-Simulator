@@ -1,0 +1,28 @@
+using System.Collections.Generic;
+using LWS.TruckSports;
+using UnityEngine;
+namespace LWS.TruckSubmarine {
+ public sealed class SubmarineDiver:MonoBehaviour {
+  public SubmarineMatch match;public SportsEventTruck truck;public SportsFloatingBody buoyancy;public Rigidbody ballast;public FixedJoint ballastJoint;public Transform gear,grip;public Transform[] propellers;public ParticleSystem bubbles,sonarRing;public Light[] headlights;public Collider[] physicalColliders;
+  public SubmarineCargo Carrying{get;private set;} public float Ballast{get;private set;} public int SonarPulses{get;private set;}public int NativeGripperContacts{get;private set;}public float LastThrust{get;private set;}
+  public readonly bool[] discovered=new bool[SubmarineRules.CargoCapacity];
+  readonly Dictionary<SubmarineCargo,float> contacts=new Dictionary<SubmarineCargo,float>(8);readonly Collider[] sonarHits=new Collider[96];
+  float nextSonar,originalLinear,originalAngular,rootMass,neutralBallast;bool cached;Rigidbody[] originalSecondary;bool[] secondaryKinematic;
+  void Cache(){if(cached)return;cached=true;rootMass=truck.body.mass;neutralBallast=rootMass*.08f;originalLinear=truck.body.linearDamping;originalAngular=truck.body.angularDamping;originalSecondary=System.Array.FindAll(truck.GetComponentsInChildren<Rigidbody>(true),body=>body!=truck.body&&body!=ballast);secondaryKinematic=new bool[originalSecondary.Length];for(int i=0;i<originalSecondary.Length;i++)secondaryKinematic[i]=originalSecondary[i].isKinematic;}
+  public void Prepare(Vector3 point,Quaternion rotation){Cache();Drop();contacts.Clear();System.Array.Clear(discovered,0,discovered.Length);SonarPulses=NativeGripperContacts=0;nextSonar=0;Ballast=0;ballast.mass=neutralBallast;truck.tractorMotor.Configure();truck.Prepare(point,rotation);for(int i=0;i<originalSecondary.Length;i++)originalSecondary[i].isKinematic=secondaryKinematic[i];physicalColliders=System.Array.FindAll(truck.GetComponentsInChildren<Collider>(true),c=>!c.isTrigger);ballast.isKinematic=false;buoyancy.enabled=true;buoyancy.Clock=0;StopFx();}
+  public void ObserveContact(SubmarineCargo cargo){if(!match.rules.Active(truck.slot)||cargo==null)return;if(!contacts.ContainsKey(cargo))NativeGripperContacts++;contacts[cargo]=match.rules.Clock;}
+  public bool GrabNearest(){if(!match.rules.Active(truck.slot)||Carrying!=null)return false;SubmarineCargo best=null;float distance=8*8;foreach(var pair in contacts){var cargo=pair.Key;if(cargo==null||cargo.Banked||cargo.Owner>=0||match.rules.Clock-pair.Value>.15f)continue;float cost=(cargo.body.position-grip.position).sqrMagnitude;if(cost<distance){distance=cost;best=cargo;}}if(best==null||!best.Attach(this))return false;Carrying=best;match.feedback.PlayAt(2,best.body.position,0);return true;}
+  public void Drop(){if(Carrying!=null)Carrying.Drop();Carrying=null;}
+  public void Delivered(SubmarineCargo cargo){if(Carrying==cargo)Carrying=null;}
+  public bool Sonar(){if(!match.rules.Active(truck.slot)||match.rules.Clock<nextSonar)return false;nextSonar=match.rules.Clock+4;SonarPulses++;int count=Physics.OverlapSphereNonAlloc(truck.body.position,85,sonarHits,1<<2,QueryTriggerInteraction.Ignore);for(int i=0;i<count;i++){var body=sonarHits[i].attachedRigidbody;var cargo=body!=null?body.GetComponent<SubmarineCargo>():null;if(cargo!=null&&cargo.match==match&&!cargo.Banked&&cargo.id>=0&&cargo.id<discovered.Length)discovered[cargo.id]=true;}if(sonarRing!=null)sonarRing.Play();match.feedback.PlayAt(1,truck.body.position,0);return true;}
+  public void Pilot(Vector2 drive,float vertical,float ballastInput,float roll,float dt){if(!match.rules.Active(truck.slot))return;Cache();var body=truck.body;Ballast=Mathf.Clamp(Ballast+Mathf.Clamp(ballastInput,-1,1)*dt*.3f,-1,1);ballast.mass=neutralBallast+rootMass*.045f*Ballast;buoyancy.Clock=match.rules.Clock;
+   // NWH retains its wheels/powertrain. These are submarine propeller forces,
+   // not an alternate ground vehicle or a second hydrostatic/drag solver.
+   truck.TickDrive(drive);if(body.position.y<-.1f){var forward=Vector3.ProjectOnPlane(truck.transform.forward,Vector3.up).normalized;if(forward.sqrMagnitude<.1f)forward=Vector3.forward;float speed=Vector3.Dot(body.linearVelocity,forward);float thrust=Mathf.Clamp((Mathf.Clamp(drive.y,-1,1)*14-speed)*1.1f,-7,7);LastThrust=thrust;body.AddForce(forward*thrust+Vector3.up*(Mathf.Clamp(vertical,-1,1)*4),ForceMode.Acceleration);
+    var desired=Vector3.up;var correction=Vector3.Cross(truck.transform.up,desired)*3.2f-body.angularVelocity*2.4f+Vector3.up*Mathf.Clamp(drive.x,-1,1)*2.8f+truck.transform.forward*Mathf.Clamp(roll,-1,1)*.45f;body.AddTorque(Vector3.ClampMagnitude(correction,5),ForceMode.Acceleration);}
+   if(propellers!=null)foreach(var propeller in propellers)if(propeller!=null)propeller.Rotate(Vector3.forward,(160+Mathf.Abs(drive.y)*1150)*dt,Space.Self);if(bubbles!=null){var emission=bubbles.emission;emission.rateOverTime=3+Mathf.Abs(drive.y)*12;if(!bubbles.isPlaying)bubbles.Play();}
+  }
+  public void Freeze(){Cache();Drop();buoyancy.enabled=false;truck.Power(false);if(!truck.body.isKinematic)truck.body.linearVelocity=truck.body.angularVelocity=Vector3.zero;truck.body.isKinematic=true;if(!ballast.isKinematic)ballast.linearVelocity=ballast.angularVelocity=Vector3.zero;ballast.isKinematic=true;foreach(var body in originalSecondary){if(!body.isKinematic)body.linearVelocity=body.angularVelocity=Vector3.zero;body.isKinematic=true;}if(cached){truck.body.linearDamping=originalLinear;truck.body.angularDamping=originalAngular;}StopFx();}
+  void StopFx(){if(bubbles!=null)bubbles.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);if(sonarRing!=null)sonarRing.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}
+ }
+}

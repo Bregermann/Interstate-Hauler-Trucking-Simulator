@@ -1,0 +1,151 @@
+{
+  "scope": "NEW independent read-only original four-AI excavation diagnostic only. Original600s/full12 scans+loads+unloads+deliveries+completion assertions and runtime/vendor/scene remain unchanged. No Unity/Editor/CLEAN/Git actions.",
+  "actualFailure": {
+    "xml": {
+      "path": "Logs/TruckSports/Impossible07/impossible07-v12-archaeology-original-native.xml",
+      "sha256": "e72e9532ea6487de3fe51683b64605a1aba7722ba6fedbbb785dad7dd679895b",
+      "bytes": 23223
+    },
+    "failedCase": "ArchaeologyPlayModeTests.NaturalFourAiScanExcavatePreservePhysicallyLoadDeliverAndFinishActualSession",
+    "duration": "600.995297",
+    "firstSample": "ARCHAEOLOGY_NATURAL clock=0.01999999 stages=Buried,Buried,Buried,Buried,Buried,Buried,Buried,Buried,Buried,Buried,Buried,Buried scores=0,0,0,0 edits=0 loads=0 unloads=0",
+    "lastSample": "ARCHAEOLOGY_NATURAL clock=589.753 stages=Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned,Scanned scores=0,0,0,0 edits=2789 loads=0 unloads=0",
+    "finding": "All12 artifacts remain Scanned throughout, while2789 actual accepted edits accrue. Zero loads/unloads/scores. This is pre-exposure, so no evidence yet against acquisition/crane/cargo/delivery."
+  },
+  "sourceEvidence": [
+    "ArchaeologyMatch.Ai selects tool from highest nine-ray CutPoint gap; Operate uses actual head.position only when AtWork.",
+    "ArchaeologyTerrain.Exposure requires9/9 downward rays HIT terrain below artifact bottom+.12, then no actual terrain penetration>.015m. Missing rays count not visible.",
+    "ArchaeologyEquipment.Reach clamps actual head target to28m and AtWork requires head-Aim<.28m.",
+    "Existing log does not record these fields; no production hypothesis proven."
+  ],
+  "hypotheses": [
+    "Highest-surface target or physical head/workspace does not move effectively after accepted cuts.",
+    "Some actual downward rays miss terrain entirely and the existing visible predicate never accepts the cleared holes.",
+    "All9 lower rays succeed but real penetration veto remains."
+  ],
+  "filter": "ArchaeologyExcavationDiagnostics.OriginalFourAiExcavationReportsRealNineSampleClearanceWithoutOverrides",
+  "boundedRun": "Original private fixture creates exact input/prefs isolation, actual scene, AllBots and strict StartMatch. Runs until65 simulationseconds/80realseconds, no timeScale/pose/state/tool/manual-cut writes. Measurement asserts actual clock>20 and edits>12 only, explicitly not clinical completion.",
+  "telemetry": "Every2simseconds durable actual-original-ai-clearance.txt under unique CLEAN Logs/TruckSports/PlaytestRepair/ArchaeologyExcavationDiagnosticNative. Includes actual roots/velocities/head/Aim/workspace/AtWork/tool/targets/gaps, all9 world hit/miss/heights/colliderpaths and threshold comparisons, actual remaining terrain overlaps/ComputePenetration depths, stage/exposure/preservation/hoist/load/unload/scores.",
+  "validation": "PASS119actualsources=17owned+100immutablevendor+2existingdependencies/557actualcachedreferences/0errors; semantic compile,no emission. Native diagnostic UNRUN.",
+  "vendorAssetsAudited": [
+    "Actual Digger PRO public runtime Modify/terrain Surface/collider lifecycle and existing real default provider",
+    "Existing NWH full rigs/equipment28m physical workspace",
+    "Unchanged actual JengaCrane adapter for later lift/load/delivery"
+  ],
+  "vendorAssetsUsed": [
+    "Existing original Digger voxel colliders and PhysX read-only rays/ComputePenetration",
+    "Existing original native fixture/strict StartMatch/input isolation"
+  ],
+  "relevantAssetsNotUsed": {
+    "Replacement excavation/physics/clearance": "No new authority; diagnostic only observes existing vendor-backed world."
+  },
+  "customSystemsCreated": [
+    "Bounded read-only excavation/clearance predicate diagnostic"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyExcavationDiagnostics.cs",
+      "sha256": "bdbc6e7d16c59379b2b9470b2bcdb3eb15a2e4aac61bfce5632fdef10a00e252",
+      "bytes": 8152
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyExcavationDiagnostics.cs.meta",
+      "sha256": "bc32711d8d26482875824865a1111bfe35812847f6aa800399212539cf478982",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/ARCHAEOLOGY-EXCAVATION-DIAGNOSTIC-V4.json.meta",
+      "sha256": "4a41e960af51b132cc06089a376788c7ca37b2ef0b992a2faef75c10d70fcfb9",
+      "bytes": 62
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyAuthoring.cs",
+      "sha256": "8b14a5daa7a58c2e7e9014344c649882c054631c01ea5f041c238cf07fc7fbdb",
+      "bytes": 27942
+    },
+    {
+      "path": "Assets/TruckArchaeology/Editor/ArchaeologyDiggerProviderAuthoring.cs",
+      "sha256": "1ba5e72932a35dfd8ff0969eb168c99fd63a7fa679b0c8c8c681b430d9f852ea",
+      "bytes": 4716
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyArtifact.cs",
+      "sha256": "31f24cbef9f3cae6386d8282c82175063fb6864f36b480f010b3016ebdb182f5",
+      "bytes": 2305
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyDefaultPolygonizerProvider.cs",
+      "sha256": "1c770244ef867203295f1ee746eb53f2f8caf5fe4883e8fb704aeab6204f710a",
+      "bytes": 1137
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyEquipment.cs",
+      "sha256": "0700a3a453a8147e34b69c6f73e7b2ea702fae7ef1c0163b83c89070e6b287cc",
+      "bytes": 2123
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMatch.cs",
+      "sha256": "3fd3cdec288b2128f8bf160a5e862ef2e2fe52fb568803a59c98daf357c7d5f1",
+      "bytes": 19717
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyRack.cs",
+      "sha256": "c4c61ea938be3d1e8b8f6f2f0de1e4def4acd146e5a9b02e36688ed06f14f57b",
+      "bytes": 158
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyStaff.cs",
+      "sha256": "dc3cb90614c2a7acf48ae5f5c03fabf5ec3a4b2318ead8d7638a992858cafdf7",
+      "bytes": 1284
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyTerrain.cs",
+      "sha256": "6c233d5f28b952333f1851650c1ca7b492bc5844acfd028defd0afd75b20db1e",
+      "bytes": 6531
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyWindowsPersistenceProbe.cs",
+      "sha256": "1ba54fcebee80a671136488468798f6a10c4ecf90c08a9cddba971ed5240e19d",
+      "bytes": 10955
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyWorkshopState.cs",
+      "sha256": "600428f4d857607aa5d3cc1f87e05327a013e1624b43bba64844b4da553267f5",
+      "bytes": 11900
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyRulesTests.cs",
+      "sha256": "f30c0ddee9a48850d43544b192a7e2b52361af609e72a47934d1e0445df91ba3",
+      "bytes": 3759
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyPlayModeTests.cs",
+      "sha256": "e9c09e8afb79873be7917eee4036e1d77bcab4aeb09348be77b5a0aa007062aa",
+      "bytes": 12921
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyStartupDiagnostics.cs",
+      "sha256": "0a5e0880a4d39d9363ff6c620a30cc063a30be93c292e08a06c9359a0e184221",
+      "bytes": 4993
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyVendorProviderTests.cs",
+      "sha256": "6b4a0d6e81d1bddfd7d79f504f1e65731a802a860c52f664445be04bc6108022",
+      "bytes": 5822
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/Rules/ArchaeologyRules.cs",
+      "sha256": "d63eb5d6c76e6a704fda45d555bdf90b69a42d239cce977e16ebe9ff97a8a8bb",
+      "bytes": 3644
+    },
+    {
+      "path": "Assets/TruckJenga/Scripts/JengaCrane.cs",
+      "sha256": "301319d1bc46fb67dce70f71fc5dbcc0b26f1ee6d3d064bf675604dc4e517ebb",
+      "bytes": 4499
+    }
+  ]
+}

@@ -52,16 +52,36 @@ def native_unity_serialization_space(relative, header, added):
     return False
 
 
-def check_whitespace(repo, parent, paths, env):
+def reviewed_whitespace_finding(repo, path, line, kind, added, explicit_review):
+    """Accept only an exact, separately reviewed finding in unchanged bytes."""
+    if not explicit_review:
+        return False
+    matches = [item for item in explicit_review if item['path'] == path and item['line'] == line
+               and item['kind'] == kind and item.get('added') == added]
+    return len(matches) == 1 and fingerprint(Path(repo) / path) == matches[0]['sha256']
+
+
+def check_whitespace(repo, parent, paths, env, explicit_review=None):
     result = subprocess.run(["git", "diff", "--cached", "--check", parent], cwd=repo, env=env,
                             capture_output=True, text=True, encoding="utf-8")
     if result.returncode == 0:
         return dict(unityEmptyFields=0, originalDocumentDiffHeaders=0)
     lines = result.stdout.splitlines()
-    assert result.returncode == 2 and not result.stderr and len(lines) % 2 == 0, result.stdout + result.stderr
-    review = dict(unityEmptyFields=0, originalDocumentDiffHeaders=0)
+    assert result.returncode == 2 and not result.stderr, 'Unexpected whitespace-check failure: ' + result.stderr[:1000]
+    review = dict(unityEmptyFields=0, originalDocumentDiffHeaders=0, explicitlyReviewedFindings=0)
     headers = {}
-    for header, added in zip(lines[::2], lines[1::2]):
+    cursor = 0
+    while cursor < len(lines):
+        header = lines[cursor]
+        cursor += 1
+        blank = re.fullmatch(r'(.+):([0-9]+): new blank line at EOF\.', header)
+        if blank:
+            assert blank[1] in paths and reviewed_whitespace_finding(repo, blank[1], int(blank[2]), 'new blank line at EOF', None, explicit_review), 'Unreviewed whitespace error: ' + header
+            review['explicitlyReviewedFindings'] += 1
+            continue
+        assert cursor < len(lines), 'Missing whitespace finding content: ' + header
+        added = lines[cursor]
+        cursor += 1
         match = re.fullmatch(r"(.+):[0-9]+: trailing whitespace\.", header)
         assert match and match[1] in paths, header
         path = match[1]
@@ -77,12 +97,14 @@ def check_whitespace(repo, parent, paths, env):
         # Retain the exact difflib audit, including its unnamed-file headers.
         elif path.startswith("Documentation/TruckSports/Evidence/") and path.endswith("-original-document-diffs.txt") and added in ("+--- ", "++++ "):
             review["originalDocumentDiffHeaders"] += 1
+        elif reviewed_whitespace_finding(repo, path, int(re.fullmatch(r'.+:([0-9]+): trailing whitespace\.', header)[1]), 'trailing whitespace', added, explicit_review):
+            review['explicitlyReviewedFindings'] += 1
         else:
             raise AssertionError("Unreviewed whitespace error: " + header + "\n" + added)
     return review
 
 
-def scoped_commit(repo, parent, paths, message, scratch):
+def scoped_commit(repo, parent, paths, message, scratch, explicit_review=None):
     """Create a commit from a public parent using only explicit working files."""
     repo, scratch = Path(repo).resolve(), Path(scratch).resolve()
     assert re.fullmatch(r"[a-f0-9]{40}", parent)
@@ -102,7 +124,7 @@ def scoped_commit(repo, parent, paths, message, scratch):
     git(repo, "add", "--pathspec-from-file=" + str(spec), "--pathspec-file-nul", env=env)
     staged = set(filter(None, git(repo, "diff", "--cached", "--name-only", "-z", parent, env=env).decode().split("\0")))
     assert staged == set(paths), ("Review scope must contain exactly changed files", staged ^ set(paths))
-    whitespace = check_whitespace(repo, parent, paths, env)
+    whitespace = check_whitespace(repo, parent, paths, env, explicit_review)
     (scratch / "whitespace-review.json").write_text(json.dumps(whitespace, indent=2))
     tree = git(repo, "write-tree", env=env).decode().strip()
     body = scratch / "message.txt"
@@ -139,6 +161,7 @@ def main():
     parser.add_argument("public_parent")
     parser.add_argument("message")
     parser.add_argument("receipt")
+    parser.add_argument("--whitespace-review", help="Exact finding/hash review JSON below the local publication logs; default remains strict.")
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[2]
     log = repo / "Logs/TruckSports/PlaytestRepair"
@@ -170,7 +193,15 @@ def main():
     remote = git(repo, "ls-remote", "origin", "refs/heads/main", "refs/heads/codex/truck-sports-seven-events").decode()
     assert len(remote.splitlines()) == 2 and all(line.split()[0] == args.public_parent for line in remote.splitlines())
     scratch = log / "PublicationIndexes" / str(time.time_ns())
-    public_commit = scoped_commit(repo, args.public_parent, paths, args.message, scratch)
+    explicit_review = None
+    if args.whitespace_review:
+        review_path = (log / args.whitespace_review).resolve()
+        assert review_path.is_relative_to(log.resolve())
+        reviewed = json.loads(review_path.read_text(encoding='utf-8'))
+        assert reviewed['reviewed'] is True and reviewed['buildContentSha256'] == promotion['buildContentSha256']
+        explicit_review = reviewed['findings']
+        assert explicit_review and all(item['path'] in paths and fingerprint(repo / item['path']) == item['sha256'] and item['reason'] for item in explicit_review)
+    public_commit = scoped_commit(repo, args.public_parent, paths, args.message, scratch, explicit_review)
     expected_local_changed = expected_local_changed_paths(repo, integration_parent, public_commit, paths)
     assert git(repo, "rev-parse", "HEAD").decode().strip() == integration_parent
     assert git(repo, "ls-files", "--stage", "-z") == actual_index_entries

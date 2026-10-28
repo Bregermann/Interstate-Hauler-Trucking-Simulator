@@ -23,7 +23,7 @@ public sealed class SportsMenuPresentationProbe:MonoBehaviour {
  InputSettings.EditorInputBehaviorInPlayMode previousEditor;
 #endif
  Keyboard keyboard;Gamepad pad;int checks,errors;readonly StringBuilder report=new StringBuilder();
- void Awake(){preferences=SportsPrefs.IsolateValidation("RetroMenu");SportsParticipantRegistry.ForgetCache();previousBackground=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+ void Awake(){preferences=SportsPrefs.IsolateValidation("RetroMenu");SportsParticipantRegistry.ForgetCache();SceneManager.sceneLoaded+=FreshWorkshopStorageBeforeRepositoryStart;previousBackground=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
 #if UNITY_EDITOR
  previousEditor=InputSystem.settings.editorInputBehaviorInPlayMode;InputSystem.settings.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
 #endif
@@ -31,7 +31,7 @@ public sealed class SportsMenuPresentationProbe:MonoBehaviour {
  void Check(bool ok,string text){checks++;if(!ok)errors++;report.AppendLine((ok?"PASS ":"FAIL ")+text);File.WriteAllText(Folder+"/progress.txt",report.ToString());}
  void Error(string text,string stack,LogType type){if(type!=LogType.Error&&type!=LogType.Exception)return;errors++;report.AppendLine("ERROR "+text+"\n"+stack);}
  IEnumerator Start(){Directory.CreateDirectory(Folder);File.WriteAllText(Folder+"/result.txt","RUNNING "+DateTime.UtcNow.ToString("o"));Application.logMessageReceived+=Error;keyboard=InputSystem.AddDevice<Keyboard>("Injected menu keyboard");pad=InputSystem.AddDevice<Gamepad>("Injected menu pad");yield return SportsProbeScene.Ensure<SportsFrontEnd>("TruckSports");yield return null;var front=FindAnyObjectByType<SportsFrontEnd>();yield return SportsWindowCapture.Save(1280,720,Folder+"/title-720.png");front.Action("play");yield return new WaitForSecondsRealtime(.4f);
-  var choices=front.GetComponentsInChildren<SportsCatalogueChoice>(true);var scenes=typeof(SportsNavigation).GetFields(BindingFlags.Public|BindingFlags.Static).Where(f=>f.IsLiteral&&f.FieldType==typeof(string)&&f.Name!="Front").Select(f=>(string)f.GetRawConstantValue()).Where(s=>s.StartsWith("Truck")).Distinct().ToArray();
+  var choices=front.GetComponentsInChildren<SportsCatalogueChoice>(true);var scenes=typeof(SportsNavigation).GetFields(BindingFlags.Public|BindingFlags.Static).Where(f=>f.IsLiteral&&f.FieldType==typeof(string)&&f.Name!="Front").Select(f=>(string)f.GetRawConstantValue()).Where(s=>s.StartsWith("Truck")).Concat(SportsImpossibleGames.All.Select(entry=>entry.scene)).Distinct().ToArray();
   Check(scenes.Length>=41&&choices.Select(c=>c.scene).Distinct().Count()==scenes.Length&&scenes.All(s=>choices.Any(c=>c.scene==s)),"all registered sport scenes have a real browse choice, including cab variants and Scrap Heap");
   foreach(var choice in choices)Check(choice.logo!=null&&choice.logo.name==choice.scene&&choice.preview!=null&&choice.GetComponent<SportsMenuAction>()!=null,"original logo, gameplay preview and existing launch action: "+choice.scene);
   var showcase=front.GetComponentInChildren<SportsCatalogueHero>();foreach(var choice in choices){showcase.Select(choice,true);Canvas.ForceUpdateCanvases();showcase.title.ForceMeshUpdate();showcase.description.ForceMeshUpdate();Check(!showcase.title.isTextTruncated&&!showcase.description.isTextTruncated,"selected title, description and participant information fit: "+choice.scene);}
@@ -39,6 +39,7 @@ public sealed class SportsMenuPresentationProbe:MonoBehaviour {
   SportsParticipantRegistry.ForgetCache();Check(SportsParticipantRegistry.Default(0).id==crewId&&SportsParticipantRegistry.Default(0).color==crewColor&&SportsParticipantRegistry.Default(0).displayName=="Arcade Captain","Crew identity/name/color survive an actual shared-preference reload");
   foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080),new Vector2Int(2560,1440),new Vector2Int(2560,1080)}){
    front.catalogue.Step(-front.catalogue.Pages);front.Focus();yield return new WaitForSecondsRealtime(.3f);yield return SportsWindowCapture.Save(size.x,size.y,Folder+"/showcase-"+size.x+"x"+size.y+".png");
+   Check(CaptureSize(Folder+"/showcase-"+size.x+"x"+size.y+".png",size.x,size.y),"requested menu resolution matches actual framebuffer and PNG: "+size.x+"x"+size.y);
    var hero=front.GetComponentInChildren<SportsCatalogueHero>();Check(hero!=null&&hero.logo.sprite!=null&&hero.preview.sprite!=null,"selected artwork and screenshot render at actual "+Screen.width+"x"+Screen.height);
    var canvas=front.GetComponent<Canvas>();foreach(var rect in new[]{hero.logo.rectTransform,hero.preview.rectTransform,hero.description.rectTransform})Check(Inside(rect,canvas),rect.name+" is screen-safe at "+Screen.width+"x"+Screen.height);
   }
@@ -49,7 +50,20 @@ public sealed class SportsMenuPresentationProbe:MonoBehaviour {
   front.catalogue.Step(-front.catalogue.Pages);front.Focus();yield return new WaitForSecondsRealtime(.2f);var selected=EventSystem.current.currentSelectedGameObject;InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.DownArrow));yield return new WaitForSecondsRealtime(.12f);report.AppendLine("MENU_KEY_EVENT enabled="+keyboard.enabled+" focused="+Application.isFocused+" held="+keyboard[Key.DownArrow].isPressed+" selected="+EventSystem.current.currentSelectedGameObject);InputSystem.QueueStateEvent(keyboard,new KeyboardState());yield return new WaitForSecondsRealtime(.15f);Check(EventSystem.current.currentSelectedGameObject!=null&&EventSystem.current.currentSelectedGameObject!=selected,"injected keyboard moves real menu focus");
   selected=EventSystem.current.currentSelectedGameObject;InputSystem.QueueStateEvent(pad,new GamepadState{leftStick=Vector2.down});yield return new WaitForSecondsRealtime(.15f);report.AppendLine("MENU_PAD_EVENT enabled="+pad.enabled+" focused="+Application.isFocused+" stick="+pad.leftStick.ReadValue()+" selected="+EventSystem.current.currentSelectedGameObject);InputSystem.QueueStateEvent(pad,new GamepadState());yield return new WaitForSecondsRealtime(.2f);Check(EventSystem.current.currentSelectedGameObject!=null&&EventSystem.current.currentSelectedGameObject!=selected,"injected gamepad moves real menu focus; not physical hardware acceptance");
   var launches=choices.GroupBy(c=>c.scene).Select(g=>new[]{g.Key,g.First().GetComponent<SportsMenuAction>().action}).ToArray();
-  foreach(var launch in launches){front.Action(launch[1]);yield return null;yield return null;yield return new WaitForSecondsRealtime(.2f);Check(SceneManager.GetActiveScene().name==launch[0]&&FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"existing action opens correct saved setup with one listener: "+launch[0]);var artwork=FindObjectsByType<Image>(FindObjectsInactive.Include).Where(i=>i.name=="Original sport title artwork").ToArray();Check(artwork.Length>0&&artwork.All(i=>i.sprite!=null&&i.sprite.name==launch[0]),"sport setup/info uses its own imported logo: "+launch[0]);SportsNavigation.FrontEnd();yield return null;yield return null;yield return new WaitForSecondsRealtime(.2f);front=FindAnyObjectByType<SportsFrontEnd>();Check(front!=null,"returns to collection after "+launch[0]);front.Action("play");}
+  foreach(var launch in launches){
+   if(SportsImpossibleGames.TryFindScene(launch[0],out _)){
+    var action=front.GetComponentsInChildren<SportsMenuAction>(true).Single(item=>item.action==launch[1]);
+    int card=Array.FindIndex(front.catalogue.cards,item=>action.transform.IsChildOf(item.transform));
+    Check(card>=0,"new sport has an actual catalogue card: "+launch[0]);
+    if(card<0)continue;
+    front.catalogue.Step(-front.catalogue.Pages);front.catalogue.Step(card/front.catalogue.pageSize);front.Focus();
+    yield return new WaitForSecondsRealtime(.2f);
+    Check(action.gameObject.activeInHierarchy&&action.button.isInteractable,"new sport launch uses its visible enabled Heat button: "+launch[0]);
+    EventSystem.current.SetSelectedGameObject(action.gameObject);yield return null;
+    Check(front.GetComponentInChildren<SportsCatalogueHero>().SelectedScene==launch[0],"actual new sport focus refreshes its own showcase before submit: "+launch[0]);
+    action.button.OnSubmit(new BaseEventData(EventSystem.current));
+   }else front.Action(launch[1]);
+   yield return null;yield return null;yield return new WaitForSecondsRealtime(.2f);Check(SceneManager.GetActiveScene().name==launch[0]&&FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"existing action opens correct saved setup with one listener: "+launch[0]);var artwork=FindObjectsByType<Image>(FindObjectsInactive.Include).Where(i=>i.name=="Original sport title artwork").ToArray();Check(artwork.Length>0&&artwork.All(i=>i.sprite!=null&&i.sprite.name==launch[0]),"sport setup/info uses its own imported logo: "+launch[0]);SportsNavigation.FrontEnd();yield return null;yield return null;yield return new WaitForSecondsRealtime(.2f);front=FindAnyObjectByType<SportsFrontEnd>();Check(front!=null,"returns to collection after "+launch[0]);front.Action("play");}
   report.AppendLine("CHECKS="+checks+" ERRORS="+errors+"; platform="+Application.platform+"; capture kind="+SportsWindowCapture.EvidenceKind+"; injected keyboard/gamepad, actual saved-scene launch/return. No full-collection gameplay, physical-device, audio-listening or human claim.");File.WriteAllText(Folder+"/result.txt",report.ToString());Application.logMessageReceived-=Error;
 #if UNITY_EDITOR
  if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
@@ -57,7 +71,21 @@ public sealed class SportsMenuPresentationProbe:MonoBehaviour {
  Application.Quit(errors==0?0:2);
  }
  static bool Inside(RectTransform rect,Canvas canvas){var corners=new Vector3[4];rect.GetWorldCorners(corners);foreach(var corner in corners){var p=RectTransformUtility.WorldToScreenPoint(canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera,corner);if(p.x<-.5f||p.y<-.5f||p.x>Screen.width+.5f||p.y>Screen.height+.5f)return false;}return true;}
- void OnDestroy(){InputSystem.settings.backgroundBehavior=previousBackground;
+ static bool CaptureSize(string path,int width,int height){
+  if(!File.Exists(path)||(!Application.isEditor&&(Screen.width!=width||Screen.height!=height)))return false;
+  var header=new byte[24];using(var file=File.OpenRead(path))if(file.Read(header,0,header.Length)!=header.Length)return false;
+  byte[] signature={137,80,78,71,13,10,26,10};for(int i=0;i<signature.Length;i++)if(header[i]!=signature[i])return false;
+  if(header[12]!='I'||header[13]!='H'||header[14]!='D'||header[15]!='R')return false;
+  int actualWidth=header[16]<<24|header[17]<<16|header[18]<<8|header[19],actualHeight=header[20]<<24|header[21]<<16|header[22]<<8|header[23];return actualWidth==width&&actualHeight==height;
+ }
+ void FreshWorkshopStorageBeforeRepositoryStart(Scene scene,LoadSceneMode mode){
+  foreach(var workshop in scene.GetRootGameObjects().SelectMany(root=>root.GetComponentsInChildren<SportsWorkshopPersistence>(true))){
+   if(workshop.storage==null)throw new InvalidOperationException("Configured workshop storer required before menu validation.");
+   string id,path;do{id="RetroMenu_"+Guid.NewGuid().ToString("N");path=Path.Combine(Application.persistentDataPath,"TruckSports","Workshops",id);}while(Directory.Exists(path));
+   workshop.modeId=id;workshop.storage.customPath=path;report.AppendLine("ISOLATED_WORKSHOP_STORAGE "+scene.name+" "+path);
+  }
+ }
+ void OnDestroy(){SceneManager.sceneLoaded-=FreshWorkshopStorageBeforeRepositoryStart;InputSystem.settings.backgroundBehavior=previousBackground;
 #if UNITY_EDITOR
  InputSystem.settings.editorInputBehaviorInPlayMode=previousEditor;
 #endif

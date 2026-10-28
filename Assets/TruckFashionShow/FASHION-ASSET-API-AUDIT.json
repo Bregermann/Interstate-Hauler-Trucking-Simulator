@@ -1,0 +1,106 @@
+{
+  "scope": "Fashion exact revised GAME15 vendor-first owned-source audit; no vendor/shared source writes or imports",
+  "requirements": "Documentation/TruckSports/Requests/2026-10-23-Alpha-0.7.0-Impossible-Games.md entire revised GAME15/common",
+  "auditedAndUsed": [
+    {
+      "path": "Assets/TruckSports/Resources/SportsTruckAppearanceCatalog.asset",
+      "sha256": "410829dfedcfa30e85d168f1b4a23739492f78f862c5766fdeaa2284732fd176"
+    },
+    {
+      "path": "Assets/TruckSports/Resources/TruckSports/SportsTruckCustomizerMenu.prefab",
+      "sha256": "a6e8a6127de7a98e8515cb3926e9eb9e11cb4bf3707e871f35eb45aba7d0d638"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsTruckCustomizerMenu.cs",
+      "sha256": "0c2ccb332e60b1c32764a94c6070045587915c12566b6e3958c062e8a79241e4"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsParticipantRegistry.cs",
+      "sha256": "32fbb3a8dc7ae5761fafd7b9aef7617c54cc5e7216420733f2b505db8070fd02"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsTruckAppearanceHost.cs",
+      "sha256": "f0d9e4aedf972751873ef20f40f868dc95eb9075773070a6baad58d31e53ffc8"
+    },
+    {
+      "path": "Assets/TruckDanceOff/Scripts/DanceInputRouter.cs",
+      "sha256": "e4c32e45fecff43e7df7874d789d2d000f9faa88385d33938b585903e7ae989b"
+    },
+    {
+      "path": "Assets/TruckDanceOff/Scripts/DanceTruckRig.cs",
+      "sha256": "22b6a6ca0ff8dbd7baa240d85cf543aa32d6bb446c008f74832e702545436bda"
+    },
+    {
+      "path": "Assets/TruckDanceOff/Rules/DanceRules.cs",
+      "sha256": "4ce3fc82045c7302a90f6e28d60fb8e13685af673141b1d229a98eb82bd091bc"
+    },
+    {
+      "path": "Assets/Hivemind/ShopStore/URP/Art/Prefabs/SM_Counter_1.prefab",
+      "sha256": "98a6fba1dd2cf2f33a3b7db2bedd0dfe06eaab2506233ad930dc7e1e093d20f6"
+    },
+    {
+      "path": "Assets/Hivemind/ShopStore/URP/Art/Prefabs/SM_Register.prefab",
+      "sha256": "a79ed98eec17e1b88ed68d41290d2222da9daa77c980cf356c11f70a2f5b9222"
+    },
+    {
+      "path": "Assets/Hivemind/ShopStore/URP/Art/Prefabs/SM_Shelf_Unit_Reg.prefab",
+      "sha256": "9a9119cac6aecfd1a0987e0dad798930b03ae3c9feb8cd9474a98b0bbcb59e23"
+    },
+    {
+      "path": "Assets/Modern Resaturant - building and interior/Models/Prefabs/Restaurant_chair.prefab",
+      "sha256": "58473548de7803a5cb49ccd934c2e8d8c57922b40df321885743f0b565092093"
+    },
+    {
+      "path": "Assets/Modern Resaturant - building and interior/Models/Prefabs/Restaurant_Table_Rectangular_1.prefab",
+      "sha256": "73afc461a0fe1742bd2a33135fa2fd84f30c512b878de27619177c16de38efd4"
+    },
+    {
+      "path": "Assets/TruckFareFight/Prefabs/Fare Fight Taxi Tractor.prefab",
+      "sha256": "bddc5f22ef1cf650e8aefa46b400dd606448d3e9bc9ef87afe883c9c30ebed59"
+    },
+    {
+      "path": "Assets/TruckDanceOff/Audio/Music/Diesel Disco.wav",
+      "sha256": "2bcaf1f9ab66b34920e3f4b687789cc00093bb0a48c3f3bd7fffc10a86e1c091"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/business01_m.FBX",
+      "sha256": "11dec95c4da99c3f6330528593299b9cb86b4c5a2dc67b59b12ad6dadf2bc4c7"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/business01_f.FBX",
+      "sha256": "ce5c612d42f74d14acea922526b759abdd2d7581e67806e5bf87f6993256b0e1"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/idle1.FBX",
+      "sha256": "c00cc7faf6d4584dac4c32f4db76e958ed77cc1f0073d91b1ac250109e91538b"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/walk.FBX",
+      "sha256": "8d5d7141453ce46a34640c7e7744095b19726ddf279f034c22ad4d21c749fcf7"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/cheer.FBX",
+      "sha256": "6f97ae79581711df2198b03a4f9ca85c4bf0aed635fb40de060de2ae5947ce12"
+    },
+    {
+      "path": "Assets/LWS/TruckTaxi/Passengers/Animations/Humanoid/shout.FBX",
+      "sha256": "189c40f5bc118ef2fa7670a516d6f9e6475f4e8cda81ac29d1c73aaaca06b645"
+    }
+  ],
+  "decisions": [
+    "Existing validated resource catalog supplies all real equippable body/hat/face/mirror/wheel/hitch/dashboard assets and previews. Existing profile IDs/Registry own persistence; no second DB.",
+    "Existing reusable Heat SportsTruckCustomizerMenu has detached draft preview/rotation/save/cancel; existing cards explicitly enablePricefalse and useModalWindowfalse. All test items remain free.",
+    "Existing DanceInputRouter owns source assignment/device-scoped lane InputActions; existing DanceRules owns timestamp/hold/penalty judgment with public120/280ms windows. No duplicate rhythm engine.",
+    "FashionStrut adapts the deliberate controlled kinematic choreography foundation of existing DanceTruckRig under explicit\u00a715.5. Preserves both original NWH chassis/Cab relative poses, all original components/physical parameters; caches/restores body/controller flags. Only Fashion owns this movement authority.",
+    "Actual Hivemind ShopStore counters/shelves/registers and restaurant seating/table fill compact owned architecture; existing Human business rigs/real Idle/Walk/Cheer/Shout clips supply judges/shoppers/shopkeepers. Controller repairs missing required states without replacing custom nonempty motions.",
+    "Original project Dance-Off disco track supplies indoor ambience; no copied Rugrats art/music/characters. Existing SportsEventSession/Heat/DOTween menu motions/ScoreJournal/common original Cinemachine remain authorities."
+  ],
+  "relevantNotUsed": [
+    "No complete installed shopping mall shell found in targeted installed path audit; existing owned retail furniture + original compact stage/architecture are used. No broad asset import or claim of inaccessible library content.",
+    "Ordinary serious NWH driving is intentionally not active inside Fashion because exact\u00a715.5 requires controlled cute arcade walking; complete original rigs/configuration preserved, normal modes unchanged.",
+    "No separate cosmetic inventory/pricing/reward/wallet backend. Future economy is only the explicitly requested deferred design document."
+  ],
+  "themes": "Four current-content themes: Royalty/Fancy Evening/Spooky/Wildly Ridiculous. Explicit actual item IDs/tag mapping in pure FashionRules; unsupported unknown IDs earn no theme tags. No unverified winter/space costume claims.",
+  "privateBoundary": "Existing commercial raw FBX/animations/materials are referenced in place only; no copied public raw asset payload.",
+  "integration": "Lead binds fixed4 existing appearance hosts after first newscene Save and common registry/menu. Fashion deliberately opts out of shared tractor shot framing; preserve indoor artificial lights/solid dark background. Source-only native environment/preview/animation validation pending."
+}

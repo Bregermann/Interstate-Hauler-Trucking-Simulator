@@ -1,0 +1,698 @@
+{
+  "schemaVersion": 1,
+  "status": "SOURCE_FROZEN_GAMES10_21_NATIVE_AUTHOR_AND_TEST_PENDING",
+  "scope": [
+    "Assets/TruckCamping",
+    "Assets/TruckPetPals"
+  ],
+  "ownedCSharpInputs": 38,
+  "sourceRequirement": {
+    "games": [
+      10,
+      21
+    ],
+    "sha256": "5b5fbc6c7c63b629e13e91cc7ddf9a8e905c94fbdecefce41499752a1ba5ae1a",
+    "path": "Documentation/TruckSports/Requests/2026-10-23-Alpha-0.7.0-Impossible-Games.md"
+  },
+  "authorSequence": [
+    "LWS.TruckCamping.Editor.CampingAuthoring.Create",
+    "LWS.TruckPetPals.Editor.PetPalsAuthoring.Create"
+  ],
+  "newScenes": [
+    "Assets/TruckCamping/Scenes/TruckCamping.unity",
+    "Assets/TruckPetPals/Scenes/TruckPetPals.unity"
+  ],
+  "sharedWilderness": "Assets/TruckCamping/Prefabs/Camp Haul shared wilderness.prefab",
+  "sceneOverwriteAllowed": false,
+  "newForestCopies": 1,
+  "fullNWHOwnerCountPerScene": 4,
+  "petCountMaximum": 4,
+  "worldMetres": [
+    2000,
+    2000
+  ],
+  "leadIntegration": [
+    "Existing common Impossible weather/time/logo/menu/registered-view author on these two NEW scenes",
+    "WildernessSeconds public clock available; no new weather or camera framework",
+    "Both scene authors already call BindNewImpossibleScene on exact four full Fare/NWH actors"
+  ],
+  "storage": {
+    "sameStorerInstance": true,
+    "workshopSlot": 0,
+    "framework": "Existing SportsWorkshopPersistence + installed PixelCrushers DiskSavedGameDataStorer",
+    "pathAuthority": "existing adapter Awake machine-local mode folder",
+    "testDirectories": "fresh WildernessValidation_GUID or PetPalsValidation_GUID only, before repository Start",
+    "sceneCustomPath": "",
+    "futureCorruptArchivesPreservedReadOnly": true,
+    "petProfileSlot": 1
+  },
+  "content": {
+    "retainedArchiveInputs": [
+      ".sports-validation/AssetIntake/Quaternius/animated-vol2.zip",
+      ".sports-validation/AssetIntake/Quaternius/animals-vol1.zip"
+    ],
+    "genuineBirdsReferencedInPlace": "Assets/TruckBaseJumping/ThirdParty/QuaterniusBirds",
+    "newReviewedCC0": [
+      "Dog.fbx",
+      "Red Fox.fbx",
+      "Fish.fbx"
+    ],
+    "licensedVendorRawMeshesOrClipsCopied": false,
+    "referencedCommercialArt": [
+      "Installed Whitebark/TTFE URP wind pine prefabs",
+      "NatureManufacture URP fern prefab",
+      "Existing NWH full Fare rig/cab/wheels/horns",
+      "UTS fully clothed adult Generic rig",
+      "Existing genuine WolfLite/compatible clips",
+      "RiverModeler textures/audio",
+      "Existing CoreCollapse masked fire and alpha splash materials"
+    ],
+    "originalGenerated": [
+      "Skinned anatomical bear/deer/rabbit and bounded bone gait",
+      "Camp timber/cooking/hammock/tent/flower/toy/accessory geometry"
+    ]
+  },
+  "testFilters": {
+    "nativeRunByThisAgent": false,
+    "editModeSourceCases": 8,
+    "editMode": "CampingRulesTests;CampingWorldGeometryTests;PetCareRulesTests",
+    "firstNative": "PetProfileRepositoryNativeTests;PetMiniatureGeometryNativeTests",
+    "fullNative": "CampingNativeTests;PetPalsNativeTests",
+    "nativeSourceCases": 7
+  },
+  "sourceValidation": {
+    "status": "CACHED_ROSLYN_SOURCE_ONLY_NO_UNITY_NO_EMIT",
+    "references": 543,
+    "units": [
+      {
+        "assembly": "LWS.TruckCamping.Rules",
+        "sources": 1,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "LWS.TruckPetPals.Rules",
+        "sources": 1,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "WildernessCampRuntime",
+        "sources": 12,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "WildernessPetRuntime",
+        "sources": 10,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "WildernessCampEditor",
+        "sources": 4,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "WildernessPetEditor",
+        "sources": 2,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "LWS.TruckCamping.EditModeTests",
+        "sources": 2,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "LWS.TruckPetPals.EditModeTests",
+        "sources": 1,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "LWS.TruckCamping.PlayModeTests",
+        "sources": 2,
+        "errors": 0,
+        "emitted": false
+      },
+      {
+        "assembly": "LWS.TruckPetPals.PlayModeTests",
+        "sources": 3,
+        "errors": 0,
+        "emitted": false
+      }
+    ],
+    "nativeExecuted": false
+  },
+  "unresolvedAcceptance": [
+    "Actual Unity import/author/save/scene validation",
+    "Ordinary physical AI camp/fire/cooking and pet/navigation/fetch flow native tests",
+    "Native1–4 input/views, all3 actual pet rigs/all7 routines and 7miniature body fits",
+    "Actual wildlife/terrain/prop/UI/camera/weather/day-night visual review",
+    "Actual Windows flow, human/hardware/audio listening/profile soak/performance"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFrameworkCreated": false,
+  "unityOrPlayerLaunchedByThisAgent": false,
+  "cleanOrGitMutated": false,
+  "files": [
+    {
+      "path": "Assets/TruckCamping.meta",
+      "bytes": 172,
+      "sha256": "a75ad352d2e9c726fb96a38fa2d09f41ae5bb7e28cc8cab1f6d4fcfd932dfb36"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor.meta",
+      "bytes": 172,
+      "sha256": "9a055f12735a84b8ae5c4739ed3054fb256699113a75795372206244d7a962f4"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampingAuthoring.cs",
+      "bytes": 8347,
+      "sha256": "5f895637b45e170a7a080c897d5eb9f63757eecaba3e733116ffdc9546ff8ca6"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampingAuthoring.cs.meta",
+      "bytes": 239,
+      "sha256": "a015ab622e45cccb4aa89b0d79163267d19c4939f34f94e4ea0b6ee59334d782"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampingWildernessAuthoring.cs",
+      "bytes": 40524,
+      "sha256": "bb18fdbab1492c872ce85d4beb5ab32795112bfb024dea6e0bf6729ffb84d0e0"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampingWildernessAuthoring.cs.meta",
+      "bytes": 239,
+      "sha256": "b453d666ebef03a6ee19ee4de760e3d2263f77acecaee8c68c14f6c172215898"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampOriginalWildlifeArt.cs",
+      "bytes": 10699,
+      "sha256": "c1565410232b32e0201cd2a5be65c42d50b548d11ddb0d496fae08aa9238f9b6"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/CampOriginalWildlifeArt.cs.meta",
+      "bytes": 239,
+      "sha256": "d8f2db1d5115c2da2303a53b1946ef06b5575632c210d7ba62dabc0af3cc9fff"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/WildernessAssetIntake.cs",
+      "bytes": 9749,
+      "sha256": "d962215697237145121000d9521ac93bc02a63a1d8293446110f06131d6da835"
+    },
+    {
+      "path": "Assets/TruckCamping/Editor/WildernessAssetIntake.cs.meta",
+      "bytes": 239,
+      "sha256": "af514c06b7e797fce7672a403c9dc75eb7f8f1fb8251d377788cff064744bd39"
+    },
+    {
+      "path": "Assets/TruckCamping/IMPLEMENTATION.md",
+      "bytes": 9848,
+      "sha256": "64d1d162972b0aafb6ba3a6b71b101b80c5fc7e9452cd32c24ab640aa721869c"
+    },
+    {
+      "path": "Assets/TruckCamping/IMPLEMENTATION.md.meta",
+      "bytes": 158,
+      "sha256": "c8b52e524a58301d72ab087d0e79c2cc459a719853f2a40f8c4e38024396c91b"
+    },
+    {
+      "path": "Assets/TruckCamping/Rules.meta",
+      "bytes": 172,
+      "sha256": "c56ba4c95b13d67306e3bd16d06f626a20e1e0b0cb345bbaa7456284113dfe05"
+    },
+    {
+      "path": "Assets/TruckCamping/Rules/CampingRules.cs",
+      "bytes": 4024,
+      "sha256": "703633adf063f2aaf54cf39fbd8250e22cc90e28e8570dad2d43b6890ac81f4a"
+    },
+    {
+      "path": "Assets/TruckCamping/Rules/CampingRules.cs.meta",
+      "bytes": 239,
+      "sha256": "425780b68328f4459d0582aa58e2c572516f4a44adde5f986ab8f1b431cd9881"
+    },
+    {
+      "path": "Assets/TruckCamping/Rules/LWS.TruckCamping.Rules.asmdef",
+      "bytes": 117,
+      "sha256": "1f4d7935c7f23b8a39abbda1a189c6737d335b7166257d00c7589c40bbde0764"
+    },
+    {
+      "path": "Assets/TruckCamping/Rules/LWS.TruckCamping.Rules.asmdef.meta",
+      "bytes": 166,
+      "sha256": "41ccb5ed9c24dae55018a59846d3a5bce07041c4ac455a66d794ba4cf90480cb"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts.meta",
+      "bytes": 172,
+      "sha256": "3cf64c15f0d0257124cc8b5f712a38151905573b77a045f8cb9ff5fd5e8324db"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampExplorer.cs",
+      "bytes": 13752,
+      "sha256": "26cc8dfd0afecb48bdffb29936186797d5bf0da9815d91f245231e49ac1602a8"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampExplorer.cs.meta",
+      "bytes": 239,
+      "sha256": "8c6c45b04f0dfab8e8af3be8c47511bc7a226ee6c2c55cd3eaba21450e51fc55"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampHammock.cs",
+      "bytes": 1599,
+      "sha256": "cdab64437f256a0d35681d300975e2aeb2c2b9fe36f17c983ed6aa2ebb589879"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampHammock.cs.meta",
+      "bytes": 239,
+      "sha256": "0296fe7c1aeb4c6f081970702d692ad86ceb8883f2668c4166f88ae2bea7509a"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampHelpPages.cs",
+      "bytes": 648,
+      "sha256": "079a091f00fc43be7a377da21f41e1079d80f396a9b1ecfbc6c1a51eb2b95655"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampHelpPages.cs.meta",
+      "bytes": 239,
+      "sha256": "4876761e6f097c40830858061c888c3250803912022d0488755f4aa99cf15039"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampingMatch.cs",
+      "bytes": 18848,
+      "sha256": "746cf0198d1081ca7dcaaf80b879e5e7dfe06ea0a1c00e082a38b30d5bbffbeb"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampingMatch.cs.meta",
+      "bytes": 239,
+      "sha256": "d0c2cd773e81f59b425211b0cf2885712ef3e33b9768542d8cbab7b89d45d7e7"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampingWilderness.cs",
+      "bytes": 2490,
+      "sha256": "1c63e3f4a514b2d17cfe43e75a5ee9e627ce6a50ac76c4066fd798b36ac8995b"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampingWilderness.cs.meta",
+      "bytes": 239,
+      "sha256": "9f5824af541117f1ff186217815275e951d7995a3411d12f0bbcdf0d3c91f5d5"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampLandmark.cs",
+      "bytes": 302,
+      "sha256": "d95be5d882619a2901e79ef8edb745607693f57030b46c609dbab9ab84c82908"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampLandmark.cs.meta",
+      "bytes": 239,
+      "sha256": "5fa224b4819994863a44ca388b1e7de3a593e77508f0133bd385b092ea5909b8"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampLivingArt.cs",
+      "bytes": 9697,
+      "sha256": "88f659fd5ffbeeecb78882860fa36eb8e555e9bba6cd90e785e0083fb9ae4915"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampLivingArt.cs.meta",
+      "bytes": 239,
+      "sha256": "c61aa7de890f04021b5fc9dd070b48aba01c5779a5f96a921c8b1275bf54dfe8"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampResource.cs",
+      "bytes": 1499,
+      "sha256": "7a85437520a02deb7a565d299e6e400d34304c61ef4b105b39ba6b81146cb336"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampResource.cs.meta",
+      "bytes": 239,
+      "sha256": "4ec1e993ff18eb9a253184eb7907809036613d222d451b56a52282e06deaf92a"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampSite.cs",
+      "bytes": 1601,
+      "sha256": "bb5810ee0f132491b2b08b605cf8fb853e0b2477a45c8cc8585950ed5b219a9e"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampSite.cs.meta",
+      "bytes": 239,
+      "sha256": "c3e46917fe4f145f13b13f89c231484de021f80b89e3397fb44101dea5193dcd"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampSleepPresentation.cs",
+      "bytes": 939,
+      "sha256": "7e53ad2f7ba73155bcb645eecdc49d17aeb995ad227e7272bd4b90e4ec0902f0"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampSleepPresentation.cs.meta",
+      "bytes": 239,
+      "sha256": "6514ebf0e44ac22a3908a718854691296e0758debf65376e3516ecf9387e01c7"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampWaterLife.cs",
+      "bytes": 897,
+      "sha256": "768bfb18ce3201a88d7110048913291534f03fc7aaa8bbbdd0b02fe59e84027a"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampWaterLife.cs.meta",
+      "bytes": 239,
+      "sha256": "f0c7ab80a9517f1cc8620350ae628a526853c3efbd1635510f696e988d877661"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampWildlife.cs",
+      "bytes": 2920,
+      "sha256": "c1f71c81d9eead3722b3e8d25d9502cfbeb77a6f0e88e05b82119253e6783f46"
+    },
+    {
+      "path": "Assets/TruckCamping/Scripts/CampWildlife.cs.meta",
+      "bytes": 239,
+      "sha256": "fb084d7d8a6a3c2093c155d4d6cc3131fd041416649d79d94801d4e1ba46b5ad"
+    },
+    {
+      "path": "Assets/TruckCamping/Source-Handoff.json.meta",
+      "bytes": 158,
+      "sha256": "807bc25ff4264886903fc1d7f59f785792a0f31f85b0b8edaf77a1983bdd2829"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests.meta",
+      "bytes": 172,
+      "sha256": "fff70f5f2a6c4455e1fb49de28f644059c8d079ebfe77903f9eb732f88a8a829"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor.meta",
+      "bytes": 172,
+      "sha256": "3816f39cc6fac3181ff1e65af2420e9e4a4bc02abc10e906a11d2a7147787a5e"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/CampingRulesTests.cs",
+      "bytes": 2398,
+      "sha256": "6a1755a744ddec015ede8484fcac17e77c65b367d92124b211ee50b4804fbdea"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/CampingRulesTests.cs.meta",
+      "bytes": 239,
+      "sha256": "0792530713a06a5369923191282f50170770eb738a2b0ea335f90da1832ff671"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/CampingWorldGeometryTests.cs",
+      "bytes": 1322,
+      "sha256": "373a4c0c2100e1bac9cb9c0bbe6ffc0886744516d967a3c291371e07c0bf9c74"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/CampingWorldGeometryTests.cs.meta",
+      "bytes": 239,
+      "sha256": "be20e4d8da04a5e5233e23aec5f68b2bba75abf838e85b1ad581626eb1269ad2"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/LWS.TruckCamping.EditModeTests.asmdef",
+      "bytes": 180,
+      "sha256": "44c4441d9da09c7510e932542dc91335b02c94e82e8af35460acbb8f2f8dff92"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/Editor/LWS.TruckCamping.EditModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "808270a8984eccc8a6da420feb8246bd3a93ff6504e73836b4c497b003ae1b7a"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode.meta",
+      "bytes": 172,
+      "sha256": "74dc268cdde387adf37a2d5fac69e15a7905314be040bfefc8734ecb03ceb1de"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/CampingNativeTests.cs",
+      "bytes": 8009,
+      "sha256": "132c9c3b3609169bf41f8bac21abfebd63f29ea5efe24f6592d05b17cb14cfcb"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/CampingNativeTests.cs.meta",
+      "bytes": 239,
+      "sha256": "5628abe3194d08c99d893e9803be83244007de22af39a781978dc25a1cac761e"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/LWS.TruckCamping.PlayModeTests.asmdef",
+      "bytes": 170,
+      "sha256": "963d613f73aabc2be395d717ff6b1cac71e5c7bd3f3695d9b704affb30aee486"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/LWS.TruckCamping.PlayModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "a26987d0eec10dfa4a9de02adf17ef551d55933f11c263d6bdeb426123a2b3e5"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/WildernessNativeScope.cs",
+      "bytes": 9829,
+      "sha256": "d9f5b9edbf8cde76b25a824d7a10afefcc94a110732bed888d8079379dbfe15f"
+    },
+    {
+      "path": "Assets/TruckCamping/Tests/PlayMode/WildernessNativeScope.cs.meta",
+      "bytes": 239,
+      "sha256": "633d747a3808a84eafe832029758ab46aa588060190a21138409f57d67189bde"
+    },
+    {
+      "path": "Assets/TruckPetPals.meta",
+      "bytes": 172,
+      "sha256": "f00b9709e2edc8faa54b4e145fd5829e856c0f69a36e0d88c557cec1cc12c953"
+    },
+    {
+      "path": "Assets/TruckPetPals/Editor.meta",
+      "bytes": 172,
+      "sha256": "3f18e3b3965303bc0368a659af8e4d47ca33b60d6e0d21de3a8ca1efd76479c1"
+    },
+    {
+      "path": "Assets/TruckPetPals/Editor/PetPalsAuthoring.cs",
+      "bytes": 16466,
+      "sha256": "68f9e3fcf0592e6caece0efc1e194433db7598dbab9ea566f2e4b63744a6e6a3"
+    },
+    {
+      "path": "Assets/TruckPetPals/Editor/PetPalsAuthoring.cs.meta",
+      "bytes": 239,
+      "sha256": "282924e52c81e74cf9d4d002dd8c1551266aff25831974fa7a18c61012827d69"
+    },
+    {
+      "path": "Assets/TruckPetPals/Editor/PetVisualAuthoring.cs",
+      "bytes": 8963,
+      "sha256": "3899a292ccc1b6a441209d7549839ad5eebbc1077e015a64837cbea9cebc4677"
+    },
+    {
+      "path": "Assets/TruckPetPals/Editor/PetVisualAuthoring.cs.meta",
+      "bytes": 239,
+      "sha256": "dd292f318ef39b31bfe6931b7d0da80356a5ac5bbce4010e14c7d47066f5f8c4"
+    },
+    {
+      "path": "Assets/TruckPetPals/IMPLEMENTATION.md",
+      "bytes": 4974,
+      "sha256": "4c47e5af8e7143f23bc2027d8b95929c0ce3f8dff64bfb047b61cb289abbd9e5"
+    },
+    {
+      "path": "Assets/TruckPetPals/IMPLEMENTATION.md.meta",
+      "bytes": 158,
+      "sha256": "98dbd57896c0971fdf295e34ee2675746b9908e9d75e6995a25d6f3151ccbb5b"
+    },
+    {
+      "path": "Assets/TruckPetPals/Rules.meta",
+      "bytes": 172,
+      "sha256": "f9b41caacac582d178551cf313609cae8c5398c6d50fe28311ad60e7253f5683"
+    },
+    {
+      "path": "Assets/TruckPetPals/Rules/LWS.TruckPetPals.Rules.asmdef",
+      "bytes": 117,
+      "sha256": "6b9b87a8ab28a77503cc1ad576a033e26735d2497a91286feaa1ca45797c873a"
+    },
+    {
+      "path": "Assets/TruckPetPals/Rules/LWS.TruckPetPals.Rules.asmdef.meta",
+      "bytes": 166,
+      "sha256": "bba684218a40834e495ca66a1a415e1b7d42fb67310ecf38fce5dbd301d13d59"
+    },
+    {
+      "path": "Assets/TruckPetPals/Rules/PetCareRules.cs",
+      "bytes": 6682,
+      "sha256": "9c2b2f5681a231ade9b60307c5a089c772e2ef6b784aa82f58aa0d65578134d3"
+    },
+    {
+      "path": "Assets/TruckPetPals/Rules/PetCareRules.cs.meta",
+      "bytes": 239,
+      "sha256": "e5f4b64f7b3d22652e269ddf7b5f1f20a944e8be65941f8642b2d7de1cf33074"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts.meta",
+      "bytes": 172,
+      "sha256": "972cd7d99c0205900da6fc6889b6bf1c59fa958d2a65ec626a0476d375d7c32b"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetAccessory.cs",
+      "bytes": 532,
+      "sha256": "7411b57145b01fbd0bce482bdb0b5ba41f813a3a4c92d02ef3bc0b4c90bafb38"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetAccessory.cs.meta",
+      "bytes": 239,
+      "sha256": "1477772763d18c47ba81a7a01c40297fff89bcc99b7dfbea9bf1e7f2930b1711"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetAdoptionPanel.cs",
+      "bytes": 11314,
+      "sha256": "9c7e9d69d5719b9fcc8c02984a2c77d24eeab458eb3302801091c93efd424649"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetAdoptionPanel.cs.meta",
+      "bytes": 239,
+      "sha256": "8e339978532463a89605307c46eb479ae0c940e368bb20746981d8d217781456"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetCareHUD.cs",
+      "bytes": 2577,
+      "sha256": "f416c952cab8fee96a4de58256bcb837b9627dd2d27a8bf04d62418e097c2f56"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetCareHUD.cs.meta",
+      "bytes": 239,
+      "sha256": "2248cd46a2ad5f61c14381aeb06a391223787960bfa6c978da0128850f7dbe25"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetCompanion.cs",
+      "bytes": 24234,
+      "sha256": "1c69d6de31062c8ad8370fdacf6cd46380c4fa9bbb6bd9641a6987d78e3dcc2d"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetCompanion.cs.meta",
+      "bytes": 239,
+      "sha256": "57e2884ff3705353d8e737a6e33886d036db5960e30f540b2d7583931964bbbd"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetDigGround.cs",
+      "bytes": 2288,
+      "sha256": "dc3c7e92c7e5a8905f47a33b864e5c78e94dd93982859e3fc91e95977344c86e"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetDigGround.cs.meta",
+      "bytes": 239,
+      "sha256": "d66fe597225db50bfa5889ea2c4e9c0a64126bcb9a5bc031c3dedf8c7538e376"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetDigPatch.cs",
+      "bytes": 3984,
+      "sha256": "88fd632872cdef4d8ca24b9b188b402e6e07534ba0da7b302410f13f72f9d312"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetDigPatch.cs.meta",
+      "bytes": 239,
+      "sha256": "4262be3c6075d8153af6e0c03f90a47747519578abe3d5f9d77140fc066fd122"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetPalsMatch.cs",
+      "bytes": 18808,
+      "sha256": "d5bbf12f11ead9289bd26b4d31c3e2827c77df7c1d2b687ee8b879933a8be713"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetPalsMatch.cs.meta",
+      "bytes": 239,
+      "sha256": "d23b7dc6e340cdce2f5592e3b485c3d430b45270ecc6c996e9570f3d52816e9b"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetProfileRepository.cs",
+      "bytes": 8621,
+      "sha256": "d741d0872736460e2883ea742d5ef94f97adfdebd001e6fc3b6537cb2b06bfab"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetProfileRepository.cs.meta",
+      "bytes": 239,
+      "sha256": "7f2eea323bb5c9707c840de12bd070577b3770b55bb21796fc0fe531981fbec6"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetToy.cs",
+      "bytes": 1840,
+      "sha256": "604b31c4b565ac9eae9f0713960fd68932f6d4ac7c4cbc06e0976e07a0d341a2"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetToy.cs.meta",
+      "bytes": 239,
+      "sha256": "fb38b57346baf47121a16408e778ccb209f5184caab3da3dd5e0c8294dbaff42"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetTruckArt.cs",
+      "bytes": 11396,
+      "sha256": "30ade5c6af3de51c26f9f9683435571be68b5dfaa1ee772238eb6bb3d70bfd59"
+    },
+    {
+      "path": "Assets/TruckPetPals/Scripts/PetTruckArt.cs.meta",
+      "bytes": 239,
+      "sha256": "466f5ab5549c0ac5b20a65764e26f286338172108c0569055d24cd5ad9a69861"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests.meta",
+      "bytes": 172,
+      "sha256": "e4f0099ea04f79d5a9be1eabc49dc2139b2be9ce73eb9c3dd2edfc218cdfaebc"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/Editor.meta",
+      "bytes": 172,
+      "sha256": "01ee1eea044f2535d16e32e01bbd97df8ed286051b7f4929959bfa99e6f587f3"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/Editor/LWS.TruckPetPals.EditModeTests.asmdef",
+      "bytes": 180,
+      "sha256": "572603006763881daf62cc40936c8a9323b53b73ba7f7471163cc22f8cd82f1c"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/Editor/LWS.TruckPetPals.EditModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "2c918db680c6007764047261580aabecec009ca5c7e01fd6c2d2b49af98f4e14"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/Editor/PetCareRulesTests.cs",
+      "bytes": 3446,
+      "sha256": "82b6b6ed13232c6016255b353db7128daacce9b600db9f2765304c3f9b2d155b"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/Editor/PetCareRulesTests.cs.meta",
+      "bytes": 239,
+      "sha256": "4e485d275681635bcdf4a70b18c317e85b19a2b78c928a5811579d75055487e1"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode.meta",
+      "bytes": 172,
+      "sha256": "627ef4854b001a7857ab7bb6a631afecd3cc373baf591901687ab9467c128035"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/LWS.TruckPetPals.PlayModeTests.asmdef",
+      "bytes": 228,
+      "sha256": "2996f57b0a4477fa7eeb30eb8476df4d08f6dfb94aef0584456caac65c05e952"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/LWS.TruckPetPals.PlayModeTests.asmdef.meta",
+      "bytes": 166,
+      "sha256": "1dc10f26094453316463152c3d60d52b189382c6581d43c48493aec913d386e3"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetMiniatureGeometryNativeTests.cs",
+      "bytes": 3926,
+      "sha256": "fc1f385b27a907ff864cd600b3f675e0ddc4afbee64b224bff7ccffa7be3ce3f"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetMiniatureGeometryNativeTests.cs.meta",
+      "bytes": 239,
+      "sha256": "5a7d71c104edff945d237c4561ae40389ce9df3d9d893ae294e30339d55511c0"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetPalsNativeTests.cs",
+      "bytes": 11066,
+      "sha256": "d64fc1ca84ae1d0e84efd2fa24108222f2de383c55e392b6b6589105dce6a618"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetPalsNativeTests.cs.meta",
+      "bytes": 239,
+      "sha256": "99707883f0485005364f55acf3830d45a8126b3bd71e7fb9e6db1f0da2aebb02"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetProfileRepositoryNativeTests.cs",
+      "bytes": 6694,
+      "sha256": "3187ae3798073276367cafe41ffda326187cd7b5f1f8c9384ba54cba6a8a9175"
+    },
+    {
+      "path": "Assets/TruckPetPals/Tests/PlayMode/PetProfileRepositoryNativeTests.cs.meta",
+      "bytes": 239,
+      "sha256": "18202a24d22f1a49ab79269c10cee492b911a5e458a3fe240c81178bb84b4948"
+    }
+  ]
+}

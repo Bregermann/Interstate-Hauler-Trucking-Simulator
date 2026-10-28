@@ -131,13 +131,26 @@ namespace LWS.TruckSports
                     if (snowStartup)
                     {
                         var snow = match.GetComponent<SportsSnowSurface>();
-                        Check(snow != null && (choice[0] == "Clear" ? snow.Coverage == 0 && snow.RoadsInClearMode : snow.Coverage > .5f && snow.MaximumRoadCoverage > .5f), scene + " original surface state " + combination);
+                        // Camping/Pet Pals use the original off-road terrain and
+                        // environment bindings, not Weatherade road materials.
+                        // Windows4 measured997/1184 ground bindings,4 terrains,
+                        // active traces and~.8 coverage with zero road bindings.
+                        bool wilderness = scene == "TruckCamping" || scene == "TruckPetPals";
+                        var ground = snow != null ? snow.surface : null;
+                        bool clear = choice[0] == "Clear";
+                        bool actualSurface = snow != null && (wilderness
+                            ? ground != null && (clear
+                                ? snow.Coverage == 0 && ground.Coverage01 == 0 && Mathf.Abs(Shader.GetGlobalFloat("_TaxiSnowCoverage")) < .001f
+                                : snow.Falling && snow.Coverage > .5f && ground.Coverage01 > .5f && ground.EnvironmentBindingsReady && ground.GroundSnowSurfaceCount > 0 && ground.TerrainSnowSurfaceCount == 4 && ground.SnowTextureReady && ground.BoundDepthCameraCount > 0 && Mathf.Abs(Shader.GetGlobalFloat("_TaxiSnowCoverage") - ground.Coverage01) < .001f)
+                            : clear ? snow.Coverage == 0 && snow.RoadsInClearMode : snow.Coverage > .5f && snow.MaximumRoadCoverage > .5f);
+                        Check(actualSurface, scene + " original " + (wilderness ? "terrain/environment" : "road") + " surface state " + combination);
                         if (snow != null)
                         {
                             snow.surface.RequestTracePixelDiagnostic();
                             float deadline = Time.realtimeSinceStartup + 3;
                             while (snow.surface.TracePixelDiagnostic.Contains("pending") && Time.realtimeSinceStartup < deadline) yield return null;
                             log.AppendLine("SNOW_SURFACE " + scene + " case=" + caseNumber + " " + combination + " coverage=" + snow.Coverage + " roadCoverage=" + snow.MaximumRoadCoverage + " roadContacts=" + snow.RoadContacts + " " + snow.surface.Diagnostic + " " + snow.surface.TracePixelDiagnostic);
+                            if (wilderness && !clear) Check(snow.surface.TraceActivePixelCount > 0 && snow.surface.TraceIndentPixelCount > 0, scene + " actual off-road tire traces have GPU mask and indentation pixels " + combination);
                         }
                     }
                     yield return Capture(scene + (snowStartup ? "-snow-start-" + caseNumber : "") + "-" + combination.Replace('|', '-'));

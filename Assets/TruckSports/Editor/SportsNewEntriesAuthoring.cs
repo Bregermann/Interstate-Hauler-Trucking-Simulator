@@ -10,7 +10,7 @@ namespace LWS.TruckSports.Editor
     // Add completed new entries without reauthoring the user's existing cards,
     // title, scene dressing or sport configuration. Explicit regeneration calls
     // the same additive operation after retaining the original catalogue.
-    public static class SportsNewEntriesAuthoring
+    public static partial class SportsNewEntriesAuthoring
     {
         [MenuItem("Truck Sports/Install completed new sport entries (preserve menu)")]
         public static void Install()

@@ -60,6 +60,7 @@ namespace LWS.TruckSports {
  public virtual string EliminationHudStatus=>Header;
  // Read-only viewport presentation. Camera/input owners remain sport-owned.
  public virtual bool CompactViewportHud=>false;
+ public virtual Vector2 ViewportCardAnchor(int view,Rect viewport)=>SportsCompactViewportHud.InnerAnchor(viewport);
  public virtual string ViewportCardLabel(int view,int participant)=>setup.players[participant].name;
  public virtual Color ViewportCardColor(int view,int participant)=>setup.players[participant].color;
  public virtual string ViewportContextPrompt(int view)=>null;

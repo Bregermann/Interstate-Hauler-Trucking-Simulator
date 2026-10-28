@@ -1,0 +1,102 @@
+{
+  "scope": "Snowman V5 proven rack-route boundary correction and bounded read-only first-packing diagnostic. No production packing/hoist/physics change.",
+  "baselineManifest": {
+    "path": "Assets/TruckSnowmanBuilding/SNOWMAN-SOURCE-V4-COLLECTION.json",
+    "sha256": "b1bd395d71d2d5c7c8c244099f3000709e99679581ab59b885004434f649284a"
+  },
+  "evidence": {
+    "log": "Logs/TruckSports/PlaytestRepair/impossible07-snowman-complete-v4.log",
+    "sha256": "e6a2624ae5830f1190265204ebea9881c90176ecfa74383a51822b7a016570af",
+    "actualStatus": "V4 guarded rack author and2focused contact/delivery/lift cases PASS. Original full540s FAIL; none relabelled.",
+    "firstBlock": "Base is at(0,2.663884,22) by75s and remains through540; Placed0/lift0/craneRest. Existing trace stops recording base predicates while lifted.",
+    "independentRouteDefect": "Actual head center6.423/r1.245281 leaves minx5.177719 above physical right-lane rail surface5.175: legal settled lane position. Nominal3.5m centreline cutoff wrongly selected recovery against visible rails."
+  },
+  "changes": [
+    "AI lane containment now uses actual serialized rail collider bounds minus actual sphere radius and actual summed contact offsets; removes proven invalid centreline cutoff. Original global pickup zone/ball growth/mass/drag/score/hoist unchanged.",
+    "New uninjected90simulation-second first-packing diagnostic records every crane.AtRest predicate, actual position/target/velocity/angular/Quaternion angle/up/dynamic/joint/sleep, private Snowman support field/age/rest, and independent actual foundation Enter/Stay/Exit pair observation. No force/pose/score writes.",
+    "Original full540s test, original V4 physical rack/lift tests and all packing criteria remain exact. First diagnostic still asserts real first packing; failure is evidence, not a completion pass."
+  ],
+  "hypotheses": [
+    {
+      "cause": "Sleeping sphere stops OnCollisionStay before .65s Snowman rest hold; .07s support cache expires",
+      "support": "Base physically settled for465s; source only refreshes stamp on real callbacks; similar already-observed Nest issue",
+      "status": "UNCONFIRMED; actual paired/sleep/supportAge/rest data required"
+    },
+    {
+      "cause": "Container-specific crane upright/identity predicate blocks spherical rest",
+      "support": "Crane.AtRest requires up>.98 and Quaternion identity<8, beyond snow sphere support geometry",
+      "status": "UNCONFIRMED; actual angle/up trace required"
+    },
+    {
+      "cause": "Residual speed/rotation/pending joint or actual foundation support mismatch",
+      "status": "UNCONFIRMED; all exact predicates and actual callback IDs traced"
+    }
+  ],
+  "nativeFilter": "SnowmanPackingDiagnostics.NaturalAiFirstPhysicalPackingGateRetainsActualContactAndReportsEveryCranePredicate",
+  "nativePlan": "Run only bounded diagnostic first. Preserve actual failure and inspect gates. No repeat540s until corrected first-placement AND ordered three-pack handoff proof passes.",
+  "validation": "PASS16 actualC# sources including two frozen dependencies/547cached actualrefs/0errors, no emission. Native diagnostic UNRUN. No scene author change required after accepted V4 rack.",
+  "protectedHashes": {
+    "Assets/TruckSnowmanBuilding/Scripts/SnowmanMatch.cs": "85228373613ee711f09f44a36a902539530a1a5a63302b0e9bd6b57ee4d04bd3",
+    "Assets/TruckSnowmanBuilding/Scripts/SnowmanBall.cs": "6d9cdd6cebf976bf4b18b305a563d1c04e3b187fd4f52f338b0f78a2bd640bdf",
+    "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPlayModeTests.cs": "93915d237ba908d01e3fd5c5ce59b3ca58e0a8a72c4e8d05efbc1e2cd0bfe72b",
+    "Assets/TruckJenga/Scripts/JengaCrane.cs": "301319d1bc46fb67dce70f71fc5dbcc0b26f1ee6d3d064bf675604dc4e517ebb"
+  },
+  "vendorAssetsAudited": [
+    "Original accepted physical rack rail collider bounds/contact offsets",
+    "NWH actual AI/handbrake authority",
+    "Original snowball/Snowman support observer and original frozen crane predicates",
+    "Unity PhysX sleeping/collision callbacks"
+  ],
+  "vendorAssetsUsed": [
+    "Unchanged NWH motion, real existing rail collision geometry and original snow body/hoist",
+    "Unity actual read-only contact/sleep/pose telemetry"
+  ],
+  "relevantAssetsNotUsed": {
+    "Hidden stabilizer/new physics": "Rejected; no coefficient/force/pose intervention before evidence."
+  },
+  "customSystemsCreated": [
+    "Actual-rack-contained AI route predicate",
+    "Read-only native first packing/contact predicate diagnostic"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckSnowmanBuilding/Scripts/SnowmanCollectionRack.cs",
+      "sha256": "1a917e7ae0fb8032c2dd33f90e33017066eec2690b3da7e06d97c1535c0a7855",
+      "bytes": 1519,
+      "previousSha256": "d573dbf448a5a22a61f943f3bede084be874e2223b6ccc50139fbb04ded27d56"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Scripts/SnowmanAiDelivery.cs",
+      "sha256": "ac292723af127661be23c61b1295fbefe91e22642f2b39fec909356208098045",
+      "bytes": 4060,
+      "previousSha256": "b87e17c81804cab54563768a7d1b9676da4e8e8d55ce43fd165001c59d0561c4"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPackingDiagnostics.cs",
+      "sha256": "69bbe5bd840888c73801d9e424590356dd1f04c8cf6552d68e0cbd6feebb6493",
+      "bytes": 5259
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPackingDiagnostics.cs.meta",
+      "sha256": "b8488a3bc5599fbccae5ae222238fcb24d301ea6769ef6febb12579dd11d0b6e",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPackingContactProbe.cs",
+      "sha256": "96e9b9f8266a4d7d5ea1ad665918413bc38ea4f8ddf0ad43620b96f1b24b686c",
+      "bytes": 841
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPackingContactProbe.cs.meta",
+      "sha256": "ddd88f6854804ce33971b5769d75214dac5f5279236ba8f6be1deb782f7cd413",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/SNOWMAN-SOURCE-V5-PACKING-DIAGNOSTIC.json.meta",
+      "sha256": "7eb59b7e428901959f24707f34183eb7b5979bfdfef2200996c9103b99cbadc7",
+      "bytes": 62
+    }
+  ]
+}

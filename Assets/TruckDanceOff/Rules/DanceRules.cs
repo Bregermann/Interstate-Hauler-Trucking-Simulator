@@ -40,6 +40,8 @@ namespace LWS.TruckDanceOff
         public int Count => notes.Length;
         public DanceGrade LastGrade { get; private set; }
         public event Action<int, DanceGrade> Judged;
+        // Presentation-only head event; hold scoring still resolves at its tail.
+        public event Action<int, DanceGrade> Started;
         public event Action<int> Freestyled;
 
         public DanceRules(DanceNote[] chart) : this(chart,GreatWindow,GoodWindow) { }
@@ -105,6 +107,7 @@ namespace LWS.TruckDanceOff
                 if (value > grade[best]) grade[best] = value;
                 partial[best] |= lane;
                 if (partial[best] != notes[best].mask) continue;
+                Started?.Invoke(best, grade[best]);
                 if (notes[best].duration > 0) state[best] = 1;
                 else Resolve(best, grade[best]);
             }

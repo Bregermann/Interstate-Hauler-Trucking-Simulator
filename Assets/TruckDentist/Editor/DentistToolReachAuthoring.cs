@@ -1,0 +1,17 @@
+using System;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+namespace LWS.TruckDentist.Editor {
+ // Explicit repair for this NEW owned clinic only; no automatic play/rematch mutation.
+ public static class DentistToolReachAuthoring {
+  const string ScenePath="Assets/TruckDentist/Scenes/TruckDentist.unity";
+  public static void RepairSavedSelectedToolReach(){if(EditorApplication.isPlaying||EditorApplication.isCompiling)throw new InvalidOperationException("Stopped compiled Editor required.");for(int i=0;i<UnityEngine.SceneManagement.SceneManager.sceneCount;i++)if(UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)throw new InvalidOperationException("Preserve dirty scene before explicit clinic equipment repair.");var scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Single);RepairOpenSelectedToolReach();if(!EditorSceneManager.SaveScene(scene))throw new System.IO.IOException("Could not save clinic tool reach.");}
+  public static void RepairOpenSelectedToolReach(){var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();if(EditorApplication.isPlaying||EditorApplication.isCompiling||scene.path!=ScenePath)throw new InvalidOperationException("Exact stopped owned clinic scene required.");var match=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<DentistMatch>(true)).Single();if(match.arms==null||match.arms.Length!=4||match.tools==null||match.tools.Length!=4||match.teeth==null||match.teeth.Length!=16)throw new InvalidOperationException("Preserve custom clinic roster.");var desired=Vector3.forward*1.2f;
+   // Preflight every model and exact wrist tray before the first mutation.
+   for(int i=0;i<4;i++){var arm=match.arms[i];var tool=match.tools[i];if(arm==null||tool==null||arm.truck==null||arm.truck.session!=match||arm.truck.slot!=i||arm.truck.tractorMotor==null||tool.match!=match||tool.arm!=arm||tool.transform!=arm.grip.transform||tool.models.Length!=6||tool.tips.Length!=6)throw new InvalidOperationException("Exact original NWH/arm/tool ownership required.");var tray=arm.grip.transform.Find("Machined articulated support tray");if(tray==null||tray.localPosition!=new Vector3(0,-.35f,0)||tray.localScale!=new Vector3(2.8f,.14f,2.8f)||tray.localRotation!=Quaternion.identity||tray.GetComponent<BoxCollider>()==null)throw new InvalidOperationException("Preserve customized wrist tray.");for(int k=0;k<6;k++){var model=tool.models[k];var tip=tool.tips[k];if(model==null||tip==null||model.parent!=arm.grip.transform||model.name!="Actual selected "+(DentalToolKind)k||model.localPosition!=Vector3.zero&&model.localPosition!=desired||model.localRotation!=Quaternion.identity||model.localScale!=Vector3.one||tip.transform!=model||tip.center!=new Vector3(0,0,.85f)||Mathf.Abs(tip.radius-.26f)>.00001f||tip.isTrigger!=(k==2||k==3||k==4))throw new InvalidOperationException("Preserve custom selected tool "+i+"/"+k);}}
+   int changed=0;foreach(var tool in match.tools)foreach(var model in tool.models)if(model.localPosition!=desired){model.localPosition=desired;EditorUtility.SetDirty(model);changed++;}if(changed>0)EditorSceneManager.MarkSceneDirty(scene);Debug.Log("DENTIST_SELECTED_TOOL_REACH repaired="+changed+"; six original model+collider roots advance1.2m together beyond unchanged1.4m tray edge. All tooth sockets/force/rules/NWH/art geometry retained. Native contact acceptance pending.");
+  }
+ }
+}

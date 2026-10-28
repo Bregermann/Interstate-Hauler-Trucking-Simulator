@@ -1,0 +1,64 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using LWS.TruckSports;
+using LWS.TruckSports.Editor;
+namespace LWS.TruckGuessThat.Editor
+{
+    public static class GuessAuthoring
+    {
+        public const string Folder="TruckGuessThat",Scene="Assets/TruckGuessThat/Scenes/TruckGuessThat.unity";
+        public const string CatalogPath="Assets/TruckSports/Resources/SportsTruckAppearanceCatalog.asset";
+        [MenuItem("Truck Sports/Alpha 0.7/Create NEW Guess That Truck")]
+        public static void CreateNewScene(){if(File.Exists(Scene))throw new InvalidOperationException("New-scene author refuses to overwrite "+Scene);var match=SportsEventAuthoring.Begin<GuessMatch>(Folder);match.setup.count=2;match.NormalizeSetup();match.feedback.clips=ExistingAudio();Install(match);SportsEventAuthoring.UI(match);InstallControls(match);SportsEventAuthoring.Save(Folder);Debug.Log("GUESS_NEW_SCENE 24 catalog identities; zero persistent generated profiles; indoor controlled lighting.");}
+        public static GuessIdentity[] Roster(SportsTruckAppearanceCatalog catalog)
+        {
+            if(catalog==null||!catalog.Validate(out string error))throw new InvalidOperationException("Validated real appearance catalog required.");
+            string[] bodies={"semi.standard","truck.monster","semi.lowrider","truck.lifted","truck.fire","novelty.hotdog"};string[] hats={"hat.cowboy","hat.wizard","hat.pirate","hat.crown"};string[] names={"COWBOY","WIZARD","CAPTAIN","MONARCH"};var result=new GuessIdentity[24];
+            for(int b=0;b<6;b++)for(int h=0;h<4;h++){int i=b*4+h;var actualBody=catalog.FindBody(bodies[b]);if(actualBody==null)throw new InvalidOperationException("Required catalog body missing: "+bodies[b]);result[i]=new GuessIdentity{id="guess."+b+"."+h,name=names[h]+" "+actualBody.label.ToUpperInvariant(),body=bodies[b],hat=hats[h],eyes=i%2==0?"eyes.friendly":"eyes.sleepy",mouth=i%3==0?"mouth.goofy":"mouth.smile",mirrors=new[]{"mirrors.chrome","mirrors.gold","mirrors.ruby"}[i%3],wheels=new[]{"wheels.chrome","wheels.gold","wheels.ruby"}[(b+h)%3]};ValidateIdentity(catalog,result[i]);result[i].bodyLabel=actualBody.label;result[i].hatLabel=catalog.FindCosmetic(result[i].hat,"hat",actualBody.id).label;result[i].eyesLabel=catalog.FindCosmetic(result[i].eyes,"face.eyes",actualBody.id).label;result[i].mouthLabel=catalog.FindCosmetic(result[i].mouth,"face.mouth",actualBody.id).label;result[i].mirrorsLabel=catalog.FindCosmetic(result[i].mirrors,"mirrors",actualBody.id).label;result[i].wheelsLabel=catalog.FindCosmetic(result[i].wheels,"wheels",actualBody.id).label;}return result;
+        }
+        static void ValidateIdentity(SportsTruckAppearanceCatalog catalog,GuessIdentity identity){var body=catalog.FindBody(identity.body);if(body==null)throw new InvalidOperationException("Missing body "+identity.body);string[] slots={"hat","face.eyes","face.mouth","mirrors","wheels"};string[] ids={identity.hat,identity.eyes,identity.mouth,identity.mirrors,identity.wheels};for(int i=0;i<ids.Length;i++)if(catalog.FindCosmetic(ids[i],slots[i],body.id)==null)throw new InvalidOperationException("Actual compatible cosmetic required: "+ids[i]+" / "+body.id);}
+        static AudioClip[] ExistingAudio(){string[] paths={"Assets/Heat - Complete Modern UI/Audio/Click.wav","Assets/TruckBilliards/Audio/Ball.wav","Assets/NWH/Vehicle Physics 2/Sound/Transmission/Gear1.wav","Assets/TruckBilliards/Audio/Strike.wav","Assets/TruckHockey/Audio/Faceoff.wav","Assets/TruckHockey/Audio/GoalHorn.wav","Assets/TruckHockey/Audio/FinalWhistle.wav"};return paths.Select(path=>{var clip=AssetDatabase.LoadAssetAtPath<AudioClip>(path);if(clip==null)throw new InvalidOperationException("Installed sports audio required: "+path);return clip;}).ToArray();}
+        public static void Install(GuessMatch match)
+        {
+            if(match==null||match.transform.Find("Mechanical deduction room")!=null)throw new InvalidOperationException("Install requires a new unauthored Guess authority.");var catalog=AssetDatabase.LoadAssetAtPath<SportsTruckAppearanceCatalog>(CatalogPath);match.identities=Roster(catalog);var root=new GameObject("Mechanical deduction room").transform;root.SetParent(match.transform,false);
+            var wood=SportsEventAuthoring.Mat(Folder,"Honey lacquer board frame",new Color(.57f,.3f,.1f),.5f);var cream=SportsEventAuthoring.Mat(Folder,"Ivory portrait enamel",new Color(.96f,.91f,.74f),.45f);var brass=SportsEventAuthoring.Mat(Folder,"Mechanical brass hinges",new Color(.74f,.48f,.12f),.65f);brass.SetFloat("_Metallic",.8f);var blue=SportsEventAuthoring.Mat(Folder,"Midnight teal walls",new Color(.025f,.15f,.19f),.2f);var red=SportsEventAuthoring.Mat(Folder,"Oxblood velvet tiles",new Color(.38f,.045f,.055f),.2f);
+            SportsEventAuthoring.Box("Warm parquet room floor",new Vector3(90,-.4f,0),new Vector3(270,.8f,90),wood,null,root);SportsEventAuthoring.Box("Teal paneled room backdrop",new Vector3(90,15,13),new Vector3(270,30,1),blue,null,root);
+            match.boardFocus=new Transform[4];var tiles=new List<GuessTile>();for(int seat=0;seat<4;seat++){
+                var board=new GameObject("Owner "+seat+" private mechanical board").transform;board.SetParent(root,false);board.localPosition=new Vector3(seat*60,0,0);match.boardFocus[seat]=board;
+                SportsEventAuthoring.Box("Carved timber board surround",new Vector3(0,8,1.5f),new Vector3(25,17,.8f),wood,null,board);SportsEventAuthoring.Box("Recessed velvet mechanism bed",new Vector3(0,8,.95f),new Vector3(23.8f,15.8f,.3f),red,null,board);
+                for(int id=0;id<24;id++){
+                    var tileRoot=new GameObject("Candidate "+id+" · "+match.identities[id].name).transform;tileRoot.SetParent(board,false);tileRoot.localPosition=new Vector3((id%6-2.5f)*3.8f,1+(3-id/6)*3.8f,0);
+                    var tile=tileRoot.gameObject.AddComponent<GuessTile>();tile.owner=seat;tile.identity=id;var hinge=new GameObject("Real folding portrait hinge").transform;hinge.SetParent(tileRoot,false);tile.hinge=hinge;
+                    SportsEventAuthoring.Box("Beveled portrait backing",new Vector3(0,1.6f,.15f),new Vector3(3.5f,3.4f,.18f),cream,null,hinge);for(int edge=-1;edge<=1;edge+=2)SportsEventAuthoring.Box("Inset portrait frame",new Vector3(edge*1.68f,1.65f,-.02f),new Vector3(.09f,3.3f,.14f),brass,null,hinge);
+                    var pin=GameObject.CreatePrimitive(PrimitiveType.Cylinder);pin.name="Actual brass folding axle";pin.transform.SetParent(tileRoot,false);pin.transform.localRotation=Quaternion.Euler(0,0,90);pin.transform.localScale=new Vector3(.14f,1.76f,.14f);pin.GetComponent<Renderer>().sharedMaterial=brass;UnityEngine.Object.DestroyImmediate(pin.GetComponent<Collider>());
+                    var portrait=Compose(catalog,match.identities[id],hinge);portrait.transform.localPosition=new Vector3(0,.7f,-.65f);portrait.transform.localRotation=Quaternion.Euler(0,155,0);portrait.transform.localScale=Vector3.one*.42f;GuessPortraitLabelAuthoring.FitOriginalPortrait(portrait.transform);
+                    var label=SportsEventAuthoring.Label("Truthful identity label",GuessPortraitLabelAuthoring.Caption(id,match.identities[id].name),Vector3.zero,.048f,new Color(.16f,.08f,.03f));label.transform.SetParent(hinge,false);label.transform.localPosition=new Vector3(0,.37f,-.17f);label.transform.localRotation=Quaternion.identity;GuessPortraitLabelAuthoring.FitCaptionWidth(label);tiles.Add(tile);
+                }
+                var title=SportsEventAuthoring.Label("Mechanical board title","GUESS THAT TRUCK",Vector3.zero,.26f,new Color(1,.88f,.47f));title.transform.SetParent(board,false);title.transform.localPosition=new Vector3(0,17.3f,1);title.transform.localRotation=Quaternion.identity;
+                SportsRallyAuthoring.Prop(root,"Assets/Modern Resaturant - building and interior/Models/Prefabs/Restaurant_Table_Rectangular_1.prefab",new Vector3(seat*60-17,0,1),new Vector3(6,4,7));SportsRallyAuthoring.Prop(root,"Assets/Modern Resaturant - building and interior/Models/Prefabs/Restaurant_chair.prefab",new Vector3(seat*60-17,0,-5),new Vector3(3,5,3));
+                for(int side=-1;side<=1;side+=2){var lamp=new GameObject("Warm board-game pendant").AddComponent<Light>();lamp.transform.SetParent(root,false);lamp.transform.position=new Vector3(seat*60+side*9,16,-8);lamp.transform.rotation=Quaternion.Euler(40,side*-20,0);lamp.type=LightType.Spot;lamp.spotAngle=70;lamp.range=35;lamp.intensity=650;lamp.color=new Color(1,.83f,.58f);lamp.shadows=LightShadows.Soft;}
+            }
+            match.tiles=tiles.ToArray();match.boardCamera=SportsEventAuthoring.Camera("Guess mechanical board Cinemachine");match.cameras=new[]{match.boardCamera.view};match.boardCamera.Pose(new Vector3(0,8,0),new Vector3(0,6,-31),48,true);RenderSettings.skybox=null;RenderSettings.ambientLight=new Color(.27f,.26f,.23f);match.boardCamera.view.clearFlags=CameraClearFlags.SolidColor;match.boardCamera.view.backgroundColor=new Color(.025f,.04f,.045f);
+        }
+        static GameObject Compose(SportsTruckAppearanceCatalog catalog,GuessIdentity identity,Transform parent)
+        {
+            ValidateIdentity(catalog,identity);var body=catalog.FindBody(identity.body);var root=new GameObject("Real catalog portrait · "+identity.id);root.transform.SetParent(parent,false);var canonical=new GameObject("Canonical body").transform;canonical.SetParent(root.transform,false);canonical.localRotation=Quaternion.Euler(body.presentationEuler);var model=(GameObject)PrefabUtility.InstantiatePrefab(body.visualPrefab);model.transform.SetParent(canonical,false);
+            foreach(var renderer in model.GetComponentsInChildren<Renderer>(true))if(Array.IndexOf(body.wheelRendererNames,renderer.name)>=0)renderer.enabled=false;
+            string[] slots={"hat","face.eyes","face.mouth","mirrors"};string[] ids={identity.hat,identity.eyes,identity.mouth,identity.mirrors};for(int i=0;i<slots.Length;i++){var mount=Array.Find(body.mounts,m=>m.slotId==slots[i]);if(mount==null)throw new InvalidOperationException("No actual semantic mount "+slots[i]);var anchor=new GameObject(slots[i]+" · "+ids[i]).transform;anchor.SetParent(canonical,false);anchor.localPosition=mount.position;anchor.localRotation=Quaternion.Euler(mount.euler);anchor.localScale=mount.scale;Cosmetic(catalog.FindCosmetic(ids[i],slots[i],body.id),anchor);}
+            var wheel=catalog.FindCosmetic(identity.wheels,"wheels",body.id);for(int w=0;w<body.wheelMounts.Length;w++){var mount=body.wheelMounts[w];var anchor=new GameObject("Actual portrait wheel "+w+" · "+identity.wheels).transform;anchor.SetParent(canonical,false);anchor.localPosition=mount.position;anchor.localRotation=Quaternion.Euler(mount.euler);anchor.localScale=mount.scale;Cosmetic(wheel,anchor);}
+            if(root.GetComponentsInChildren<Collider>(true).Length!=0||root.GetComponentsInChildren<Rigidbody>(true).Length!=0)throw new InvalidOperationException("Catalog portrait must remain render-only.");return root;
+        }
+        static void Cosmetic(SportsTruckAppearanceCatalog.Cosmetic item,Transform anchor){var instance=(GameObject)PrefabUtility.InstantiatePrefab(item.visualPrefab);instance.transform.SetParent(anchor,false);instance.transform.localPosition=item.position;instance.transform.localRotation=Quaternion.Euler(item.euler);instance.transform.localScale=item.scale;}
+        static void InstallControls(GuessMatch match)
+        {
+            var parent=match.menus.hud.transform;match.questionPanel=SportsUIAuthoring.Rect("Mechanical deduction controls",parent,new Vector2(1420,160),new Vector2(0,-400));match.questionPanel.AddComponent<UnityEngine.UI.Image>().color=new Color(.02f,.07f,.085f,.97f);
+            match.questionLabel=SportsUIAuthoring.Text("Current legal question",match.questionPanel.transform,"",new Vector2(1300,46),new Vector2(0,42),29);match.answerLabel=SportsUIAuthoring.Text("Truthful last answer",parent,"",new Vector2(1300,45),new Vector2(0,420),25);
+            string[] keys={"guess.previous","guess.mode","guess.confirm","guess.next"};string[] labels={"PREVIOUS","ASK / IDENTIFY","CONFIRM","NEXT"};for(int i=0;i<4;i++)SportsUIAuthoring.Button(match.questionPanel.transform,labels[i],keys[i],new Vector2(-510+i*340,-35),new Vector2(310,52));
+            match.privacyCurtain=SportsUIAuthoring.Rect("Owner privacy curtain",parent,new Vector2(1920,1080),Vector2.zero);match.privacyCurtain.AddComponent<UnityEngine.UI.Image>().color=new Color(.015f,.035f,.045f,1);match.privateLabel=SportsUIAuthoring.Text("Private owner handoff",match.privacyCurtain.transform,"",new Vector2(1300,240),new Vector2(0,80),42);SportsUIAuthoring.Button(match.privacyCurtain.transform,"INCOMING OWNER CONFIRM","guess.confirm",new Vector2(0,-130),new Vector2(650,70));match.privacyCurtain.SetActive(false);
+        }
+    }
+}

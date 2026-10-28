@@ -1,0 +1,190 @@
+{
+  "exactRequest": "Documentation/TruckSports/Requests/2026-10-23-Alpha-0.7.0-Impossible-Games.md GAME3 +common",
+  "assets": [
+    {
+      "path": "Assets/TruckFareFight/Prefabs/Fare Fight Taxi Tractor.prefab",
+      "status": "USED",
+      "role": "Original full NWH tractor, no source/factory edits; directly instantiate existing prefab",
+      "sha256": "bddc5f22ef1cf650e8aefa46b400dd606448d3e9bc9ef87afe883c9c30ebed59"
+    },
+    {
+      "path": "Assets/TruckFareFight/Editor/FareFightVehicleAuthoring.cs",
+      "status": "API AUDITED",
+      "role": "PrefabPath only; EnsurePrefab not called because it dirties existing source legacy cameras",
+      "sha256": "7632eb9ccbfbd55335a32f17535f22d1738dbcef8549c6ee58bd7202cbb9f596"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsNwhTractorMotor.cs",
+      "status": "USED",
+      "role": "Original Configure/Power/Drive/ResetAttachedBodies/AddAssemblyVelocity public adapters; no duplicate drivetrain",
+      "sha256": "3503ba6af6fe004c5502bdbc87f39d495d3ea77ea1f44cc6918d723cf4c62851"
+    },
+    {
+      "path": "Assets/NWH/WheelController/Scripts/Spring.cs",
+      "status": "USED API",
+      "role": "Per-instance maxForce/6, exact restored original",
+      "sha256": "b3ac6ca619ea39cd3096b0464a2f5798281a09ac5aa816d9841b308842cfdbf8"
+    },
+    {
+      "path": "Assets/NWH/WheelController/Scripts/Damper.cs",
+      "status": "USED API",
+      "role": "Per-instance bump/rebound divided by sqrt6, exact restored originals",
+      "sha256": "cbe9e7c8989d0cf6952cc605882062224065232cad81bccf6ec9add3b14b218c"
+    },
+    {
+      "path": "Assets/NWH/Vehicle Physics 2/Scripts/VehicleController/Modules/Aerodynamics/AerodynamicsModule.cs",
+      "status": "USED API",
+      "role": "Public simulateDrag/downforce false in airless arena, exact restored originals",
+      "sha256": "92e75ec66dcf2a98e2a09289c2a54095c61108b9065d4b2a4511b520686d9b50"
+    },
+    {
+      "path": "Assets/NWH/Vehicle Physics 2/Scripts/VehicleController/Modules/Arcade/ArcadeModule.cs",
+      "status": "USED API",
+      "role": "Existing ground steering assist uses Physics.gravity: scale its public strength and drift-force by1/6, restore exact",
+      "sha256": "b9e86bc3cb74cef734af32e7ccf434dc917980c579de105384645b1c7fb321ef"
+    },
+    {
+      "path": "Assets/NWH/Vehicle Physics 2/Scripts/VehicleController/Modules/FlipOver/FlipOverModule.cs",
+      "status": "AUDITED NOT USED",
+      "role": "Existing rig manual activation retained; mode finite jets and explicitly documented ten-second stranded recovery do not invoke vendor teleport",
+      "sha256": "2d1a86c872f71138b071c681f3d2af95315681d7df8917279ee56e340c94deed"
+    },
+    {
+      "path": "Assets/PinwheelStudio/Vista/Personal/Samples/Prefabs/VistaSample_DesertRock.prefab",
+      "status": "USED",
+      "role": "Genuine owned rock mesh for meteors and perimeter mountains, instance-only material",
+      "sha256": "37edf887da8837a27ed88ff113df6a5a379c896fe53aa721f5e3b6ba10e76b45"
+    },
+    {
+      "path": "Assets/PinwheelStudio/Vista/Personal/Samples/Materials/VistaSample_DesertRock.mat",
+      "status": "AUDITED NOT USED",
+      "role": "Actual material has null albedo texture; author explicitly uses installed real rock-base texture instead",
+      "sha256": "96c5535cecf7ecf2f612c6c6ccda9cdbf8ad4cca4f92321b21a9798c9029705a"
+    },
+    {
+      "path": "Assets/PinwheelStudio/Vista/Personal/Samples/TerrainLayers/Rock Base/rock_base_diff.jpg",
+      "status": "USED",
+      "role": "Actual installed terrain/mountain/meteor rock albedo",
+      "sha256": "6f4dc81358a63203a03f29d0fead814ceb97969783e164268161f8e4a2cfc2e0"
+    },
+    {
+      "path": "Assets/CoreCollapse/Demo/Prefabs/Particles/Explosion.prefab",
+      "status": "USED PRESENTATION",
+      "role": "Original particle hierarchy reused in bounded4 pool; author strips source gameplay/auto-dispose scripts from instances before runtime",
+      "sha256": "5b362d6250ce6287fabcdf3e5bb3ab4d24840e60febfb6a1ac68e21cf17b9ef1"
+    },
+    {
+      "path": "Assets/CoreCollapse/Demo/Prefabs/Particles/Dust.prefab",
+      "status": "USED PRESENTATION",
+      "role": "Original meteor impact dust particles in bounded4 pool",
+      "sha256": "d643ec020f16d5847e8214b8540b62a07c81239fe295314d9a57f557729ca6b2"
+    },
+    {
+      "path": "Assets/CoreCollapse/Demo/Scripts/Character/Explosion.cs",
+      "status": "AUDITED NOT USED",
+      "role": "Vendor targets Collapser/Pushable damage graph, not NWH chassis. Mode actual meteor collision applies bounded NWH Rigidbody impulse; no invented damage/score system",
+      "sha256": "72a4e84a67da3c295e41de88a61fa5f2c56a0250f8605039d67679600e52e93f"
+    },
+    {
+      "path": "Assets/NWH/Vehicle Physics 2/Effects/Prefabs/SurfaceDust.prefab",
+      "status": "AUDITED NOT DUPLICATED",
+      "role": "Original NWH wheel effects remain vendor-owned; meteor dust uses CoreCollapse particles instead",
+      "sha256": "7e75a09d4c5542fc1d35d3e54c4db8769dcf9de740a75c967893c44e98186d88"
+    },
+    {
+      "path": "Assets/WeatherMaker/Prefab/Textures/SkySphere/WeatherMakerSkySphereMoonTexture1.png",
+      "status": "AUDITED NOT COPIED",
+      "role": "Moon-disc imagery is not an Earth globe or local rock surface. Lead common WeatherMaker binder owns sky/time; airless space scene special integration limit is explicit",
+      "sha256": "272a8b160223bbc90c7ea854385590940010b75eb3c6b0d12550308f9ea857c6"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsEventSession.cs",
+      "status": "USED",
+      "role": "Profile, source input, setup/pause/rematch/results/journal/typed HUD authority",
+      "sha256": "bc1b7a29af7a820537543762679c06cb85e28d899458b0b4c6854ff9689e1d42"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsEventCamera.cs",
+      "status": "USED",
+      "role": "Existing single Cinemachine evaluation bridge",
+      "sha256": "76438d216ceee46358ef735a6f042806f38df88ec30c3bd6025936ed899619f0"
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsDrivingViews.cs",
+      "status": "USED",
+      "role": "Original private cab/chase/source camera ownership",
+      "sha256": "db7184cc556935fd1d18675fc1cf2e94a44c6f87816c5fd77b4bb9a97b01a198"
+    },
+    {
+      "path": "Assets/TruckSports/Editor/SportsTruckAppearanceImpossibleAuthoring.cs",
+      "status": "LEAD POSTPASS",
+      "role": "Existing new-scene fixed-owner facade29+4/body/cab binder, no additional appearance framework",
+      "sha256": "12ec16be742d920424366ff8184b0020fdf8377c12ec664be9b3d402cec8962e"
+    },
+    {
+      "path": "Library/PackageCache/com.unity.ai.navigation@734c2c4c5591/Runtime/NavMeshSurface.cs",
+      "status": "USED API",
+      "role": "Explicit actual terrain NavMeshSurface bake; NavMesh.CalculatePath queries only, NWH still moves every actor",
+      "sha256": "1974808159206e8cd5f8a7d817f82ea7d47a27224f4bd79857814684d8561d89"
+    },
+    {
+      "path": "Assets/Heat - Complete Modern UI/Audio/Click.wav",
+      "status": "USED",
+      "role": "Existing production UI audio",
+      "sha256": "d6af3a71952c54e9f5d3e5a879ee79929b76f8ceef039abff554e730625a7d57"
+    },
+    {
+      "path": "Assets/TruckBilliards/Audio/Ball.wav",
+      "status": "USED",
+      "role": "Existing event contact audio",
+      "sha256": "a62a30e78ecc04a0fb0b96a96a45714349c3fa190b9d85089c03eddcd9036c1c"
+    },
+    {
+      "path": "Assets/NWH/Vehicle Physics 2/Sound/Horn/Horn.wav",
+      "status": "USED",
+      "role": "Existing flag collection cue",
+      "sha256": "c85cd4757eb53483b5b315cc6adefbd292e68d44ffa8667b64eac8034846394d"
+    },
+    {
+      "path": "Assets/TruckBilliards/Audio/Strike.wav",
+      "status": "USED",
+      "role": "Existing meteor collision cue",
+      "sha256": "ba187f5197cc52c1c02df12850e0e5a6a39b63adde038b2e2741e62d115c94e5"
+    },
+    {
+      "path": "Assets/TruckHockey/Audio/Faceoff.wav",
+      "status": "USED",
+      "role": "Existing meteor warning cue",
+      "sha256": "4b37ddcae91d96c0247312be5180f347f5284688bf291efc942c7ed377e3b849"
+    },
+    {
+      "path": "Assets/TruckHockey/Audio/GoalHorn.wav",
+      "status": "USED",
+      "role": "Existing actual delivery cue",
+      "sha256": "ab0f51f09c36679dbd5dd7cd19a76fffbbff447592e08420a2c6568579c20aa7"
+    },
+    {
+      "path": "Assets/TruckHockey/Audio/FinalWhistle.wav",
+      "status": "USED",
+      "role": "Existing real results cue",
+      "sha256": "9f72409cd8fa86a3492536b70330887dcedd123ec3c53f95ae2801a6f8b9e6ab"
+    }
+  ],
+  "missingOwnedArt": "No installed/cached genuine lunar habitat/research dome/Earth/astronaut model was verified in bounded vendor-first audit. No external asset was downloaded/imported. Detailed habitats/dome/crater terrain and recognizable geographic Earth silhouettes are purpose-authored owned geometry, not attributed to a nonexistent vendor asset.",
+  "ownership": "Existing vendor/0.6/shared sources unchanged. No Unity import/author/native run performed. Direct asset references remain commercial/private dependencies; no raw vendor files copied into this module.",
+  "originalFullRigRigidbodies": [
+    {
+      "name": "Fare Fight Taxi Tractor",
+      "mass": 7400,
+      "originalKinematic": true,
+      "runtime": "Original SportsEventTruck.Prepare makes the root dynamic."
+    },
+    {
+      "name": "Cab",
+      "mass": 1500,
+      "originalKinematic": false,
+      "runtime": "Original full-rig secondary cab body retained; thin mode relay reports its real collision impulse to the same MoonTruck owner."
+    }
+  ],
+  "newSharedSystemsCreated": false
+}

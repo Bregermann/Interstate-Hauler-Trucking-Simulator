@@ -1,0 +1,129 @@
+{
+  "scope": "Existing world venue title position only, after direct actualV4PNG shows title overlapping liveROUND1 status. No styling/material/font/shader/content/rotation/camera/audio/gameplay/HUD/runtime/shared/vendor changes. No Unity/CLEAN/scene/Git writes.",
+  "actualVisualEvidence": {
+    "image": {
+      "path": ".sports-validation/TruckSportsPublicValidation/Logs/TruckSports/Impossible07/OrchestraPresentationV2/concert-bent-visible-1920-controlled.png",
+      "sha256": "b324a0e82cd23387f52cb381fa4f55fe8d146af10d3f11015d60c535808de823",
+      "bytes": 1345024
+    },
+    "viewMethod": "Actual PNG inspected directly through view_image at1920x1080; venue title THE SIX-TON SYMPHONY overlaps real ROUND1 near y148; song title near y90. This is a visual defect despite original4/4mechanical/render passes.",
+    "savedPose": "Read exact actual saved title5YAML records under actual-saved-title-guard-documents.txt: world(0,10.5,25),scale1,identityrotation,char.26,size64,middlecenter,built-infont/material,existingdepthadapter and boundedbillboard."
+  },
+  "repair": "Only title.transform.position changes (0,10.5,25)->(0,5.4,25), placing it in blank burgundy curtain. Same existing object/font/material/depthshader/content/color/rotation/scale and all other scene state preserved. Original first concertshot0 analytical anchor projection147.13->274.84px at1080; actual bounds/GPU/HUD tests remain mandatory.",
+  "author": "LWS.TruckOrchestra.Editor.OrchestraVenueTitleAuthoring.InstallOnOpenOriginalScene",
+  "guards": "Stopped exact saved original scene/oneMatch/oneknownlabel; exact original pose1e-4m/identity1e-3deg/root/typography/color/content, actual LegacyRuntime.ttf font and unchanged GUI edit material, existing leaddepthshaderbinding/billboard600x36/nooffset/nootherbehavior; refuses custom/already-applied/partial or interactive objects. All preflight before singletransform write, caller owns save.",
+  "futureNewScene": "Original presentationauthor replaces only final position expression with same ApplyNewTitlePosition helper. Original preflight and V4 podium helper remain exact.",
+  "editFilter": "OrchestraVenueTitleGuardTests.OnlyExactOriginalWorldTitlePoseAndTypographyPassThenOnlyPositionChanges",
+  "nativeFilter": "LWS.TruckOrchestra.Tests.OrchestraVenueTitleTests.OriginalAiVenueTitleIsVisibleInCurtainAndClearOfActualSongRoundAndProgressAt720And1080",
+  "existingTests": "Original OrchestraPresentationTests strict conductor/GPU/all4station/title/timingpanel and original OrchestraLifecycleTests byte unchanged; rerun4retained cases as needed.",
+  "newNativeAcceptance": "Exact originalFixture/input/prefs/actualAllBotsStart/realacceptednotes, then controlled mode freeze preserving liveHUD. At720/1080 existing caption must contribute>80actualGPUglyphpixels, staywithinfrustum/36pxcap and blankcurtain normalizedtop-center.22-.29, and actual captured song/status/progress RectTransforms must not overlap caption with8capturepixel padding. Preserve font/material/style exact. Captures under newunique OrchestraVenueTitleV5 nativefolder; noWindows/human/listening/performance claim.",
+  "validation": "PASS17actualmodeCS/557actualcachedrefs/0errors,noemission. New guarded author/edit/native UNRUN.",
+  "vendorAssetsAudited": [
+    "Actual saved orchestra title/camera projection/currentV4directcapture",
+    "Existing Unity TextMesh/font and SportsPerCameraBillboard/depthtextadapter",
+    "Existing DanceConcertCamera and real DanceHud song/time/progress rectangles"
+  ],
+  "vendorAssetsUsed": [
+    "Existing TextMesh LegacyRuntime/font/material/depthshader",
+    "Existing boundedbillboard/actualCinemachine musicalcamera",
+    "Original owned burgundycurtain venue and current nativecapturefixture"
+  ],
+  "relevantAssetsNotUsed": {
+    "Branding/camera/font redesign": "Not needed; reposition the existing label only."
+  },
+  "customSystemsCreated": [
+    "Explicit guarded modeowned label-position repair",
+    "Actual glyph/HUDscreen-overlap regression plus pose/customrefusal test"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckOrchestra/Editor/OrchestraPresentationAuthoring.cs",
+      "sha256": "9608fc1428309f150cc316e5283499b8fc2fc59e459b28c80e9f061cf36bbc15",
+      "bytes": 16531
+    },
+    {
+      "path": "Assets/TruckOrchestra/Editor/OrchestraVenueTitleAuthoring.cs",
+      "sha256": "c3a3971a1fa88034c53808023e531c0dac43a4ea0b98b68cec125de30b5d46b6",
+      "bytes": 4187
+    },
+    {
+      "path": "Assets/TruckOrchestra/Editor/OrchestraVenueTitleAuthoring.cs.meta",
+      "sha256": "67ce3db611afc5cfa889ab0af12b5338f4443cfac45355930c93cea352eb2156",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckOrchestra/Tests/EditMode/OrchestraVenueTitleGuardTests.cs",
+      "sha256": "75922d960f2969a43be2ce505f5067b6588f80da4195a618eaa9e62feedcaaa8",
+      "bytes": 2728
+    },
+    {
+      "path": "Assets/TruckOrchestra/Tests/EditMode/OrchestraVenueTitleGuardTests.cs.meta",
+      "sha256": "5c50ea278b4b8f5cac1f8f7759f0527f6f1ab72050ca4ef31fb4fff750ee94d1",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckOrchestra/Tests/PlayMode/OrchestraVenueTitleTests.cs",
+      "sha256": "b750efe3736b3e15062982629088a6c62d5d8cce791f6268f36abbd5042721e7",
+      "bytes": 6520
+    },
+    {
+      "path": "Assets/TruckOrchestra/Tests/PlayMode/OrchestraVenueTitleTests.cs.meta",
+      "sha256": "372b5ae107b99fd2c36942dcd3ad7566cc69376684c2021cf69ee12b80e81eb5",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckOrchestra/PRESENTATION-V5-VENUE-TITLE.json.meta",
+      "sha256": "3796bd1c35e74bea433d9adf28d227a12e3554644daefad440b8f8da0b9bf9d5",
+      "bytes": 62
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/TruckOrchestra/Tests/PlayMode/OrchestraPresentationTests.cs",
+      "sha256": "4a77aae65856d0c3d7d1a36ac69e702d3460408bb56524bf8eaf920154b20e01",
+      "bytes": 11932
+    },
+    {
+      "path": "Assets/TruckOrchestra/Tests/PlayMode/OrchestraLifecycleTests.cs",
+      "sha256": "1fe940e3795cd2f06ba569c54597ee23c4ed9ae460caa6a5095ad4ec62f25b61",
+      "bytes": 11793
+    },
+    {
+      "path": "Assets/TruckOrchestra/Editor/OrchestraPodiumClearanceAuthoring.cs",
+      "sha256": "26127a246c0a23a1d1f528e45ab31411a687ea305503192186414663a9ac23f8",
+      "bytes": 5167
+    },
+    {
+      "path": "Assets/TruckOrchestra/Scripts/OrchestraMatch.cs",
+      "sha256": "0594961adebf1bff4b1baddd7e2b26c6ae6ffecdece971566eca6c68dfd7b649",
+      "bytes": 6027
+    },
+    {
+      "path": "Assets/TruckOrchestra/Scripts/OrchestraConductor.cs",
+      "sha256": "3ac07189eb21595a4e64c65de0b1503444c9ef73f6c0a32726f74d4cbc0edf40",
+      "bytes": 2818
+    },
+    {
+      "path": "Assets/TruckOrchestra/Scripts/OrchestraInstrument.cs",
+      "sha256": "3022b8eb99913053642c3b5ebeeec83117273d27011b7ecfb6ee4d18b4f396c9",
+      "bytes": 3859
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsDepthTestedWorldText.cs",
+      "sha256": "9f94f8d317b1d4dc42df3d793e912f90bb2097cd2870a23948d48359e5d5e7cc",
+      "bytes": 2972
+    },
+    {
+      "path": "Assets/TruckSports/Scripts/SportsPerCameraBillboard.cs",
+      "sha256": "3060a7ad240c4d37617425202150949bc9bcb90fe0e92ff3f5a26b2b776d11f3",
+      "bytes": 2680
+    },
+    {
+      "path": "Assets/TruckDanceOff/Scripts/DanceConcertCamera.cs",
+      "sha256": "4c6678646578920917120cb1173e34bbe2f901555e41bab6e4d4f2ebab636eb3",
+      "bytes": 3757
+    }
+  ]
+}

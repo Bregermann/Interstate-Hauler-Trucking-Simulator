@@ -1,0 +1,102 @@
+{
+  "scope": "Bounded mode-owned physical tool handoff after actualV14. No score/health/rules/force/speed-threshold/vehicle/arm/vendor changes, noUnity/CLEAN/Git/scene writes.",
+  "actualEvidence": {
+    "xml": {
+      "path": "Logs/TruckSports/Impossible07/impossible07-v14-dentist-safe-physical-front-back-transits.xml",
+      "sha256": "43c23143a81257b595ca7a8683ac21daacef284012b29ccbf536aade71803f8a",
+      "bytes": 122516
+    },
+    "controlledRoute": "Real front/back/front route PASS35.960s, all intact sockets/zero mistakes.",
+    "naturalFailure": "Natural4AI firstmistakes occur immediately after first completed Water rinse/Water->Brush handoff;13.14simlastsample Water contacts152,score0,speed~0,socketsintact. Current per-second trace lacks the exact failing receipt; V3 records it before assertions if remainingfailure.",
+    "solidActivationEvidence": "Original clinical physicalDrill activation at oldtreatmentpose produces142601N. Original targetcenter z6.85 vs actualtoothfront6.975 and sphere.26 leaves .135m preexistingoverlap before newsolidtool activation.",
+    "clinicalExtraction": "Actual CorrectExtractions and Extracted assertions passed; NUnit CLR-null check reports Expected:null/Butwas:<null>, a destroyed Unity Joint wrapper. No outcome/physics criterion removed."
+  },
+  "production": "Delay tool selection until original wrist has physically withdrawn to proven row-front lane. Preserve new-tooth retract/center/drive/align order; same-tooth transitions withdraw before selecting next attachment. Aim actual chosen sphere tangentially to actual tooth Collider.ClosestPoint with only2mm contact, rather than .135m overlap. In final .8m approach AI commands1m/s through normal public ServingArm.Move goals, under existing1.5m/s precision-work rule; all original2.2m/s arm maximum/physics and rule thresholds unchanged. Actual extractor pull unchanged.",
+  "fixture": "Replace only destroyedworldSocket CLR Is.Null with Unity==null +absence of live world-connected ConfigurableJoint. Retain actual CorrectExtractions/Extracted/bodymotion/no-kinematic/once-score/contact/health and C14 MonoScript assertions. Original initial physicalWater retreat remains.",
+  "nativeFilters": [
+    "LWS.TruckDentist.Tests.DentistAiSafeRouteTests.OriginalAiWithdrawsBeforeRealWaterToBrushHandoffAndCleansAtActualGentleContact",
+    "LWS.TruckDentist.Tests.DentistAiSafeRouteTests.OriginalFourAiPhysicallyTreatBothRowsAndExtractOnlyCorrectLooseTeethWithoutTrayDamage",
+    "LWS.TruckDentist.Tests.DentistAiSafeRouteTests.ActualSameAiWaypointsDriveFrontBackAndFrontAgainWithRealWaterAndIntactSockets",
+    "LWS.TruckDentist.Tests.DentistLifecycleTests.NativeWaterIsHarmlessWrongHealthyDrillCostsPointsAndRealClampedLooseSocketExtracts"
+  ],
+  "newFocusedCriterion": "Actual productionBot/NWH/arm/contacts rinse then fullywithdraw before solidBrushselection, nativeBrush completes originalstage2/30points,zero mistakes/socketbreaks/Health100. No pose/score/stage/velocity writes. Existing all6tool/4correctextraction/no-wrongsocket/rematch regression remains strict.",
+  "telemetry": "Exact latestScoreJournal EventId/Reason/Delta, maxnativeforce/stages/tool/phase/root/wrist logged before any failing natural assertion; preserve original failed evidence.",
+  "validation": "PASS13actualsources/557cachedactualrefs/0errors,noemission. V3 repaired nativeUNRUN.",
+  "vendorAssetsAudited": [
+    "Actual original NWH fullrig/ServingArm and V14 physical traces",
+    "UnityCollider.ClosestPoint and selected actualSphere geometry",
+    "Existing CoreCollapse/socket/clinical extraction semantics"
+  ],
+  "vendorAssetsUsed": [
+    "Existing ServingArm physical Move/realNWH and PhysX contacts",
+    "Original selected tool colliders/extractor joint/damage/score authority"
+  ],
+  "relevantAssetsNotUsed": {
+    "Global force/velocity/score hacks": "Not needed; correct actual tool approach/handoff."
+  },
+  "customSystemsCreated": [
+    "Mode-only physical same-tooth tool withdrawal and gentle contact aim",
+    "Strict focused physical rinse-to-brush regression"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckDentist/Scripts/DentistMatch.cs",
+      "sha256": "66b19218bca8dfd2c8a3e60276fc2007a45c0c376f2926ec56aa844e199bbc75",
+      "bytes": 15470
+    },
+    {
+      "path": "Assets/TruckDentist/Tests/PlayMode/DentistLifecycleTests.cs",
+      "sha256": "9c499462894d3497a00033e1f83ada3d12c500cfe56dc2b29de348856d05fe74",
+      "bytes": 21358
+    },
+    {
+      "path": "Assets/TruckDentist/Tests/PlayMode/DentistAiSafeRouteTests.cs",
+      "sha256": "a144b4fe7636fb2fdff1a3120f021b51c17709bc4771a6614334b12e2ec19927",
+      "bytes": 9693
+    },
+    {
+      "path": "Assets/TruckDentist/DENTIST-TOOL-HANDOFF-V3.json.meta",
+      "sha256": "996e2157ca96d1495ae2f63786bf57436e22a8f3c431e501d6badec79347451c",
+      "bytes": 62
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/TruckDentist/Scripts/DentalRules.cs",
+      "sha256": "6f077ed172da85c85799059c1efb6f528036cd2fc8192253f60ac58d36db4463",
+      "bytes": 4264
+    },
+    {
+      "path": "Assets/TruckDentist/Scripts/DentalTool.cs",
+      "sha256": "31c26a2e87458a89d80f072f0ec31a59f37c30593132324dac6ce40a8e855fa8",
+      "bytes": 3785
+    },
+    {
+      "path": "Assets/TruckDentist/Scripts/DentalTooth.cs",
+      "sha256": "071fce33beb623eaaff7f39b5cb95eb3f0ed7f8847157973014f1150869a274c",
+      "bytes": 4074
+    },
+    {
+      "path": "Assets/TruckTeaParty/Scripts/ServingArm.cs",
+      "sha256": "3198c4fc3fd101ec35897618cd37534dc8909e56d3a8feb653fa13c3e567fce1",
+      "bytes": 5703
+    },
+    {
+      "path": "Assets/TruckTeaParty/Scripts/ServingContact.cs",
+      "sha256": "0b624d8bf4508ce6e2d88fcba1961ea7ccdd23b0aa94300915c082c2d9f85161",
+      "bytes": 406
+    },
+    {
+      "path": "Assets/TruckDentist/Tests/PlayMode/DentistPenaltyCauseProbe.cs",
+      "sha256": "a5e5ca27ed44e6183bd279e87733bf510b77c6bd5b330edff1a10af8985aeb34",
+      "bytes": 3899
+    },
+    {
+      "path": "Assets/TruckDentist/Tests/PlayMode/DentistPenaltyDiagnostics.cs",
+      "sha256": "560e557cfb2bcafd6263a77bb3ddd7bd7771339e0a09683b8bde2fdb6dafd979",
+      "bytes": 8080
+    }
+  ]
+}

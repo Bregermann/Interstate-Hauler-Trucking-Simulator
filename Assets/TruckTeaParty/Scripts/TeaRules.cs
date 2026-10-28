@@ -1,0 +1,13 @@
+using System;
+namespace LWS.TruckTeaParty {
+ [Serializable]public sealed class TeaRules {
+  public readonly int[] points=new int[4],served=new int[4],bows=new int[4],broken=new int[4];public readonly float[] spilled=new float[4];readonly bool[] completed=new bool[12],bowed=new bool[12],lost=new bool[12];readonly int[] servers=new int[12];float allResolvedAt=-1;public int Count{get;private set;}public float Clock{get;private set;}public float Remaining{get;private set;}public bool Complete{get;private set;}public bool Active=>Clock>=3&&!Complete;
+  public void Reset(int count,int option){Count=Math.Clamp(count,1,4);Clock=0;Remaining=option==0?180:option==1?240:300;Complete=false;allResolvedAt=-1;Array.Clear(points,0,4);Array.Clear(served,0,4);Array.Clear(bows,0,4);Array.Clear(broken,0,4);Array.Clear(spilled,0,4);Array.Clear(completed,0,12);Array.Clear(bowed,0,12);Array.Clear(lost,0,12);Array.Fill(servers,-1);}
+  public void Tick(float dt){if(Complete||!float.IsFinite(dt)||dt<=0)return;dt=Math.Min(dt,.1f);Clock+=dt;if(Clock<3)return;Remaining=Math.Max(0,Remaining-dt);bool any=false;for(int i=0;i<Count*3;i++)any|=!completed[i]&&!lost[i];if(!any&&allResolvedAt<0)allResolvedAt=Clock;Complete=Remaining<=0||allResolvedAt>=0&&Clock-allResolvedAt>=5;}
+  public int Serve(int slot,int cup,int guest,int intended,float volume,float cupSpill,bool intact,bool actualSettled){if(!Active||slot<0||slot>=Count||cup<0||cup>=Count*3||guest!=intended||completed[cup]||lost[cup]||!intact||!actualSettled||!float.IsFinite(volume)||!float.IsFinite(cupSpill)||volume<.75f||volume>1.001f)return 0;int score=95+(int)Math.Round(20*Math.Max(0,1-Math.Abs(volume-.85f)/.15f))-(int)Math.Min(30,Math.Max(0,cupSpill)*30+spilled[slot]*8);score=Math.Max(25,score);completed[cup]=true;servers[cup]=slot;served[slot]++;points[slot]+=score;return score;}
+  public int Courtesy(int slot,int cup,bool actualNearGuest,bool completedPhysicalBow){if(!Active||slot<0||slot>=Count||cup<0||cup>=12||!completed[cup]||servers[cup]!=slot||bowed[cup]||!actualNearGuest||!completedPhysicalBow)return 0;bowed[cup]=true;bows[slot]++;points[slot]+=15;return 15;}
+  public void Spill(int slot,float amount){if(!Active||slot<0||slot>=Count||!float.IsFinite(amount)||amount<=0)return;spilled[slot]+=Math.Min(amount,10);}
+  public void Broken(int slot,int cup){if(!Active)return;if(slot>=0&&slot<Count)broken[slot]++;if(cup>=0&&cup<Count*3&&!completed[cup])lost[cup]=true;}
+  public bool CupDone(int id)=>id>=0&&id<12&&(completed[id]||lost[id]);public int Place(int slot){int place=1;for(int i=0;i<Count;i++)if(points[i]>points[slot])place++;return place;}
+ }
+}

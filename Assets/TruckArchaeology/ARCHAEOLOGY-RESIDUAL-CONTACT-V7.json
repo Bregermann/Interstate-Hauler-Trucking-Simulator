@@ -1,0 +1,115 @@
+{
+  "scope": "Exact real remaining-contact worktarget correction after nativeR16; original physical penetration veto/visibility/hole proofs and all tool/rate/physics/scoring coefficients unchanged. No Unity/CLEAN/Git/scene/shared/vendorwrites.",
+  "actualEvidence": {
+    "xml": {
+      "path": "Logs/TruckSports/Impossible07/impossible07-v16-archaeology-real-nine-wells-interior-residual-and-physical-load.xml",
+      "sha256": "64be1e3321baaf6ef72a32bee15f2be3df31ec1d7aeb3b8627f20fb024a93fbd",
+      "bytes": 574705
+    },
+    "case": "RealOriginalNineWellsCannotExposeInteriorSoilThenOriginalAiCutsResidualPhysicallyReleasesAndLoads",
+    "result": "Failed",
+    "seconds": "96.968973",
+    "finding": "Native densegeometry passes. Controlled actualwell+AI test reachesExposure1 but Clearancefalse with confirmedMeshCollider ComputePen.269631743m,normal(-.927191,.374587,-.001600). Oldfallback workpointbodycenter repeats withoutresolvingcontact;0physicalLoads. NoSDFvalues claimed."
+  },
+  "cause": "Workselection incorrectly reused visibility bottom+.12threshold; soil at/above actualboxbottom canremain physicallyblocking evenwhenvisible. Also MTV-resolved box canstart overlapping anotherface ofsameconcavechunk; BoxCast cannotpromise usablepositive-distance hit. Centerfallback isnot evidenced residual location.",
+  "repair": "Keep visiblebottom+.12 and physicalComputePen>.015 exactly. Workcandidate includes actualsurface>=realboxbottom. For confirmedpenetrating actualreadableDiggerMeshCollider, readits unchanged vertices/triangles into reusablelists, transformtrianglestoactualBoxCollider localvolume, exact6planeclip and choose genuineclippedsurfacepoint; same supportedDiggerSphere cut at existing.2depthoffset. No newmesh/collider/voxel/terrainresponse. ExistingBoxCast fallbackretainedforothercollidertypes; no unresolvedcontact can repeatedlydamageemptycenter\u2014cacheinvalidworktarget, AI/Reach/Operateholdwithoutpose/scorechanges. Allsampling/queryworkat existing.25cadence; scratchlists/fixed16vertexbuffers reused, nobroadperFixedhierarchyscan.",
+  "newPureFilter": "ArchaeologyMeshContactTests",
+  "pureCoverage": "Realtriangle-boxclip interior/sliver/crossing(novertex/centroidinside),rejectAABB-only/degenerate; actualorientedscaledBox andtransformedMeshCollider query, preservedoriginalmeshvertices/indices/object,actualsurfaceinsidebox/normal. ExistingV6footprintgeometrytest remainsunchanged/passretained.",
+  "nativeFilter": "ArchaeologyFootprintPlayModeTests.RealOriginalNineWellsCannotExposeInteriorSoilThenOriginalAiCutsResidualPhysicallyReleasesAndLoads",
+  "nativeChanges": "Retainsall realDigger controlled9well/interior/cut/dynamicrelease/>1mlift/originalphysicalcargoLoad/noScore/strict.015/bodymass/models/cache/rematchconditions. Adds actualpenetration observation +realbottomsoil/meshcontact target counters, residualsurface/normal/submesh/triangle telemetry. Same90realcap; accelerates8x with exactoriginalfixedstep soactualpost-residual crane has simulationtime; not fullunaccelerated acceptance. No timeout/criterion relaxation.",
+  "originalFull": "ArchaeologyPlayModeTests.NaturalFourAiScanExcavatePreservePhysicallyLoadDeliverAndFinishActualSession byteexacte9c09e8... original600real/full12scan/load/unload/delivery/journalconditions stillrequired.",
+  "validation": "PASS124actualCS=22owned+100immutablevendor+2deps/557cachedactualrefs/0errors,noemission. Newnative/pureUNRUN. No fullcompletion/Windows/persistence/human/performanceclaims.",
+  "vendorAssetsAudited": [
+    "ActualR16Digger voxelmesh/PhysXpenetration and currentBoxCast query assumptions",
+    "Digger ChunkObject readablemesh/publicgeometry, unchangedVoxelModificationJob",
+    "Unity realBoxCollider/MeshCollider transforms and confirmedComputePen query"
+  ],
+  "vendorAssetsUsed": [
+    "Digger solemesh/voxel/collider/editauthority, samepublicModify API",
+    "Unity actualPhysXpenetration gate andoriginalNWH/crane"
+  ],
+  "relevantAssetsNotUsed": {
+    "New terrain/SDF/physics framework": "No suchsystem; readactualvendorcollider geometry only when PhysXalreadyconfirmsblocked.",
+    "BoxCast-only contactlocation": "Insufficientforalready-overlappingconcavechunk; retainedwhenuseful, exactmeshquery suppliesmissingpoint."
+  },
+  "customSystemsCreated": [
+    "Smallmode-owned readonlytriangle/boxcontactquery for semantictooltargeting",
+    "Focusedpurequery regressions andresidualtelemetry"
+  ],
+  "vendorSourceModified": false,
+  "duplicateVendorFunctionalityCreated": false,
+  "files": [
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyTerrain.cs",
+      "sha256": "8b2b784a1db6d0c3c59c500ba3d34d89dc579c65cce7b8206eb4134d673e6875",
+      "bytes": 11093
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyArtifact.cs",
+      "sha256": "8309bda72b6e860a707e38ec0373cd3c88491d63ff7e1a705d0b66242b7dc9a9",
+      "bytes": 2488
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMatch.cs",
+      "sha256": "578a8cde93962790b9165f7260252c8bda89678f916258b3131fb4934481f6ff",
+      "bytes": 19483
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyFootprintPlayModeTests.cs",
+      "sha256": "bca250abcb8262b5b244024d9aa144c10971593a433be6fbbea4ec96aa7100dd",
+      "bytes": 9798
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMeshContact.cs",
+      "sha256": "b81e987fb0ba9d0065129bd9d52a7df09050c813b8cb9514862ce398878bde37",
+      "bytes": 3031
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyMeshContact.cs.meta",
+      "sha256": "a822674182479f816da00d285a55e3ff0c0de8c187245a6bae15e2dccf37bc8a",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyMeshContactTests.cs",
+      "sha256": "a461cbdca3d64bdf960ac57f0aa0fed4f14c8ad3b20bc7933aa15e72278446ec",
+      "bytes": 3439
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyMeshContactTests.cs.meta",
+      "sha256": "a2e8e96db8a7689867a77402aab283c7e36f25041eb834b38acf54110f12575a",
+      "bytes": 62
+    },
+    {
+      "path": "Assets/TruckArchaeology/ARCHAEOLOGY-RESIDUAL-CONTACT-V7.json.meta",
+      "sha256": "557634c84584be360b776318a750e66314eabbb9297286d61d8339625f625e93",
+      "bytes": 62
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/TruckArchaeology/Tests/PlayMode/ArchaeologyPlayModeTests.cs",
+      "sha256": "e9c09e8afb79873be7917eee4036e1d77bcab4aeb09348be77b5a0aa007062aa",
+      "bytes": 12921
+    },
+    {
+      "path": "Assets/TruckArchaeology/Tests/EditMode/ArchaeologyFootprintTests.cs",
+      "sha256": "2bd0a5357a9e63e420fc13369584c5d10c2b6098191b25c2b964bc8606819006",
+      "bytes": 1708
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/ArchaeologyEquipment.cs",
+      "sha256": "0700a3a453a8147e34b69c6f73e7b2ea702fae7ef1c0163b83c89070e6b287cc",
+      "bytes": 2123
+    },
+    {
+      "path": "Assets/TruckArchaeology/Scripts/Rules/ArchaeologyRules.cs",
+      "sha256": "d63eb5d6c76e6a704fda45d555bdf90b69a42d239cce977e16ebe9ff97a8a8bb",
+      "bytes": 3644
+    },
+    {
+      "path": "Assets/TruckJenga/Scripts/JengaCrane.cs",
+      "sha256": "301319d1bc46fb67dce70f71fc5dbcc0b26f1ee6d3d064bf675604dc4e517ebb",
+      "bytes": 4499
+    }
+  ]
+}

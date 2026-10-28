@@ -1,0 +1,62 @@
+{
+  "scope": "Snowman V3 actual AI route-only correction; original V1/V2 manifests and native failure evidence retained",
+  "baselineManifestSha256": "06130053ec7a42305ed25c209701b5b8c9f94b97360fa5dcf8334ceab7609042",
+  "evidence": "Logs/TruckSports/Impossible07/SnowmanV3Diagnosis/observed-route-cause.json",
+  "actualFailure": "V2 native focused interception FAIL93.0599s. Exact trace proves fixed-lane miss and1.2m phase gate versus1.3m actual driver stopping deadlock.",
+  "changes": [
+    "Use actual incoming x/velocity for bounded route prediction, earlier grown-ball departure atz\u221245 and parkingz\u22123; no new physical authority.",
+    "Consistent1.4m phase acceptance encloses actual1.3m stopping radius; recovery flanks actual escaped sphere and drives it toward original loading lane.",
+    "Interception telemetry requires actual recent owner contact, slow physical velocity AND unchanged loading x/z gates; one-second actual approach trace includes tractor heading and predictedx.",
+    "Engine-free route regression uses measured actual failed trace and exact stopping deadlock. Focused native uses45s actual approach then30s actual accepted lift checkpoints; full540s natural completion and strict physical assertions retained."
+  ],
+  "unchanged": [
+    "SnowmanMatch.cs/RequestLift all original gates, SnowmanBall.cs growth/contact/physics, scene/author/colliders/materials/snow reservoirs, hoist/scoring/decorations/save/UI/cameras/human controls",
+    "JengaCrane.cs immutable301319d1bc46fb67dce70f71fc5dbcc0b26f1ee6d3d064bf675604dc4e517ebb",
+    "Verified Jenga V6 and Moon V2 freeze untouched"
+  ],
+  "validation": "PASS12sourceCS including2actual dependencies/543cachedreferences/0semanticerrors, no emission. Actual engine-free grade484 and measured route arithmetic regression PASS. Native physical repair UNRUN; source hypothesis requires parent exclusive validation.",
+  "focusedFilter": "SnowmanPlayModeTests.NaturalAiPhysicallyInterceptsRollingBaseInsideOriginalHoistZone",
+  "pureFilter": "SnowmanRulesTests.DeliveryArrivalEnclosesActualDriveStopAndUsesMeasuredLateralTrajectory",
+  "fullFilter": "SnowmanPlayModeTests",
+  "files": [
+    {
+      "path": "Assets/TruckSnowmanBuilding/Scripts/SnowmanAiDelivery.cs",
+      "sha256": "fdefde1527218803e037f6ade49ca2b6b144db81001d9947325692976be0f16d",
+      "bytes": 6854,
+      "previousSha256": "55d50df55b50190af2d47b89e3dae9ebd0ca159054a1c9a931ad4fe6b5e34e42"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Rules/SnowmanDeliveryRoute.cs",
+      "sha256": "80192dfd6d0b356e73dd60005ee2d8e702cd909713dfce8734602a17f314e60d",
+      "bytes": 821
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Rules/SnowmanDeliveryRoute.cs.meta",
+      "sha256": "200d9beecb5237455b77bc27ca4b8cb644b8476e0e2f81c3045c64e19c755ebc",
+      "bytes": 254
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/EditMode/SnowmanRulesTests.cs",
+      "sha256": "cf92cd051fd2c7f881b73d8fa950c86be6468c9fcb2e921568a51a6893758517",
+      "bytes": 3124,
+      "previousSha256": "9c9720df7d37ba76d7028597c841349230576148eec7a782753013cae5179c0d"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Tests/PlayMode/SnowmanPlayModeTests.cs",
+      "sha256": "49f904b35d17e619298ba778495ec39c6fff7779bcf41d1e211e181712391fda",
+      "bytes": 14474,
+      "previousSha256": "bd671e619d95ea6113aef29ac99d5c58357499f2f70071c0130612cc42f66724"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/Editor/PureRuleChecks.ps1",
+      "sha256": "51a67ab37396cfa4c3eb047e20949d1c09eea7bf8496e9fa3c672d15072e1c65",
+      "bytes": 1484,
+      "previousSha256": "93ea17366beba9fd0971f73553f6a94d033494b1a60ade1fe05122c2bbd2540d"
+    },
+    {
+      "path": "Assets/TruckSnowmanBuilding/SNOWMAN-SOURCE-V3-DELTA.json.meta",
+      "sha256": "f4777a790097d23fa68248c17c95ffdbe588d4474d0ed1706cee578685bcf7b3",
+      "bytes": 62
+    }
+  ]
+}
