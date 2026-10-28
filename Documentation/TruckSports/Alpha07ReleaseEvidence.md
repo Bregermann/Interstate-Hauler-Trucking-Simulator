@@ -1,16 +1,16 @@
 # Truck Sports: Party! Alpha 0.7.0 — release evidence
 
-The Impossible Games adds21 integrated sports to the existing collection. The Windows development build includes81scenes, with74selection cards,80sport choices and10menu pages. Every new sport has original logo/icon assets and an actual Windows gameplay preview. Existing sport artwork and unrelated project work are preserved.
+The Impossible Games adds 21 integrated sports to the existing collection. The Windows development build includes 81 scenes, with 74 selection cards, 80 sport choices and 10 menu pages. Every new sport has original logo/icon assets and an actual Windows gameplay preview. Existing sport artwork and unrelated project work are preserved.
 
 ## Implemented and repaired
 
-- Original per-mode rules, AI, physical interactions, setup/HUD/results and saved scenes for all21games below; native evidence is listed separately from Windows and human verification.
+- Original per-mode rules, AI, physical interactions, setup/HUD/results and saved scenes for all 21 games below; native evidence is listed separately from Windows and human verification.
 - Repaired Piñata/Ballet/Nest shared-camera obstruction, Tornado entry framing, overlapping contextual HUD rows, Pet owner cards, Yoga contrast and Orchestra setup controls. Nest retains its six original animated rigs/materials and now fits their actual animated geometry.
 - Archaeology resets transient future schedules after restoring an earlier checkpoint and publishes validated saved visible poses before rebuilding the original vehicle assemblies. Real nonzero deliveries and unique per-owner score preservation were observed through disk reset/reload/fresh-scene restore.
 - Bake-Off's physical oven/serving sequence and Nest's finite-material construction/hatching complete naturally in the recorded tests; no fabricated score or outcome injection is used.
-- Camping/Pet share the original wilderness: four terrains,2297tree placements, physical navigation and water layout preserved. Improved canopy, water UV/material presentation and grounded rock-bank/cave appearance use existing assets. Snow accumulation/clear transitions and actual GPU track pixels pass the final Windows matrix.
+- Camping/Pet share the original wilderness: four terrains, 2,297 tree placements, physical navigation and water layout preserved. Improved canopy, water UV/material presentation and grounded rock-bank/cave appearance use existing assets. Snow accumulation/clear transitions and actual GPU track pixels pass the final Windows matrix.
 - Tea lawn uses corrected UVs/tangents with original geometry/furniture/collision intact.
-- Archaeology and Snowman pause Save/Restore collided with Change Driving View. A failing native reproduction captured both. The correction changes only three anchored positions in each scene; every other serialized byte and callback stays exact. Both scenes pass720/1080 layout checks and final Windows image review.
+- Archaeology and Snowman pause Save/Restore collided with Change Driving View. A failing native reproduction captured both. The correction changes only three anchored positions in each scene; every other serialized byte and callback stays exact. Both scenes pass 720p/1080p layout checks and final Windows image review.
 
 ## Actual verification
 
@@ -23,9 +23,9 @@ Final content SHA256: `f863429826854b0197a2175d29fc301b826271ad7701ae60e5d71a222
 | wilderness-snow | 127 | 0 | 102.34 |
 | menu | 575 | 0 | 108.1 |
 
-These are1185check executions, not1185unique test cases. Earlier Windows3 retains two complete Bake/Nest matches (203/0 at disclosed4x) and genuine earned-score Archaeology disk persistence (198/0 at1x). The original failed receipts remain failures; later passing builds do not relabel them. Final gameplay differences are recorded in the frozen source/asset manifests.
+These are 1,185 check executions, not 1,185 unique test cases. Earlier Windows3 retains two complete Bake/Nest matches (203/0 at disclosed 4×) and genuine earned-score Archaeology disk persistence (198/0 at 1×). The original failed receipts remain failures; later passing builds do not relabel them. Final gameplay differences are recorded in the frozen source/asset manifests.
 
-Targeted native regressions: seven exact focused repair cases; two restore precision/rejection controls;14preview/saved-menu tests;40existing shared Dance rules/timing tests; the two-scene workshop pause case; and six Python validation-helper tests. All21sport core receipts below are native evidence, not human-playtest claims.
+Targeted native regressions: seven exact focused repair cases; two restore precision/rejection controls; 14 preview/saved-menu tests; 40 existing shared Dance rules/timing tests; the two-scene workshop pause case; and six Python validation-helper tests. All 21 sport core receipts below are native evidence, not human-playtest claims.
 
 | Sport / saved scene | Passing native receipt(s) | Final Windows coverage |
 |---|---|---|
@@ -53,7 +53,9 @@ Targeted native regressions: seven exact focused repair cases; two restore preci
 
 ## Build, source and preservation
 
-`Builds/TruckSports/TruckSports.exe` is the canonical destination; it requires its companion files. The accepted0.6 build and previous0.7 build are retained in private recovery folders. The final candidate is copied only after exact code/content acceptance.925unrelated protected file hashes remain intact. Public source is published through an alternate-index, public-parent commit to `main` and `codex/truck-sports-seven-events`; private integration history, raw commercial source and Digger-generated private geometry are excluded. Actual publication hashes are reported after the remote verification gate.
+`Builds/TruckSports/TruckSports.exe` is the canonical destination; it requires its companion files. The accepted0.6 build and previous0.7 build are retained in private recovery folders. The final candidate is copied only after exact code/content acceptance.925unrelated protected file hashes remain intact. Public source is published through an alternate-index, public-parent commit to `main` and `codex/truck-sports-seven-events`; private integration history, raw commercial source and Digger-generated private geometry are excluded. Release payload `9894b33766f6d98f70f42c85672694501e961491` is verified on both public branches. The same scoped changes are preserved locally in private integration history. [Publication and installed-build receipt](Evidence/Alpha07/GitPublication.json). Eight exact-whitespace publication-tool regressions pass; the original strict default remains, and22specifically reviewed nonsemantic findings retain their original built bytes.
+
+The final build is installed with643verified companion files. Build result:0errors,59warnings retained in the build log. Snow/menu tests ran alongside a user-authorized installed player; promotion occurred after that player exited naturally. Timings are not isolated performance benchmarks.
 
 ## Remaining verification limits
 

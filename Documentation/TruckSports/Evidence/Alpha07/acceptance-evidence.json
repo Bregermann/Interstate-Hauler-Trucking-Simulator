@@ -740,5 +740,41 @@
     "No sustained GPU/CPU profiler or long-session memory-soak certification.",
     "Seven obsolete APV GUIDs remain unresolved in26 individually reviewed inactive renderer/pipeline fields; no runtime-resource resolution is claimed."
   ],
-  "publication": "Reviewed scoped source publication follows a separate exact-payload gate; no raw commercial source, private history or unrelated work is included."
+  "publication": {
+    "releasePayloadCommit": "9894b33766f6d98f70f42c85672694501e961491",
+    "publicParent": "f7af55ec77d93cfc1309678e2022b81abb61fca5",
+    "verifiedBranches": [
+      "main",
+      "codex/truck-sports-seven-events"
+    ],
+    "privateIntegrationPreservedLocally": true,
+    "privateIntegrationHeadPushed": false,
+    "unrelatedProtectedFilesHashVerified": 925,
+    "reviewedPayloadFiles": 2977,
+    "reviewSha256": "861d98631bd358464b97abd7d5c80e8af4b76a30cdd63759d23e8ae0860ff5d7",
+    "canonicalInstalled": {
+      "path": "Builds/TruckSports/TruckSports.exe",
+      "buildContentSha256": "f863429826854b0197a2175d29fc301b826271ad7701ae60e5d71a222dc0217f",
+      "managedSha256": "ecaa03cb21ecf4a7a3066cba8a69d73115f5d89fe5035515998c310175c69eae",
+      "verifiedFiles": 643
+    },
+    "previousBuildPreservedAt": ".sports-validation/Recovery/AcceptedBuildBeforeCamera-20261028-131142",
+    "accepted06PreservedAt": ".sports-validation/Recovery/AcceptedBuildBeforeCamera-20261028-122814",
+    "publicationToolRegression": {
+      "passed": 8,
+      "failed": 0,
+      "durationSeconds": 0.049,
+      "scope": "Exact finding/hash identity, stale hashes, duplicate reviews, unknown errors, strict-default rejection and odd native EOF diagnostic parsing."
+    },
+    "whitespaceReview": {
+      "nativeEmptySerializedFields": 39580,
+      "explicitExactNonsemanticFindings": 22,
+      "testedAssetBytesRewritten": false,
+      "defaultStrictGatePreserved": true
+    },
+    "executionConditions": "Snow/menu candidate checks ran with explicit user authorization alongside their installed game. That game exited naturally before canonical promotion. No unrelated process was closed. These timings are not isolated performance benchmarks.",
+    "note": "This records the actual release-payload publication. A subsequent documentation-only commit may be the branch tip. No human/device/listening or entire historical backlog completion is inferred."
+  },
+  "publicationToolTests": 8,
+  "canonicalBuildInstalled": true
 }
