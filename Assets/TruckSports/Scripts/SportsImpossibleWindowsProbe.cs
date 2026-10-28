@@ -12,7 +12,7 @@ namespace LWS.TruckSports
 {
     // A short actual-player integration tour, separate from full native match
     // acceptance. Uses the existing preference, navigation and capture adapters.
-    public sealed class SportsImpossibleWindowsProbe : MonoBehaviour
+    public sealed partial class SportsImpossibleWindowsProbe : MonoBehaviour
     {
         const string Flag = "-tsImpossibleOpenings", Output = "-tsImpossibleOutput";
         readonly StringBuilder report = new StringBuilder();
@@ -25,7 +25,7 @@ namespace LWS.TruckSports
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Boot()
         {
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), Flag) < 0) return;
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), Flag) < 0 && Array.IndexOf(Environment.GetCommandLineArgs(), CompleteFlag) < 0) return;
             if (Application.isEditor || Application.platform != RuntimePlatform.WindowsPlayer)
             { Debug.LogError("Impossible openings require the actual Windows development player."); return; }
             var root = new GameObject("Explicit Impossible Windows saved-scene tour");
@@ -58,7 +58,8 @@ namespace LWS.TruckSports
             SportsParticipantRegistry.ForgetCache(); SportsCameraOptions.Set(false);
             Application.logMessageReceived += Error;
             SceneManager.sceneLoaded += FreshWorkshopStorageBeforeRepositoryStart;
-            foreach (var entry in SportsImpossibleGames.All)
+            var entries = ConfigureExtended(args);
+            foreach (var entry in entries)
             {
                 current = entry.scene;
                 Check(Application.CanStreamedLevelBeLoaded(entry.scene), "actual scene is included in this executable");
@@ -78,14 +79,18 @@ namespace LWS.TruckSports
                 try
                 {
                     match.setup.count = Mathf.Clamp(4, match.MinimumPlayers, match.MaximumPlayers);
-                    match.NormalizeSetup(); match.AllBots(); started = match.StartMatch();
+                    if (extended) match.option = 0;
+                    match.NormalizeSetup(); match.AllBots();
+                    if (extended) ApplyExtendedForecast(match);
+                    started = match.StartMatch();
                 }
                 catch (Exception failure) { Error(failure.Message, failure.StackTrace, LogType.Exception); }
                 Check(started, "ordinary AI setup starts the actual match");
                 if (started)
                 {
                     string matchId = match.MatchId;
-                    yield return new WaitForSecondsRealtime(7);
+                    if (extended) yield return CompleteVisit(match);
+                    else yield return new WaitForSecondsRealtime(7);
                     Check(match.Running || match.Finished, "actual match remains in a valid gameplay/results state");
                     Check(match.cameras != null && match.cameras.Any(camera => camera != null && camera.isActiveAndEnabled && camera.targetTexture == null && camera.rect.width > 0 && camera.rect.height > 0), "actual active camera renders into the player backbuffer");
                     Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Count(item => item.isActiveAndEnabled) == 1,
@@ -98,7 +103,7 @@ namespace LWS.TruckSports
                     else
                         report.AppendLine("SCOPE " + current + " board presentation has no driving-rig acceptance claim.");
                     report.AppendLine("OPENING_STATE " + current + " " + match.Header.Replace('\n', ' ') + " | " + match.Status.Replace('\n', ' '));
-                    yield return Capture("natural-gameplay");
+                    yield return Capture(extended ? "full-session-final-state" : "natural-gameplay");
                     if (!match.Finished)
                     {
                         match.Pause(0, false); yield return new WaitForSecondsRealtime(.2f);
@@ -112,7 +117,9 @@ namespace LWS.TruckSports
                     try { rematched = match.StartMatch(); }
                     catch (Exception failure) { Error(failure.Message, failure.StackTrace, LogType.Exception); }
                     Check(rematched && match.MatchId != matchId, "ordinary rematch starts a distinct match");
+                    if (extended && completeFacts.Count > 0) completeFacts.Last().rematched = rematched && match.MatchId != matchId;
                     yield return new WaitForSecondsRealtime(.3f); match.SetupScreen();
+                    if (extended) yield return RepeatedVisit(match);
                     Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Count(item => item.isActiveAndEnabled) == 1,
                         "one active listener after ordinary rematch");
                 }
@@ -121,6 +128,7 @@ namespace LWS.TruckSports
                 Check(FindAnyObjectByType<SportsFrontEnd>() != null && !oldScene.isLoaded, "returns to original collection and unloads prior sport");
                 Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Count(item => item.isActiveAndEnabled) == 1,
                     "one active listener after collection return");
+                if (extended) yield return RecordCollectionMemory();
             }
             current = "collection"; yield return Capture("return"); Finish(false);
         }
@@ -212,7 +220,7 @@ namespace LWS.TruckSports
         }
         void Update()
         {
-            if (!finished && folder != null && Time.realtimeSinceStartup - began > 1100)
+            if (!finished && folder != null && Time.realtimeSinceStartup - began > (extended ? extendedLimit : 1100))
             { Check(false, "bounded Windows tour exceeded its deadline"); Finish(true); }
         }
         void Finish(bool interrupted)
@@ -222,7 +230,8 @@ namespace LWS.TruckSports
             SceneManager.sceneLoaded -= FreshWorkshopStorageBeforeRepositoryStart;
             preferences?.Dispose(); preferences = null; SportsParticipantRegistry.ForgetCache(); Time.timeScale = 1;
             report.AppendLine("CHECKS=" + checks + " ERRORS=" + errors + " SCENES=" + visited + " SCREENSHOTS=" + captures + " INTERRUPTED=" + interrupted);
-            report.AppendLine("Actual Windows composed frames, ordinary saved setup/AI opening, pause/resume/rematch/exit only. Full matches have separate native receipts. No physical-controller, listening, human or performance acceptance inferred.");
+            if (extended) WriteExtendedSummary(interrupted);
+            report.AppendLine(extended ? "Actual Windows complete-session and explicit Unity profiler evidence. Selected option0, all AI, stated simulation scale; untimed sessions end only through their normal finish control. No injected poses/contacts/scores/outcomes, human/device/listening or hardware performance certification." : "Actual Windows composed frames, ordinary saved setup/AI opening, pause/resume/rematch/exit only. Full matches have separate native receipts. No physical-controller, listening, human or performance acceptance inferred.");
             File.WriteAllText(Path.Combine(folder, "result.txt"), report.ToString());
             Application.Quit(errors == 0 ? 0 : 2);
         }

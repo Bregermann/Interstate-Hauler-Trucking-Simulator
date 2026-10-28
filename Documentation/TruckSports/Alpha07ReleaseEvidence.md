@@ -1,3 +1,5 @@
+> Historical Windows6 checkpoint. The October28 Windows9 refresh and complete-session evidence are recorded in [Alpha07RefreshEvidence.md](Alpha07RefreshEvidence.md). The original checkpoint evidence below remains unchanged.
+
 # Truck Sports: Party! Alpha 0.7.0 — release evidence
 
 The Impossible Games adds 21 integrated sports to the existing collection. The Windows development build includes 81 scenes, with 74 selection cards, 80 sport choices and 10 menu pages. Every new sport has original logo/icon assets and an actual Windows gameplay preview. Existing sport artwork and unrelated project work are preserved.

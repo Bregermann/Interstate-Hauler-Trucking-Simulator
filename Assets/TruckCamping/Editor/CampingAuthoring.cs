@@ -43,8 +43,18 @@ namespace LWS.TruckCamping.Editor
         }
         public static void Finish(CampingMatch match,string folder)
         {
-            SportsEventAuthoring.Save(folder);SportsTruckAppearanceHostAuthoring.BindNewImpossibleScene(match,match.explorers.Select(e=>e.truck).ToArray());
+            SportsEventAuthoring.Save(folder);ConfigureSnowAtmosphere(match);SportsTruckAppearanceHostAuthoring.BindNewImpossibleScene(match,match.explorers.Select(e=>e.truck).ToArray());
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(match.gameObject.scene);UnityEditor.SceneManagement.EditorSceneManager.SaveScene(match.gameObject.scene);AssetDatabase.SaveAssets();
+        }
+        public const float WildernessSnowMistGain=.15f;
+        // Scene-local public Weather Maker configuration. Main snow intensity,
+        // accumulation, wind, road grip and every vendor source remain intact.
+        public static void ConfigureSnowAtmosphere(CampingMatch match)
+        {
+            var snow=match.presentationWeather?.precipitation?.SnowScript;
+            if(snow==null)throw new InvalidOperationException("Existing wilderness Weather Maker snow emitter required.");
+            if(snow.MistIntensityMultiplier==1)snow.MistIntensityMultiplier=WildernessSnowMistGain;
+            else if(snow.MistIntensityMultiplier!=WildernessSnowMistGain)throw new InvalidOperationException("Preserve customized wilderness snow mist gain for review.");
         }
         static void FishingTools(CampExplorer explorer,Transform parent,int index)
         {
@@ -67,7 +77,7 @@ namespace LWS.TruckCamping.Editor
             match.persistence.statusLabel=SportsUIAuthoring.Text("Mode-local expedition save status",pause,"Pause outside care interactions to save the real expedition. Pet identity also autosaves separately.",new Vector2(1300,70),new Vector2(0,-340),22);
             match.photoExit=SportsUIAuthoring.Button(match.menus.hud.transform,"RETURN TO WALK","camp-photo-exit",new Vector2(0,-365),new Vector2(520,48)).gameObject;match.photoExit.SetActive(false);
             foreach(var replay in match.menus.replayButtons)replay.SetActive(false);
-            var label=SportsUIAuthoring.Text("Cooperative wilderness activity reminder",match.menus.hud.transform,"STOP · ACTION FOR CAMP ACTIVITIES",new Vector2(800,35),new Vector2(0,445),21);label.color=new Color(.8f,.92f,.81f);
+            var label=SportsUIAuthoring.Text("Cooperative wilderness activity reminder",match.menus.hud.transform,"STOP · ACTION FOR CAMP ACTIVITIES",new Vector2(800,35),new Vector2(0,445),21);label.color=new Color(.8f,.92f,.81f);CampingActivityPromptAuthoring.Install(label);
         }
         static void Help(CampingMatch match)
         {

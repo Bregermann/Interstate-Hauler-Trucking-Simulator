@@ -6,6 +6,68 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 
 ## Active work
 
+October28 refreshed0.7 acceptance: exact Windows9 content c16873fb512b39d51c3409670d6aa6d3f86783b190748def9dad33888fc215b8 (managed 4ddbf85a9bd3287a183cfbdf6b3b0c3f740b037ea5acddef4fddf41a0cf7f716) builds81scenes with0errors/194warnings, matching R99 warning count. Six fresh actual Windows stages pass1324/0 check executions; all21original complete AI sessions and targeted corrected final outcomes are evidenced separately. Wilderness mist/readability and measured-window/reset requirements above have passed within their stated scope. The exact artifact is now installed with643verified files and the prior build preserved; Git publication is pending. Alpha0.8 remains queued immediately afterward; no Dragon Kingdom implementation is claimed yet.
+
+October28 extended Windows R100 observations: batches A/B plus wilderness contain19 completed original sessions with19 successful ordinary rematches; Goose R99 and full Archaeology R100 add their complete matches, reaching all21 original terminal states/rematches. A retains185checks/1failure, B209checks/2failures. Those three failures are the observer's incorrect universal intermediate-score requirement in Guess That, Snowman and Orchestra, whose actual original results show a winning identification,488-point completed physical build and79,900 ensemble total respectively. Development-only observer corrections now check their original authorities; R102 EditMode policy+original immutable-score contracts pass31/31 in0.1403847s. R101's prior new-test TMP assembly-reference compilation failure is retained, corrected through the established reflection pattern; it executed no tests. The original failed Windows receipts remain unchanged and three corrected actual Windows reruns are pending. Wilderness five-reset observation passes69/0 in348.82s with14PNGs; all19 result-screen originals were inspected through retained contact sheets. Rigidbody/collider counts stay stable. Mesh counts grow during short repeated driving observations but return to250 after each natural scene unload BEFORE explicit GC; both returns retain zero Rigidbody/colliders. Thus the recorded growth is not evidence of retained scene meshes. Per-family allocation inventory is prepared for the next scoped run; no leak-free certification is claimed. Forty-two original normal-speed measured windows span21scenes at720p/1080p, including4AI-view wilderness workloads. Full normal-speed Archaeology passes25/0 in1254.18real seconds:12physical deliveries,1856preserved value, original results/pause/rematch/menu,8PNGs; both actual result images directly inspected. Frozen content remains5fcfc50915ee4949bfd523abb9067285327d4519cb21f12063e50fdd3e58d891. New source intake and subsequent weather/UI repair remain separate from that tested artifact.
+
+### Q23-WILDERNESS-CONTRAST-001 — Severe daytime snow and activity prompt readability
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q23-WILDERNESS-CONTRAST-001 |
+| Sport/System | Camping and Pet Pals weather presentation/HUD |
+| Original Request | Maintain usable severe-weather visibility and readable, finished UI; recorded Windows Heavy Snow/Day review exposed excessive whiteout and a pale unbacked activity hint. |
+| Acceptance Criteria | Heavy Snow retains real precipitation/coverage/wind while the shared wilderness remains navigable; activity reminder stays readable against bright snow at720p/1080p. Preserve physics, authored world, cameras and original weather authority. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | CampingAuthoring scene-local Weather Maker SnowScript.MistIntensityMultiplier0.15; explicit CampingActivityPromptAuthoring installs the existing SportsBroadcastPlate/uGUI backing and cream text. Saved Camping/Pet scenes each add exactly5UI documents and change exactly3existing documents: hint color, HUD child reference, one mist field. Every other original document is byte-exact after line-ending normalization; idempotent Editor repeat preserves complete scene bytes. No normal Play Mode/build regeneration or vendor source edit. |
+| Automated Verification | R102 paired native mist diagnosis1/1 in15.1190677s retains identical paused bodies and105real particles; white samples5277→23→4189 when ONLY mist rendering is hidden/restored. R104 narrow repair is byte-idempotent;2scene/2cycle/720p+1080p native snow/HUD test1/1 passes25.1774523s. Fresh Windows9 snow/clear/day/night/rematch and real GPU tracks pass127/0 in96.89s. Lead inspected12weather/time cases at both resolutions and full-resolution HeavySnow/Day frames: readable backed prompt, visible terrain/trucks, substantial actual snow and tracks. Original failed test-only compilation/R103 empty-batch cleanup receipts remain retained; successful corrections are separate. |
+| Human Verification | Not performed. Lead's earlier actual Windows image review records the defect. |
+| Remaining Work | No unresolved defect in the exercised Windows weather/time/HUD/rematch scope. Human comfort/listening and physical-device acceptance were not performed. |
+
+### Q24-INTAKE-001 — Queued Alpha0.8 Wyrms & Wheels
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q24-INTAKE-001 |
+| Sport/System | Next release after completed0.7 and fresh build delivery |
+| Original Request | Continue without ceasing; finish0.7, deliver/push a fresh build, then immediately implement the attached Alpha0.8 Wyrms & Wheels prompt. Exact66,067-byte source is archived at Documentation/TruckSports/Requests/2026-10-28-Alpha08-WyrmsAndWheels.md, SHA2568cdb59d6ca05715ad86996c99b59b457e625d3fd807ac22cffd52b42292640d9. |
+| Acceptance Criteria | Complete the four specified Dragon Kingdom games and optional Dragon Mayhem variants using one shared kingdom/dragon framework, owned animated assets, existing Sports architecture, separate development/integration and the full source acceptance/patch-note requirements.0.7 work remains protected and precedes implementation. |
+| Status | MISSING |
+| Implementation Evidence | Immutable original request archived; no Dragon Kingdom gameplay implementation is claimed by intake. The prompt explicitly requires parallel agent development when that phase begins. |
+| Automated Verification | Source archive bytes and SHA256 match the supplied attachment exactly. Current authoritative release metadata remains0.7 while its acceptance work continues. |
+| Human Verification | Not performed. |
+| Remaining Work | Finish current0.7 complete-session/profiler acceptance and deliver the refreshed build/push; then read the full queued source, assign its individual permanent requirements and begin the specified asset audit/shared framework/game implementations without another permission round. |
+
+October28 continuation after the delivered checkpoint: Q23-WINDOWS-COMPLETE-001 and Q23-PERF-SOAK-001 remain authorized automated work. Dead Air's human-required hold stays in effect; the current-pass ownership release did not establish full backlog completion. Continue these targeted acceptance gaps rather than reopening archived mechanics.
+
+### Q23-WINDOWS-COMPLETE-001 — Extended actual Windows match coverage
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q23-WINDOWS-COMPLETE-001 |
+| Sport/System | Alpha0.7 actual Windows lifecycle acceptance |
+| Original Request | Run multiple complete automated matches where feasible, with results, rematches, pause and transitions; compilation/native tests alone are insufficient. |
+| Acceptance Criteria | Observe actual saved-mode AI play to its original terminal state, results, pause/resume, fresh rematch and menu return. Explicitly identify selected options and any accelerated simulation. Untimed activities use their own voluntary session finish and genuine observed activity, never an injected winner. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Development-only SportsImpossibleCompleteWindowsProbe extends the existing saved-scene observer; original mode rules/AI/physics remain authoritative. Input delta between full-session R99 and final Windows9 contains no game-rule or physics source change; only two wilderness presentation scenes differ. |
+| Automated Verification | All21 original AI option0 sessions reach results and rematch on frozen R99/R100. Full Archaeology25/0:12physical deliveries,1856value,1254.18real seconds at1x. Original A/B batches retain3incorrect universal intermediate-award failures. Corrected final Windows9 Guess/Snowman/Orchestra70/0 verifies21truthful turns to identification, completed3ball/6decoration grade488, and all109DSP chart notes resolved with79900conserved total. Fresh Windows9 all21opening/pause/rematch/menu421/0, disk62/0, snow127/0, menu575/0, five-reset wilderness69/0;1324check executions across six stages. Native outcome policy/original score31/31. Original-image review and exact source/asset/build hashes: Documentation/TruckSports/Evidence/Alpha07Refresh/acceptance-evidence.json. |
+| Human Verification | Not performed. |
+| Remaining Work | No unresolved behavior in the exercised AI option0/lifecycle scope. Other rules variants and human/physical-controller/listening acceptance are not inferred; those external verification limits remain explicitly recorded. |
+
+### Q23-PERF-SOAK-001 — Measured performance and repeated-session retention
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q23-PERF-SOAK-001 |
+| Sport/System | Alpha0.7 representative CPU/GPU/physics/memory and lifecycle retention |
+| Original Request | Profile CPU, GPU, physics and memory where tooling is available; check weather, split-screen, large scenes and repeated matches for leaks/regressions. |
+| Acceptance Criteria | Record actual normal-speed live frame/CPU/physics/GPU sample counts and memory using Unity profiler APIs, label unavailable counters accurately, retain representative settings/workload/hardware and repeated-session snapshots. No isolated or hardware budget claim without the relevant measurement conditions. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing SportsExpansionPerformance wrapper uses Unity ProfilerRecorder and FrameTimingManager; explicit nonrace live windows preserve original racing/default routes. The development-only complete observer records hardware/settings, forecast/time, sample availability, native resource families and scene-return snapshots before and after separately labelled explicit cleanup. |
+| Automated Verification | Normal1x720p/1080p measured windows cover all21original scenes. Fresh Windows9 explicitClear/Day4AI-view Camping/Pet sessions pass69/0 with five match observations each. Across stopped resets, non-skid meshes remain554/627 and materials353/378 respectively; all observed mesh growth belongs to original NWH SkidmarkMesh. Natural menu returns have zero skidmark meshes/Rigidbody/colliders before explicit GC. Actual counter sample counts/hardware/settings and repeated memory are retained in Alpha07Refresh acceptance evidence; zero samples means unavailable, never zero cost. R97 real nonrace native profiler1/1 also passes. |
+| Human Verification | Not performed. |
+| Remaining Work | Measured-window and short-reset recording criteria are complete. No indefinite leak-free, isolated hardware-budget, physical-device or full-collection performance certification is claimed. |
+
 October28 delivery verified: release payload `9894b33766f6d98f70f42c85672694501e961491` is public on both `main` and `codex/truck-sports-seven-events`. Local integration `bb699bf6e69cb7b76137419dd5fb0d91ef2567e5` preserves private history without pushing it. The exact tested643-file Windows6 build is installed at `Builds/TruckSports/TruckSports.exe`; both the prior0.7 and accepted0.6 builds remain recoverable. All925protected hashes remain exact. Publication-tool regression8/8 passes;22exact nonsemantic whitespace findings are hash-reviewed without rewriting any tested asset bytes. Public delivery receipt: Documentation/TruckSports/Evidence/Alpha07/GitPublication.json. Remaining human/device/listening/full-Windows-variant/isolated-profiling/soak and severe-day-snow contrast limits remain explicitly recorded below.
 
 
