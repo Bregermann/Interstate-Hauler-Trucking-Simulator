@@ -1,0 +1,56 @@
+PASS collection startup
+PASS sixth menu entry authored
+PASS saved Cornhole setup
+PASS one listener
+PASS one EventSystem
+PASS begin 4 simultaneous courses
+PROGRESS round=1 totals=0,0,0,0 attempts=1:Approach:(0.00, 6.57, -20.94),1:Approach:(110.00, 6.57, -20.94),1:Approach:(220.00, 6.57, -20.94),1:Approach:(330.00, 6.57, -20.94)
+PROGRESS round=1 totals=0,0,0,0 attempts=2:AttemptResult:(0.23, 3.57, 63.57),2:AttemptResult:(109.41, 3.34, 62.31),2:AttemptResult:(220.82, 3.69, 62.88),2:AttemptResult:(330.68, 3.76, 63.01)
+PROGRESS round=1 totals=0,0,0,0 attempts=4:Waiting:(0.87, -9.68, 49.00),4:AttemptResult:(111.67, -9.96, 52.85),4:AttemptResult:(221.10, -9.96, 51.64),4:AttemptResult:(330.86, -9.96, 52.05)
+PASS saved Cornhole uses existing Heat presenter through original lifecycle
+PASS actual banked notification visible and nonblocking final=False
+PASS actual banked capture resolution (1280, 720)
+PASS actual banked capture resolution (1920, 1080)
+PROGRESS round=2 totals=2,2,2,2 attempts=2:Approach:(0.15, 6.14, -19.40),2:Approach:(109.91, 6.18, -19.58),2:Approach:(220.01, 6.24, -19.84),2:Approach:(330.04, 5.79, -17.95)
+PROGRESS round=2 totals=2,2,2,2 attempts=4:Approach:(0.11, 6.22, -19.76),4:Approach:(109.98, 5.88, -18.32),4:Approach:(220.09, 5.70, -17.56),3:AttemptResult:(329.55, -9.96, 54.69)
+PROGRESS round=3 totals=2,2,2,2 attempts=1:Settling:(1.47, -9.63, 37.38),1:Settling:(110.32, -9.48, 45.52),1:Settling:(220.01, 1.90, 54.10),1:Settling:(330.24, 2.36, 53.42)
+PROGRESS round=3 totals=2,2,2,2 attempts=3:Flight:(-0.96, 6.60, 45.52),3:Settling:(110.10, -9.45, 49.72),3:Flight:(219.80, 22.25, 43.30),3:Flight:(330.25, 19.49, 44.74)
+PROGRESS round=4 totals=2,3,3,3 attempts=1:Flight:(-0.16, 35.43, 15.69),1:Flight:(110.48, 35.47, 16.12),1:Flight:(219.94, 35.45, 15.97),1:Flight:(330.06, 35.48, 15.85)
+PROGRESS round=4 totals=2,3,3,3 attempts=3:Flight:(0.25, 42.66, 21.93),3:Approach:(111.01, 2.29, -3.37),3:Flight:(220.95, 19.91, 9.33),3:Flight:(330.43, 17.40, 8.40)
+PROGRESS round=4 totals=3,5,6,5 attempts=4:Waiting:(1.87, -9.96, 45.44),4:Waiting:(113.42, -9.96, 44.04),4:Waiting:(223.62, -9.96, 45.07),4:Waiting:(332.93, -9.96, 46.26)
+PROGRESS round=5 totals=3,5,6,5 attempts=2:AttemptResult:(-0.70, -9.68, 55.94),2:Settling:(110.83, 1.95, 54.39),2:AttemptResult:(220.21, 2.07, 55.08),2:AttemptResult:(330.02, 2.08, 53.52)
+PROGRESS round=5 totals=3,5,6,5 attempts=4:AttemptResult:(0.36, -9.68, 51.99),4:Settling:(110.83, -9.96, 53.59),4:AttemptResult:(219.75, -9.96, 55.86),4:Settling:(327.62, -9.96, 14.23)
+PASS banked round awards retain unique event IDs, actual participant/color and no provisional points
+PASS confirmed banked deltas exactly reconstruct all original final totals
+PASS actual first bank captured or legitimate all-zero match creates no invented award
+PASS saved Cornhole uses existing Heat presenter through original lifecycle
+PASS actual banked notification visible and nonblocking final=True
+PASS actual banked capture resolution (1280, 720)
+PASS actual banked capture resolution (1920, 1080)
+PASS exactly five round finalizations
+PASS one finished course waits without freezing others
+PHYSICAL_MATCH launches=80 holed=0
+PASS four attempts per round no fifth / five banks 0
+PASS valid cumulative total 0
+AI difficulty=Easy total=3 timeouts=0
+PASS four attempts per round no fifth / five banks 1
+PASS valid cumulative total 1
+AI difficulty=Normal total=6 timeouts=0
+PASS four attempts per round no fifth / five banks 2
+PASS valid cumulative total 2
+AI difficulty=Hard total=7 timeouts=0
+PASS four attempts per round no fifth / five banks 3
+PASS valid cumulative total 3
+AI difficulty=Hard total=6 timeouts=0
+PASS final winner or tie
+PASS shared aftertouch bound throughout match
+PASS final throw review 0
+PASS final throw review 1
+PASS final throw review 2
+PASS final throw review 3
+PASS standings exit remains available after replay stops
+PASS final review returns to standings
+PERF duration=116.238 frames=16696 meanMs=6.71074739727627 p95=12.48727 p99=12.52127 maxMs=74.9587 managedDelta=2334720 gen0=70 GPU=NVIDIA GeForce GTX 1660 Ti size=1280x720 timescale=3
+PASS rematch preserves configuration resets score/body pool
+CHECKS 36
+CHECKS=36 ERRORS=0

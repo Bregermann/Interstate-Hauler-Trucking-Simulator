@@ -1,0 +1,57 @@
+#if UNITY_EDITOR && VISTA
+using System;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using LWS.TruckDragonRiders.Editor;
+using UnityEngine;
+
+namespace LWS.TruckDragonKingdom.Editor
+{
+    public static partial class DragonKingdomWorldAdoptionPlan
+    {
+        // Read-only DTO for the existing public JSON certificate API. The
+        // production-only authority remains private inside Rider authoring.
+        [Serializable]sealed class CanonicalCourseCertificateHeader
+        {
+            public string scope,status,receipt,receiptSha256,target,currentSceneSha256;
+            public bool productionEligible,currentProfilesExact,currentExternalConfigurationExact,currentWorldExact,currentNwhExact,unitAncestors,noTestDependencies,sourceClosureExact;
+            public int choices,originalTrucks,recordedInfernoPoses,recordedFirePoses,freshPoseSamples;
+        }
+        const string CanonicalCourseNativeCase="DragonKingdomCanonicalMountedCourseTests.CertifiedCanonicalProfilesAndFixedPhysicalCourseClearActuallyPassedWorldWithoutAdoption";
+        static bool CourseHash(string value)=>value!=null&&value.Length==64&&value.All(Uri.IsHexDigit);
+        static bool CourseSameHash(string a,string b)=>CourseHash(a)&&CourseHash(b)&&string.Equals(a,b,StringComparison.OrdinalIgnoreCase);
+        static bool CourseSamePath(string a,string b)=>!string.IsNullOrEmpty(a)&&!string.IsNullOrEmpty(b)&&string.Equals(Path.GetFullPath(a),Path.GetFullPath(b),StringComparison.OrdinalIgnoreCase);
+
+        // This metadata check grants no authority. Its only production caller
+        // first requires the actual specific native test/receipt and rereads
+        // the strict production-only canonical certificate against live data.
+        static void RequireCanonicalMountedCourseMetadata(DragonKingdomMountedCourseReview.Receipt proof,string tag,string promotion,string liveJson,string sceneHash,string worldHash,string previewHash,string integrationHash)
+        {
+            const string canonical="Assets/TruckDragonRiders/Scenes/TruckDragonRiders.unity";
+            var q=proof?.qualifiedSource;var live=string.IsNullOrEmpty(liveJson)?null:JsonUtility.FromJson<CanonicalCourseCertificateHeader>(liveJson);
+            if(proof==null||!proof.canonicalSourceReview||!proof.fixedQualifiedCourse||!proof.coordinatedCourse||proof.candidate!=tag||proof.status!="SAMPLED_FULL_MOUNT_ENVELOPE_CLEAR_REQUIRES_ACTUAL_FLIGHT"||!string.IsNullOrEmpty(proof.error)||!proof.sourceBytesPreserved||proof.contactQueries!=0||proof.apertureFailures!=0||proof.queries<=0||proof.turnQueries<=0||proof.gateCount!=12||proof.physicalGateColliders!=12||proof.courseLayout?.Length!=12||proof.rigs?.Length!=8||proof.ridersScene!=canonical||!CourseSamePath(proof.canonicalPromotionReceipt,promotion)||!CourseSameHash(proof.ridersSceneSha256,sceneHash)||!CourseSameHash(proof.worldPrefabSha256,worldHash)||!CourseSameHash(proof.worldPreviewSha256,previewHash)||!CourseSameHash(proof.worldIntegrationReceiptSha256,integrationHash)||proof.originalCourseHash!=DragonKingdomMountedCourseReview.GateHash(proof.courseLayout))throw new InvalidOperationException("Canonical course receipt/world/scene/physical-course identity or clear-query result differs.");
+            if(live==null||!live.productionEligible||live.target!=canonical||live.scope!="ONE_EXACT_CANONICAL_SCENE_ROW_ORIGINAL_SHA_TO_SUCCESSFUL_APPLY_SHA_NOT_COURSE_WORLD_OR_FRESH_POSE_ACCEPTANCE"||live.status!="CURRENT_CANONICAL_SINGLE_SOURCE_ROW_CERTIFIED_RECORDED_NATIVE_POSES_NOT_NEW_REPLAY"||!CourseSamePath(live.receipt,promotion)||!CourseSameHash(live.currentSceneSha256,sceneHash)||!CourseSameHash(proof.canonicalPromotionReceiptSha256,live.receiptSha256)||live.choices!=8||live.originalTrucks!=4||live.recordedInfernoPoses!=699||live.recordedFirePoses!=537||live.freshPoseSamples!=0||!live.currentProfilesExact||!live.currentExternalConfigurationExact||!live.currentWorldExact||!live.currentNwhExact||!live.unitAncestors||!live.noTestDependencies||!live.sourceClosureExact)throw new InvalidOperationException("Live production-only canonical source certificate required; disposable or stale authority cannot adopt a world.");
+            if(q==null||!q.canonicalSourceReview||q.canonicalSourceCertificate==null||q.canonicalSourceCertificate!=liveJson||q.scene!=canonical||q.sourceScene!=canonical||!CourseSameHash(q.sceneSha256,sceneHash)||!CourseSamePath(q.productionEvidence,proof.qualifiedProductionEvidence)||q.status!="CURRENT_SOURCE_SEMANTIC_QUALIFICATION_COMPLETE_NATIVE_TEST_RESULT_REMAINS_SEPARATE"||!string.IsNullOrEmpty(q.failure)||!string.IsNullOrEmpty(q.cleanupFailure)||!q.currentConfigurationExact||!q.currentProfilesExact||!q.currentNwhExact||!q.unitAncestors||!q.noTestDependencies||!q.candidateClosedForComparison||!q.comparisonClosedBeforeCandidateReopen||!q.candidateRestored||!q.rootActivationExact||!q.currentSourceBytesExact||q.straightExitDistance!=55||proof.straightExitDistance!=55||!float.IsFinite(q.maximumNwhDimensionDrift)||q.maximumNwhDimensionDrift>.00001f||q.rigs?.Count!=8||q.currentSourceSnapshot==null||q.currentSourceSnapshot.Length<1000||q.currentSourceSnapshot.Any(row=>row==null||string.IsNullOrEmpty(row.path)||!CourseHash(row.sha256))||q.currentSourceSnapshot.Select(row=>Path.GetFullPath(row.path)).Distinct(StringComparer.OrdinalIgnoreCase).Count()!=q.currentSourceSnapshot.Length)throw new InvalidOperationException("Current canonical source comparison/restoration/complete source closure is not qualified.");
+            foreach(int crew in Enumerable.Range(0,4))foreach(string species in new[]{"dragon-inferno","dragon-fire"})
+            {
+                var actual=proof.rigs.Where(r=>r!=null&&r.crew==crew&&r.species==species).ToArray();var sources=q.rigs.Where(r=>r!=null&&r.crew==crew&&r.species==species).ToArray();
+                if(actual.Length!=1||sources.Length!=1)throw new InvalidOperationException("Exactly one of each qualified species per original crew is required.");var r=actual[0];var source=sources[0];int poses=species=="dragon-fire"?537:699;
+                if(r.poseAuthority!="PAIRED_FULL_NATIVE_GEOMETRY_CURRENT_PROFILE_EQUIVALENCE_NOT_NEW_POSE_REPLAY"||r.poses!=0||r.baseFlightPoses!=0||r.configuredGraphPoses!=0||r.nativeMixerPoses!=0||r.recordedSourcePoses!=poses||source.recordedSourcePoses!=poses||r.recordedMixerLabelledPoses<=0||r.recordedMixerLabelledPoses!=source.recordedMixerLabelledPoses||source.poseLabels?.Length!=poses||source.poseLabels.Any(string.IsNullOrEmpty)||source.poseLabels.Count(label=>label.IndexOf("blend",StringComparison.OrdinalIgnoreCase)>=0||label.IndexOf("two-layer",StringComparison.OrdinalIgnoreCase)>=0)!=source.recordedMixerLabelledPoses||source.envelopeAuthority!="CURRENT_AUTHORED_BOX_CENTER_TRANSFORMED_BY_CURRENT_LOCAL_TO_WORLD_NOT_PHYSX_CACHE"||r.skinnedVertices<=0||r.skinnedVertices!=source.skinPoints||r.originalTruckColliders<1||r.originalTruckRenderers<1||r.controller!=source.controller||!CourseSameHash(r.controllerSha256,source.controllerSha256)||!r.envelope.Equals(source.headingBounds)||!r.neutralSeatOffset.Equals(source.neutralCrossingOffset)||r.maximumGateRadialExtent!=source.anyAttitudeRadius||!float.IsFinite(r.maximumGateRadialExtent)||r.maximumGateRadialExtent<=0||r.clips==null||r.clips.Length==0||r.clipSha256?.Length!=r.clips.Length||source.clips==null||source.clipSha256==null||!r.clips.SequenceEqual(source.clips)||source.clipSha256.Length!=r.clipSha256.Length||r.clipSha256.Where((hash,index)=>!CourseSameHash(hash,source.clipSha256[index])).Any()||r.clipSha256.Any(hash=>!CourseHash(hash)))throw new InvalidOperationException("Exact recorded699/537 source envelopes/controller/mixer provenance required; fresh counters must remain zero.");
+            }
+        }
+        static void ValidateCanonicalMountedCourseEvidence(string tag,string path,DragonKingdomMountedCourseReview.Receipt proof)
+        {
+            string promotion=Arg("-tsDragonCanonicalMountPromotionReceipt",""),tests=Arg("-tsDragonMountedCourseTests","");
+            if(string.IsNullOrEmpty(promotion)||string.IsNullOrEmpty(tests)||!File.Exists(ApplyIo(promotion))||!File.Exists(ApplyIo(tests)))throw new InvalidOperationException("Explicit real canonical promotion receipt and specific passed canonical course tests.xml required.");
+            var xml=new XmlDocument();xml.Load(ApplyIo(tests));var cases=xml.SelectNodes("//test-case").Cast<XmlNode>().Where(node=>node.Attributes["fullname"]?.Value==CanonicalCourseNativeCase).ToArray();
+            string native=Path.Combine(Path.GetDirectoryName(Path.GetFullPath(tests)),"rendered-evidence","mounted-course-"+tag+"-coordinated.json");
+            if(cases.Length!=1||cases[0].Attributes["result"]?.Value!="Passed"||!File.Exists(ApplyIo(native))||Digest(native)!=Digest(path))throw new InvalidOperationException("The exact canonical course receipt must belong to its genuinely passed specific native case; no metadata-only acceptance.");
+            var live=DragonRiderSaddleAuthoring.ValidateCanonicalMountPromotionSourceCertificate(promotion);
+            string folder=Root+"VisualCandidates/"+tag;RequireCanonicalMountedCourseMetadata(proof,tag,promotion,live,Digest("Assets/TruckDragonRiders/Scenes/TruckDragonRiders.unity"),Digest(folder+"/Shared Dragon Kingdom.prefab"),Digest(folder+"/DragonKingdomPreview.unity"),Digest(folder+"/Integration Receipt.json"));
+            foreach(var file in proof.qualifiedSource.currentSourceSnapshot)if(!File.Exists(ApplyIo(file.path))||!CourseSameHash(Digest(file.path),file.sha256))throw new InvalidOperationException("Canonical course source bytes changed after native review: "+file.path);
+            foreach(var rig in proof.rigs)if(!CourseSameHash(Digest(rig.controller),rig.controllerSha256)||rig.clips.Where((clip,index)=>!CourseSameHash(Digest(clip),rig.clipSha256[index])).Any())throw new InvalidOperationException("Canonical course controller/effective animation changed after native review.");
+        }
+    }
+}
+#endif

@@ -1,0 +1,27 @@
+PASS TruckMinefield saved Weather Maker match-time binding
+PASS TruckMinefield one actual Heat weather control and one time control
+PASS TruckMinefield-setup actual Windows backbuffer 1280x720
+PASS TruckMinefield-setup actual Windows backbuffer 1920x1080
+PASS TruckMinefield installed forecast Clear
+PASS TruckMinefield starts Clear|Day
+PASS TruckMinefield real vendor clock Clear|Day
+PASS TruckMinefield fixed fill off and short-match time frozen
+PASS TruckMinefield selected weather independently matches installed profile
+PASS TruckMinefield heat/attempt seed does not reroll active match time
+LIGHTS TruckMinefield Clear|Day Sun intensity=1 rotation=(42.52, 167.33, 0.00); Moon intensity=0 rotation=(318.70, 326.18, 0.00); Sports orthographic sun lookup intensity=1 rotation=(42.52, 167.33, 0.00) ambient=RGBA(0.382, 0.403, 0.500, 0.500)
+FRAME_TIME TruckMinefield Clear|Day medianMs=12.51 p95Ms=18.77 samples=60; whole-player frame interval, not isolated GPU/CPU profiling.
+PASS TruckMinefield-Clear-Day actual Windows backbuffer 1280x720
+PASS TruckMinefield-Clear-Day actual Windows backbuffer 1920x1080
+PASS TruckMinefield installed forecast Clear
+PASS TruckMinefield starts Clear|Night
+PASS TruckMinefield real vendor clock Clear|Night
+PASS TruckMinefield fixed fill off and short-match time frozen
+PASS TruckMinefield selected weather independently matches installed profile
+PASS TruckMinefield heat/attempt seed does not reroll active match time
+LIGHTS TruckMinefield Clear|Night Sun intensity=0 rotation=(324.03, 308.60, 0.00); Moon intensity=0.3369363 rotation=(19.80, 114.48, 0.00); Sports orthographic sun lookup intensity=0 rotation=(324.03, 308.60, 0.00) ambient=RGBA(0.145, 0.146, 0.250, 0.250)
+FRAME_TIME TruckMinefield Clear|Night medianMs=12.51 p95Ms=18.77 samples=60; whole-player frame interval, not isolated GPU/CPU profiling.
+PASS TruckMinefield-Clear-Night actual Windows backbuffer 1280x720
+PASS TruckMinefield-Clear-Night actual Windows backbuffer 1920x1080
+PASS returns to the real sport-selection menu after repeated weather/time matches
+Actual saved scenes and rendered Windows backbuffer; automatic match starts and software sources, not human/controller/listening acceptance. Frame samples include the complete player workload.
+CHECKS=21 ERRORS=0

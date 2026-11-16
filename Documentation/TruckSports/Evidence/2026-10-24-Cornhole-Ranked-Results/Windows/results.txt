@@ -1,0 +1,61 @@
+PASS collection startup
+PASS sixth menu entry authored
+PASS saved Cornhole setup
+PASS one listener
+PASS one EventSystem
+PASS begin 4 simultaneous courses
+PROGRESS round=1 totals=0,0,0,0 attempts=1:Approach:(0.00, 6.57, -20.93),1:Approach:(110.00, 6.57, -20.93),1:Approach:(220.00, 6.57, -20.93),1:Approach:(330.00, 6.57, -20.93)
+PROGRESS round=1 totals=0,0,0,0 attempts=2:AttemptResult:(-0.61, 2.30, 53.20),3:Approach:(110.00, 6.56, -20.93),2:Settling:(218.14, -9.96, 36.29),2:Settling:(330.24, -9.68, 50.32)
+PROGRESS round=1 totals=0,0,0,0 attempts=4:AttemptResult:(-0.41, -9.96, 52.18),4:AttemptResult:(112.19, 1.91, 52.57),4:Settling:(219.39, -9.96, 42.55),4:Settling:(330.16, -9.96, 45.62)
+PASS saved Cornhole uses existing Heat presenter through original lifecycle
+PASS actual banked notification visible and nonblocking final=False
+PASS actual banked capture resolution (1280, 720)
+PASS actual banked capture resolution (1920, 1080)
+PROGRESS round=2 totals=1,2,1,1 attempts=1:AttemptResult:(-1.00, -9.96, 39.34),1:AttemptResult:(109.22, -9.68, 40.74),1:AttemptResult:(219.14, -9.96, 41.82),1:AttemptResult:(329.75, -9.96, 41.20)
+PROGRESS round=2 totals=1,2,1,1 attempts=3:AttemptResult:(-1.37, -9.96, 44.80),3:AttemptResult:(109.90, -9.96, 46.14),3:AttemptResult:(219.93, -9.96, 47.81),3:AttemptResult:(330.48, -9.96, 46.70)
+PROGRESS round=3 totals=1,3,1,1 attempts=1:Flight:(0.09, 38.53, 36.46),1:Flight:(111.30, 38.13, 40.93),1:Flight:(220.51, 38.20, 39.23),1:Flight:(330.56, 38.04, 39.98)
+PROGRESS round=3 totals=1,3,1,1 attempts=3:Flight:(0.91, 35.36, 47.50),3:Flight:(110.17, 24.99, 49.77),3:Flight:(219.94, 25.78, 51.67),3:Flight:(329.99, 34.78, 47.80)
+PROGRESS round=4 totals=3,5,3,3 attempts=1:Approach:(0.03, 6.40, -20.53),1:Approach:(109.98, 6.40, -20.53),1:Approach:(220.00, 6.40, -20.53),1:Approach:(330.00, 6.40, -20.53)
+PROGRESS round=4 totals=3,5,3,3 attempts=3:Approach:(-0.01, 6.47, -20.77),3:Approach:(110.31, 5.73, -17.71),2:AttemptResult:(220.13, -9.96, 53.19),3:Approach:(329.97, 5.82, -18.07)
+PROGRESS round=4 totals=3,5,3,3 attempts=4:Waiting:(-1.01, 2.75, 57.33),4:Waiting:(109.68, 2.23, 56.03),4:AttemptResult:(219.84, 2.65, 58.37),4:Waiting:(329.89, 2.82, 59.35)
+PROGRESS round=5 totals=4,6,4,4 attempts=2:Settling:(-0.01, -9.68, 44.31),2:Flight:(110.66, 12.92, 42.20),2:Settling:(219.80, -9.96, 45.80),2:Settling:(329.85, -9.96, 45.88)
+PROGRESS round=5 totals=4,6,4,4 attempts=4:Settling:(-2.57, -9.96, 47.11),4:Flight:(108.41, 14.83, 41.05),4:Settling:(219.24, -9.96, 46.56),4:Settling:(328.87, -9.96, 46.49)
+PASS banked round awards retain unique event IDs, actual participant/color and no provisional points
+PASS confirmed banked deltas exactly reconstruct all original final totals
+PASS actual result board has one stable row per original participant
+PASS ranked cards preserve all actual totals, tied placements and original winners
+PASS actual retained bank statistics replace the old unsorted result text
+PASS result animation cannot change original banked totals
+PASS actual first bank captured or legitimate all-zero match creates no invented award
+PASS legitimate zero final round produces no fake scoring receipt
+PASS exactly five round finalizations
+PASS one finished course waits without freezing others
+PHYSICAL_MATCH launches=80 holed=0
+PASS four attempts per round no fifth / five banks 0
+PASS valid cumulative total 0
+AI difficulty=Easy total=4 timeouts=0
+PASS four attempts per round no fifth / five banks 1
+PASS valid cumulative total 1
+AI difficulty=Normal total=6 timeouts=0
+PASS four attempts per round no fifth / five banks 2
+PASS valid cumulative total 2
+AI difficulty=Hard total=4 timeouts=0
+PASS four attempts per round no fifth / five banks 3
+PASS valid cumulative total 3
+AI difficulty=Hard total=4 timeouts=0
+PASS final winner or tie
+PASS shared aftertouch bound throughout match
+PASS final throw review 0
+PASS final replay caption describes already banked points 0
+PASS final throw review 1
+PASS final replay caption describes already banked points 1
+PASS final throw review 2
+PASS final replay caption describes already banked points 2
+PASS final throw review 3
+PASS final replay caption describes already banked points 3
+PASS standings exit remains available after replay stops
+PASS final review returns to standings
+PERF duration=116.1129 frames=14647 meanMs=7.68794177709584 p95=12.5156 p99=12.5419 maxMs=125.0218 managedDelta=2445312 gen0=64 GPU=NVIDIA GeForce GTX 1660 Ti size=1280x720 timescale=3
+PASS rematch preserves configuration resets score/body pool
+CHECKS 41
+CHECKS=41 ERRORS=0

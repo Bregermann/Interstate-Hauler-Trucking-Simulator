@@ -1,0 +1,746 @@
+{
+  "scope": "SOURCE_REPAIR_OF_ALL_V66_RECORDS_NOT_NATIVE_WORLD_ACCEPTANCE",
+  "nativeBaseline": {
+    "testedContacts": 7809,
+    "failureRecords": 51,
+    "uniqueBlockingRoots": 8
+  },
+  "categories": [
+    {
+      "edge": "castle-pass",
+      "category": "body-roof-clearance",
+      "count": 7
+    },
+    {
+      "edge": "castle-pass",
+      "category": "support-obstruction",
+      "count": 1
+    },
+    {
+      "edge": "forest-nests",
+      "category": "support-obstruction",
+      "count": 12
+    },
+    {
+      "edge": "forest-nests",
+      "category": "body-roof-clearance",
+      "count": 17
+    },
+    {
+      "edge": "castle-caverns",
+      "category": "body-roof-clearance",
+      "count": 3
+    },
+    {
+      "edge": "forest-caverns",
+      "category": "body-roof-clearance",
+      "count": 7
+    },
+    {
+      "edge": "caverns-volcano",
+      "category": "body-roof-clearance",
+      "count": 3
+    },
+    {
+      "edge": "caverns-volcano",
+      "category": "support-obstruction",
+      "count": 1
+    }
+  ],
+  "roots": [
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Vista terrain tile 1 1",
+      "sourceAsset": "",
+      "failureRecords": 3
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Owned stone viaduct volcano-pass over castle-pass span 3",
+      "sourceAsset": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/prefabs/props/P_PROP_bridge_stone_01.prefab",
+      "failureRecords": 3
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Owned stone viaduct pass-refuge over castle-pass span 4",
+      "sourceAsset": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/prefabs/props/P_PROP_bridge_stone_01.prefab",
+      "failureRecords": 2
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Vista terrain tile 0 0",
+      "sourceAsset": "",
+      "failureRecords": 29
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Vista terrain tile 1 0",
+      "sourceAsset": "",
+      "failureRecords": 3
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Owned stone viaduct castle-pass over forest-caverns span 4",
+      "sourceAsset": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/prefabs/props/P_PROP_bridge_stone_01.prefab",
+      "failureRecords": 2
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Owned stone viaduct castle-pass over forest-caverns span 2",
+      "sourceAsset": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/prefabs/props/P_PROP_bridge_stone_01.prefab",
+      "failureRecords": 5
+    },
+    {
+      "hierarchy": "Dragon Kingdom preview and terrain/Shared Dragon Kingdom/Owned stone viaduct volcano-pass over caverns-volcano span 2",
+      "sourceAsset": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/prefabs/props/P_PROP_bridge_stone_01.prefab",
+      "failureRecords": 4
+    }
+  ],
+  "failureCoverage": [
+    {
+      "edge": "castle-pass",
+      "sample": 205,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": 711.50830078125,
+        "y": 193.48484802246094,
+        "z": 1236.95458984375
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 206,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": 718.7422485351562,
+        "y": 194.242431640625,
+        "z": 1240.0357666015625
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 206,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": 718.7422485351562,
+        "y": 194.242431640625,
+        "z": 1240.0357666015625
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 272,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 292.3724060058594,
+        "y": 227.6271209716797,
+        "z": 1308.481201171875
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 273,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 284.4706726074219,
+        "y": 228.2203369140625,
+        "z": 1309.3504638671875
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 277,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": 251.33282470703125,
+        "y": 230.5932159423828,
+        "z": 1298.9111328125
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 358,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -153.70811462402344,
+        "y": 277.29730224609375,
+        "z": 1256.61083984375
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "castle-pass",
+      "sample": 359,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -149.07025146484375,
+        "y": 278.2432556152344,
+        "z": 1250.427001953125
+      },
+      "sourceRepair": "Adaptive angle-based level turn throats; narrow arch aperture fitting; rerouted pass-refuge removes one crossing; volcano approach moves its upper bend outside the retained opening."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 55,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1052.9443359375,
+        "y": 72.0,
+        "z": 447.267333984375
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 55,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1052.9443359375,
+        "y": 72.0,
+        "z": 447.267333984375
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 56,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1045.265380859375,
+        "y": 73.0,
+        "z": 449.1444091796875
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 56,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1045.265380859375,
+        "y": 73.0,
+        "z": 449.1444091796875
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 57,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1037.5865478515625,
+        "y": 74.0,
+        "z": 451.021484375
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 57,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1037.5865478515625,
+        "y": 74.0,
+        "z": 451.021484375
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 58,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1029.9075927734375,
+        "y": 75.0,
+        "z": 452.8985290527344
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 101,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -699.715087890625,
+        "y": 118.0,
+        "z": 533.6122436523438
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 102,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -692.0362548828125,
+        "y": 119.0,
+        "z": 535.4893188476562
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 102,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -692.0362548828125,
+        "y": 119.0,
+        "z": 535.4893188476562
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 156,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1013.8341064453125,
+        "y": 163.79629516601562,
+        "z": 617.6334838867188
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 156,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1013.8341064453125,
+        "y": 163.79629516601562,
+        "z": 617.6334838867188
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 156,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": -1012.5831909179688,
+        "y": 163.79629516601562,
+        "z": 623.0919799804688
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 156,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1011.332275390625,
+        "y": 163.79629516601562,
+        "z": 628.5504760742188
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "support-obstruction",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1021.4955444335938,
+        "y": 164.8148193359375,
+        "z": 619.3892211914062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1021.4955444335938,
+        "y": 164.8148193359375,
+        "z": 619.3892211914062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "support-obstruction",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": -1020.24462890625,
+        "y": 164.8148193359375,
+        "z": 624.8477172851562
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": -1020.24462890625,
+        "y": 164.8148193359375,
+        "z": 624.8477172851562
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "support-obstruction",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1018.9937133789062,
+        "y": 164.8148193359375,
+        "z": 630.3062133789062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 157,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1018.9937133789062,
+        "y": 164.8148193359375,
+        "z": 630.3062133789062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 158,
+      "category": "body-roof-clearance",
+      "lateralOffset": -0.3499999940395355,
+      "expected": {
+        "x": -1029.1571044921875,
+        "y": 165.8333282470703,
+        "z": 621.1449584960938
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 158,
+      "category": "support-obstruction",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": -1027.9061279296875,
+        "y": 165.8333282470703,
+        "z": 626.6034545898438
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 158,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": -1027.9061279296875,
+        "y": 165.8333282470703,
+        "z": 626.6034545898438
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 158,
+      "category": "support-obstruction",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1026.6551513671875,
+        "y": 165.8333282470703,
+        "z": 632.0619506835938
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 158,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1026.6551513671875,
+        "y": 165.8333282470703,
+        "z": 632.0619506835938
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 165,
+      "category": "support-obstruction",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1080.2852783203125,
+        "y": 172.9629669189453,
+        "z": 644.3522338867188
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 165,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1080.2852783203125,
+        "y": 172.9629669189453,
+        "z": 644.3522338867188
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 166,
+      "category": "support-obstruction",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1087.94677734375,
+        "y": 173.98147583007812,
+        "z": 646.1079711914062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "forest-nests",
+      "sample": 166,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": -1087.94677734375,
+        "y": 173.98147583007812,
+        "z": 646.1079711914062
+      },
+      "sourceRepair": "Longer, raised switchbacks with angle-based level throats; actual creek structural spans; XYZ-straight channel grading."
+    },
+    {
+      "edge": "castle-caverns",
+      "sample": 128,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 707.0,
+        "y": 102.31578826904297,
+        "z": 676.9473876953125
+      },
+      "sourceRepair": "132m shared-fork level approaches; unchanged actual common junction pavement."
+    },
+    {
+      "edge": "castle-caverns",
+      "sample": 129,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 707.0,
+        "y": 103.21052551269531,
+        "z": 684.631591796875
+      },
+      "sourceRepair": "132m shared-fork level approaches; unchanged actual common junction pavement."
+    },
+    {
+      "edge": "castle-caverns",
+      "sample": 130,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 707.0,
+        "y": 104.10526275634766,
+        "z": 692.3157958984375
+      },
+      "sourceRepair": "132m shared-fork level approaches; unchanged actual common junction pavement."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 171,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 272.79998779296875,
+        "y": 95.0,
+        "z": 893.7000122070312
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 172,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 279.6000061035156,
+        "y": 95.0,
+        "z": 893.7000122070312
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 183,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 293.70001220703125,
+        "y": 95.0,
+        "z": 843.7142944335938
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 184,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 293.70001220703125,
+        "y": 95.0,
+        "z": 836.2857055664062
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 185,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": 300.0,
+        "y": 95.0,
+        "z": 828.8571166992188
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 187,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.0,
+      "expected": {
+        "x": 300.0,
+        "y": 95.0,
+        "z": 814.0
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "forest-caverns",
+      "sample": 187,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 293.70001220703125,
+        "y": 95.0,
+        "z": 814.0
+      },
+      "sourceRepair": "Replace double-crossing dogleg with one direct lower traverse; fit complete stone arch aperture instead of outer bounds; merged whole openings with no waypoint pier."
+    },
+    {
+      "edge": "caverns-volcano",
+      "sample": 82,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 903.6744384765625,
+        "y": 154.6666717529297,
+        "z": 1110.52490234375
+      },
+      "sourceRepair": "Longer first climb preserves sensible grade after132m level fork; owned upper stone arch fitted around true opening."
+    },
+    {
+      "edge": "caverns-volcano",
+      "sample": 83,
+      "category": "support-obstruction",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 911.1160278320312,
+        "y": 155.88888549804688,
+        "z": 1112.75732421875
+      },
+      "sourceRepair": "Longer first climb preserves sensible grade after132m level fork; owned upper stone arch fitted around true opening."
+    },
+    {
+      "edge": "caverns-volcano",
+      "sample": 83,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 911.1160278320312,
+        "y": 155.88888549804688,
+        "z": 1112.75732421875
+      },
+      "sourceRepair": "Longer first climb preserves sensible grade after132m level fork; owned upper stone arch fitted around true opening."
+    },
+    {
+      "edge": "caverns-volcano",
+      "sample": 84,
+      "category": "body-roof-clearance",
+      "lateralOffset": 0.3499999940395355,
+      "expected": {
+        "x": 918.5574951171875,
+        "y": 157.11111450195312,
+        "z": 1114.9898681640625
+      },
+      "sourceRepair": "Longer first climb preserves sensible grade after132m level fork; owned upper stone arch fitted around true opening."
+    }
+  ],
+  "bridgeMeshMeasurement": {
+    "source": "Assets/TruckDragonKingdom/PrivateLicensedEnvironment/Plugins/Tidal Flask Studios/Fantastic Village Pack/3d/props/SM_PROP_bridge_stone_01.fbx",
+    "actualVertexCount": 227,
+    "sourceBoundsXYZ": [
+      [
+        -177.2993,
+        -2.98389,
+        -437.30026
+      ],
+      [
+        179.76884,
+        318.72931,
+        496.05807
+      ]
+    ],
+    "apertureAtHalfHeightZ": [
+      -87.2,
+      145.9
+    ],
+    "wholeLength": 933.35834,
+    "apertureLengthFractionAtHalfHeight": 0.24996,
+    "authoringOpeningFraction": 0.22,
+    "wholeVisibleAndCollisionGeometryRetained": true
+  },
+  "verification": {
+    "sourceCompiler": "Actual Unity6000.4.10f1/project/vendor reference assemblies; zero errors/warnings",
+    "sourceGradeMaximumPercent": 17.5384619536,
+    "drivableGraphLinks": 18,
+    "roadOverpasses": 3,
+    "forestWaterCrossings": 4,
+    "physicalGatesChanged": false,
+    "vendorSourceChanged": false,
+    "nativeEditorRunByThisAgent": false,
+    "acceptedWorld": false
+  },
+  "limitations": [
+    "Source crossings and measured model aperture cannot prove native collision or visual quality.",
+    "Native retry must preserve failed generated terrain/models/definition before changed authoring.",
+    "Actual NWH driving and human visual/play acceptance remain outstanding."
+  ]
+}

@@ -1,0 +1,138 @@
+#if UNITY_EDITOR && VISTA
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using LWS.TruckDragonKingdom;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace LWS.TruckDragonRiders.Editor
+{
+    public static partial class DragonRiderSaddleAuthoring
+    {
+        const string CanonicalCertificateEditorSource="Assets/TruckDragonRiders/Editor/DragonRiderSaddleAuthoring.ProductionCandidate.cs";
+        [Serializable] sealed class CanonicalSourceCertificateProof
+        {
+            public string scope,status,receipt,receiptSha256,projectRoot,target,oldSceneSha256,currentSceneSha256,metaSha256;
+            public bool productionEligible,currentProfilesExact,currentExternalConfigurationExact,currentWorldExact,currentNwhExact,unitAncestors,noTestDependencies,sourceClosureExact;
+            public int choices,originalTrucks,recordedInfernoPoses=699,recordedFirePoses=537,freshPoseSamples,protectedFiles;
+            public float maximumNwhDimensionDrift;public string testEditorOldSha256,testEditorCurrentSha256;
+        }
+        sealed class CanonicalMountSourceAuthority
+        {
+            public readonly CanonicalSourceCertificateProof proof;
+            public CanonicalMountSourceAuthority(CanonicalSourceCertificateProof proof){this.proof=proof;}
+        }
+        static bool CanonicalCertificateSame(string a,string b)=>string.Equals(a,b,StringComparison.OrdinalIgnoreCase);
+        static string CanonicalCertificatePhysical(string path)=>Path.GetFullPath(CurrentRiderPhysicalDependency(path));
+        static void RequireProductionCanonicalSourceAuthority(CanonicalMountSourceAuthority authority)
+        {
+            if(authority==null||!authority.proof.productionEligible||authority.proof.target!=DragonRidersAuthoring.ScenePath||!CanonicalCertificateSame(authority.proof.projectRoot,Directory.GetParent(Application.dataPath).FullName))throw new InvalidOperationException("A validated production canonical source authority is required; TEST_ONLY authority cannot enter production guards.");
+        }
+        static string CertifiedCanonicalSourceRowExpected(CanonicalMountSourceAuthority authority,string path,string recordedSha256,bool testOnly)
+        {
+            if(authority==null)return recordedSha256;
+            // No metadata, prefab, controller or runtime path receives a
+            // substitute hash. Their existing exact comparisons remain sole
+            // authority. Test tokens bind their own disposable path only.
+            if(path.Replace('\\','/')!=authority.proof.target)return recordedSha256;
+            if(!testOnly)RequireProductionCanonicalSourceAuthority(authority);
+            if(!CanonicalCertificateSame(recordedSha256,authority.proof.oldSceneSha256)||!CanonicalCertificateSame(Hash(CanonicalCertificatePhysical(path)),authority.proof.currentSceneSha256)||!CanonicalCertificateSame(Hash(CanonicalCertificatePhysical(path+".meta")),authority.proof.metaSha256))throw new InvalidOperationException("Certified canonical source row old/new/meta bytes no longer match the exact authorized chain.");
+            return authority.proof.currentSceneSha256;
+        }
+        static void RequireCanonicalCertificateHeader(CanonicalMountApply apply,bool testOnly)
+        {
+            string expected=testOnly?"DISPOSABLE_CANONICAL_PLAN_APPLY_VALIDATED_NOT_CANONICAL":"CANONICAL_MOUNTS_PROMOTED_REQUIRES_COURSE_WORLD_AND_GAMEPLAY_VALIDATION";
+            if(apply==null||apply.plan==null||apply.canonicalTarget==testOnly||apply.status!=expected||!string.IsNullOrEmpty(apply.failure)||apply.nativeCalls!=8||!apply.allOriginalChoicesPreflighted||!apply.otherSevenEveryStepExact||!apply.externalIdentitiesExact||!apply.configurationExact||!apply.worldExact||!apply.nwhExact||!apply.profilesExact||!apply.unitAncestors||!apply.noTestDependencies||!apply.savedReloaded||!apply.sourceClosureExact||apply.protectedRacers!=4||apply.protectedTrucks!=4||apply.protectedRings!=12||apply.protectedExternalObjects<1000||apply.maximumNwhDimensionDrift>.00001f||apply.choices?.Length!=8)throw new InvalidOperationException("A successful exact canonical Apply is required; disposable receipts cannot authorize production canonical source rows.");
+            if(apply.plan.scene!=DragonRidersAuthoring.ScenePath||!CanonicalCertificateSame(apply.plan.projectRoot,Directory.GetParent(Application.dataPath).FullName)||!CanonicalCertificateSame(apply.projectRoot,apply.plan.projectRoot)||!CanonicalCertificateSame(Path.GetFullPath(apply.targetPhysicalPath),Path.GetFullPath(apply.target))||(!testOnly&&apply.target!=DragonRidersAuthoring.ScenePath)||(testOnly&&(!apply.target.StartsWith("Assets/TruckDragonRiders/Tests/Generated/CanonicalPromotion-",StringComparison.Ordinal)||apply.target.Contains(".."))))throw new InvalidOperationException("Canonical certificate project/physical target ownership changed.");
+            if(!CanonicalCertificateSame(apply.sourceSha256,apply.plan.sceneSha256)||CanonicalCertificateSame(apply.sourceSha256,apply.resultSha256)||!CanonicalCertificateSame(Hash(apply.target),apply.resultSha256)||!CanonicalCertificateSame(Hash(apply.target+".meta"),apply.metaSha256)||!CanonicalCertificateSame(Hash(DragonRidersAuthoring.ScenePath+".meta"),apply.plan.metaSha256)||AssetDatabase.AssetPathToGUID(DragonRidersAuthoring.ScenePath)!=apply.plan.sceneGuid||(!testOnly&&!CanonicalCertificateSame(apply.metaSha256,apply.plan.metaSha256)))throw new InvalidOperationException("Canonical certificate original/result scene or unchanged metadata/GUID chain changed.");
+            if(!CanonicalCertificateSame(Hash(Path.Combine(apply.backupFolder,"before.unity")),apply.sourceSha256)||!CanonicalCertificateSame(Hash(Path.Combine(apply.backupFolder,"before.unity.meta")),apply.metaSha256))throw new InvalidOperationException("Actual source-closed pre-Apply backup changed.");
+            if(!CanonicalCertificateSame(HashTextForNativeReplacement(JsonUtility.ToJson(apply.plan,true)),apply.planSha256)||apply.plan.protectedSources==null||apply.plan.protectedSources.Length<1000)throw new InvalidOperationException("Canonical Apply plan payload or complete protected source inventory changed; recordedPlan="+apply.planSha256+" roundTripPlan="+HashTextForNativeReplacement(JsonUtility.ToJson(apply.plan,true)));
+        }
+        static NativeEightReceipt RequireCanonicalCertificateEightAuthority(CanonicalMountApply apply)
+        {
+            const string test="DragonRiderNativeEightReplacementTests.ActualEightChoiceNativeReplacementPreservesOwnersAndRejectsLastChoiceEditBeforeStepZero";RequireRiderPassedManifest(apply.eightEvidence,test+"(False)");RequireRiderPassedManifest(apply.eightEvidence,test+"(True)");
+            if(Path.GetFullPath(apply.eightEvidence)!=Path.GetFullPath(apply.plan.eightEvidence)||Path.GetFullPath(apply.productionEvidence)!=Path.GetFullPath(apply.plan.productionEvidence)||!CanonicalCertificateSame(Hash(Path.Combine(apply.eightEvidence,"tests.xml")),apply.plan.eightTestsSha256)||!CanonicalCertificateSame(Hash(CanonicalEightReceiptPath(apply.eightEvidence)),apply.plan.eightReceiptSha256))throw new InvalidOperationException("Canonical Apply no longer binds its actual passed eight-choice evidence.");
+            var eight=JsonUtility.FromJson<NativeEightReceipt>(File.ReadAllText(CanonicalEightReceiptPath(apply.eightEvidence)));
+            if(eight.status!="DISPOSABLE_ALL_EIGHT_NATIVE_REPLACEMENTS_VALIDATED_NOT_CANONICAL"||!string.IsNullOrEmpty(eight.failure)||!eight.originalSourcesExact||!eight.externalIdentitiesExact||!eight.externalConfigurationExact||!eight.worldExact||!eight.nwhExact||!eight.qualifiedProfilesExact||!eight.savedReloaded||!eight.unitAncestors||!eight.noTestAssetDependencies||!eight.allOriginalChoicesPreflighted||!eight.otherSevenEveryStepExact||eight.nativeCalls!=8||eight.replacedChoices!=8||eight.choices?.Length!=8||eight.protectedRacers!=4||eight.protectedTrucks!=4||eight.protectedPhysicalRings!=12||eight.protectedExternalObjects!=apply.protectedExternalObjects||Path.GetFullPath(eight.productionEvidence)!=Path.GetFullPath(apply.productionEvidence))throw new InvalidOperationException("Actual eight-profile native baseline authority changed.");
+            var old=eight.originalSources.Where(row=>row.path.Replace('\\','/')==DragonRidersAuthoring.ScenePath).ToArray();if(old.Length!=1||!CanonicalCertificateSame(old[0].sha256,apply.sourceSha256)||eight.externalBefore!=apply.externalBefore||eight.worldBefore!=apply.worldBefore||apply.externalBefore!=apply.externalAfter||apply.worldBefore!=apply.worldAfter||apply.plan.externalConfiguration!=apply.externalBefore||apply.plan.worldState!=apply.worldBefore)throw new InvalidOperationException("Exact original scene/external configuration/world authority no longer chains to canonical Apply.");return eight;
+        }
+        static void RequireCanonicalCertificateProtectedSources(CanonicalMountApply apply,CanonicalSourceCertificateProof output,bool testOnly,string testEvidence)
+        {
+            foreach(var row in apply.plan.protectedSources)
+            {
+                string current=Hash(CanonicalCertificatePhysical(row.path));if(CanonicalCertificateSame(current,row.sha256))continue;
+                // This one TEST_ONLY authoring transition is unavoidable when
+                // exercising the new strict wrapper against the already saved
+                // V426 control. It is not a producer data exception, cannot
+                // create production authority and never applies to metadata.
+                if(!testOnly||row.path.Replace('\\','/')!=CanonicalCertificateEditorSource)throw new InvalidOperationException("Canonical certificate protected source changed: "+row.path);
+                var old=JsonUtility.FromJson<FlightSourceRows>("{\"rows\":"+File.ReadAllText(Path.Combine(testEvidence,"input-manifest.json"))+"}").rows.Single(p=>p.path==CanonicalCertificateEditorSource);
+                var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-tsDragonOutput");if(at<0||at+1>=args.Length)throw new InvalidOperationException("Actual native input context required for fixed test-only Editor transition.");string native=Path.Combine(Directory.GetParent(Path.GetFullPath(args[at+1])).FullName,"input-manifest.json");var fresh=JsonUtility.FromJson<FlightSourceRows>("{\"rows\":"+File.ReadAllText(native)+"}").rows.Single(p=>p.path==CanonicalCertificateEditorSource);
+                if(!CanonicalCertificateSame(old.sha256,row.sha256)||!CanonicalCertificateSame(fresh.sha256,current))throw new InvalidOperationException("Fixed TEST_ONLY Editor old/current native source identities differ.");output.testEditorOldSha256=row.sha256;output.testEditorCurrentSha256=current;
+            }
+            output.protectedFiles=apply.plan.protectedSources.Length;
+        }
+        static CanonicalMountSourceAuthority ReadCanonicalMountSourceAuthority(string receiptPath,CanonicalMountApply apply,bool testOnly,string testEvidence)
+        {
+            RequirePromotionEditorContext();RequireCanonicalCertificateHeader(apply,testOnly);var eight=RequireCanonicalCertificateEightAuthority(apply);var production=ReadQualifiedCourseProduction(apply.productionEvidence);
+            var proof=new CanonicalSourceCertificateProof{scope=testOnly?"TEST_ONLY_EXISTING_SAVED_DISPOSABLE_RESULT_NO_PRODUCTION_AUTHORITY":"ONE_EXACT_CANONICAL_SCENE_ROW_ORIGINAL_SHA_TO_SUCCESSFUL_APPLY_SHA_NOT_COURSE_WORLD_OR_FRESH_POSE_ACCEPTANCE",receipt=receiptPath,receiptSha256=Hash(receiptPath),projectRoot=apply.projectRoot,target=apply.target,oldSceneSha256=apply.sourceSha256,currentSceneSha256=apply.resultSha256,metaSha256=apply.metaSha256,productionEligible=!testOnly};var authority=new CanonicalMountSourceAuthority(proof);
+            for(int i=0;i<2;i++)
+            {
+                string nativeCase=production.species[i]=="dragon-fire"?"DragonRiderMotorRootRepresentationTests.UnitAncestorsAndInactiveFireMotorRootRetainFull537GeometryAndExportPristineTestFixture":"DragonRiderMotorRootRepresentationTests.UnitAncestorsAndInactiveConfiguredMotorRootRetainFull699GeometryAndMeasureActualTruckCenteredCourseEnvelope";var manifest=RequireRiderPassedManifest(production.producerEvidence[i],nativeCase);var sceneRows=manifest.Where(row=>row.path.Replace('\\','/')==DragonRidersAuthoring.ScenePath).ToArray();var metaRows=manifest.Where(row=>row.path.Replace('\\','/')==DragonRidersAuthoring.ScenePath+".meta").ToArray();if(sceneRows.Length!=1||metaRows.Length!=1||!CanonicalCertificateSame(sceneRows[0].sha256,proof.oldSceneSha256)||!CanonicalCertificateSame(metaRows[0].sha256,apply.plan.metaSha256))throw new InvalidOperationException("Canonical source certificate must chain to BOTH original producer scene/meta rows.");
+            }
+            RequireCanonicalCertificateProtectedSources(apply,proof,testOnly,testEvidence);
+            var mounts=production.species.Select((s,i)=>testOnly?RequireQualifiedProductionMount(production.producerEvidence[i],production.runtimeEvidence[i]):RequireQualifiedProductionMountFromCanonicalSource(production.producerEvidence[i],production.runtimeEvidence[i],authority)).ToArray();var aliases=mounts.Select((m,i)=>QualifiedCourseControllerAliases(m.fixture.controller,production.controllers[i])).ToArray();var signatures=new string[2];
+            for(int i=0;i<2;i++)
+            {
+                if(mounts[i].species!=production.species[i])throw new InvalidOperationException("Canonical source species order changed.");if(!testOnly)RequireProductionSourceSceneFromCanonicalSource(DragonRidersAuthoring.ScenePath,mounts[i].producerManifest,apply.plan.courseEvidence,authority);var source=PrefabUtility.LoadPrefabContents(mounts[i].fixture.prefab);try{signatures[i]=ProductionActorSignature(source.GetComponent<DragonCharacter>(),aliases[i]);}finally{PrefabUtility.UnloadPrefabContents(source);}
+                if(eight.choices.Where(row=>row.species==mounts[i].species).Count()!=4||eight.choices.Where(row=>row.species==mounts[i].species).Any(row=>row.qualifiedSignature!=HashTextForNativeReplacement(signatures[i])))throw new InvalidOperationException("Current canonical profiles lost original actual native geometry identity.");
+            }
+            var context=new CanonicalMountContext{production=production,baseline=eight,mounts=mounts,aliases=aliases,signatures=signatures};if(!CanonicalMountProtectedPaths(context,DragonRidersAuthoring.ScenePath,apply.eightEvidence).SequenceEqual(apply.plan.protectedSources.Select(row=>row.path)))throw new InvalidOperationException("Canonical certificate protected source inventory membership changed.");
+            var setup=EditorSceneManager.GetSceneManagerSetup();Scene scene=default;var watched=apply.plan.protectedSources.Select(row=>CanonicalCertificatePhysical(row.path)).Concat(new[]{receiptPath,apply.target,apply.target+".meta",Path.Combine(apply.backupFolder,"before.unity"),Path.Combine(apply.backupFolder,"before.unity.meta")}).Distinct().ToDictionary(path=>path,path=>Hash(path));
+            try
+            {
+                scene=EditorSceneManager.OpenScene(apply.target,OpenSceneMode.Single);var match=CourseMatch(scene);var actors=NativeEightActors(match);proof.currentProfilesExact=true;proof.unitAncestors=true;
+                for(int i=0;i<8;i++)
+                {
+                    var row=apply.choices[i];var actor=actors[i];int species=Array.IndexOf(production.species,row.species);if(row.slot!=i/2||row.index!=i%2||match.racers[i/2].choiceIds[i%2]!=row.species||species<0)throw new InvalidOperationException("Canonical current choice roster changed.");proof.currentProfilesExact&=NativeReplacementIdentity(actor.gameObject)==row.targetAfter&&row.targetAfter==row.targetReloaded&&NativeReplacementIdentity(actor)==row.actorAfter&&row.actorAfter==row.actorReloaded&&NativeEightRootPlacement(actor.transform)==row.rootPlacement&&!actor.gameObject.activeSelf&&actor.GetComponent<DragonRiderSaddle>().rigging.truck==match.trucks[row.slot]&&PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(actor.gameObject)==production.actorPrefabs[species]&&ProductionActorSignature(actor,aliases[species])==signatures[species];for(var t=actor.transform;t!=null;t=t.parent)proof.unitAncestors&=t.localScale.Equals(Vector3.one);proof.choices++;
+                }
+                proof.currentExternalConfigurationExact=HashTextForNativeReplacement(ProductionSceneConfiguration(scene,new HashSet<GameObject>(actors.Select(a=>a.gameObject))))==apply.externalAfter;proof.currentWorldExact=HashTextForNativeReplacement(NativeReplacementWorldState(match.world))==apply.worldAfter;proof.noTestDependencies=!AssetDatabase.GetDependencies(apply.target,true).Any(path=>path!=apply.target&&path.Contains("/Tests/Generated/"));if(match.gates.Length!=12||CoursePhysicalGates(scene).Length!=12||NativeEightProtectedIds(scene,actors).Count!=apply.protectedExternalObjects)throw new InvalidOperationException("Canonical protected course/external identities changed.");var currentNwh=CaptureProductionNwhFields(match);proof.originalTrucks=match.trucks.Length;
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);scene=EditorSceneManager.OpenScene(production.candidateScene,OpenSceneMode.Single);var reference=CaptureProductionNwhFields(CourseMatch(scene));proof.currentNwhExact=ExactProductionNwhFields(reference,currentNwh)&&FiniteWorldBoxDimensionsAgree(reference,currentNwh,out proof.maximumNwhDimensionDrift);
+                if(!proof.currentProfilesExact||!proof.unitAncestors||!proof.currentExternalConfigurationExact||!proof.currentWorldExact||!proof.noTestDependencies||!proof.currentNwhExact||proof.choices!=8||proof.originalTrucks!=4)throw new InvalidOperationException("Canonical current native profiles/external/world/original NWH semantic requalification failed.");
+            }
+            finally{if(scene.IsValid()&&scene.isLoaded)EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);if(setup.Length>0)EditorSceneManager.RestoreSceneManagerSetup(setup);}
+            proof.sourceClosureExact=watched.All(row=>CanonicalCertificateSame(Hash(row.Key),row.Value));if(!proof.sourceClosureExact||!CanonicalCertificateSame(Hash(apply.target),proof.currentSceneSha256))throw new InvalidOperationException("Canonical certificate read-only source/target bytes changed after editor cleanup.");proof.status=testOnly?"TEST_ONLY_SAVED_COPY_CHAIN_VALIDATED_NOT_CANONICAL":"CURRENT_CANONICAL_SINGLE_SOURCE_ROW_CERTIFIED_RECORDED_NATIVE_POSES_NOT_NEW_REPLAY";return authority;
+        }
+        public static string ValidateCanonicalMountPromotionSourceCertificate(string receiptPath)
+        {
+            var apply=JsonUtility.FromJson<CanonicalMountApply>(File.ReadAllText(receiptPath));return JsonUtility.ToJson(ReadCanonicalMountSourceAuthority(receiptPath,apply,false,null).proof,true);
+        }
+        [Serializable] sealed class CanonicalSourceControlProof
+        {public string scope="TEST_ONLY_REUSES_ACTUAL_V426_SAVED_RESULT_NO_CANONICAL_WRITES_OR_NEW_EIGHT_REPLACEMENTS";public bool savedCopyValidated,publicReaderRejectsDisposable,productionGuardRejectsTestAuthority,defaultChangedRowRejected,otherRowsStrict,sourceBytesExact;public int headerFaultsRejected;public CanonicalSourceCertificateProof savedCopy;}
+        public static string ProbeCanonicalMountSourceCertificateControls(string evidence)
+        {
+            RequireRiderPassedManifest(evidence,"DragonRiderCanonicalMountPromotionTests.DisposableCanonicalPlanApplyPreservesOriginalsAndRejectsOrRollsBackFaults(\"baseline\")");string path=Path.Combine(evidence,"rendered-evidence","RiderSaddleAuthoring","CanonicalMountPromotion","mount-promotion-baseline.json");var before=File.ReadAllBytes(path);var original=File.ReadAllBytes(DragonRidersAuthoring.ScenePath);var meta=File.ReadAllBytes(DragonRidersAuthoring.ScenePath+".meta");var apply=JsonUtility.FromJson<CanonicalMountApply>(File.ReadAllText(path));var output=new CanonicalSourceControlProof();
+            try
+            {
+                try{ValidateCanonicalMountPromotionSourceCertificate(path);}catch(InvalidOperationException){output.publicReaderRejectsDisposable=true;}if(!output.publicReaderRejectsDisposable)throw new InvalidOperationException("Disposable source must never create public canonical authority.");
+                var authority=ReadCanonicalMountSourceAuthority(path,apply,true,evidence);output.savedCopy=authority.proof;output.savedCopyValidated=authority.proof.currentProfilesExact&&authority.proof.sourceClosureExact&&!authority.proof.productionEligible;
+                try{RequireProductionCanonicalSourceAuthority(authority);}catch(InvalidOperationException){output.productionGuardRejectsTestAuthority=true;}
+                string Expected(CanonicalMountSourceAuthority token,string source,string recorded)=>CertifiedCanonicalSourceRowExpected(token,source,recorded,true);if(!CanonicalCertificateSame(Expected(authority,apply.target,apply.sourceSha256),apply.resultSha256))throw new InvalidOperationException("Saved copy old/new row matcher failed.");
+                output.defaultChangedRowRejected=!CanonicalCertificateSame(Hash(apply.target),Expected(null,apply.target,apply.sourceSha256));output.otherRowsStrict=Expected(authority,apply.target+".meta",apply.plan.metaSha256)==apply.plan.metaSha256&&Expected(authority,DragonRidersAuthoring.ScenePath,apply.sourceSha256)==apply.sourceSha256&&Expected(authority,"Assets/Unrelated.prefab","unchanged")=="unchanged";
+                try{Expected(authority,apply.target,"WRONG_ORIGINAL_SHA");}catch(InvalidOperationException){output.headerFaultsRejected++;}
+                foreach(string fault in new[]{"old-sha","new-sha","metadata","project","target","source-closure","profiles","world","config"})
+                {
+                    var changed=JsonUtility.FromJson<CanonicalMountApply>(File.ReadAllText(path));if(fault=="old-sha")changed.sourceSha256="WRONG";if(fault=="new-sha")changed.resultSha256="WRONG";if(fault=="metadata")changed.metaSha256="WRONG";if(fault=="project")changed.projectRoot="F:/WrongProject";if(fault=="target")changed.target="Assets/Unrelated.unity";if(fault=="source-closure")changed.sourceClosureExact=false;if(fault=="profiles")changed.profilesExact=false;if(fault=="world")changed.worldExact=false;if(fault=="config")changed.configurationExact=false;try{RequireCanonicalCertificateHeader(changed,true);}catch(InvalidOperationException){output.headerFaultsRejected++;}
+                }
+                if(!output.savedCopyValidated||!output.productionGuardRejectsTestAuthority||!output.defaultChangedRowRejected||!output.otherRowsStrict||output.headerFaultsRejected!=10)throw new InvalidOperationException("Canonical single-row source controls failed.");
+            }
+            finally{output.sourceBytesExact=before.SequenceEqual(File.ReadAllBytes(path))&&original.SequenceEqual(File.ReadAllBytes(DragonRidersAuthoring.ScenePath))&&meta.SequenceEqual(File.ReadAllBytes(DragonRidersAuthoring.ScenePath+".meta"));var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-tsDragonOutput");if(at>=0&&at+1<args.Length){string folder=Path.Combine(args[at+1],"RiderSaddleAuthoring","CanonicalSourceCertificate");Directory.CreateDirectory(folder);File.WriteAllText(Path.Combine(folder,"actual-saved-copy-single-row-controls.json"),JsonUtility.ToJson(output,true));}}
+            if(!output.sourceBytesExact)throw new InvalidOperationException("Certificate controls changed original/captured source bytes.");return JsonUtility.ToJson(output,true);
+        }
+    }
+}
+#endif

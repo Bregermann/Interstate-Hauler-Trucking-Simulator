@@ -1,0 +1,35 @@
+#if UNITY_EDITOR && VISTA
+using System;
+using System.IO;
+using System.Linq;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public sealed class DragonRiderCanonicalSourceCertificateTests
+{
+    [Serializable]sealed class SavedCopy
+    {
+        public string scope,status;public bool productionEligible,currentProfilesExact,currentExternalConfigurationExact,currentWorldExact,currentNwhExact,unitAncestors,noTestDependencies,sourceClosureExact;
+        public int choices,originalTrucks,recordedInfernoPoses,recordedFirePoses,freshPoseSamples,protectedFiles;public float maximumNwhDimensionDrift;
+    }
+    [Serializable]sealed class Proof
+    {public bool savedCopyValidated,publicReaderRejectsDisposable,productionGuardRejectsTestAuthority,defaultChangedRowRejected,otherRowsStrict,sourceBytesExact;public int headerFaultsRejected;public SavedCopy savedCopy;}
+    [Test,Timeout(900000)]
+    public void ActualSavedDisposableResultValidatesOnlyItsOneRowAndCannotAuthorizeCanonicalOrOtherSources()
+    {
+        var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-tsRiderCanonicalCertificateControlEvidence");Assert.That(at>=0&&at+1<args.Length,Is.True,"Explicit actual passed V426 saved-result evidence required; no replacement regeneration.");
+        const string original="Assets/TruckDragonRiders/Scenes/TruckDragonRiders.unity",generated="Assets/TruckDragonRiders/Tests/Generated/";var bytes=File.ReadAllBytes(original);var meta=File.ReadAllBytes(original+".meta");Directory.CreateDirectory(generated);AssetDatabase.Refresh();
+        for(int i=0;i<SceneManager.sceneCount;i++){var scene=SceneManager.GetSceneAt(i);if(Application.isBatchMode&&string.IsNullOrEmpty(scene.path))Assert.That(EditorSceneManager.SaveScene(scene,generated+"CertificateRunner-"+Guid.NewGuid().ToString("N")+".unity"),Is.True);Assert.That(scene.isDirty||string.IsNullOrEmpty(scene.path),Is.False,"Preserve incoming scene edits before readonly qualification.");}
+        var setup=EditorSceneManager.GetSceneManagerSetup();var incoming=setup.Where(row=>!string.IsNullOrEmpty(row.path)).ToDictionary(row=>row.path,row=>File.ReadAllBytes(row.path));var isolation=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);Assert.That(EditorSceneManager.SaveScene(isolation,generated+"CertificateIsolation-"+Guid.NewGuid().ToString("N")+".unity"),Is.True);
+        try
+        {
+            var author=Type.GetType("LWS.TruckDragonRiders.Editor.DragonRiderSaddleAuthoring, Assembly-CSharp-Editor",true);string json=(string)author.GetMethod("ProbeCanonicalMountSourceCertificateControls").Invoke(null,new object[]{args[at+1]});var proof=JsonUtility.FromJson<Proof>(json);
+            Assert.That(proof.savedCopyValidated&&proof.publicReaderRejectsDisposable&&proof.productionGuardRejectsTestAuthority&&proof.defaultChangedRowRejected&&proof.otherRowsStrict&&proof.sourceBytesExact,Is.True);Assert.That(proof.headerFaultsRejected,Is.EqualTo(10));Assert.That(proof.savedCopy.productionEligible,Is.False,"The reused saved-copy kernel can never supply a production capability.");Assert.That(proof.savedCopy.status,Is.EqualTo("TEST_ONLY_SAVED_COPY_CHAIN_VALIDATED_NOT_CANONICAL"));Assert.That(proof.savedCopy.currentProfilesExact&&proof.savedCopy.currentExternalConfigurationExact&&proof.savedCopy.currentWorldExact&&proof.savedCopy.currentNwhExact&&proof.savedCopy.unitAncestors&&proof.savedCopy.noTestDependencies&&proof.savedCopy.sourceClosureExact,Is.True);Assert.That(proof.savedCopy.choices,Is.EqualTo(8));Assert.That(proof.savedCopy.originalTrucks,Is.EqualTo(4));Assert.That(proof.savedCopy.recordedInfernoPoses,Is.EqualTo(699));Assert.That(proof.savedCopy.recordedFirePoses,Is.EqualTo(537));Assert.That(proof.savedCopy.freshPoseSamples,Is.Zero,"Original native poses are reused after semantic/source qualification, not relabelled new samples.");Assert.That(proof.savedCopy.maximumNwhDimensionDrift,Is.LessThanOrEqualTo(.00001f));Assert.That(proof.savedCopy.protectedFiles,Is.GreaterThan(1000));
+        }
+        finally{if(setup.Length>0)EditorSceneManager.RestoreSceneManagerSetup(setup);foreach(var pair in incoming)CollectionAssert.AreEqual(pair.Value,File.ReadAllBytes(pair.Key));CollectionAssert.AreEqual(bytes,File.ReadAllBytes(original));CollectionAssert.AreEqual(meta,File.ReadAllBytes(original+".meta"));}
+    }
+}
+#endif

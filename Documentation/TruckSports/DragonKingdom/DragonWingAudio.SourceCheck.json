@@ -1,0 +1,31 @@
+{
+  "scope": "Standalone Roslyn compile against frozen native Unity references only; Unity/native tests and listening NOT run",
+  "checks": [
+    {
+      "phase": "Source",
+      "exitCode": 0,
+      "response": "C:\\Users\\Jeremy\\AppData\\Local\\Temp\\DragonWingAudio-4ibg6rzz\\Source.rsp",
+      "diagnostics": "",
+      "referenceNote": "Bee runtime reference transiently absent during parent compilation; verified against retained Library/ScriptAssemblies/Assembly-CSharp.dll instead, no CLEAN writes."
+    },
+    {
+      "phase": "Native",
+      "exitCode": 0,
+      "response": "C:\\Users\\Jeremy\\AppData\\Local\\Temp\\DragonWingAudio-4ibg6rzz\\Native.rsp",
+      "diagnostics": ""
+    }
+  ],
+  "sha256": {
+    "Assets/TruckDragonKingdom/Scripts/DragonWingAudio.cs": "77d4bce8927e4639ece8c877dda6991ce9a2c833bff54847ac662101b75b6db1",
+    "Assets/TruckDragonKingdom/Editor/DragonWingAudioAuthoring.cs": "7c9f6a6a3dfacc6c87157ec5291c85b582304934f0ac01f6eceee338cfb5df76",
+    "Assets/TruckDragonKingdom/Tests/Native/DragonWingAudioNativeTests.cs": "4aaf23da95ecf0ce0a54a23fd862038e0b6b6988bf3f00413317b8857bf18691"
+  },
+  "nativeBaseline": {
+    "run": "NativeWingCameraV89",
+    "overallPassed": 4,
+    "wingPassed": 3,
+    "durationSeconds": 82.8481634,
+    "wingSourceSha256": "726230287bc841a1ae8ee8d6a0b319750082a3e84796028956aa2d4bba081392",
+    "currentDifference": "Guard diagnostic timeSamples reads when source.clip is null; all actual playback/DSP/stroke/cadence assertions unchanged. Current guarded source compiled, not natively rerun here."
+  }
+}

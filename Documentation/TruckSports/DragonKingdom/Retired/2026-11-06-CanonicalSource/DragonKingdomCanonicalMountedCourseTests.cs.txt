@@ -1,0 +1,110 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+public sealed class DragonKingdomCanonicalMountedCourseTests
+{
+    static Type Review=>Type.GetType("LWS.TruckDragonKingdom.Editor.DragonKingdomMountedCourseReview, Assembly-CSharp-Editor",true);
+    static Type Author=>Type.GetType("LWS.TruckDragonRiders.Editor.DragonRiderSaddleAuthoring, Assembly-CSharp-Editor",true);
+    static Type Plan=>Type.GetType("LWS.TruckDragonKingdom.Editor.DragonKingdomWorldAdoptionPlan, Assembly-CSharp-Editor",true);
+    static object Get(object value,string name)=>value.GetType().GetField(name).GetValue(value);
+    static void Set(object value,string name,object field)=>value.GetType().GetField(name).SetValue(value,field);
+    static object New(Type owner,string name)=>Activator.CreateInstance(owner.GetNestedType(name));
+    const string Canonical="Assets/TruckDragonRiders/Scenes/TruckDragonRiders.unity",Promotion="Logs/TruckSports/DragonKingdom/metadata-control-only.json";
+    static readonly string Hash=new string('a',64);
+    static object Metadata(out object live)
+    {
+        // A pure well-formed metadata specimen, never a native receipt or
+        // production token. The actual consumer separately requires passed
+        // XML, exact native receipt bytes and a live production certificate.
+        live=Activator.CreateInstance(Plan.GetNestedType("CanonicalCourseCertificateHeader",BindingFlags.NonPublic));foreach(string flag in new[]{"productionEligible","currentProfilesExact","currentExternalConfigurationExact","currentWorldExact","currentNwhExact","unitAncestors","noTestDependencies","sourceClosureExact"})Set(live,flag,true);
+        Set(live,"scope","ONE_EXACT_CANONICAL_SCENE_ROW_ORIGINAL_SHA_TO_SUCCESSFUL_APPLY_SHA_NOT_COURSE_WORLD_OR_FRESH_POSE_ACCEPTANCE");Set(live,"status","CURRENT_CANONICAL_SINGLE_SOURCE_ROW_CERTIFIED_RECORDED_NATIVE_POSES_NOT_NEW_REPLAY");Set(live,"receipt",Promotion);Set(live,"receiptSha256",Hash);Set(live,"currentSceneSha256",Hash);Set(live,"target",Canonical);Set(live,"choices",8);Set(live,"originalTrucks",4);Set(live,"recordedInfernoPoses",699);Set(live,"recordedFirePoses",537);
+        var q=New(Author,"QualifiedCourseSource");Set(q,"canonicalSourceReview",true);Set(q,"canonicalSourceCertificate",JsonUtility.ToJson(live,true));Set(q,"scene",Canonical);Set(q,"sourceScene",Canonical);Set(q,"sceneSha256",Hash);Set(q,"productionEvidence","Logs/metadata-production");Set(q,"status","CURRENT_SOURCE_SEMANTIC_QUALIFICATION_COMPLETE_NATIVE_TEST_RESULT_REMAINS_SEPARATE");Set(q,"straightExitDistance",55f);
+        foreach(string flag in new[]{"currentConfigurationExact","currentProfilesExact","currentNwhExact","unitAncestors","noTestDependencies","candidateClosedForComparison","comparisonClosedBeforeCandidateReopen","candidateRestored","rootActivationExact","currentSourceBytesExact"})Set(q,flag,true);
+        var fileType=Author.GetNestedType("QualifiedCourseSourceFile");var files=Array.CreateInstance(fileType,1000);for(int i=0;i<1000;i++){var file=Activator.CreateInstance(fileType);Set(file,"path","Logs/metadata-only/"+i+".bin");Set(file,"sha256",Hash);files.SetValue(file,i);}Set(q,"currentSourceSnapshot",files);
+        var proof=New(Review,"Receipt");Set(proof,"qualifiedSource",q);foreach(string flag in new[]{"canonicalSourceReview","fixedQualifiedCourse","coordinatedCourse","sourceBytesPreserved"})Set(proof,flag,true);Set(proof,"candidate","MetadataOnly");Set(proof,"status","SAMPLED_FULL_MOUNT_ENVELOPE_CLEAR_REQUIRES_ACTUAL_FLIGHT");Set(proof,"ridersScene",Canonical);Set(proof,"canonicalPromotionReceipt",Promotion);Set(proof,"canonicalPromotionReceiptSha256",Hash);Set(proof,"qualifiedProductionEvidence","Logs/metadata-production");Set(proof,"straightExitDistance",55f);
+        foreach(string field in new[]{"ridersSceneSha256","worldPrefabSha256","worldPreviewSha256","worldIntegrationReceiptSha256"})Set(proof,field,Hash);foreach(string field in new[]{"gateCount","physicalGateColliders"})Set(proof,field,12);Set(proof,"queries",100);Set(proof,"turnQueries",5);
+        var gateType=Get(proof,"courseLayout")==null?Review.GetNestedType("Receipt").GetField("courseLayout").FieldType.GetElementType():null;var gates=Array.CreateInstance(gateType,12);for(int i=0;i<12;i++)gates.SetValue(Activator.CreateInstance(gateType),i);Set(proof,"courseLayout",gates);Set(proof,"originalCourseHash",Review.GetMethod("GateHash").Invoke(null,new object[]{gates}));
+        var rigs=Array.CreateInstance(Review.GetNestedType("Rig"),8);var sources=(IList)Get(q,"rigs");int n=0;
+        for(int crew=0;crew<4;crew++)foreach(string species in new[]{"dragon-inferno","dragon-fire"})
+        {
+            int count=species=="dragon-fire"?537:699;var source=New(Author,"QualifiedCourseRigSource");var rig=New(Review,"Rig");foreach(var item in new[]{source,rig}){Set(item,"crew",crew);Set(item,"species",species);Set(item,"recordedSourcePoses",count);Set(item,"recordedMixerLabelledPoses",1);Set(item,"controller","Logs/metadata-controller");Set(item,"controllerSha256",item==source?Hash.ToUpperInvariant():Hash);Set(item,"clips",new[]{"Logs/metadata-clip"});Set(item,"clipSha256",new[]{item==source?Hash.ToUpperInvariant():Hash});}
+            var labels=Enumerable.Range(0,count).Select(i=>i==0?"actual-blend":"actual-phase-"+i).ToArray();Set(source,"poseLabels",labels);Set(source,"envelopeAuthority","CURRENT_AUTHORED_BOX_CENTER_TRANSFORMED_BY_CURRENT_LOCAL_TO_WORLD_NOT_PHYSX_CACHE");Set(source,"skinPoints",100);Set(source,"anyAttitudeRadius",50f);Set(rig,"skinnedVertices",100);Set(rig,"maximumGateRadialExtent",50f);Set(rig,"poseAuthority","PAIRED_FULL_NATIVE_GEOMETRY_CURRENT_PROFILE_EQUIVALENCE_NOT_NEW_POSE_REPLAY");Set(rig,"originalTruckColliders",2);Set(rig,"originalTruckRenderers",3);sources.Add(source);rigs.SetValue(rig,n++);
+        }
+        Set(proof,"rigs",rigs);return proof;
+    }
+    static void Validate(object proof,object live)=>Plan.GetMethod("RequireCanonicalMountedCourseMetadata",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new[]{proof,"MetadataOnly",Promotion,JsonUtility.ToJson(live,true),Hash,Hash,Hash,Hash});
+    [Test]
+    public void WellFormedRecordedMetadataKeepsFreshCountersZeroButCannotByItselfAuthorizeAdoption()
+    {
+        var proof=Metadata(out var live);Validate(proof,live);foreach(var rig in (Array)Get(proof,"rigs"))foreach(string field in new[]{"poses","baseFlightPoses","configuredGraphPoses","nativeMixerPoses"})Assert.That(Get(rig,field),Is.EqualTo(0));
+        var error=Assert.Throws<TargetInvocationException>(()=>Plan.GetMethod("ValidateCanonicalMountedCourseEvidence",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new[]{"MetadataOnly","Logs/nonexistent-native-receipt.json",proof}));Assert.That(error.InnerException,Is.Not.Null,"Metadata cannot bypass required native XML/live source certificate.");
+    }
+    [TestCase("disposable")][TestCase("world")][TestCase("scene")][TestCase("receipt")][TestCase("rig-count")][TestCase("duplicate-crew")][TestCase("fresh-counter")][TestCase("poses")][TestCase("mixer")][TestCase("stale-source")][TestCase("source-duplicate")][TestCase("wrong-sha")][TestCase("restore")][TestCase("controller")][TestCase("clip")][TestCase("course")][TestCase("profile")][TestCase("unknown-world-certificate")]
+    public void RecordedCanonicalMetadataRejectsIndependentAuthorityAndProvenanceMutation(string fault)
+    {
+        var proof=Metadata(out var live);var q=Get(proof,"qualifiedSource");var rig=((Array)Get(proof,"rigs")).GetValue(0);
+        switch(fault)
+        {
+            case "disposable":Set(live,"productionEligible",false);break;
+            case "world":Set(proof,"worldPrefabSha256",new string('b',64));break;
+            case "scene":Set(proof,"ridersScene","Assets/Wrong.unity");break;
+            case "receipt":Set(proof,"canonicalPromotionReceipt","Logs/Wrong.json");break;
+            case "rig-count":Set(proof,"rigs",Array.CreateInstance(rig.GetType(),7));break;
+            case "duplicate-crew":Set(((Array)Get(proof,"rigs")).GetValue(2),"crew",0);break;
+            case "fresh-counter":Set(rig,"poses",699);break;
+            case "poses":Set(rig,"recordedSourcePoses",698);break;
+            case "mixer":Set(rig,"recordedMixerLabelledPoses",0);break;
+            case "stale-source":Set(q,"currentSourceBytesExact",false);break;
+            case "source-duplicate":var files=(Array)Get(q,"currentSourceSnapshot");files.SetValue(files.GetValue(0),1);break;
+            case "wrong-sha":Set(proof,"ridersSceneSha256","INVALID");break;
+            case "restore":Set(q,"comparisonClosedBeforeCandidateReopen",false);break;
+            case "controller":Set(rig,"controllerSha256",new string('b',64));break;
+            case "clip":Set(rig,"clips",new[]{"Logs/other-clip"});break;
+            case "course":Set(proof,"originalCourseHash","CHANGED");break;
+            case "profile":Set(q,"currentProfilesExact",false);break;
+            case "unknown-world-certificate":Set(live,"currentWorldExact",false);break;
+        }
+        var error=Assert.Throws<TargetInvocationException>(()=>Validate(proof,live));Assert.That(error.InnerException,Is.TypeOf<InvalidOperationException>());
+    }
+    [Test]
+    public void CanonicalSnapshotUsesOnePhysicalKeyForRelativeAbsoluteAliasesWhileHistoricalPathsRemainUnchanged()
+    {
+        var method=Author.GetMethod("QualifiedCourseSnapshotPaths",BindingFlags.NonPublic|BindingFlags.Static);var paths=new[]{Canonical,Path.GetFullPath(Canonical)};
+        var canonical=(string[])method.Invoke(null,new object[]{paths,true});var historical=(string[])method.Invoke(null,new object[]{paths,false});Assert.That(canonical.Length,Is.EqualTo(1));Assert.That(canonical[0],Is.EqualTo(Path.GetFullPath(Canonical)));CollectionAssert.AreEqual(paths,historical,"Default historical path representation remains unchanged.");
+    }
+    [Test]
+    public void MissingRealPromotionCannotOpenAnySourceOrChangeSceneContext()
+    {
+        var before=EditorSceneManager.GetSceneManagerSetup();string[] paths=before.Where(s=>!string.IsNullOrEmpty(s.path)).Select(s=>s.path).ToArray();var bytes=paths.ToDictionary(p=>p,File.ReadAllBytes);object[] args={default(Scene),"Logs/no-production","Logs/no-course","Logs/no-promotion.json"};
+        Assert.Throws<TargetInvocationException>(()=>Author.GetMethod("ValidateQualifiedCanonicalMountedCourseSource").Invoke(null,args));Assert.That(((Scene)args[0]).IsValid(),Is.False);CollectionAssert.AreEqual(before.Select(s=>s.path),EditorSceneManager.GetSceneManagerSetup().Select(s=>s.path));foreach(var pair in bytes)CollectionAssert.AreEqual(pair.Value,File.ReadAllBytes(pair.Key));
+    }
+    [UnityTest,Timeout(900000)]
+    public IEnumerator CertifiedCanonicalProfilesAndFixedPhysicalCourseClearActuallyPassedWorldWithoutAdoption()
+    {
+        var args=Environment.GetCommandLineArgs();foreach(string flag in new[]{"-tsDragonCanonicalMountPromotionReceipt","-tsDragonMountedProductionEvidence","-tsRiderProductionCourseEvidence","-tsDragonCourseSource"})Assert.That(Array.IndexOf(args,flag),Is.GreaterThanOrEqualTo(0),flag+" must name real passed evidence; this fixture never applies mounts/worlds.");
+        const string generated="Assets/TruckDragonKingdom/Tests/World/Generated/";Directory.CreateDirectory(generated);AssetDatabase.Refresh();
+        for(int i=0;i<SceneManager.sceneCount;i++){var incoming=SceneManager.GetSceneAt(i);if(Application.isBatchMode&&string.IsNullOrEmpty(incoming.path))Assert.That(EditorSceneManager.SaveScene(incoming,generated+"CanonicalCourseRunner-"+Guid.NewGuid().ToString("N")+".unity"),Is.True);Assert.That(incoming.isDirty,Is.False,"Preserve user edits.");}
+        var setup=EditorSceneManager.GetSceneManagerSetup();var incomingBytes=setup.Where(s=>!string.IsNullOrEmpty(s.path)).ToDictionary(s=>s.path,s=>File.ReadAllBytes(s.path));var isolated=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);Assert.That(EditorSceneManager.SaveScene(isolated,generated+"CanonicalCourseIsolation-"+Guid.NewGuid().ToString("N")+".unity"),Is.True);
+        try
+        {
+            Review.GetMethod("ReviewCanonicalCoordinatedCourseCandidate").Invoke(null,null);yield return null;var proof=Review.GetProperty("LastReceipt").GetValue(null);var source=Get(proof,"qualifiedSource");
+            string Required(string flag)=>args[Array.IndexOf(args,flag)+1];string promotion=Required("-tsDragonCanonicalMountPromotionReceipt"),tag=Required("-tsDragonCourseSource"),folder="Assets/TruckDragonKingdom/VisualCandidates/"+tag;
+            string ActualHash(string path){string full=Path.GetFullPath(path);if(Application.platform==RuntimePlatform.WindowsEditor&&full.Length>=248)full=@"\\?\"+full;using(var sha=SHA256.Create())return string.Concat(sha.ComputeHash(File.ReadAllBytes(full)).Select(value=>value.ToString("x2")));}
+            string live=(string)Author.GetMethod("ValidateCanonicalMountPromotionSourceCertificate").Invoke(null,new object[]{promotion});
+            Plan.GetMethod("RequireCanonicalMountedCourseMetadata",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{proof,tag,promotion,live,ActualHash(Canonical),ActualHash(folder+"/Shared Dragon Kingdom.prefab"),ActualHash(folder+"/DragonKingdomPreview.unity"),ActualHash(folder+"/Integration Receipt.json")});Assert.That(Get(proof,"status"),Is.EqualTo("SAMPLED_FULL_MOUNT_ENVELOPE_CLEAR_REQUIRES_ACTUAL_FLIGHT"));foreach(string flag in new[]{"canonicalSourceReview","sourceBytesPreserved","fixedQualifiedCourse","coordinatedCourse"})Assert.That(Get(proof,flag),Is.EqualTo(true));foreach(string flag in new[]{"currentSourceBytesExact","currentConfigurationExact","currentProfilesExact","currentNwhExact","unitAncestors","noTestDependencies","candidateRestored","rootActivationExact"})Assert.That(Get(source,flag),Is.EqualTo(true));Assert.That(Get(JsonUtility.FromJson((string)Get(source,"canonicalSourceCertificate"),Plan.GetNestedType("CanonicalCourseCertificateHeader",BindingFlags.NonPublic)),"productionEligible"),Is.EqualTo(true));Assert.That(Get(proof,"gateCount"),Is.EqualTo(12));Assert.That(Get(proof,"physicalGateColliders"),Is.EqualTo(12));Assert.That(Get(proof,"contactQueries"),Is.EqualTo(0));Assert.That(Get(proof,"apertureFailures"),Is.EqualTo(0));Assert.That(Get(proof,"queries"),Is.GreaterThan(1000));foreach(var rig in (Array)Get(proof,"rigs")){Assert.That(Get(rig,"recordedSourcePoses"),Is.EqualTo((string)Get(rig,"species")=="dragon-fire"?537:699));foreach(string field in new[]{"poses","baseFlightPoses","configuredGraphPoses","nativeMixerPoses"})Assert.That(Get(rig,field),Is.EqualTo(0),"Recorded geometry is not a new pose replay.");}
+        }
+        finally{EditorSceneManager.RestoreSceneManagerSetup(setup);foreach(var pair in incomingBytes)CollectionAssert.AreEqual(pair.Value,File.ReadAllBytes(pair.Key));}
+    }
+}
+#endif

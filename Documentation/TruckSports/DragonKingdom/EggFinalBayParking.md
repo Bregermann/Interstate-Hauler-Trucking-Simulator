@@ -1,0 +1,62 @@
+# Egg final-bay parking investigation
+
+The full saved-scene journey is still unaccepted. V126 proved all four existing road-to-bay connectors and supported parking poses, while V137 showed original AI repeatedly returning toward the shared junction near (-840, 270, 920). The narrow parking adapter retains original long-route navigation and human commands, uses the existing Musical Parking 128/82-degree reverse hysteresis, and checks a finite final corridor plus actual wheel/body support. Dynamic truck bodies remain physical obstacles checked each drive tick.
+
+V147's controlled original-NWH test failed its unchanged delivery assertions. It recorded zero deliveries by clock341.3. Slots0/1/3 reached supported parking within5.43m of their approaches through the shared route; their cargo subsequently became Lost. Slot2 repeatedly failed the new corridor's zero sample with `CENTER SUPPORT / BODY CLEARANCE` and never activated reverse parking. Static connector acceptance therefore does not establish live loaded-vehicle query correctness.
+
+The same trace shows cargo leaving its cradle during the crane's Approach stage, before pickup. The idle hoist remained approximately4m above its current socket, so a stale idle-head explanation is unsupported. `DragonEggCarrier.BeginJob` releases the cradle restraint immediately after the existing `JengaCrane.Begin`. `ReleaseRestraint` disconnects a driven ConfigurableJoint before deferred destruction. Whether that creates a temporary world-anchor force, or another physical interaction causes the escape, requires the new atomic witness. No hoist repair or delivery-rule changes have been made on this evidence alone.
+
+The separate `DragonEggBayEncounterNativeTests` fixture changes only unsaved initial marker configuration before ordinary StartMatch. Crews0/2 start6.8m apart facing their opposed real bays; original start clearance and nonpenetration must pass. Four original NWH assemblies, cargo, collisions and cranes remain active. The test requires a real body-block encounter followed by both original cargo bodies physically unloading at their correct nests. No overlap, force, score, callback or live pose is injected. Its4xsimulation is explicitly disclosed and does not replace the untouched15minute journey test.
+
+`DragonEggPhysicsObservation` records the exact nearest-height support selection and inflated body query at the current physical rotation and the proposed corridor-zero rotation. It records collider hierarchy, cargo/truck penetration, real rigidbody masses/velocities and joint local/world anchors. `DragonEggJointTransitionObservation` runs after the original session's FixedUpdate and before PhysX, retaining eight consecutive steps around real crane/restraint/joint transitions, bounded to1000 captures. These observations never change solver, collider, joint, body or gameplay state.
+
+At the V147 source handoff, compilation succeeded with zero Roslyn diagnostics against the retained native reference assemblies; the new encounter and transition witnesses were not yet executed. The V147 baseline match/base/native-test hashes stayed exact while those separate files were added. V149's later execution and selected repair are recorded below. Parent owns all native execution and acceptance.
+
+## V149 executed witnesses and selected physical repair
+
+Both executed fixtures failed their unchanged acceptance gates. The encounter never activated final parking and observed zero body-hold frames, so it provides no contact-yield acceptance. Its actual spatial witness selected genuine Vista terrain as support. At the controlled encounter's grounded start, the planned origin was270.3427m with box center271.9662m and half-height1.35350m; the separately parented cargo bottom was approximately273.2545m. The only nonignored collider in this virtual loaded-body query was the same crew's restrained cargo CapsuleCollider. This confirms a self-obstacle rather than unsupported ground.
+
+The actual joint transition log records slot1 step892/clock17.82022: the disconnected ConfigurableJoint interpreted its former truck-local connected anchor as world(-0.00002,4.04699,-0.95340),1307.19m from its physical anchor. Its x/y/z drives remained1500spring/220damper/1800force for an intervening PhysX step. The next step recorded a large new angular velocity before any crane grip. This proves an active transient world joint; it is not evidence of a stale idle hoist.
+
+The selected source repair preserves the existing physical authorities:
+
+- The protected support helper accepts an optional exact attached-load collider only in the already explicit static-planning branch. Egg passes it only while the actual Restraint connects that cargo to the same NWH body. Default start/recovery calls remain strict; loose and other cargo remain obstacles, and physical collisions remain enabled.
+- BeginJob retains the real cradle restraint through Approach/LowerPickup. Tick releases it only after JengaCrane creates the actual FixedJoint connected to its exact spreader. The handoff occurs in that same pre-solve step.
+- ReleaseRestraint first zeros every linear/angular/slerp drive and limit spring, frees all constraints and disables projection. It then disconnects while retaining its actual world anchor and schedules ordinary deferred destruction. It never changes a cargo/truck pose, velocity, score, crane stage or reach.
+- Executed native fixtures now additionally require zero unsafe driven-world steps, observed inert pending joints, actual acquired-grip handovers and less than.02m handover world-anchor error. Four physical deliveries across two ordinary starts remain required by the controlled case; no original delivery assertions were lowered.
+
+Runtime and native source compile with zero Roslyn diagnostics after this repair. The repaired behavior has not yet run natively. Parent owns the next initial controlled rerun, followed by the encounter and full journey as appropriate. Base Intro/engine warmup remains parent-owned and was not edited by this repair.
+
+## V153 executed physical handover and next selected repair
+
+V153 executed both fixtures and both still failed. It did prove that the preceding release correction ran physically: unsafe driven-world steps0, inert released steps3, actual grip handovers5, maximum handover anchor error0. Cargo now survives Approach and Lift. Its next failure is precise: slot1 changes from Lift at step386 to Traverse, then loses the actual FixedJoint at step388 with cargo moving9.31m/s horizontally. Slots3 and2 show the same transition/loss at589→591 and643→645. With25kg cargo and.85m anchor, an instantaneous10m/s/.02s velocity change requests approximately12500N and10625Nm, exceeding the existing12000N/5000Nm grip. Neither force gate is increased.
+
+JengaCrane exposes public travel/lift/turn speed settings, with no acceleration setting. The Egg adapter therefore limits only its public travel/lift speed during the existing Step call and restores both configured fields in finally. The cap uses actual mass, active grip height, gravity and dt: `(min(12000,5000/lever)/mass - gravity) * dt * .25`, clamped against negative available acceleration. For the actual25kg/.85m/.02s case this is approximately1.13m/s. A worst-case full direction reversal consumes at most half the smaller force/anchor-torque capacity, retaining margin for gravity, turning, contact and solver behavior. Jenga still owns every path, stage and MovePosition; no new motion motor, direct velocity or force is introduced.
+
+The opposed encounter again never reached a live body-hold assertion. It rejected the other crew's genuinely restrained capsule at static corridor sample2. Planning now receives a bounded four-collider set, each included only while its actual current restraint connects to that exact crew's NWH body. Those loads are paired with their trucks only during static planning. The live per-tick collision probe still blocks every other truck/load; loose cargo is never classified as attached.
+
+Slot0 additionally demanded the exact approach endpoint at travel yaw, although V126's probe explicitly used the authored bay yaw only for its last sample. That unused endpoint rejected the corridor and the fallback wandered toward a genuine unsupported edge. Existing gameplay parks within6m and valid crane reach. Planning now proves the full actual footprint/wheel corridor to a point5m before the approach and rejects that point if outside the existing25.25m reach margin. Actual drive collision horizons, stopped-body job gates,26m crane limit and supported-nest delivery rules remain unchanged. This changes the planned stopping target, not the acceptance tolerances.
+
+Native assertions now additionally require no premature actual grip loss through Lift/Traverse/LowerStack and exact restoration of the saved public speed settings. Both source assemblies compile with zero diagnostics. The V153-selected fixes have not yet run in Unity; contact yield and full-journey delivery remain unaccepted pending executed evidence.
+
+## V156 contact execution and V158 accepted physical contracts
+
+V156's encounter made two real deliveries (crews1/3,948points each) but left crews0/2 in persistent Cab/Chassis contact. It observed the genuine body guard at clock1.88 and still had a5.10m root gap with.01776m proxy penetration at clock378.18. The loaded-corridor correction and finite-grip speed configuration therefore worked; the directionless current-overlap hold still prevented safe withdrawal.
+
+The mode-local BayYield partial uses the existing NWH commands and Musical Parking reverse hysteresis. A seed-rotated stable pair priority chooses one yielding crew after.6s of actual body blockage. Each attempt is bounded to20game seconds, at most four attempts, with a fully supported3m straight rear leg and a checked5m-back/5.5m-side waypoint. Live rear footprint and wheel support checks remain active. The only existing-contact exception is against the designated other crew: all actual own collider pairs must show that a.25m proposed displacement reduces/clears penetration and creates no new overlap. Straight withdrawal initially uses zero steering. No body/collider is disabled and no pose, velocity, force, score or completion callback is injected.
+
+The controlled fixture also corrected its own acceleration policy: ordinary Resume correctly restores shared gameplay timeScale1. The fixture now reapplies its declared4x only after its unchanged real pause freeze assertions, retaining its85real-second deadline. No settling or supported-delivery rule changed. Snapshot records actual ContainsAndSupports, Settled and timeScale; post-Finished predicates can become false because ordinary StopCargo disables physical presence after valid awards.
+
+Actual `NativeMountYieldV158/tests.xml` records both physical contracts **PASS**:
+
+- Opposed encounter37.770092s: all four original cargo bodies delivered at clock98.45996, scores1059/948/1054/947. Crew2 alone yielded,97separating steps. Four real grip handovers, zero premature losses, zero driven-world steps and zero handover anchor error.
+- Controlled reverse/quarter-turn two-start test41.396941s: four real deliveries in each ordinary start, eight real grip handovers, eight inert released steps, zero premature losses, zero unsafe driven-world steps and zero anchor error. Pause, actual reverse travel, saved speed restoration and unchanged cargo identities passed. The second start ended at clock73.49997.
+
+This accepts the executed local physical contracts, not the separate full15minute saved-world journey or human play. The full batch passed3/6; the remaining Egg/Escape input-lifecycle and Riders saddle failures are separately owned and are not hidden by these physical passes. Latest runtime/native source compilation has zero diagnostics. Raw vendor source remains unchanged.
+
+- VENDOR ASSETS AUDITED: original NWH adapter, existing JengaCrane, working Heist crane coordination and Musical Parking DriveTo/recovery.
+- VENDOR ASSETS USED: original NWH physics and JengaCrane; existing project reverse hysteresis as the final-bay steering foundation.
+- RELEVANT ASSETS NOT USED: Musical Parking's unguarded escape motion was not transplanted into a cliff-sensitive bay.
+- CUSTOM SYSTEMS CREATED: narrow Egg corridor/parking semantics and read-only native encounter/joint observations.
+- VENDOR SOURCE MODIFIED: none.
+- DUPLICATE VENDOR FUNCTIONALITY CREATED: none; original physics, crane motion and awards remain authorities.
