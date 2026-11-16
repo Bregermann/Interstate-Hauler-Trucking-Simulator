@@ -1,0 +1,286 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8945014925717430308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3298709507949986187}
+  - component: {fileID: 1318079784365417913}
+  - component: {fileID: 261085813296940424}
+  m_Layer: 0
+  m_Name: dragon-inferno Dragon Actor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3298709507949986187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945014925717430308}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3071392248473858930}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1318079784365417913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945014925717430308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d3cfe183f1444ebb5300643c3c8a2c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.DragonCharacter
+  motor: {fileID: 1132107318265146935}
+  mouth: {fileID: 9019908230952741891}
+  saddle: {fileID: 3071392248473858784}
+  leftGrip: {fileID: 3071392248473858926}
+  rightGrip: {fileID: 3071392248473858834}
+  physicalColliders:
+  - {fileID: 1372408667561417124}
+  voice: {fileID: 261085813296940424}
+  warningLight: {fileID: 0}
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  sightRange: 140
+  hearingRange: 110
+  memorySeconds: 6
+  sightAngle: 155
+  warningDuration: 1.2
+  attackCooldown: 6
+  breathRange: 28
+  clawRange: 8
+  breathHalfAngle: 26
+  maximumImpulse: 2.4
+  attackDamage: 12
+  clearanceRadius: 3
+  clearanceDistance: 16
+--- !u!82 &261085813296940424
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945014925717430308}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1001 &2017204795296471067
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3298709507949986187}
+    m_Modifications:
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558208644681561929, guid: c002daaac3ac44347a90d505a0f36ba6,
+        type: 3}
+      propertyPath: m_Name
+      value: dragon-inferno Dragon Animal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c002daaac3ac44347a90d505a0f36ba6, type: 3}
+--- !u!114 &1132107318265146935 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1461559406155806252, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd41064c0154d439fde29953b4119fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.DragonAnimalMotor
+--- !u!136 &1372408667561417124 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 645505116244672959, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3071392248473858784 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3558208644681067259, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3071392248473858834 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3558208644681067273, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3071392248473858926 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3558208644681067381, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3071392248473858930 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3558208644681067369, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9019908230952741891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7409454574732522520, guid: c002daaac3ac44347a90d505a0f36ba6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2017204795296471067}
+  m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,286 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &627416072647140238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6490448884236217434}
+  - component: {fileID: 8148041085667551501}
+  - component: {fileID: 3601576017046907927}
+  m_Layer: 0
+  m_Name: dragon-spark Dragon Actor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6490448884236217434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627416072647140238}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1225533651045403901}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8148041085667551501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627416072647140238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d3cfe183f1444ebb5300643c3c8a2c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.DragonCharacter
+  motor: {fileID: 3507956211295608449}
+  mouth: {fileID: 5272537652896528968}
+  saddle: {fileID: 1225533651045403827}
+  leftGrip: {fileID: 1225533651045403879}
+  rightGrip: {fileID: 1225533651045403849}
+  physicalColliders:
+  - {fileID: 1439224660701146957}
+  voice: {fileID: 3601576017046907927}
+  warningLight: {fileID: 0}
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  sightRange: 140
+  hearingRange: 110
+  memorySeconds: 6
+  sightAngle: 155
+  warningDuration: 1.2
+  attackCooldown: 6
+  breathRange: 28
+  clawRange: 8
+  breathHalfAngle: 26
+  maximumImpulse: 2.4
+  attackDamage: 12
+  clearanceRadius: 3
+  clearanceDistance: 16
+--- !u!82 &3601576017046907927
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627416072647140238}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1001 &3966549756834519943
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6490448884236217434}
+    m_Modifications:
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742124413604744026, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+        type: 3}
+      propertyPath: m_Name
+      value: dragon-spark Dragon Animal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4fb7a7123d37cc244b4a6010df0ae57a, type: 3}
+--- !u!4 &1225533651045403827 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2742124413604452148, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1225533651045403849 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2742124413604452174, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1225533651045403879 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2742124413604452192, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1225533651045403901 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2742124413604452218, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1439224660701146957 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2663075199915291850, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3507956211295608449 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 550213667836052742, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd41064c0154d439fde29953b4119fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.DragonAnimalMotor
+--- !u!4 &5272537652896528968 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9090466316435612111, guid: 4fb7a7123d37cc244b4a6010df0ae57a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3966549756834519943}
+  m_PrefabAsset: {fileID: 0}

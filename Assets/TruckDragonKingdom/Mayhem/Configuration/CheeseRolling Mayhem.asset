@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13365783d77a499e8b4dfbb2077b6fcf, type: 3}
+  m_Name: CheeseRolling Mayhem
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.Mayhem.DragonMayhemConfiguration
+  sport: 3
+  variantName: DRAGON PURSUIT
+  sideBonusLabel: PURSUIT GOLD
+  maximumSideGold: 5
+  gustVelocityChange: 1.1
+  approachHeight: 18
+  goldLifetime: 24
+  passCooldown: 14
+  temporarySheep: 2
+  spawnOffset: {x: -90, y: 60, z: -75}
+  departureOffset: {x: 100, y: 55, z: 100}
+  dropSpeciesId: dragon-inferno
+  dropContactClip: {fileID: 7400000, guid: a45e0457d8aad6347bf562c22b62e721, type: 2}
+  dropContactNormalizedTime: 0.45
+  dropMouthLocalOffset: {x: 0.003504306, y: 2.1832948, z: 1.4323632}
+  groundGrabSpeciesId: dragon-inferno
+  groundGrabContactClip: {fileID: 7400000, guid: 15207f961a796a14f8c571c5bc384760,
+    type: 2}
+  groundGrabContactNormalizedTime: 0.45
+  groundGrabGripLocalOffset: {x: -0.7305167, y: 0.13005343, z: 0.45592412}

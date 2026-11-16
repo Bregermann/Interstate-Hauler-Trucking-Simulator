@@ -1,0 +1,628 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02850ee88ec34d89b65e22af3b057dac, type: 3}
+  m_Name: DragonSpeciesCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDragonKingdom.DragonSpeciesCatalog
+  species:
+  - id: dragon-inferno
+    displayName: Dragon Inferno
+    visualPrefab: {fileID: 3319832262097768165, guid: 5aa274becdffa9c46b69f1cf98445a50,
+      type: 3}
+    supportedRoles: 123
+    visualScale: 5
+    groundSpeed: 7
+    flightSpeed: 32
+    flightAcceleration: 8
+    turnRate: 54
+    bankAngle: 30
+    element: 1
+    maximumStamina: 130
+    temperament: 2
+    mouthBone: RigJaw
+    leftGripBone: RigLArmPalm
+    rightGripBone: RigRArmPalm
+    saddleBone: RigSpine2
+    breathEffect: {fileID: 2500977573442136424, guid: e9606c0fc404e0040afbda26f5aec732,
+      type: 3}
+    sounds:
+    - {fileID: 8300000, guid: f6bd501e75c7f4d549eaaee0ec1020fe, type: 3}
+    - {fileID: 8300000, guid: 93b6c37bfee634610a841c4509f1276f, type: 3}
+    - {fileID: 8300000, guid: ceabcaffa73ab410a80795954af336b9, type: 3}
+    - {fileID: 8300000, guid: 49365b3021f7bd44cbc24829cdf743f5, type: 3}
+    - {fileID: 8300000, guid: fbc19e6d86ed3d142b0b531b232852de, type: 3}
+    animations:
+    - action: 0
+      clip: {fileID: 7400000, guid: e04d23ed53901a9428fef67f9fb26ccb, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Idle.FBX;
+        rendered verification pending.'
+    - action: 2
+      clip: {fileID: 7400000, guid: 487ccdde143b48a41ad0aeb43e33115a, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Walk
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 3
+      clip: {fileID: 7400000, guid: 876a382d23115c0498a5e940128bd6ca, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Run
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 4
+      clip: {fileID: 7400000, guid: fd79f7b923a6d3e4da5a486f39eb68eb, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Turn
+        Left.FBX; rendered verification pending.'
+    - action: 5
+      clip: {fileID: 7400000, guid: 07721f93735da49458bd8b931beacdba, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Turn
+        Right.FBX; rendered verification pending.'
+    - action: 10
+      clip: {fileID: 7400000, guid: 03904ae9752768d4eb45e9ac5ad02def, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 11
+      clip: {fileID: 7400000, guid: 842838099714d1b4bb058901a652d074, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Idle.FBX; rendered verification pending.'
+    - action: 18
+      clip: {fileID: 7400000, guid: 72e43e82b81bb8d44af835aa2fd6e5ec, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'LWS DIRECTED BREATH V1: original Cast Spell body/wing/jaw retained;
+        actual terminal neck/head aim the calibrated muzzle forward during .36-.65
+        strike, preserving original windup/recovery. Source hashes and unchanged
+        curves checked; native actual-contact/render review required.'
+    - action: 20
+      clip: {fileID: 7400000, guid: 53221f7efd0ee8241b70958ee30d1340, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Tail
+        Attack.FBX; rendered verification pending.'
+    - action: 28
+      clip: {fileID: 7400000, guid: e2f9b62f1a5ec8c45b80baf38d9d6e9c, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Take
+        Damage.FBX; rendered verification pending.'
+    - action: 29
+      clip: {fileID: 7400000, guid: bcd79af101a95a749a31bff5221a60c0, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Die.FBX;
+        rendered verification pending.'
+    - action: 30
+      clip: {fileID: 7400000, guid: 03904ae9752768d4eb45e9ac5ad02def, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 1
+      clip: {fileID: 7400000, guid: 34f1b695177a3e0488d9e49c3e227164, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 8
+      clip: {fileID: 7400000, guid: 90ab1ef1d2f1e844395bd1f9b90ef320, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Cast
+        Spell.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 24
+      clip: {fileID: 7400000, guid: acb2728cc97e4454197ad9267d4ad67f, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Bite
+        Attack.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 6
+      clip: {fileID: 7400000, guid: f54a0a29705fffd408673b508508f3f6, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'LWS SELECTED ANATOMICAL REST V2: actual Inferno Idle reference,
+        world-axis torso lowering, actual limb IK/head support, folded wing chains
+        and subtle breathing; Wake begins at that exact rest pose. Painted eyes have
+        no invented eyelid control; rendered verification pending.'
+    - action: 7
+      clip: {fileID: 7400000, guid: 9bf0ecf4474623e4cae144b27d105170, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'LWS SELECTED ANATOMICAL REST V2: actual Inferno Idle reference,
+        world-axis torso lowering, actual limb IK/head support, folded wing chains
+        and subtle breathing; Wake begins at that exact rest pose. Painted eyes have
+        no invented eyelid control; rendered verification pending.'
+    - action: 25
+      clip: {fileID: 7400000, guid: 9577fb639ac5cef41b75086e9bae8bab, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 26
+      clip: {fileID: 7400000, guid: 9baba58c55f22dc419c3905d3faa008c, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 17
+      clip: {fileID: 7400000, guid: 100a0dc8689e76f4eb86cf44ab402511, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 9
+      clip: {fileID: 7400000, guid: 7b6eb3f87b091b94cb7d509fe853eeed, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 16
+      clip: {fileID: 7400000, guid: 6208b4ad30b39294a996a2ab9d744217, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 12
+      clip: {fileID: 7400000, guid: 8c27f87c1c75c9c4288c843802302ecc, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 13
+      clip: {fileID: 7400000, guid: 9d99f225aabadaf4c99cc201da4ce19d, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 14
+      clip: {fileID: 7400000, guid: 2d2144187a4932446a9218780dfd7e2b, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 15
+      clip: {fileID: 7400000, guid: 16c4ef3bfeb3ac74e9f4ccd73a566040, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 21
+      clip: {fileID: 7400000, guid: fd9e50b98bb6dff4eaff95cc0ad3f3ed, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 22
+      clip: {fileID: 7400000, guid: 977a349fc884ef845af3dfbc1faa8bf1, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 23
+      clip: {fileID: 7400000, guid: a45e0457d8aad6347bf562c22b62e721, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 19
+      clip: {fileID: 7400000, guid: 32e0848eda58ce34cb495ad152f0c0fa, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Inferno Cute Series/FBX/Dragon Inferno@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 31
+      clip: {fileID: 7400000, guid: 15207f961a796a14f8c571c5bc384760, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'LWS GROUNDED REACH V1: actual Idle reference, selective torso
+        crouch, real two-bone forelimb reach/planted rear feet and real neck targeting;
+        airborne Grab retained byte-exact.'
+  - id: dragon-fire
+    displayName: Dragon Fire
+    visualPrefab: {fileID: 1464745901521549467, guid: 3b2bc9ea12bebd34db0ea2d87f964288,
+      type: 3}
+    supportedRoles: 74
+    visualScale: 7
+    groundSpeed: 7
+    flightSpeed: 36
+    flightAcceleration: 11
+    turnRate: 68
+    bankAngle: 30
+    element: 1
+    maximumStamina: 80
+    temperament: 1
+    mouthBone: RigJaw
+    leftGripBone: RigLArmPalm
+    rightGripBone: RigRArmPalm
+    saddleBone: RigSpine2
+    breathEffect: {fileID: 7606729026238191993, guid: 68f269920a583ac4996962a12de6dd8a,
+      type: 3}
+    sounds:
+    - {fileID: 8300000, guid: f6bd501e75c7f4d549eaaee0ec1020fe, type: 3}
+    - {fileID: 8300000, guid: 93b6c37bfee634610a841c4509f1276f, type: 3}
+    - {fileID: 8300000, guid: ceabcaffa73ab410a80795954af336b9, type: 3}
+    - {fileID: 8300000, guid: 49365b3021f7bd44cbc24829cdf743f5, type: 3}
+    - {fileID: 8300000, guid: fbc19e6d86ed3d142b0b531b232852de, type: 3}
+    animations:
+    - action: 4
+      clip: {fileID: 7400000, guid: 688461beff78bf7448093fcb623b7433, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Turn
+        Left.FBX; rendered verification pending.'
+    - action: 5
+      clip: {fileID: 7400000, guid: ff49807c2c0759a42aa180b43351282f, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Turn
+        Right.FBX; rendered verification pending.'
+    - action: 10
+      clip: {fileID: 7400000, guid: f83436fe1b18c5042841e6f6a4dfccf6, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 11
+      clip: {fileID: 7400000, guid: dd953e7476ae8234d96d2dfb7d9ab2f5, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Idle.FBX; rendered verification pending.'
+    - action: 18
+      clip: {fileID: 7400000, guid: 955713e89a97e5b498b27b648a8eb875, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'LWS DIRECTED BREATH V1: original Cast Spell body/wing/jaw retained;
+        actual terminal neck/head aim the calibrated muzzle forward during .36-.65
+        strike, preserving original windup/recovery. Source hashes and unchanged
+        curves checked; native actual-contact/render review required.'
+    - action: 28
+      clip: {fileID: 7400000, guid: 8edf51a5a5b50d24bbd9e31b1889fd60, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Take
+        Damage.FBX; rendered verification pending.'
+    - action: 29
+      clip: {fileID: 7400000, guid: 41c7f33570d7be24090199bc8a38bd35, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Die.FBX;
+        rendered verification pending.'
+    - action: 30
+      clip: {fileID: 7400000, guid: f83436fe1b18c5042841e6f6a4dfccf6, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 1
+      clip: {fileID: 7400000, guid: 78435557d4398e746bec7978fd000079, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Idle.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 8
+      clip: {fileID: 7400000, guid: 3e265fdaae21c1f4ab8ca07651630b6a, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Cast
+        Spell.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 24
+      clip: {fileID: 7400000, guid: c5a3b752c003b5845b8ef0d442218676, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Bite
+        Attack.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 9
+      clip: {fileID: 7400000, guid: 362fc81fe1cfa894d8ca80bbbd4303bd, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 16
+      clip: {fileID: 7400000, guid: 4fa11673cdc83e841a4cfbeceaa507fe, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 12
+      clip: {fileID: 7400000, guid: 56c4a95d1baf85146b65a10c537ce09a, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 13
+      clip: {fileID: 7400000, guid: 9a5ae5430ef5a3c41aff15ff827a657c, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 14
+      clip: {fileID: 7400000, guid: 598c2fcd90371754cabdc51a5af8c15d, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 15
+      clip: {fileID: 7400000, guid: b89d4d419277fa241a1e38070626ad35, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 21
+      clip: {fileID: 7400000, guid: e9cf5d8b91205e24eba60953e64e4ec9, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 22
+      clip: {fileID: 7400000, guid: ece68b8695668014dbb9a2be7ff765d0, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 23
+      clip: {fileID: 7400000, guid: b1cda4059de7e924e8b1b91e283274c3, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+    - action: 19
+      clip: {fileID: 7400000, guid: 11ce3bcec2d55994fa2877e9896288f2, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Fire Cute Series/FBX/Dragon Fire@Fly
+        Forward In Place.FBX; real source curves + sampled bone rotation/pose curves;
+        rendered verification pending.
+  - id: dragon-spark
+    displayName: Dragon Spark
+    visualPrefab: {fileID: 955717841895258307, guid: f8b62f332c9589e4e847b449066a2967,
+      type: 3}
+    supportedRoles: 5
+    visualScale: 1
+    groundSpeed: 3
+    flightSpeed: 0
+    flightAcceleration: 8
+    turnRate: 54
+    bankAngle: 30
+    element: 1
+    maximumStamina: 100
+    temperament: 0
+    mouthBone: RigJaw
+    leftGripBone: RigLArmPalm
+    rightGripBone: RigRArmPalm
+    saddleBone: RigSpine2
+    breathEffect: {fileID: 7184981756903397227, guid: 6cafdd93f884583439363d712d3b396b,
+      type: 3}
+    sounds:
+    - {fileID: 8300000, guid: f6bd501e75c7f4d549eaaee0ec1020fe, type: 3}
+    - {fileID: 8300000, guid: 93b6c37bfee634610a841c4509f1276f, type: 3}
+    - {fileID: 8300000, guid: ceabcaffa73ab410a80795954af336b9, type: 3}
+    - {fileID: 8300000, guid: 49365b3021f7bd44cbc24829cdf743f5, type: 3}
+    - {fileID: 8300000, guid: fbc19e6d86ed3d142b0b531b232852de, type: 3}
+    animations:
+    - action: 0
+      clip: {fileID: 7400000, guid: 7921125393d2cb74b8f60622be713488, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        rendered verification pending.'
+    - action: 2
+      clip: {fileID: 7400000, guid: 963c233313c949a42ae0f8abeba24547, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Walk
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 3
+      clip: {fileID: 7400000, guid: 13dac0aa8649d484ca62534f7003ad29, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Run
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 4
+      clip: {fileID: 7400000, guid: dbbfc68adfb668f4e922938255b5d502, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Turn
+        Left.FBX; rendered verification pending.'
+    - action: 5
+      clip: {fileID: 7400000, guid: 57a785178bbbe5943a879807bc39a4e4, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Turn
+        Right.FBX; rendered verification pending.'
+    - action: 18
+      clip: {fileID: 7400000, guid: 860a949fa42b2534fbc0f9d6ff34245e, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Cast
+        Spell.FBX; rendered verification pending.'
+    - action: 28
+      clip: {fileID: 7400000, guid: fbe6f0d599b524848b9db14c544daeb9, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Take
+        Damage.FBX; rendered verification pending.'
+    - action: 29
+      clip: {fileID: 7400000, guid: 07df210eb9f20304a92b9c33a82df75c, type: 3}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Die.FBX;
+        rendered verification pending.'
+    - action: 30
+      clip: {fileID: 7400000, guid: 13dac0aa8649d484ca62534f7003ad29, type: 3}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: 'OWNED ORIGINAL: Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Run
+        Forward In Place.FBX; rendered verification pending.'
+    - action: 1
+      clip: {fileID: 7400000, guid: c119d4b7c51784141827572ebe90dd61, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 8
+      clip: {fileID: 7400000, guid: ddf1a53cc89365149b8a2137ffbb02b2, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Cast
+        Spell.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 24
+      clip: {fileID: 7400000, guid: 8d2b60ec259c07e4ea929c8aab4938db, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Bite
+        Attack.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
+    - action: 6
+      clip: {fileID: 7400000, guid: 593236a3cff26d243a9e28b6d2afb500, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 7
+      clip: {fileID: 7400000, guid: 35b41165e5f3d334e93e454f3fac22ab, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 25
+      clip: {fileID: 7400000, guid: f2b22464cc9bb0444bbfc108a06168a6, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 26
+      clip: {fileID: 7400000, guid: d024587c2c6f85b4f943a899beccc5b7, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 17
+      clip: {fileID: 7400000, guid: 839adeead6246f741b7b7c31f0f05932, type: 2}
+      loop: 1
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Idle.FBX;
+        real source curves + sampled bone rotation/pose curves; rendered verification
+        pending.
+    - action: 27
+      clip: {fileID: 7400000, guid: 9403969c6b780b640aae634d97ed22d0, type: 2}
+      loop: 0
+      playbackSpeed: 1
+      sourceNote: LWS AUTHORED RIG OVERLAY on Assets/TruckDragonKingdom/PrivateLicensedDragons/Monsters
+        Ultimate Pack 02 Cute Series/Dragon Spark Cute Series/FBX/Dragon Spark@Jump
+        In Place.FBX; real source curves + sampled bone rotation/pose curves; rendered
+        verification pending.
