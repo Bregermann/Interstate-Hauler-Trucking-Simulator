@@ -97,7 +97,7 @@ namespace LWS.TruckBilliards
    vibrationText.text="Vibration: "+(session.settings.vibration?"ON":"OFF");
    var r=session.settings.resolutions[session.settings.resolutionIndex];resolutionText.text="Resolution: "+r.x+" × "+r.y;
   }
-  void Rewire(){if(selections==null||selections[(int)session.Screen]==null)return;navigation.Clear();foreach(var item in selections[(int)session.Screen])if(item.IsActive()&&item.IsInteractable())navigation.Add(item);for(int i=0;i<navigation.Count;i++){var item=navigation[i];var up=navigation[(i+navigation.Count-1)%navigation.Count];var down=navigation[(i+1)%navigation.Count];var nav=new UnityEngine.UI.Navigation{mode=UnityEngine.UI.Navigation.Mode.Explicit,selectOnUp=up,selectOnDown=down};if(!(item is UnityEngine.UI.Slider)){nav.selectOnLeft=up;nav.selectOnRight=down;}item.navigation=nav;var heat=item.GetComponent<ButtonManager>();if(heat!=null){heat.navigationMode=nav.mode;heat.selectOnUp=up.gameObject;heat.selectOnDown=down.gameObject;heat.selectOnLeft=nav.selectOnLeft?.gameObject;heat.selectOnRight=nav.selectOnRight?.gameObject;}}}
+  void Rewire(){if(selections==null||selections[(int)session.Screen]==null)return;navigation.Clear();foreach(var item in selections[(int)session.Screen])if(item.IsActive()&&item.IsInteractable()&&!(item is TMP_InputField field&&field.readOnly))navigation.Add(item);for(int i=0;i<navigation.Count;i++){var item=navigation[i];var up=navigation[(i+navigation.Count-1)%navigation.Count];var down=navigation[(i+1)%navigation.Count];var nav=new UnityEngine.UI.Navigation{mode=UnityEngine.UI.Navigation.Mode.Explicit,selectOnUp=up,selectOnDown=down};if(!(item is UnityEngine.UI.Slider)){nav.selectOnLeft=up;nav.selectOnRight=down;}item.navigation=nav;var heat=item.GetComponent<ButtonManager>();if(heat!=null){heat.navigationMode=nav.mode;heat.selectOnUp=up.gameObject;heat.selectOnDown=down.gameObject;heat.selectOnLeft=nav.selectOnLeft?.gameObject;heat.selectOnRight=nav.selectOnRight?.gameObject;}}}
   void Update(){
    if(session.Screen==BilliardsScreen.Match||EventSystem.current==null)return;
    var selected=EventSystem.current.currentSelectedGameObject;
@@ -108,7 +108,7 @@ namespace LWS.TruckBilliards
     var next=Keyboard.current.shiftKey.isPressed?item.navigation.selectOnUp:item.navigation.selectOnDown;
     if(next!=null)EventSystem.current.SetSelectedGameObject(next.gameObject);
    }
-   foreach(var pad in Gamepad.all)if(pad.buttonEast.wasPressedThisFrame){
+   foreach(var pad in Gamepad.all)if(LWS.TruckSports.SportsGameNightRuntime.IsMenuPadAllowed(pad)&&pad.buttonEast.wasPressedThisFrame){
     if(field!=null&&field.isFocused){field.DeactivateInputField();return;}Back();return;
    }
   }
@@ -126,7 +126,7 @@ namespace LWS.TruckBilliards
   }
   public void RequestConfirm(string what){confirmation=what;confirmText.text=what=="restart"?"RESTART THIS RACK?\nEarlier scores and the current breaker are preserved.":what=="restartseries"?"RESTART THIS SERIES?\nClear scores and restore the original opening player.":what=="practicereset"?"RESET PRACTICE RACK?\nRestore all balls, cue and truck.":"RETURN TO MAIN MENU?\nThe current match will be discarded.";session.Show(BilliardsScreen.Confirm);}
   public void Action(string key)
-  {
+  {if(LWS.TruckSports.SportsGameNightRuntime.InterceptOwnerAction(session,key))return;
    if(session.Screen==BilliardsScreen.Disconnect&&(key=="resume"||key=="reassign1"||key=="reassign2")&&!session.input.DisconnectConfirm())return;
    if(Debug.isDebugBuild)Debug.Log("TB_MENU_ACTION "+key+" screen="+session.Screen);
    if(session.match.impact!=null)session.match.audioSource.PlayOneShot(session.match.impact,.25f);
@@ -173,7 +173,7 @@ namespace LWS.TruckBilliards
  }
  static class BilliardsSelectableExtensions
  {
-  public static UnityEngine.UI.Selectable FindFirstInteractable(this UnityEngine.UI.Selectable[] items){foreach(var item in items)if(item.IsActive()&&item.IsInteractable())return item;return null;}
+  public static UnityEngine.UI.Selectable FindFirstInteractable(this UnityEngine.UI.Selectable[] items){foreach(var item in items)if(item.IsActive()&&item.IsInteractable()&&!(item is TMP_InputField field&&field.readOnly))return item;return null;}
  }
 }
 

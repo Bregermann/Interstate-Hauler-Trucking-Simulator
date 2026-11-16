@@ -18,6 +18,7 @@ namespace LWS.TruckSports
         public static SportsGameNightRuntime Instance { get; private set; }
         public static bool Active => Instance != null && Instance.State != null && Instance.State.Phase != SportsGameNightPhase.Ended;
         public SportsGameNightState State { get; private set; }
+        public SportsGameNightReport Report { get; private set; }
         readonly Dictionary<string, Gamepad> pads = new Dictionary<string, Gamepad>();
         readonly Dictionary<string, SportsParticipant> guests = new Dictionary<string, SportsParticipant>();
         SportsGameNightView view;
@@ -29,6 +30,7 @@ namespace LWS.TruckSports
         bool uiLease;
         int gateFrame;
         string observedMatch;
+        double matchPlayedSeconds;
         public bool LobbyVisible => view != null && view.Visible;
         public bool InSport => binding != null;
         public static bool BlockSharedMenus => SportsControllerKeyboard.InputBlocked || Instance != null && (Instance.LobbyVisible || Time.frameCount <= Instance.gateFrame);
@@ -59,9 +61,17 @@ namespace LWS.TruckSports
         {
             if (Instance != this) return;
             SceneManager.sceneLoaded -= Loaded; InputSystem.onDeviceChange -= DeviceChanged;
+            Report?.Save(true, State != null && State.Phase != SportsGameNightPhase.Ended); Report?.Dispose();
             SportsControllerKeyboard.MenuPadAllowed = null; RestoreUi(); Instance = null;
         }
-        void Loaded(Scene scene, LoadSceneMode mode) { if (mode == LoadSceneMode.Single) StartCoroutine(BindScene(scene)); }
+        void Loaded(Scene scene, LoadSceneMode mode)
+        {
+            if (mode != LoadSceneMode.Single) return;
+            // The old MonoBehaviour is already destroyed here. Never poll its
+            // controller roster while waiting one frame for the new scene UI.
+            binding = null; observedMatch = null;
+            StartCoroutine(BindScene(scene));
+        }
         IEnumerator BindScene(Scene scene)
         {
             yield return null; if (!scene.isLoaded || scene != SceneManager.GetActiveScene()) yield break;
@@ -83,7 +93,16 @@ namespace LWS.TruckSports
                 var session = FindAnyObjectByType<SportsEventSession>();
                 if (session != null)
                 {
-                    binding = new SportsPartyMatchBinding(this, session); binding.Apply();
+                    binding = new SportsPartyMatchBinding(this, session);
+                }
+                else
+                {
+                    var legacy = SportsLegacySessionAdapter.Find();
+                    if (legacy != null) binding = new SportsPartyMatchBinding(this, legacy);
+                }
+                if (binding != null)
+                {
+                    binding.Apply();
                     State.BindInitialConfiguration(binding.Fingerprint());
                     State.SetMatchParticipants(binding.HumanProfileIds());
                 }
@@ -100,6 +119,13 @@ namespace LWS.TruckSports
         }
         void ApplyUiAuthority()
         {
+            // The saved title canvas has its own sorting order. Hide it while
+            // our separate lobby/profile canvas owns the front-end screen.
+            if (front != null)
+            {
+                var frontCanvas = front.GetComponentInParent<Canvas>();
+                if (frontCanvas != null) frontCanvas.enabled = !LobbyVisible;
+            }
             if (scopedUiActions == null) return;
             if (!Active) { scopedUiActions.devices = null; if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = !LobbyVisible && originalNavigation; return; }
             var devices = new List<InputDevice>();
@@ -121,14 +147,18 @@ namespace LWS.TruckSports
         public void Open(SportsFrontEnd owner, Gamepad firstPad = null)
         {
             front = owner;
-            if (!Active) { State = new SportsGameNightState(); guests.Clear(); pads.Clear(); }
+            if (!Active)
+            {
+                Report?.Dispose(); State = new SportsGameNightState(); guests.Clear(); pads.Clear();
+                Report = new SportsGameNightReport(State); SportsSessionTelemetry.BeginGameNight(State.SessionId);
+            }
             if (view == null) view = SportsGameNightView.Create(this, owner);
             ShowLobby(); if (firstPad != null && CanJoin(firstPad)) Join(firstPad);
         }
         public void ShowLobby()
         {
             if (State == null || State.Phase == SportsGameNightPhase.Ended) return;
-            if (State.MatchInProgress) State.AbortMatch("return-to-lobby");
+            if (State.MatchInProgress) { Report?.Interrupt("return-to-lobby"); State.AbortMatch("return-to-lobby"); }
             State.ReturnToLobby(); view.Show(); gateFrame = Time.frameCount + 1; ApplyUiAuthority();
         }
         public bool Join(Gamepad pad)
@@ -153,6 +183,8 @@ namespace LWS.TruckSports
         {
             var profile = Profile(id); if (profile == null || !State.SelectProfile(slot, id, IsGuest(id))) return false;
             if (!IsGuest(id)) SportsParticipantRegistry.UseInSeat(slot, id);
+            if (!IsGuest(id)) SportsParticipantRegistry.RecordGameNightVisit(id, State.SessionId);
+            Report?.Remember(profile);
             view.Refresh(); return true;
         }
         public void SelectGuest(int slot)
@@ -161,7 +193,8 @@ namespace LWS.TruckSports
             if (!guests.ContainsKey(id)) guests[id] = new SportsParticipant { id = id, displayName = "Guest " + (slot + 1), color = Color.HSVToRGB(slot * .22f, .65f, 1) };
             SelectProfile(slot, id);
         }
-        public void ProfileChanged(int slot) { var profile = Profile(slot); if (profile != null) State.SelectProfile(slot, profile.id, IsGuest(profile.id)); view.Refresh(); }
+        public void ProfileChanged(int slot) { var profile = Profile(slot); if (profile != null) { State.SelectProfile(slot, profile.id, IsGuest(profile.id)); Report?.Remember(profile); } view.Refresh(); }
+        public string DriverName(string id) => Profile(id)?.displayName ?? Report?.NameFor(id) ?? "Driver";
         public void SelectSport()
         {
             if (front == null || !State.OpenSelection(HostKey)) { view.Notice("Every participating player must choose a profile and ready up."); return; }
@@ -176,34 +209,40 @@ namespace LWS.TruckSports
         public static void BeforeReturnToCollection()
         {
             if (!Active) return;
-            if (Instance.State.MatchInProgress) Instance.State.AbortMatch("return-to-menu");
+            if (Instance.State.MatchInProgress) { Instance.Report?.Interrupt("return-to-menu"); Instance.State.AbortMatch("return-to-menu"); }
             Instance.State.ReturnToLobby();
         }
         public static SportsParticipant ProfileForSlot(ISportsParticipantSlot[] slots, int index)
-            => Active && Instance.binding != null && ReferenceEquals(Instance.binding.Session.setup.players, slots) ? Instance.binding.ProfileForSlot(index) : null;
+            => Active && Instance.binding != null && ReferenceEquals(Instance.binding.Players, slots) ? Instance.binding.ProfileForSlot(index) : null;
         public static void ConfigurationEdited(SportsEventSession session)
+            => ConfigurationEditedOwner(session);
+        public static void ConfigurationEditedOwner(Component owner)
         {
-            if (!Active || Instance.binding == null || Instance.binding.Session != session || Instance.binding.Applying || session.Running && !session.Finished) return;
+            if (!Active || Instance.binding == null || Instance.binding.Owner != owner || Instance.binding.Applying || Instance.binding.Running && !Instance.binding.Finished) return;
             Instance.binding.Apply(); Instance.State.SetMatchParticipants(Instance.binding.HumanProfileIds());
             Instance.State.ChangeConfiguration(Instance.binding.Fingerprint());
         }
         public static bool TryStart(SportsEventSession session)
+            => TryStartOwner(session);
+        public static bool TryStartOwner(Component session)
         {
             if (!Active) return true;
             var owner = Instance;
-            if (owner.binding == null || owner.binding.Session != session) return false;
+            if (owner.binding == null || owner.binding.Owner != session) return false;
             if (owner.State.Phase == SportsGameNightPhase.Results || owner.State.MatchInProgress)
             {
-                PrepareSetup(session); session.SetupScreen();
+                PrepareSetupOwner(session); owner.binding.Setup();
             }
-            ConfigurationEdited(session);
+            ConfigurationEditedOwner(session);
             if (owner.State.CanStart(owner.HostKey)) return true;
             owner.view.Notice("Ready check: each participating player presses START / MENU, then Player 1 starts the match."); return false;
         }
         public static void PrepareSetup(SportsEventSession session)
+            => PrepareSetupOwner(session);
+        public static void PrepareSetupOwner(Component session)
         {
-            if (!Active || Instance.binding == null || Instance.binding.Session != session) return;
-            if (Instance.State.MatchInProgress) Instance.State.RestartSetup(Instance.HostKey);
+            if (!Active || Instance.binding == null || Instance.binding.Owner != session) return;
+            if (Instance.State.MatchInProgress) { Instance.Report?.Interrupt("restart-or-change-setup"); Instance.State.RestartSetup(Instance.HostKey); }
             else if (Instance.State.Phase == SportsGameNightPhase.Results) Instance.State.PrepareRematch(Instance.HostKey);
         }
         public static bool InterceptSetupAction(SportsEventSession session, string action)
@@ -213,6 +252,21 @@ namespace LWS.TruckSports
             if (action == "allai") { Instance.binding.SpectateAI = true; return false; }
             if (session.menus.Screen == SportsEventScreen.Setup && (action.StartsWith("source", StringComparison.Ordinal) || action.StartsWith("pad", StringComparison.Ordinal)))
             { Instance.view.Notice("Controllers and human profiles come from the game-night lobby."); return true; }
+            return false;
+        }
+        public static bool InterceptOwnerAction(Component owner, string action)
+        {
+            if (!Active || Instance.binding == null || Instance.binding.Owner != owner) return false;
+            if (BlockSharedMenus) return true;
+            if (Instance.State.Phase != SportsGameNightPhase.Configuration) return false;
+            if (action == "allai")
+            {
+                if (Instance.binding.SupportsAiSpectating) { Instance.binding.SpectateAI = true; ConfigurationEditedOwner(owner); }
+                return true;
+            }
+            if (!string.IsNullOrEmpty(action) && (action.StartsWith("source", StringComparison.Ordinal) || action.StartsWith("pad", StringComparison.Ordinal) ||
+                action.StartsWith("control", StringComparison.Ordinal) || Instance.binding.Legacy != null && Instance.binding.Legacy.InputPresetModes && action == "mode"))
+            { Instance.view.Notice("Choose profiles and controllers in the game-night lobby. Y switches between crew and AI spectating."); return true; }
             return false;
         }
         public static bool MenuConfirmPressed()
@@ -228,21 +282,36 @@ namespace LWS.TruckSports
             if (!Active || SportsControllerKeyboard.InputBlocked || Time.frameCount <= gateFrame) return;
             if (LobbyVisible) { view.Tick(); return; }
             if (binding == null) return;
+            foreach (var pad in Gamepad.all)
+                if (CanJoin(pad) && State.SeatForDevice(DeviceKey(pad)) < 0 && pad.startButton.wasPressedThisFrame && State.Seats.Any(s => s.Occupied && !s.Connected))
+                { view.OfferReplacement(pad); return; }
             binding.SyncAssignedControllers();
-            if (binding.Session.Running && !binding.Session.Finished)
+            if (binding.Running && !binding.Finished)
             {
-                if (observedMatch != binding.Session.MatchId)
+                if (observedMatch != binding.MatchId)
                 {
-                    observedMatch = binding.Session.MatchId;
-                    State.ConfirmMatchStarted(observedMatch, binding.HumanProfileIds());
+                    observedMatch = binding.MatchId;
+                    matchPlayedSeconds = 0;
+                    if (State.ConfirmMatchStarted(observedMatch, binding.HumanProfileIds())) Report?.BeginMatch(binding);
                 }
+                if (binding.Live) matchPlayedSeconds += Time.unscaledDeltaTime;
             }
-            else if (binding.Session.Finished && State.MatchInProgress && binding.TryResults(out var snapshot))
+            else if (binding.Finished && State.MatchInProgress && binding.TryResults(out var snapshot))
             {
-                State.CompleteMatch(binding.Session.MatchId, snapshot.Rows.Select(r => new SportsGameNightOutcome(r.ParticipantId, r.IsAI, r.Winner)));
+                if (State.CompleteMatch(binding.MatchId, snapshot.Rows.Select(r => new SportsGameNightOutcome(r.ParticipantId, r.IsAI, r.Winner))))
+                {
+                    SportsParticipantRegistry.RecordFinalStatistics(State.SessionId, binding.MatchId, binding.SceneName,
+                        binding.StatisticsVariant, snapshot, binding.HumanProfileIds(), matchPlayedSeconds, binding.Title, binding.OptionLabel);
+                    SportsSessionTelemetry.MatchCompleted(binding.MatchId, binding.SceneName, snapshot);
+                    Report?.Complete(snapshot, binding.HumanProfileIds(), matchPlayedSeconds);
+                }
             }
             if (State.Phase == SportsGameNightPhase.Configuration)
             {
+                if (Pad(0) != null && Pad(0).buttonNorth.wasPressedThisFrame || Keyboard.current != null && Keyboard.current.f6Key.wasPressedThisFrame)
+                {
+                    if (binding.SupportsAiSpectating) { binding.SpectateAI = !binding.SpectateAI; ConfigurationEditedOwner(binding.Owner); }
+                }
                 for (int slot = 0; slot < 4; slot++)
                 {
                     var pad = Pad(slot);
@@ -250,7 +319,7 @@ namespace LWS.TruckSports
                     if (State.Seats[slot].DeviceKey == "keyboard" && Keyboard.current != null && Keyboard.current.f5Key.wasPressedThisFrame) State.SetReady(slot, !State.Seats[slot].Ready);
                 }
             }
-            view.ReadyBar(binding.Session, State);
+            view.ReadyBar(!binding.Live && !binding.Finished, State, binding.SpectateAI, binding.SupportsAiSpectating);
         }
         void DeviceChanged(InputDevice device, InputDeviceChange change)
         {
@@ -278,7 +347,9 @@ namespace LWS.TruckSports
         public void EndNight()
         {
             if (!State.EndNight(HostKey)) return;
+            SportsSessionTelemetry.EndGameNight(State.SessionId); Report?.Save(true);
             view.ShowFinalStandings(); ApplyUiAuthority();
         }
+        public bool ExportReport() => Report != null && Report.Save(State.Phase == SportsGameNightPhase.Ended);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.IO;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -29,6 +30,8 @@ public sealed class SportsGameNightLobbyTests
     IDisposable preferences;
     Gamepad one, two;
     Component night;
+    GameObject telemetry;
+    Gamepad[] four;
     [UnityTest, Timeout(120000)]
     public IEnumerator TwoControllersCreateProfileReadyAndKeepOwnershipAcrossSportReturn()
     {
@@ -88,6 +91,7 @@ public sealed class SportsGameNightLobbyTests
     {
         preferences = (IDisposable)Static("SportsPrefs", "IsolateValidation", "FoundationMatch" + Guid.NewGuid().ToString("N"));
         Static("SportsParticipantRegistry", "ForgetCache");
+        telemetry = new GameObject("Foundation real telemetry observer"); UnityEngine.Object.DontDestroyOnLoad(telemetry); telemetry.AddComponent(T("SportsSessionTelemetry"));
         one = InputSystem.AddDevice<Gamepad>("Foundation match host"); two = InputSystem.AddDevice<Gamepad>("Foundation match second");
         EditorSceneManager.LoadSceneInPlayMode("Assets/TruckSports/Scenes/TruckSports.unity", new LoadSceneParameters(LoadSceneMode.Single));
         yield return null; yield return null;
@@ -120,6 +124,8 @@ public sealed class SportsGameNightLobbyTests
         var totals = (int[])Get(session, "total"); Assert.That(Math.Max(totals[2], totals[3]), Is.GreaterThan(Math.Max(totals[0], totals[1])));
         var points = (IDictionary)Get(state, "Points"); Assert.That(points[firstId], Is.EqualTo(0)); Assert.That(points[secondId], Is.EqualTo(0));
         Assert.That(points.Count, Is.EqualTo(2), "AI victory must not create a human-profile session score entry.");
+        InputSystem.DisableDevice(two); yield return null;
+        InputSystem.EnableDevice(two); yield return null;
         Call(Get(session, "menus"), "Action", "rematch"); yield return null;
         Assert.That(Get(state, "Phase").ToString(), Is.EqualTo("Configuration"));
         Assert.That(Get(session, "Finished"), Is.EqualTo(false)); Assert.That(Get(state, "AllReady"), Is.EqualTo(false));
@@ -131,6 +137,80 @@ public sealed class SportsGameNightLobbyTests
         Assert.That(Get(state, "Phase").ToString(), Is.EqualTo("Lobby"));
         Assert.That(Call(night, "Pad", 0), Is.SameAs(one)); Assert.That(Call(night, "Pad", 1), Is.SameAs(two));
         Assert.That(points[firstId], Is.EqualTo(0)); Assert.That(points[secondId], Is.EqualTo(0));
+        Static("SportsParticipantRegistry", "ForgetCache");
+        var firstStats = Get(Static("SportsParticipantRegistry", "Find", firstId), "statistics");
+        Assert.That(Get(firstStats, "matches"), Is.EqualTo(1)); Assert.That(Get(firstStats, "losses"), Is.EqualTo(1)); Assert.That(Get(firstStats, "winnerPoints"), Is.EqualTo(0));
+        var savedSessions = (IList)Get(firstStats, "sessionIds"); Assert.That(savedSessions.Count, Is.EqualTo(1));
+        Call(night, "EndNight"); yield return null;
+        yield return Press(one, GamepadButton.West); // Final-screen controller export.
+        var report = Get(night, "Report"); var contents = Get(report, "Contents");
+        Assert.That(Get(contents, "completedMatches"), Is.EqualTo(1)); Assert.That(Get(contents, "interruptedMatches"), Is.EqualTo(1));
+        Assert.That(Get(contents, "status"), Is.EqualTo("completed")); Assert.That(Get(report, "SaveError"), Is.Null);
+        var events = (IEnumerable)Get(contents, "events");
+        Assert.That(events.Cast<object>().Any(e => (string)Get(e, "kind") == "device_changed"), Is.True);
+        string jsonPath = (string)Get(report, "JsonPath"), summaryPath = (string)Get(report, "SummaryPath");
+        Assert.That(File.Exists(jsonPath), Is.True); Assert.That(File.ReadAllText(jsonPath), Does.Contain(firstMatch));
+        Assert.That(File.ReadAllText(summaryPath), Does.Contain("Completed matches: 1"));
+        string stream = (string)T("SportsSessionTelemetry").GetProperty("CurrentFile").GetValue(null);
+        using (var source = new FileStream(stream, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        using (var reader = new StreamReader(source)) Assert.That(reader.ReadToEnd(), Does.Contain("game_night_ended"));
+    }
+    [UnityTest, Timeout(300000)]
+    public IEnumerator FourControllersKeepProfilesAndReadyGatesAcrossAllSevenLegacySessions()
+    {
+        preferences = (IDisposable)Static("SportsPrefs", "IsolateValidation", "FoundationLegacy" + Guid.NewGuid().ToString("N"));
+        Static("SportsParticipantRegistry", "ForgetCache");
+        four = Enumerable.Range(0, 4).Select(i => InputSystem.AddDevice<Gamepad>("Legacy driver " + (i + 1))).ToArray();
+        one = four[0]; two = four[1];
+        EditorSceneManager.LoadSceneInPlayMode("Assets/TruckSports/Scenes/TruckSports.unity", new LoadSceneParameters(LoadSceneMode.Single));
+        yield return null; yield return null;
+        night = UnityEngine.Object.FindAnyObjectByType(T("SportsGameNightRuntime")) as Component;
+        if (night == null) night = new GameObject("Legacy four-controller integration").AddComponent(T("SportsGameNightRuntime"));
+        yield return null; yield return null;
+        Call(night, "Open", UnityEngine.Object.FindAnyObjectByType(T("SportsFrontEnd")), one);
+        for (int i = 1; i < 4; i++) Call(night, "Join", four[i]);
+        string[] ids = Enumerable.Range(0, 4).Select(i => (string)Get(Static("SportsParticipantRegistry", "Default", i), "id")).ToArray();
+        for (int i = 0; i < 4; i++) Call(night, "SelectProfile", i, ids[i]);
+        var state = Get(night, "State");
+        foreach (string scene in new[] { "TruckBowling", "TruckCornhole", "TruckCheeseRolling", "TruckHockey", "TruckAirHockey", "TruckWallball", "TruckBilliards" })
+        {
+            for (int i = 0; i < 4; i++) Call(state, "SetReady", i, true);
+            Call(night, "SelectSport"); Static("SportsNavigation", "LoadSport", scene);
+            yield return null; yield return null; yield return null; yield return null;
+            var binding = Get(night, "binding"); Assert.That(binding, Is.Not.Null, scene);
+            var owner = (Component)Get(binding, "Owner"); Assert.That(owner.gameObject.scene.name, Is.EqualTo(scene));
+            string[] humans = (string[])Call(binding, "HumanProfileIds"); int expected = scene == "TruckAirHockey" || scene == "TruckBilliards" ? 2 : 4;
+            Assert.That(humans.Length, Is.EqualTo(expected), scene + " supported human capacity");
+            Assert.That(humans.Distinct().Count(), Is.EqualTo(expected));
+            var roster = (Array)Get(binding, "Players");
+            for (int i = 0; i < roster.Length; i++)
+            {
+                var player = roster.GetValue(i); string id = (string)Get(player, "participantId"); int seat = Array.IndexOf(ids, id);
+                if (seat >= 0 && humans.Contains(id)) Assert.That(Call(binding, "Controller", i), Is.SameAs(four[seat]), scene + " source ownership");
+            }
+            Call(state, "SetReady", 0, false);
+            var start = owner.GetType().GetMethod("StartMatch", Any);
+            object[] startArgs = start.GetParameters().Length == 0 ? Array.Empty<object>() : new object[] { false };
+            Assert.That(start.Invoke(owner, startArgs), Is.EqualTo(false), scene + " blocks an unready start");
+            Call(state, "SetReady", 0, true);
+            Assert.That(start.Invoke(owner, startArgs), Is.EqualTo(true), scene + " starts with the assigned real devices");
+            yield return null; yield return null; yield return null;
+            Assert.That(Get(state, "Phase").ToString(), Is.EqualTo("Playing"), scene + " match identity/lifecycle");
+            Assert.That(Get(binding, "MatchId"), Is.Not.Null.And.Not.Empty);
+            if (scene == "TruckHockey")
+            {
+                InputSystem.RemoveDevice(four[3]); yield return null; yield return null;
+                four[3] = InputSystem.AddDevice<Gamepad>("Replacement fourth driver");
+                yield return Press(four[3], GamepadButton.Start);
+                Assert.That(Call(night, "Pad", 3), Is.SameAs(four[3]));
+                Assert.That(Get(Call(night, "Profile", 3), "id"), Is.EqualTo(ids[3]), "Replacement preserves the actual driver identity.");
+            }
+            Static("SportsNavigation", "FrontEnd", true);
+            yield return null; yield return null; yield return null; yield return null;
+            Assert.That(Get(state, "Phase").ToString(), Is.EqualTo("Lobby"));
+            for (int i = 0; i < 4; i++) Assert.That(Call(night, "Pad", i), Is.SameAs(four[i]));
+            Assert.That(((IDictionary)Get(state, "Points")).Values.Cast<int>().All(p => p == 0), Is.True, "Interrupted starts never award points.");
+        }
     }
     [UnityTearDown] public IEnumerator Cleanup()
     {
@@ -139,8 +219,11 @@ public sealed class SportsGameNightLobbyTests
         if (two != null && two.added) InputSystem.QueueStateEvent(two, new GamepadState());
         yield return null; yield return null; yield return null;
         if (night != null) UnityEngine.Object.Destroy(night.gameObject);
+        if (telemetry != null) UnityEngine.Object.Destroy(telemetry);
         if (one != null && one.added) InputSystem.RemoveDevice(one);
         if (two != null && two.added) InputSystem.RemoveDevice(two);
+        if (four != null) foreach (var pad in four) if (pad != null && pad.added) InputSystem.RemoveDevice(pad);
+        four = null;
         yield return null;
         Static("SportsParticipantRegistry", "ForgetCache"); preferences?.Dispose(); preferences = null;
     }

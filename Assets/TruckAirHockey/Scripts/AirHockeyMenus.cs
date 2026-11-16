@@ -19,7 +19,7 @@ public sealed class AirHockeyMenus:SportsMenuView {
  public void Gate(){gateFrame=Time.frameCount;released=false;}public void Dirty(){revision=-1;}
  public void Show(AirHockeyScreen screen){Screen=screen;hud.SetActive(screen==AirHockeyScreen.Play);base.Show((int)screen);Gate();Dirty();if(screen==AirHockeyScreen.Result)resultText.text=match.players[match.rules.Winner].name+" WINS\n"+match.players[0].name+"  "+match.rules.Score[0]+" : "+match.rules.Score[1]+"  "+match.players[1].name+"\nFirst to 7 • Rematch alternates opening serve";}
  bool FreshConfirm(){if(!released)return false;if(SportsDeviceInput.KeyDown(Key.Enter)||SportsDeviceInput.KeyDown(Key.Space)||Mouse.current!=null&&Mouse.current.leftButton.wasReleasedThisFrame)return true;foreach(var p in match.players)if(p.controller&&p.pad!=null&&p.pad.added&&p.pad.enabled&&p.pad.buttonSouth.wasPressedThisFrame)return true;return match.AllAI;}
- public override void Action(string key){
+ public override void Action(string key){if(LWS.TruckSports.SportsGameNightRuntime.InterceptOwnerAction(match,key))return;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
  if(Array.IndexOf(Environment.GetCommandLineArgs(),"-tsArenaUpdate")>=0)Debug.Log("AH_UI_ACTION key="+key+" screen="+Screen+" fresh="+released+" confirm="+FreshConfirm()+" frame="+Time.frameCount);
 #endif

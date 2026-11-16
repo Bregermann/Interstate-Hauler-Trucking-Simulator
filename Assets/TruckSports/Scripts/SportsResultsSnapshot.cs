@@ -15,8 +15,12 @@ namespace LWS.TruckSports
         public readonly bool IsAI, Winner;
         public readonly int Slot, Place;
         public readonly double? Measurement;
+        public readonly SportsRecordPreference RecordPreference;
         public SportsResultRow(ISportsParticipantSlot participant, int slot, int place, bool winner,
             double? measurement, string unit, string detail, string fallbackValue = "—", string format = "0.###")
+            : this(participant, slot, place, winner, measurement, unit, detail, fallbackValue, format, SportsRecordPreference.Unspecified) { }
+        public SportsResultRow(ISportsParticipantSlot participant, int slot, int place, bool winner,
+            double? measurement, string unit, string detail, string fallbackValue, string format, SportsRecordPreference recordPreference)
         {
             if (participant == null || string.IsNullOrWhiteSpace(participant.ParticipantId) || slot < 0 || place < 0 || winner && place != 1)
                 throw new ArgumentException("Results require a stable identity, valid slot and explicit authoritative placing.");
@@ -25,6 +29,7 @@ namespace LWS.TruckSports
             ParticipantId = participant.ParticipantId; DisplayName = participant.DisplayName; Color = participant.ParticipantColor;
             IsAI = participant.IsBot; Slot = slot; Place = place; Winner = winner; Measurement = measurement;
             Unit = unit ?? ""; Detail = detail ?? ""; FallbackValue = fallbackValue ?? "—"; Format = format ?? "0.###";
+            RecordPreference = recordPreference;
         }
         // Display grammar only; retain the rules owner's original unit and value.
         public string DisplayUnit => Measurement == 1 ? Unit switch
@@ -43,8 +48,11 @@ namespace LWS.TruckSports
     public sealed class SportsResultsSnapshot
     {
         public readonly string Heading, Summary;
+        public readonly SportsMatchKind Kind;
         public IReadOnlyList<SportsResultRow> Rows { get; }
         public SportsResultsSnapshot(string heading, string summary, IEnumerable<SportsResultRow> rows)
+            : this(heading, summary, rows, SportsMatchKind.Competitive) { }
+        public SportsResultsSnapshot(string heading, string summary, IEnumerable<SportsResultRow> rows, SportsMatchKind kind)
         {
             if (string.IsNullOrWhiteSpace(heading) || rows == null) throw new ArgumentException("Results require a heading and explicit participant rows.");
             var entries = rows.ToArray();
@@ -52,6 +60,7 @@ namespace LWS.TruckSports
                 entries.Select(row => row.ParticipantId).Distinct(StringComparer.Ordinal).Count() != entries.Length || entries.Select(row => row.Slot).Distinct().Count() != entries.Length)
                 throw new ArgumentException("Results require one unique stable identity and slot per participant, with at most twelve rows.");
             Heading = heading; Summary = summary ?? "";
+            Kind = kind;
             Rows = Array.AsReadOnly(entries.OrderBy(row => row.Place == 0 ? int.MaxValue : row.Place).ThenBy(row => row.Slot).ToArray());
         }
     }

@@ -25,7 +25,7 @@ namespace LWS.TruckSports
         {
             public int schema = 1;
             public long sequence;
-            public string sessionId, utc, kind, scene, version, matchId, sport, eventId, participantId, teamId;
+            public string sessionId, gameNightId, utc, kind, scene, version, matchId, sport, eventId, participantId, teamId;
             public string message, stack, level, unit, reason, device, deviceChange;
             public int frame, slot, deviceId, sampleFrames, droppedEvents;
             public float realtime, framesPerSecond, minimumFrameMs, maximumFrameMs;
@@ -40,6 +40,8 @@ namespace LWS.TruckSports
         static SportsSessionTelemetry instance;
         static int queued, dropped, accepting;
         static string activeSession;
+        static string activeGameNight;
+        public static event Action<Record> Recorded;
         StreamWriter writer;
         string scene, version;
         int frame, sampleFrames;
@@ -51,7 +53,7 @@ namespace LWS.TruckSports
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetSession()
         {
-            instance = null; activeSession = null; CurrentFile = null;
+            instance = null; activeSession = activeGameNight = null; CurrentFile = null; Recorded = null;
             queued = dropped = accepting = 0;
             while (pending.TryDequeue(out _)) { }
         }
@@ -74,7 +76,7 @@ namespace LWS.TruckSports
             scene = SceneManager.GetActiveScene().name; version = Application.version;
             try
             {
-                string folder = Path.Combine(Application.persistentDataPath, "TruckSports", "Telemetry");
+                string folder = Path.Combine(Application.persistentDataPath, "TruckSports", SportsPrefs.StorageScope == "Player" ? "Telemetry" : "Validation/" + SportsPrefs.StorageScope + "/Telemetry");
                 Directory.CreateDirectory(folder);
                 CurrentFile = Path.Combine(folder, DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ") + "-" + activeSession + ".jsonl");
                 writer = new StreamWriter(new FileStream(CurrentFile, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
@@ -102,6 +104,7 @@ namespace LWS.TruckSports
         {
             if (Volatile.Read(ref accepting) == 0) return;
             value.utc = DateTime.UtcNow.ToString("O");
+            value.gameNightId = activeGameNight;
             if (Interlocked.Increment(ref queued) > QueueCapacity)
             {
                 Interlocked.Decrement(ref queued); Interlocked.Increment(ref dropped); return;
@@ -111,6 +114,20 @@ namespace LWS.TruckSports
 
         public static void MatchStarted(string matchId, string sport)
             => Enqueue(new Record { kind = "match_started", matchId = matchId, sport = sport });
+        public static void BeginGameNight(string id) { activeGameNight = id; Enqueue(new Record { kind = "game_night_started" }); }
+        public static void EndGameNight(string id)
+        {
+            if (activeGameNight != id) return;
+            Enqueue(new Record { kind = "game_night_ended" }); FlushNow(); activeGameNight = null;
+        }
+        public static void GameNightEvent(string kind, string matchId = null, string sport = null, string message = null)
+            => Enqueue(new Record { kind = kind, matchId = matchId, sport = sport, message = message });
+        public static void GameplayEvent(string sport, string eventId, string participantId, string reason, double value = 0)
+        {
+            if (!double.IsFinite(value)) return;
+            Enqueue(new Record { kind = "gameplay_event", sport = sport, eventId = eventId, participantId = participantId, reason = reason, outcome = value });
+        }
+        public static void FlushNow() { if (instance != null && !instance.closed) { instance.Drain(); instance.Flush(); } }
         public static void ConfirmedScore(SportsScoreEvent score)
         {
             if (score == null || instance == null) return;
@@ -169,7 +186,7 @@ namespace LWS.TruckSports
             try
             {
                 int lost = Interlocked.Exchange(ref dropped, 0);
-                if (lost > 0) Write(new Record { kind = "telemetry_queue_overflow", droppedEvents = lost, utc = DateTime.UtcNow.ToString("O") });
+                if (lost > 0) Write(new Record { kind = "telemetry_queue_overflow", gameNightId = activeGameNight, droppedEvents = lost, utc = DateTime.UtcNow.ToString("O") });
                 while (maximum-- > 0 && pending.TryDequeue(out var value)) { Interlocked.Decrement(ref queued); Write(value); }
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException) { StopAfterIoFailure(); }
@@ -179,6 +196,7 @@ namespace LWS.TruckSports
             value.sessionId = activeSession; value.sequence = ++sequence;
             value.scene = value.scene ?? scene; value.version = version; value.frame = frame; value.realtime = realtime;
             writer.WriteLine(JsonUtility.ToJson(value));
+            Recorded?.Invoke(value);
         }
         void Flush()
         {

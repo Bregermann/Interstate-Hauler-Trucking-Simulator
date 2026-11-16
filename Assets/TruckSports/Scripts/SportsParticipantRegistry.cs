@@ -17,6 +17,7 @@ public interface ISportsParticipantSlot {
  public Color color=Color.cyan;
  public bool preferredAI;
  public SportsTruckAppearanceData appearance=new SportsTruckAppearanceData();
+ public SportsProfileStatistics statistics=new SportsProfileStatistics();
 }
 [Serializable] public sealed class SportsLegacySetup {
  public string key,json;
@@ -26,12 +27,13 @@ public interface ISportsParticipantSlot {
  public string[] participantIds,names;
 }
 [Serializable] public sealed class SportsParticipantData {
- public const int CurrentVersion=3;
+ public const int CurrentVersion=4;
  public int version=CurrentVersion;
  public List<SportsParticipant> participants=new List<SportsParticipant>();
  public List<string> roster=new List<string>();
  public List<SportsLegacySetup> legacy=new List<SportsLegacySetup>();
  public List<SportsMatchReceipt> results=new List<SportsMatchReceipt>();
+ public List<string> statisticMatches=new List<string>();
 }
 public static class SportsParticipantRegistry {
  public const string Key="TruckSports.Participants.v1";
@@ -72,7 +74,7 @@ public static class SportsParticipantRegistry {
  static void NewerData(){readOnly=true;Notice="Participant data is from a newer game version. Changes are temporary.";Debug.LogWarning(Notice);}
  static void PrepareAppearance(string original){
   if(data.participants.Any(p=>p.appearance!=null&&p.appearance.version>SportsTruckAppearanceData.CurrentVersion)){NewerData();return;}
-  int oldVersion=data.version;bool migrated=oldVersion<SportsParticipantData.CurrentVersion,repaired=false;foreach(var p in data.participants){p.appearance=SportsTruckAppearanceData.Normalize(p.appearance,out bool changed);repaired|=changed;if(string.IsNullOrEmpty(p.avatarKey))p.avatarKey="truck";}
+  int oldVersion=data.version;bool migrated=oldVersion<SportsParticipantData.CurrentVersion,repaired=false;data.statisticMatches??=new List<string>();foreach(var p in data.participants){p.appearance=SportsTruckAppearanceData.Normalize(p.appearance,out bool changed);repaired|=changed;if(string.IsNullOrEmpty(p.avatarKey))p.avatarKey="truck";p.statistics??=new SportsProfileStatistics();p.statistics.Normalize();}
   data.version=SportsParticipantData.CurrentVersion;
   if(migrated&&!SportsPrefs.HasKey(Key+".Migrated.v"+oldVersion))SportsPrefs.SetString(Key+".Migrated.v"+oldVersion,original);
   if(repaired&&!migrated){SportsPrefs.SetString(Key+".Recovered.Appearance."+DateTime.UtcNow.Ticks,original);Notice="Invalid truck appearance preferences were preserved and safely repaired.";Debug.LogWarning(Notice);}
@@ -146,6 +148,29 @@ public static class SportsParticipantRegistry {
   count=Math.Min(count,slots.Length);var ids=new string[count];var names=new string[count];for(int i=0;i<count;i++){ids[i]=slots[i].ParticipantId;names[i]=slots[i].DisplayName;}
   data.results.Add(new SportsMatchReceipt{matchId=matchId,mode=mode,completedUtc=DateTime.UtcNow.ToString("O"),summary=summary??"",participantIds=ids,names=names});
   if(data.results.Count>128)data.results.RemoveAt(0);Persist();return true;
+ }
+ public static bool RecordGameNightVisit(string profileId,string sessionId){
+  Load();var profile=Find(profileId);if(profile==null||readOnly||SportsGameNightRuntime.IsGuest(profileId)||string.IsNullOrWhiteSpace(sessionId))return false;
+  string previous=JsonUtility.ToJson(data);profile.statistics??=new SportsProfileStatistics();if(!profile.statistics.Visit(sessionId))return true;
+  return CommitStatistics(previous);
+ }
+ public static bool RecordFinalStatistics(string sessionId,string matchId,string sport,string variant,SportsResultsSnapshot snapshot,IEnumerable<string> humanProfiles,double playedSeconds,string sportTitle=null,string variantLabel=null){
+  Load();if(readOnly||snapshot==null||humanProfiles==null||string.IsNullOrWhiteSpace(sessionId)||string.IsNullOrWhiteSpace(matchId)||string.IsNullOrWhiteSpace(sport)||!double.IsFinite(playedSeconds)||playedSeconds<0)return false;
+  data.statisticMatches??=new List<string>();if(data.statisticMatches.Contains(matchId))return true;
+  var humans=new HashSet<string>(humanProfiles,StringComparer.Ordinal);
+  if(humans.Any(id=>!snapshot.Rows.Any(r=>r.ParticipantId==id&&!r.IsAI)))return false;
+  string previous=JsonUtility.ToJson(data),utc=DateTime.UtcNow.ToString("O");bool anyWinner=snapshot.Rows.Any(r=>r.Winner);
+  foreach(var row in snapshot.Rows){
+   if(row.IsAI||!humans.Contains(row.ParticipantId)||SportsGameNightRuntime.IsGuest(row.ParticipantId))continue;
+   var profile=Find(row.ParticipantId);if(profile==null)continue;
+   profile.statistics??=new SportsProfileStatistics();profile.statistics.Visit(sessionId);
+   profile.statistics.Apply(sport,variant,matchId,utc,snapshot.Kind,row.Winner,anyWinner,row.Place,playedSeconds,row.Measurement,row.Unit,row.RecordPreference,sportTitle,variantLabel);profile.lastPlayedUtc=utc;
+  }
+  data.statisticMatches.Add(matchId);return CommitStatistics(previous);
+ }
+ static bool CommitStatistics(string previous){
+  try{if(Persist()){Changed?.Invoke();return true;}}catch(Exception error){Notice="Statistics could not be saved. Previous saved statistics are retained.";Debug.LogWarning(Notice+" "+error.GetType().Name);}
+  data=JsonUtility.FromJson<SportsParticipantData>(previous);return false;
  }
  static bool Persist(){
   if(readOnly)return false;string previous=SportsPrefs.GetString(Key);

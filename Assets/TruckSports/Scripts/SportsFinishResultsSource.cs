@@ -18,8 +18,13 @@ namespace LWS.TruckSports
         public virtual bool TryCapture(out SportsResultsSnapshot snapshot)
         {
             snapshot = null;
-            if (wallball != null)
-            {
+            if (wallball != null) return TryCaptureWallball(wallball, out snapshot);
+            if (cornhole != null) return TryCaptureCornhole(cornhole, out snapshot);
+            return TryCaptureSession(session, out snapshot);
+        }
+        public static bool TryCaptureWallball(LWS.TruckWallball.WallballMatch wallball, out SportsResultsSnapshot snapshot)
+        {
+            snapshot = null; if (wallball == null) return false;
                 if (!wallball.InMatch || wallball.rules.Phase != LWS.TruckWallball.WallballPhase.Finished) return false;
                 var entries = new List<SportsResultRow>(wallball.Count);
                 for (int i = 0; i < wallball.Count; i++)
@@ -31,9 +36,10 @@ namespace LWS.TruckSports
                 snapshot = new SportsResultsSnapshot(wallball.TeamName(wallball.rules.Winner) + " WINS WALLBALL",
                     wallball.rules.Points + " RALLIES SCORED · " + wallball.LegalReturns + " LEGAL RETURNS · MAX VOLLEY " + wallball.MaximumVolley, entries);
                 return true;
-            }
-            if (cornhole != null)
-            {
+        }
+        public static bool TryCaptureCornhole(LWS.TruckCornhole.CornholeMatch cornhole, out SportsResultsSnapshot snapshot)
+        {
+            snapshot = null; if (cornhole == null) return false;
                 if (!cornhole.Finished) return false;
                 var entries = new List<SportsResultRow>(cornhole.setup.count);
                 for (int i = 0; i < cornhole.setup.count; i++)
@@ -43,8 +49,6 @@ namespace LWS.TruckSports
                 snapshot = new SportsResultsSnapshot(cornhole.setup.count == 1 ? "SOLO CORNHOLE RESULTS" : cornhole.winners.Length > 1 ? "SHARED CORNHOLE VICTORY" : "CORNHOLE RESULTS",
                     cornhole.RoundFinalizations + " ROUNDS BANKED · FOUR TRUCKS PER ROUND", entries);
                 return true;
-            }
-            return TryCaptureSession(session, out snapshot);
         }
         public static bool TryCaptureSession(SportsEventSession session, out SportsResultsSnapshot snapshot)
         {

@@ -21,10 +21,10 @@ namespace LWS.TruckSports
         readonly int[] choices = new int[4];
         readonly float[] nextChoice = new float[4];
         TMP_FontAsset headingFont, bodyFont;
-        TMP_Text notice, editorTitle, profileText, finalText, banner;
+        TMP_Text notice, editorTitle, profileText, finalText, banner, reportStatus;
         TMP_InputField nameField;
         ButtonManager selectSport, profileBack, profileConfirm;
-        int editing = -1, profileOwner = -1, deleteChoice, finalPageIndex;
+        int editing = -1, profileOwner = -1, deleteChoice, finalPageIndex, profileStatsPage;
         bool creating, deleting;
         float noticeUntil;
         string previousBanner;
@@ -91,7 +91,12 @@ namespace LWS.TruckSports
                     ready = Text("Ready state", card, new Vector2(580, 34), new Vector2(55, -43), 26, true),
                     help = Text("Controls", card, new Vector2(740, 54), new Vector2(0, -94), 20),
                     points = Text("Winner points", card, new Vector2(190, 34), new Vector2(285, 90), 23, true) };
-                var readyButton = Button("CHOOSE / READY", card, new Vector2(55, -43), new Vector2(460, 40), () => Activate(slot));
+                var readyButton = Button("CHOOSE / READY", card, new Vector2(55, -43), new Vector2(460, 40), () =>
+                {
+                    var seat = night.State.Seats[slot];
+                    if (seat.DeviceKey == "keyboard" || !seat.Occupied && slot == 0) Activate(slot);
+                    else Notice("Each player readies with their own assigned controller.");
+                });
                 var readyGroup = readyButton.GetComponent<CanvasGroup>();
                 if (readyGroup == null) readyGroup = readyButton.gameObject.AddComponent<CanvasGroup>();
                 readyGroup.alpha = 0;
@@ -116,7 +121,9 @@ namespace LWS.TruckSports
             profileBack = Button("BACK", profilePage.transform, new Vector2(-300, -350), new Vector2(420, 64), CloseProfile);
             profileConfirm = Button("DELETE PROFILE", profilePage.transform, new Vector2(300, -350), new Vector2(420, 64), ProfileConfirm);
             finalPage = Page("Night standings", "GAME NIGHT COMPLETE"); finalText = Text("Final standings", finalPage.transform, new Vector2(1550, 620), new Vector2(0, 20), 34, true);
-            Button("BACK TO TITLE", finalPage.transform, new Vector2(0, -390), new Vector2(520, 64), CloseFinal);
+            reportStatus = Text("Report status", finalPage.transform, new Vector2(1650, 65), new Vector2(0, -305), 20);
+            Button("BACK TO TITLE", finalPage.transform, new Vector2(-300, -390), new Vector2(520, 64), CloseFinal);
+            Button("X  ·  SAVE SESSION REPORT", finalPage.transform, new Vector2(300, -390), new Vector2(520, 64), ExportReport);
             readyRoot = Rect("Game-night ready check", transform, new Vector2(1540, 68), Vector2.zero).gameObject;
             var readyRect = readyRoot.GetComponent<RectTransform>(); readyRect.anchorMin = readyRect.anchorMax = new Vector2(.5f, 0); readyRect.pivot = new Vector2(.5f, 0); readyRect.anchoredPosition = new Vector2(0, 10);
             readyRoot.AddComponent<UnityEngine.UI.Image>().color = SportsBroadcastCanvas.Ink; readyRoot.AddComponent<SportsBroadcastPlate>().cut = 12;
@@ -184,6 +191,8 @@ namespace LWS.TruckSports
             else night.State.SetReady(slot, !seat.Ready);
             Refresh();
         }
+        static bool Left(Gamepad pad) => pad.dpad.left.wasPressedThisFrame || pad.leftStick.left.wasPressedThisFrame;
+        static bool Right(Gamepad pad) => pad.dpad.right.wasPressedThisFrame || pad.leftStick.right.wasPressedThisFrame;
         public void Tick()
         {
             if (editor.activeSelf) { if (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame) CommitName(nameField.text); if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) CancelEditor(); return; }
@@ -197,9 +206,7 @@ namespace LWS.TruckSports
                 {
                     if (pad.startButton.wasPressedThisFrame && night.State.Seats.Any(s => s.Occupied && !s.Connected))
                     {
-                        disconnectedSeats = Enumerable.Range(0, 4).Where(i => night.State.Seats[i].Occupied && !night.State.Seats[i].Connected).ToArray();
-                        if (disconnectedSeats.Length == 1) { night.ReplaceController(disconnectedSeats[0], pad); continue; }
-                        replacementPad = pad; replacementChoice = 0; ShowOnly(profilePage); RenderReplacement(); return;
+                        OfferReplacement(pad); return;
                     }
                     if (pad.buttonSouth.wasPressedThisFrame || pad.startButton.wasPressedThisFrame) night.Join(pad);
                     continue;
@@ -211,7 +218,7 @@ namespace LWS.TruckSports
                 if (pad.buttonSouth.wasPressedThisFrame) { Activate(slot); if (editor.activeSelf || SportsControllerKeyboard.InputBlocked) return; }
                 if (pad.buttonWest.wasPressedThisFrame) { BeginName(slot, !seat.ProfileConfirmed); return; }
                 if (pad.buttonNorth.wasPressedThisFrame) { if (!seat.ProfileConfirmed) night.SelectGuest(slot); else { OpenProfile(slot); return; } }
-                Vector2 direction = pad.dpad.ReadValue();
+                Vector2 direction = pad.dpad.ReadValue(); if (direction.sqrMagnitude < .25f) direction = pad.leftStick.ReadValue();
                 if (!seat.ProfileConfirmed && Mathf.Abs(direction.x) > .5f && Time.unscaledTime >= nextChoice[slot])
                 {
                     int count = Profiles(slot).Count; if (count > 0) choices[slot] = (choices[slot] + (direction.x > 0 ? 1 : count - 1)) % count;
@@ -245,6 +252,13 @@ namespace LWS.TruckSports
                 }
             }
         }
+        public void OfferReplacement(Gamepad pad)
+        {
+            disconnectedSeats = Enumerable.Range(0, 4).Where(i => night.State.Seats[i].Occupied && !night.State.Seats[i].Connected).ToArray();
+            if (disconnectedSeats.Length == 0) return;
+            if (disconnectedSeats.Length == 1) { night.ReplaceController(disconnectedSeats[0], pad); return; }
+            replacementPad = pad; replacementChoice = 0; ShowOnly(profilePage); RenderReplacement(); night.RefreshUiAuthority();
+        }
         void BeginName(int slot, bool isNew)
         {
             editing = slot; creating = isNew; editorTitle.text = isNew ? "CREATE YOUR DRIVER" : "RENAME YOUR DRIVER";
@@ -269,9 +283,43 @@ namespace LWS.TruckSports
         {
             profileOwner = slot; deleting = false; var profile = night.Profile(slot); if (profile == null) return;
             ProfileButtons("BACK", SportsGameNightRuntime.IsGuest(profile.id) ? "LEAVE AS GUEST" : "DELETE PROFILE");
-            var recent = SportsParticipantRegistry.Current.results.Where(r => r.participantIds != null && r.participantIds.Contains(profile.id)).Reverse().Take(5);
-            profileText.text = profile.displayName + "\n" + (SportsGameNightRuntime.IsGuest(profile.id) ? "GUEST · THIS GAME NIGHT ONLY" : "SAVED DRIVER") + "\nCreated: " + (string.IsNullOrEmpty(profile.createdUtc) ? "Imported profile" : profile.createdUtc.Substring(0, 10)) + "\nLast played: " + (string.IsNullOrEmpty(profile.lastPlayedUtc) ? "Not recorded" : profile.lastPlayedUtc.Substring(0, 10)) + "\n\nRECENT MATCHES\n" + string.Join("\n", recent.Select(r => r.mode + " · " + r.summary));
+            profileStatsPage = 0; RenderProfileStatistics();
             ShowOnly(profilePage);
+        }
+        static string ProfileDate(string value) => DateTime.TryParse(value, out var date) ? date.ToString("yyyy-MM-dd") : "Not recorded";
+        static int ProfilePages(SportsProfileStatistics stats) => 1 + (stats?.sports?.Sum(s => Math.Max(1, (s.records.Count + 3) / 4)) ?? 0);
+        void RenderProfileStatistics()
+        {
+            var profile = night.Profile(profileOwner); if (profile == null) return;
+            if (SportsGameNightRuntime.IsGuest(profile.id))
+            { profileText.text = profile.displayName + "\n\nGUEST · THIS GAME NIGHT ONLY\n\nSession winner points remain in the lobby.\nChoose or create a saved driver for lifetime statistics.\n\nB: back · X: leave guest"; return; }
+            var stats = profile.statistics ?? new SportsProfileStatistics(); stats.Normalize();
+            profileStatsPage = Mathf.Clamp(profileStatsPage, 0, ProfilePages(stats) - 1);
+            if (profileStatsPage == 0)
+            {
+                profileText.text = profile.displayName + "\nLIFETIME DRIVER STATISTICS\n\n" +
+                    stats.matches + " MATCHES   ·   " + stats.sessionIds.Count + " GAME NIGHTS\n" +
+                    stats.wins + " WINS   ·   " + stats.losses + " LOSSES   ·   " + stats.draws + " DRAWS\n" +
+                    stats.WinPercentage.ToString("0.#") + "% COMPETITIVE WIN RATE   ·   " + stats.winnerPoints + " LIFETIME WINNER POINTS\n" +
+                    stats.practice + " PRACTICE   ·   " + stats.cooperative + " COOPERATIVE MATCHES\n" +
+                    TimeSpan.FromSeconds(stats.playedSeconds).TotalMinutes.ToString("0.#") + " MINUTES PLAYED\n\n" +
+                    "CREATED " + ProfileDate(profile.createdUtc) + "   ·   LAST PLAYED " + ProfileDate(profile.lastPlayedUtc) +
+                    "\n\n← / →: sport records · B: back · X: delete profile";
+            }
+            else
+            {
+                int recordPage = profileStatsPage - 1; SportsSportStatistic sport = null;
+                foreach (var candidate in stats.sports.OrderBy(s => s.title, StringComparer.Ordinal))
+                {
+                    int count = Math.Max(1, (candidate.records.Count + 3) / 4);
+                    if (recordPage < count) { sport = candidate; break; } recordPage -= count;
+                }
+                string records = sport.records.Count == 0 ? "NO COMPARABLE PERSONAL RECORD YET" : string.Join("\n", sport.records.Skip(recordPage * 4).Take(4).Select(r => (string.IsNullOrEmpty(r.variantLabel) ? "STANDARD" : r.variantLabel) + " · " + r.value.ToString("0.###") + " " + r.unit + (r.preference == SportsRecordPreference.Lower ? " · LOWEST" : " · HIGHEST")));
+                string places = sport.placements.Count == 0 ? "NO COMPETITIVE PLACEMENTS" : string.Join("   ·   ", sport.placements.OrderBy(p => p.place).Take(6).Select(p => "#" + p.place + " × " + p.count));
+                profileText.text = profile.displayName + "\n" + (string.IsNullOrEmpty(sport.title) ? "SPORT RESULTS" : sport.title) + "   ·   RECORD PAGE " + (recordPage + 1) + "\n\n" +
+                    sport.matches + " MATCHES   ·   " + sport.wins + " WINS   ·   " + sport.losses + " LOSSES   ·   " + sport.draws + " DRAWS\n" +
+                    places + "\n\nPERSONAL RECORDS\n" + records + "\n\n← / →: pages · B: back · X: delete profile";
+            }
         }
         void CloseProfile() { replacementPad = null; disconnectedSeats = null; profileOwner = -1; deleting = false; if (night.InSport) Hide(); else Show(); night.RefreshUiAuthority(); }
         void BeginDelete() { deleting = true; deleteChoice = 0; RenderDeleteChoice(); }
@@ -300,8 +348,8 @@ namespace LWS.TruckSports
             if (replacementPad != null)
             {
                 if (!replacementPad.added || !replacementPad.enabled || replacementPad.buttonEast.wasPressedThisFrame) { CloseProfile(); return; }
-                if (replacementPad.dpad.left.wasPressedThisFrame) replacementChoice = (replacementChoice + disconnectedSeats.Length - 1) % disconnectedSeats.Length;
-                if (replacementPad.dpad.right.wasPressedThisFrame) replacementChoice = (replacementChoice + 1) % disconnectedSeats.Length;
+                if (Left(replacementPad)) replacementChoice = (replacementChoice + disconnectedSeats.Length - 1) % disconnectedSeats.Length;
+                if (Right(replacementPad)) replacementChoice = (replacementChoice + 1) % disconnectedSeats.Length;
                 RenderReplacement();
                 if (replacementPad.buttonSouth.wasPressedThisFrame)
                 {
@@ -313,8 +361,18 @@ namespace LWS.TruckSports
             var pad = profileOwner >= 0 ? night.Pad(profileOwner) : night.Pad(0);
             if (pad == null) return;
             if (pad.buttonEast.wasPressedThisFrame) { CloseProfile(); return; }
-            if (!deleting) { if (pad.buttonWest.wasPressedThisFrame) BeginDelete(); return; }
-            if (pad.dpad.left.wasPressedThisFrame || pad.dpad.right.wasPressedThisFrame) { deleteChoice = 1 - deleteChoice; RenderDeleteChoice(); }
+            if (!deleting)
+            {
+                if (pad.buttonWest.wasPressedThisFrame) BeginDelete();
+                else if (Left(pad) || Right(pad))
+                {
+                    int pages = ProfilePages(night.Profile(profileOwner)?.statistics);
+                    profileStatsPage = (profileStatsPage + (Right(pad) ? 1 : pages - 1)) % pages;
+                    RenderProfileStatistics();
+                }
+                return;
+            }
+            if (Left(pad) || Right(pad)) { deleteChoice = 1 - deleteChoice; RenderDeleteChoice(); }
             if (!pad.buttonSouth.wasPressedThisFrame) return;
             if (deleteChoice == 1) ProfileConfirm(); else CloseProfile();
         }
@@ -330,21 +388,28 @@ namespace LWS.TruckSports
         }
         public void ShowFinalStandings()
         {
-            ShowOnly(finalPage); var scores = night.State.Points.OrderByDescending(p => p.Value).ThenBy(p => night.Profile(p.Key)?.displayName).ToArray();
-            finalText.text = (scores.Length == 0 || scores[0].Value == 0 ? "NO WINNER POINTS EARNED" : "THE GAME-NIGHT CHAMPIONS") + "\n\n" + string.Join("\n\n", scores.Skip(finalPageIndex * 8).Take(8).Select((p, i) => (finalPageIndex * 8 + i + 1) + ".  " + (night.Profile(p.Key)?.displayName ?? "Former driver") + "   " + p.Value + " POINTS"));
+            ShowOnly(finalPage); var scores = night.State.Points.OrderByDescending(p => p.Value).ThenBy(p => night.DriverName(p.Key)).ToArray();
+            finalPageIndex = Mathf.Clamp(finalPageIndex, 0, Math.Max(0, (scores.Length - 1) / 6));
+            finalText.text = (scores.Length == 0 || scores[0].Value == 0 ? "NO WINNER POINTS EARNED" : "THE GAME-NIGHT CHAMPIONS") + "\n\n" + string.Join("\n\n", scores.Skip(finalPageIndex * 6).Take(6).Select(p => (1 + scores.Count(other => other.Value > p.Value)) + ".  " + night.DriverName(p.Key) + "   " + p.Value + " POINTS"));
+            reportStatus.text = night.Report != null && night.Report.SaveError == null ? "SESSION REPORT READY  ·  X TO SAVE / EXPORT  ·  ← / → STANDINGS" : "REPORT SAVE INCOMPLETE · X TO RETRY";
         }
+        void ExportReport() { reportStatus.text = night.ExportReport() ? "REPORT SAVED\n" + night.Report.JsonPath : "REPORT COULD NOT BE SAVED · CHECK AVAILABLE DISK SPACE AND RETRY"; }
         public void TickEnded()
         {
             var pad = night.Pad(0);
+            if (pad != null && pad.buttonWest.wasPressedThisFrame) ExportReport();
             if (pad != null && (pad.buttonSouth.wasPressedThisFrame || pad.buttonEast.wasPressedThisFrame) || Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame) CloseFinal();
-            if (pad != null && pad.dpad.right.wasPressedThisFrame) { finalPageIndex++; ShowFinalStandings(); }
-            if (pad != null && pad.dpad.left.wasPressedThisFrame) { finalPageIndex = Math.Max(0, finalPageIndex - 1); ShowFinalStandings(); }
+            if (pad != null && Right(pad)) { finalPageIndex++; ShowFinalStandings(); }
+            if (pad != null && Left(pad)) { finalPageIndex = Math.Max(0, finalPageIndex - 1); ShowFinalStandings(); }
         }
         void CloseFinal() { Hide(); night.RefreshUiAuthority(); var front = FindAnyObjectByType<SportsFrontEnd>(); front?.Show(0); }
         public void ReadyBar(SportsEventSession session, SportsGameNightState state)
+            => ReadyBar(!session.Live && !session.Finished, state);
+        public void ReadyBar(bool setupVisible, SportsGameNightState state, bool spectateAI = false, bool supportsAiSpectating = true)
         {
-            bool show = !Visible && state.Phase == SportsGameNightPhase.Configuration && !session.Live && !session.Finished; readyRoot.SetActive(show); if (!show) return;
+            bool show = !Visible && state.Phase == SportsGameNightPhase.Configuration && setupVisible; readyRoot.SetActive(show); if (!show) return;
             string text = string.Join("   ·   ", Enumerable.Range(0, 4).Where(i => state.Seats[i].Occupied).Select(i => "P" + (i + 1) + " " + (state.IsRequired(i) ? state.Seats[i].Ready ? "READY" : "PRESS START / MENU" : "SPECTATING")));
+            if (supportsAiSpectating) text += "   ·   Y / F6: " + (spectateAI ? "PLAY WITH CREW" : "WATCH AI");
             if (text != previousBanner) { previousBanner = text; banner.text = text; }
         }
     }
