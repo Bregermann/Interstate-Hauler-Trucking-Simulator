@@ -24,7 +24,7 @@ public sealed class SportsParticipantsMenu:MonoBehaviour {
    choiceSeat=seat;choiceBank=0;RefreshChoices();front.Show(choicePage);return;
   }else if(action.StartsWith("peoplecolor")){Color.RGBToHSV(p.color,out float h,out _,out _);SportsParticipantRegistry.Rename(p.id,p.displayName,Color.HSVToRGB(Mathf.Repeat(h+.137f,1),.7f,1),p.preferredAI);
   }else if(action.StartsWith("peoplekind"))SportsParticipantRegistry.Rename(p.id,p.displayName,p.color,!p.preferredAI);
-  else if(action.StartsWith("peoplenew")){var added=SportsParticipantRegistry.Create("New driver");SportsParticipantRegistry.UseInSeat(seat,added.id);}
+  else if(action.StartsWith("peoplenew")){var owner=SportsControllerKeyboard.SubmittingPad();if(owner!=null&&SportsControllerKeyboard.Open(names[row],owner,"",value=>{if(this==null)return;var added=SportsParticipantRegistry.Create(value);SportsParticipantRegistry.UseInSeat(seat,added.id);Refresh();},"NEW DRIVER"))return;var added=SportsParticipantRegistry.Create("New driver");SportsParticipantRegistry.UseInSeat(seat,added.id);}
   Refresh();
  }
  void OpenCustomizer(string participantId){

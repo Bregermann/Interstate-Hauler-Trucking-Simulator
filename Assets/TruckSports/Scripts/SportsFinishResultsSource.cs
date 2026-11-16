@@ -44,6 +44,11 @@ namespace LWS.TruckSports
                     cornhole.RoundFinalizations + " ROUNDS BANKED · FOUR TRUCKS PER ROUND", entries);
                 return true;
             }
+            return TryCaptureSession(session, out snapshot);
+        }
+        public static bool TryCaptureSession(SportsEventSession session, out SportsResultsSnapshot snapshot)
+        {
+            snapshot = null;
             if (session == null || !session.Finished) return false;
             var rows = new List<SportsResultRow>(session.setup.count);
             if (session is AvalancheMatch avalanche)
@@ -80,6 +85,7 @@ namespace LWS.TruckSports
             if (SportsSurvivalResults.TryCapture(session, out snapshot)) return true;
             if (SportsSeriesResults.TryCapture(session, out snapshot)) return true;
             if (SportsPossessionTeamResults.TryCapture(session, out snapshot)) return true;
+            if (SportsFoundationResults.TryCapture(session, out snapshot)) return true;
             return SportsRoundLegacyResults.TryCapture(session, out snapshot);
         }
     }

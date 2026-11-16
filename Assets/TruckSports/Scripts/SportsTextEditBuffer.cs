@@ -23,6 +23,14 @@ namespace LWS.TruckSports
             if (Limit > 0 && Text.Length + value.Length > Limit) return false;
             Text += value; return true;
         }
+        public bool ReplaceDraft(string value)
+        {
+            if (Closed || value == null) return false;
+            var next = new SportsTextEditBuffer("", Limit);
+            if (value.Length > 0 && !next.Insert(value)) return false;
+            Text = value; return true;
+        }
+        public bool Clear() { if (Closed) return false; Text = ""; return true; }
         public bool Backspace()
         {
             if (Closed || Text.Length == 0) return false;
@@ -30,6 +38,6 @@ namespace LWS.TruckSports
             Text = Text.Substring(0, elements[elements.Length - 1]); return true;
         }
         public string Commit() { if (Closed) throw new InvalidOperationException("This text edit is closed."); Closed = true; return Text; }
-        public string Cancel() { Closed = true; Text = Original; return Original; }
+        public string Cancel() { if (Closed) throw new InvalidOperationException("This text edit is closed."); Closed = true; Text = Original; return Original; }
     }
 }

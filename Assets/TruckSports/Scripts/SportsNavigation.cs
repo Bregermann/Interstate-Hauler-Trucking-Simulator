@@ -21,7 +21,7 @@ public static void EnterCollection(){Collection=true;}
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
  internal static void StandaloneValidation(){Collection=false;}
 #endif
- public static void LoadSport(string scene){Time.timeScale=1;Load(scene);}
- public static void FrontEnd(bool selection=true){OpenSelection=selection;Time.timeScale=1;Load(Front);}
+ public static void LoadSport(string scene){if(!SportsGameNightRuntime.BeforeLoadSport(scene))return;Time.timeScale=1;Load(scene);}
+ public static void FrontEnd(bool selection=true){SportsGameNightRuntime.BeforeReturnToCollection();OpenSelection=selection;Time.timeScale=1;Load(Front);}
 }
 }

@@ -18,18 +18,27 @@ namespace LWS.TruckSports
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Initial() { for (int i = 0; i < SceneManager.sceneCount; i++) Loaded(SceneManager.GetSceneAt(i), LoadSceneMode.Additive); }
         static void Loaded(Scene scene, LoadSceneMode mode)
-        { if (scene.isLoaded) foreach (var root in scene.GetRootGameObjects()) BindUnder(root.transform); }
-        public static void BindUnder(Transform root)
         {
-            foreach (var input in root.GetComponentsInChildren<TMP_InputField>(true))
+            if (!scene.isLoaded) return;
+            foreach (var root in scene.GetRootGameObjects())
             {
-                bool shared = input.GetComponentInParent<SportsMenuView>(true) != null || input.GetComponentInParent<LWS.TruckBilliards.BilliardsMenus>(true) != null;
-                if (shared && input.GetComponent<SportsControllerTextField>() == null) input.gameObject.AddComponent<SportsControllerTextField>();
+                foreach (var menu in root.GetComponentsInChildren<SportsMenuView>(true)) BindUnder(menu.transform);
+                foreach (var menu in root.GetComponentsInChildren<LWS.TruckBilliards.BilliardsMenus>(true)) BindUnder(menu.transform);
             }
         }
+        public static SportsControllerTextField Bind(TMP_InputField input)
+        {
+            if (input == null) return null;
+            var adapter = input.GetComponent<SportsControllerTextField>();
+            return adapter != null ? adapter : input.gameObject.AddComponent<SportsControllerTextField>();
+        }
+        // Explicit registration also supports dynamically created shared lobby fields.
+        public static void BindUnder(Transform root)
+        { foreach (var input in root.GetComponentsInChildren<TMP_InputField>(true)) Bind(input); }
         void Awake() { field = GetComponent<TMP_InputField>(); activateOnSelect = field.shouldActivateOnSelect; field.shouldActivateOnSelect = false; }
         void OnDestroy() { if (field != null) field.shouldActivateOnSelect = activateOnSelect; }
-        void OnDisable() { SportsControllerKeyboard.CancelFor(field); }
+        void OnEnable() { if (field != null) field.shouldActivateOnSelect = false; }
+        void OnDisable() { SportsControllerKeyboard.CancelFor(field); if (field != null) field.shouldActivateOnSelect = activateOnSelect; }
         void Update()
         {
             if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject) OpenFromPad();

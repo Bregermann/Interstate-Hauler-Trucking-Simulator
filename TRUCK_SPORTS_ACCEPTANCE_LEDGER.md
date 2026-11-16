@@ -1,10 +1,41 @@
 # Truck Sports: Party! — permanent requirements and acceptance ledger
 
-Authoritative active-work record from October 20, 2026. Current authorization: emergency Alpha0.8 closeout followed by RF09 controller-first release foundation; Q24 — Alpha0.8 Wyrms & Wheels is scope-frozen, following the delivered refreshed Alpha 0.7 build and scoped public commits recorded below. Q22/Q23 and earlier presentation, eighteen-sport, camera and human-playtest repairs remain the delivered baseline with their individual unresolved acceptance limits. Historical work is deferred unless the user reactivates it or it directly affects these requirements.
+Authoritative active work: **Alpha0.9.0 Release Foundation**, requested November16,2026. Exact master directive: `Documentation/TruckSports/Requests/2026-11-16-Alpha09-ReleaseFoundation.md`. It supersedes every older execution order. The roadmap is0.8Dragon /0.9Release Foundation /0.10Hitches,Horrors&High Water /0.11Tricks,Tartan&Total Chaos. Preserve older requirements/evidence; do not resume their task queues or future sports. Do not send Interstate:Hauler coordination/access requests unless the user explicitly authorizes them again.
 
 Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED. October20 expansion standardizes the two equivalent prior labels without changing their evidence or human-verification meaning. Automated completion and human verification are separate. Human verification is never inferred from software input, scripts or screenshots. IDs remain permanent; superseded/cancelled entries retain their record.
 
 ## Active work
+
+**Current gates:** Git preservation/push complete (`5c7b7aa85565fd0e66f6a7bfc413964d56029962`, verified public development branch; stable branches unchanged). Complete historical inventory delivered in `Documentation/TruckSports/2026-11-16-Complete-Pre09-Backlog-Inventory.md`:635formal records reviewed,360open,275verified retained. No new world/game acceptance runs were performed for either gate. Now implement controller join → profile/keyboard → ready lobby → host-owned sport flow → human winner points/statistics → session reports → representative Windows game-night test. No player-facing played-sports checklist.
+
+### RF09-GIT-001 — Preserve and publish existing legitimate Sports work
+
+| Field | Record |
+|---|---|
+| Requirement ID | RF09-GIT-001 |
+| Sport/System | Git cleanup |
+| Original Request | Organize and commit existing legitimate work, publish to the configured repository's development branch before new production changes; retain licensed/unrelated work and history. |
+| Acceptance Criteria | Logical commits, scoped secret/license review, successful normal push, verified remote tip, documented local exclusions. |
+| Status | VERIFIED |
+| Implementation Evidence | Four public commits7120aa49/f41eae71/50d24972/5c7b7aa8;1794changed paths; existing Git LFS for two canonical world assets. Local private checkpoints3ad9ed43/3bf56600. |
+| Automated Verification | Normal push succeeded after exact user payload approval; ls-remote tip5c7b7aa85565fd0e66f6a7bfc413964d56029962 matches. main/seven-events remain7e705927.761candidate text files scanned, no configured secret-pattern findings. Working index empty. |
+| Human Verification | User explicitly approved exact public payload and development branch. No gameplay acceptance inferred. |
+| Remaining Work | Unrelated host/Taxi/vendor changes and local diagnostics/build artifacts remain intentionally local and documented. Continue logical foundation checkpoints; no repeat giant cleanup. |
+
+### RF09-INVENTORY-001 — Complete historical visibility before foundation implementation
+
+| Field | Record |
+|---|---|
+| Requirement ID | RF09-INVENTORY-001 |
+| Sport/System | Backlog inventory / roadmap |
+| Original Request | Inventory every outstanding earlier requirement with status, files, evidence,0.9blocking assessment and later milestone; then implement0.9, not the old backlog. |
+| Acceptance Criteria | Existing formal records, archival unknowns and future22/28sports are visible; verified work is not reopened; missing source records are identified. |
+| Status | VERIFIED |
+| Implementation Evidence | Documentation/TruckSports/2026-11-16-Complete-Pre09-Backlog-Inventory.md; exact current master request archived. |
+| Automated Verification | Parsed635unique formal records with no malformed horizontal rows;360recorded open (54partial/305implemented-unverified/1blocked),275verified retained;13foundation children,49archival references,50future names. No Unity tests launched for inventory. |
+| Human Verification | Inventory linked and summarized in chat before new production implementation. |
+| Remaining Work | Original detailed future22/28sport source prompts not found in Requests; retain names/design intent and flag source limitation. Inventory is a snapshot; this ledger remains authority. |
+
 
 ### CLOSEOUT-08-001 — Emergency alpha scope freeze and delivery (November16)
 
@@ -16,9 +47,9 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 | Acceptance Criteria | One focused Hoard regression plus normal match/rematch smoke; repaired Egg screenshot names; compiled candidate includes all four Dragon games/menu/results/controls/cameras; bounded Windows smoke passes before replacing0.7. Report actual limitations. |
 | Status | PARTIAL |
 | Implementation Evidence | Hoard Candidate03 and V638 focused saved-rig regression; Egg filename-only fix7bbf2b89; existing Riders609/Escape624/Egg632 gameplay evidence retained. |
-| Automated Verification | V638 passes1/1 in14.479279s, Editor0/77.6s, exact source/DATA return. V639 normal match fails on zero delivery points before rematch (Native0/1,92.20139s; Editor2/141.77s). Source/DATA return passes. Candidate Windows build now running separately; no delivery claimed. |
+| Automated Verification | V638 passes1/1 in14.479279s, Editor0/77.6s, exact source/DATA return. V639 normal match fails on zero delivery points before rematch (Native0/1,92.20139s; Editor2/141.77s). Source/DATA return passes. Separate0.8candidate Windows build completed (Editor0,3067.81s); not launched or promoted. No delivery claimed. |
 | Human Verification | Not performed. |
-| Remaining Work | Focused pass closed with explicit unresolved Hoard AI banking deadlock. Tested sources and short Egg capture names integrated; compile/build running. Finish bounded Windows smoke and safely deliver or checkpoint concrete build blockers. V637 seating, V631 palette and further world/source-framework work are frozen uninvoked; retained drafts are deferred, not erased or required for this alpha closeout. Existing unfinished visual polish stays recorded for later. |
+| Remaining Work | Focused pass closed with explicit unresolved Hoard AI banking deadlock. Tested sources and short Egg capture names integrated; candidate build complete but unlaunched. New master directive supersedes further0.8execution; preserve candidate and safe0.7installation. Finish bounded Windows smoke and safely deliver or checkpoint concrete build blockers. V637 seating, V631 palette and further world/source-framework work are frozen uninvoked; retained drafts are deferred, not erased or required for this alpha closeout. Existing unfinished visual polish stays recorded for later. |
 
 ### RF09-001 — Controller-first multiplayer release foundation
 
@@ -26,29 +57,29 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 |---|---|
 | Requirement ID | RF09-001 |
 | Sport/System | Alpha0.9 shared release foundation |
-| Original Request | After0.8 delivery or a safe checkpoint with explicit blockers, prioritize seamless controller-only social play across the existing catalog before adding sports. |
+| Original Request | Implement the November16 master Release Foundation directive after the completed Git and inventory gates; older closeout and expansion execution orders are superseded. |
 | Acceptance Criteria | Complete the individually identified foundation requirements below; no front-end played-sports checklist/progression tracker. Backend individual match analytics are allowed. |
 | Status | PARTIAL |
-| Implementation Evidence | Existing shared input/profile/UI systems under targeted inspection; no newly verified0.9 acceptance claimed. |
-| Automated Verification | Not yet executed for this directive. |
+| Implementation Evidence | Project-owned GameNight rules/runtime/lobby and common-session adapters; detached controller keyboard; registry schema3 profile fields and create/edit/delete flow; typed final-result bridges. Heat/uGUI, Input System, DOTween and existing SportsPrefs retained. No vendor source changes. |
+| Automated Verification | Native EditMode core-rules-01:10/10 passed (38-check party scenario and9text-buffer cases). Native controller-ui-01 aborted during licensing reconnect before tests. controller-ui-02:0/6 passed; observed detached TMP caret and Unity missing-CanvasGroup failures are fixed, controller-ui-03 passes actual two-controller profile/create/reload/host/Parking/return flow and commit-once (2/6); other failures were unreset fixture counters. Corrected controller-match-04 passes5/5, including normal mixed-human/AI Dance-Off completion, no AI human award, fresh rematch and interrupted return (69.421s; Editor0/117.14s). Standalone current rules:38/38; restart/fresh-ready/interrupted-result rejection/single-award scenario passed. No Windows/hardware/human acceptance. |
 | Human Verification | User rejected played-sports progression UI. |
-| Remaining Work | Implement missing foundation behavior using existing vendor/shared systems after bounded0.8 closeout. Original0.9 sports requirements remain retained and follow this foundation. |
+| Remaining Work | Implement the complete profile/controller/lobby/sport/results/points/stats/report flow, then a representative Windows game-night test. Old22/28sport content is deferred to0.10/0.11. No played-sports checklist; AI victories do not earn permanent human-profile points. |
 
 | Permanent ID | Requirement / observable acceptance | Status | Evidence / automated verification / human verification | Remaining work |
 |---|---|---|---|---|
-| RF09-PADS-001 | Gamepads detect, assign, disconnect and reconnect without losing player ownership. | IMPLEMENTED / UNVERIFIED | Existing implementation inspection pending; no new test or human pass. | Verify/fix affected shared input. |
-| RF09-NAV-001 | All menus and gameplay operate using gamepads only across the catalog. | IMPLEMENTED / UNVERIFIED | Existing implementation inspection pending; no new test or human pass. | Audit actual menu paths, repair gaps. |
-| RF09-PROFILE-001 | Each entering human selects/creates a persistent player profile. | IMPLEMENTED / UNVERIFIED | Existing implementation inspection pending; no new test or human pass. | Integrate profile entry flow. |
-| RF09-KEYBOARD-001 | Every text entry has a controller-operable on-screen keyboard. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Integrate reusable keyboard. |
-| RF09-READY-001 | Every human explicitly readies before match start. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Integrate ready gate. |
-| RF09-HOST-001 | Player1 owns next-sport selection. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Verify ownership throughout return flow. |
-| RF09-UX-001 | Attractive intuitive controller focus, navigation and prompts. | IMPLEMENTED / UNVERIFIED | Existing shared UI retained; no new test or human pass. | Repair specific navigation/layout gaps. |
-| RF09-CREW-001 | Local humans and AI configure correctly with stable identities. | IMPLEMENTED / UNVERIFIED | Existing Your Crew retained; no new test or human pass. | Verify mixed participation and assignment. |
-| RF09-WINNERS-001 | Individual game winners receive simple winner points. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Integrate authoritative match results once. |
-| RF09-STATS-001 | Persistent per-profile statistics have accessible screens. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Implement missing persistence/UI. |
-| RF09-TELEMETRY-001 | Structured session/error/performance/gameplay telemetry supports later analysis. | MISSING | Targeted source inspection found no required shared implementation; no new test or human pass. | Extend existing event authority where needed. |
-| RF09-FLOW-001 | Results/replay/player management/rematch/menu return stay reliable. | IMPLEMENTED / UNVERIFIED | Existing implementation inspection pending; no new test or human pass. | Repair affected transitions. |
-| RF09-CATALOG-001 | Every existing sport remains discoverable and launchable through shared navigation. | IMPLEMENTED / UNVERIFIED | Existing registry retained; no new test or human pass. | Test shared integration boundary. |
+| RF09-PADS-001 | Gamepads detect, assign, disconnect and reconnect without losing player ownership. | PARTIAL | Input System join/reconnect/profile ownership; explicit multi-missing-seat chooser and host takeover. Pure ownership checks pass; actual UI/device run pending. | Finish catalog adapters and runtime reconnection acceptance. |
+| RF09-NAV-001 | All menus and gameplay operate using gamepads only across the catalog. | PARTIAL | Host-filtered common menu input and scoped UI actions; owner-only keyboard; underlying modal input gate. | Complete legacy menu integration and rendered controller checks. |
+| RF09-PROFILE-001 | Each entering human selects/creates a persistent player profile. | PARTIAL | Shared persistent registry schema3: avatars/colors/creation/last-played fields, create/rename/delete-with-confirmation, saved or guest lobby selection. | Verify actual saves/reloads and game-night flow; add supported permanent statistics. |
+| RF09-KEYBOARD-001 | Every text entry has a controller-operable on-screen keyboard. | PARTIAL | Detached TMP validation and owner-pad Heat/uGUI keyboard implemented. Native02 exposed public-caret null mesh failure; fixed via protected TMP edit positions without vendor changes. Native03 commit-once and real lobby pass; Native04 all4remaining keyboard cases pass.10core tests passed. | Software owner/cancel/commit/focus/disconnect checks pass. Inspect Windows rendering and verify physical controllers. |
+| RF09-READY-001 | Every human explicitly readies before match start. | PARTIAL | Four-seat independent ready gate, configuration invalidation, fresh rematch/restart readiness implemented.38rule checks plus restart scenario pass. | Actual complete-match/rematch acceptance remains open. |
+| RF09-HOST-001 | Player1 owns next-sport selection. | PARTIAL | Player1 owns selection and shared menu actions; disconnected-host takeover explicit. Pure nonhost rejection passes. | Verify real menu transition and reconnect behavior. |
+| RF09-UX-001 | Attractive intuitive controller focus, navigation and prompts. | PARTIAL | Heat-based four-driver lobby/profile/confirmation/final standings, shared broadcast theme and DOTween transitions. Native02 CanvasGroup failure fixed; Native03 pending. | Inspect720p/1080p layouts and live navigation; no visual acceptance claimed. |
+| RF09-CREW-001 | Local humans and AI configure correctly with stable identities. | PARTIAL | Common-session binding preserves stable profile IDs, maps up to4humans to real devices, keeps optional AI and limited-capacity spectators. | Integrate legacy session owners and verify mixed participation. |
+| RF09-WINNERS-001 | Individual game winners receive simple winner points. | PARTIAL | Exactly-once human session point authority; AI excluded from human awards. Read-only typed final-result adapters extended; Jenga loser and Goose last-round winner are not mistaken for champions. | Compile/verify new adapters and finish actual end-to-end result handoff before permanent stats. |
+| RF09-STATS-001 | Persistent per-profile statistics have accessible screens. | MISSING | Existing recent match history retained; full lifetime/per-sport statistics not implemented or claimed. | First actual playable loop now passes. Implement supported lifetime/per-sport statistics and controller screens. |
+| RF09-TELEMETRY-001 | Structured session/error/performance/gameplay telemetry supports later analysis. | PARTIAL | Local bounded JSONL observer for score/outcome/match/device/error/performance events preserved and compiled. | Game-night JSON report, readable summary and controller finalization remain open. |
+| RF09-FLOW-001 | Results/replay/player management/rematch/menu return stay reliable. | PARTIAL | Common-session setup/rematch/restart and return-to-lobby hooks implemented; interrupted rounds cannot award. | Normal mixed-human/AI Dance-Off match, results, rematch start and interrupted lobby return pass in Native04. Second full sport and Windows game night remain open. |
+| RF09-CATALOG-001 | Every existing sport remains discoverable and launchable through shared navigation. | PARTIAL | Existing registry unchanged; common session and additional26typed result bridges integrated in source. | Legacy owners remain unbound; compilation/runtime/catalog integration not yet accepted. |
 
 
 - **Latest continuation (November16):** Escape V624 passes the original Fortress/Boat match, rematch and actual scene unload; Riders V609 retains both full races. Official URP material authoring V623 now passes with only four intended material changes and exact visual properties/metas/idempotence; current6843-row DATA authority is3dec5f8a…. Egg V632 Native completes both journeys with two physical deliveries each and correct720p/1080p results/rematch, but its outer evidence check fails on263-character near-bay screenshot writes. A filename-only fix is compiled/frozen for the combined cohort; missing active images remain unaccepted. Hoard V636 passes actual saved-rig contact/separation/workspace/repeated-yield/human-input checks after a test-only paused-state correction. Original full two-round V634 improves to two deliveries in round1, but round2 has six loads and zero deliveries; the series correctly fails and rematch blockage diagnosis continues. Private roadside V635 passes16placements/save/reload/12frames and all preservation checks; Root views all12 but withholds visual/adoption approval for sampled-footprint seating and original apparent floating rocks. Palette A authoring is sealed but uninvoked. Combined-source games, finished-world presentation, menus, final cold/Windows build/export/push remain open; no0.8release or human verification is claimed.

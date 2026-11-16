@@ -37,6 +37,7 @@ namespace LWS.TruckArchaeology
         }
         public bool Complete=>Enumerable.Range(0,Players*3).All(i=>Stages[i]==ArtifactStage.Delivered);
         public int Delivered=>Enumerable.Range(0,Players*3).Count(i=>Stages[i]==ArtifactStage.Delivered);
+        public int Place(int slot){if(slot<0||slot>=Players)throw new ArgumentOutOfRangeException(nameof(slot));return Cooperative?0:1+Scores.Take(Players).Count(v=>v>Scores[slot]);}
         public static double ToolLoss(ArchaeologyTool tool)=>tool==ArchaeologyTool.Excavator?.09:tool==ArchaeologyTool.Drill?.15:tool==ArchaeologyTool.Blower?.002:tool==ArchaeologyTool.Brush?.0002:0;
     }
 }

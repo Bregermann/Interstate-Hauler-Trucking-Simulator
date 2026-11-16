@@ -15,6 +15,7 @@ namespace LWS.TruckTruckGoose
         readonly double[] previous, progress;
         public GooseRules(int count, int rounds) { if(count<8||count>12||rounds<1)throw new ArgumentOutOfRangeException();Scores=new int[count];previous=new double[count];progress=new double[count];Rounds=rounds; }
         public double Progress(int slot) => progress[slot];
+        public int FinalPlace(int slot){if(slot<0||slot>=Scores.Length)throw new ArgumentOutOfRangeException(nameof(slot));int rank=1;foreach(int score in Scores)if(score>Scores[slot])rank++;return rank;}
         public int Direction(int slot) => slot==Picker?1:slot==Goose?-1:0;
         public bool Select(int candidate, double pickerAngle, double gooseAngle, bool physicallyNearby)
         {

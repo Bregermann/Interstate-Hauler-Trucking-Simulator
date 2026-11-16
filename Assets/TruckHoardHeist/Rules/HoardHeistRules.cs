@@ -27,6 +27,11 @@ namespace LWS.TruckHoardHeist
         public int DeliveredCount { get; private set; }
         public int LostCount { get; private set; }
         public bool Exhausted => DeliveredCount + LostCount == States.Length;
+        public int Place(int slot)
+        {
+            if (slot < 0 || slot >= Participants) throw new ArgumentOutOfRangeException(nameof(slot));
+            int rank = 1; for (int i = 0; i < Participants; i++) if (Scores[i] > Scores[slot]) rank++; return rank;
+        }
         readonly int[] values, bodyIds;
         readonly float[] masses;
 
