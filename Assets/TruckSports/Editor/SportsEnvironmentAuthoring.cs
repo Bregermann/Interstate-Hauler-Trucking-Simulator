@@ -1340,6 +1340,36 @@ namespace LWS.TruckSports.Editor
         }
         // Explicit migration only; normal builds and Play Mode never rewrite setup choices.
         public static void InstallRepresentative() => InstallPaths(SportsBuilder.SceneList().Where(path => Representative.Contains(Path.GetFileNameWithoutExtension(path))), false);
+        // Explicit new-venue bridge to the existing weather/time authority.
+        // New worlds supply their own authored lamps instead of pretending to
+        // have one of the audited legacy arena footprints below.
+        public static SportsMatchTime BindAuthoredOutdoorSession(SportsEventSession session, string folder, Light[] venueLamps)
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || session == null || session.presentationWeather == null
+                || string.IsNullOrEmpty(session.gameObject.scene.path) || session.gameObject.scene.name != folder)
+                throw new InvalidOperationException("A saved stopped new venue and its single shared weather owner are required.");
+            var scene = session.gameObject.scene;
+            var weather = session.presentationWeather;
+            if (All<SportsChaosWeather>(scene).Length != 1 || weather.session != session)
+                throw new InvalidOperationException("Preserve one weather authority per new venue.");
+            var binding = weather.GetComponent<SportsMatchTime>() ?? weather.gameObject.AddComponent<SportsMatchTime>();
+            if (weather.presets == null) weather.presets = SportsWeatherPresetsAuthoring.EnsureCatalog();
+            binding.cycle = weather.vendor.GetComponentInChildren<WeatherMakerDayNightCycleManagerScript>(true);
+            binding.clouds = weather.clouds;
+            BindThreeDimensionalSky(weather, binding); BindSkyProfile(weather, binding);
+            binding.daylightFill = All<Light>(scene).SingleOrDefault(light => light.type == LightType.Directional && light.GetComponentInParent<WeatherMakerScript>() == null);
+            binding.nightLights = venueLamps ?? Array.Empty<Light>();
+            var cameras = All<SportsEventCamera>(scene).Select(rig => rig.view).Where(camera => camera != null).Distinct().ToArray();
+            weather.vendor.AllowCameras.Clear(); weather.vendor.AllowCameras.AddRange(cameras);
+            SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, folder);
+            InstallHeadlights(scene, binding); weather.matchTime = binding;
+            var picker = All<SportsWeatherPicker>(scene).FirstOrDefault(p => !p.timeOfDay)
+                ?? SportsWeatherPickerAuthoring.Install(session, weather.presets, new Vector2(0, 336));
+            InstallTimePicker(picker); PolishCollectionSetup(binding, picker);
+            EditorUtility.SetDirty(binding); EditorUtility.SetDirty(weather); EditorUtility.SetDirty(session);
+            EditorSceneManager.MarkSceneDirty(scene);
+            return binding;
+        }
         public static void InstallApplicable()
         {
             // Preserve the two specifically protected Plowing moods and the legacy

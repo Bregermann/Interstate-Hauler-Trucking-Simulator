@@ -15,7 +15,8 @@ namespace LWS.TruckSports.Editor
             "TruckEggSpoonRace", "TruckTornadoRodeo", "TruckMechanicalBull", "TruckGuessThat",
             "TruckJenga", "TruckCamping", "TruckTeaParty", "TruckDentist", "TruckBallet",
             "TruckBakeOff", "TruckFashionShow", "TruckYoga", "TruckNestBuilding",
-            "TruckSnowmanBuilding", "TruckArchaeology", "TruckOrchestra", "TruckPetPals"
+            "TruckSnowmanBuilding", "TruckArchaeology", "TruckOrchestra", "TruckPetPals",
+            "TruckDragonEscape", "TruckHoardHeist", "TruckDragonEggDelivery", "TruckDragonRiders"
         };
 
         // Explicit authoring for NEW expansion scenes only. The existing appearance
@@ -28,7 +29,7 @@ namespace LWS.TruckSports.Editor
                 throw new InvalidOperationException("A stopped compiled Editor and explicit new match are required.");
             var scene = match.gameObject.scene;
             if (!scene.IsValid() || !ImpossibleScenes.Contains(scene.name))
-                throw new InvalidOperationException("This author binds only explicitly named Impossible Games scenes.");
+                throw new InvalidOperationException("This author binds only explicitly named expansion scenes.");
             if (trucks == null || trucks.Length == 0 || trucks.Length > 12 ||
                 trucks.Any(t => t == null || t.gameObject.scene != scene || t.session != match) ||
                 trucks.Distinct().Count() != trucks.Length || trucks.Select(t => t.slot).Distinct().Count() != trucks.Length)

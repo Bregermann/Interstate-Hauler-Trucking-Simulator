@@ -1,0 +1,19 @@
+#if UNITY_EDITOR
+using System;
+using NUnit.Framework;
+using UnityEngine;
+public sealed class DragonRiderExistingAllActionTests
+{
+#pragma warning disable CS0649
+    [Serializable]sealed class Report{public bool intervalControlsPassed,sourceBytesExact,nwhExact,sceneBytesExact;public Profile[] profiles;}
+    [Serializable]sealed class Profile{public string species,profile,status,failure,actualOwnedDefaultClip,actualStartupOriginalKeyGuid;public bool existingAllActionSafeMounted,ownedDefaultValidated,originalDefaultControlPassed,nativeDerivedInfernoMaterialPatch,actualConfiguredStartupTrial,sourceMotionUnchanged,exactOriginalBoxAcceptance,originalFootprintFits;public int actualPoses,invalidAnatomicalPoses,unsafeExpandedPlanningMisses,candidateSatPairs,candidateWheelContactPoses;public float nativeMaterialRearward,roundedCandidateFactor,actualCandidateSkinScaleError,maximumActualWheelGap,maximumOwnedDefaultUnselectedPositionError,maximumOwnedDefaultUnselectedRotationError,maximumOwnedDefaultScaleError,maximumOwnedDefaultSelectedRotationError;}
+#pragma warning restore CS0649
+    [Test,Timeout(1800000)]
+    public void ExistingAllActionMountedAdapterRetainsRawDefaultControlAndSelectedRotationProvenanceBeforeAll699Geometry()
+    {
+        var args=Environment.GetCommandLineArgs();int pointwise=Array.IndexOf(args,"-tsRiderPointwiseEvidence"),startup=Array.IndexOf(args,"-tsRiderStartupEvidence");Assert.That(pointwise>=0&&pointwise+1<args.Length&&startup>=0&&startup+1<args.Length,Is.True);var type=Type.GetType("LWS.TruckDragonRiders.Editor.DragonRiderSaddleAuthoring, Assembly-CSharp-Editor",true);var report=JsonUtility.FromJson<Report>((string)type.GetMethod("InspectExistingAllActionSafeMountedInfernoUsingProvenPointwiseMaterialWithoutSavingAssets").Invoke(null,new object[]{args[pointwise+1],args[startup+1]}));Assert.That(report.intervalControlsPassed&&report.sourceBytesExact&&report.nwhExact&&report.sceneBytesExact,Is.True);Assert.That(report.profiles.Length,Is.EqualTo(1));var row=report.profiles[0];Assert.That(row.failure,Is.Null.Or.Empty);Assert.That(row.species,Is.EqualTo("dragon-inferno"));Assert.That(row.existingAllActionSafeMounted&&row.ownedDefaultValidated&&row.originalDefaultControlPassed&&row.nativeDerivedInfernoMaterialPatch&&row.actualConfiguredStartupTrial&&row.sourceMotionUnchanged,Is.True);Assert.That(row.nativeMaterialRearward,Is.EqualTo(-.3136605322f));Assert.That(row.actualOwnedDefaultClip,Does.StartWith("TRANSIENT_CAB_"));Assert.That(row.actualStartupOriginalKeyGuid,Is.EqualTo("e04d23ed53901a9428fef67f9fb26ccb"));Assert.That(row.maximumOwnedDefaultUnselectedPositionError,Is.LessThanOrEqualTo(.00001f));Assert.That(row.maximumOwnedDefaultScaleError,Is.LessThanOrEqualTo(.000001f));Assert.That(row.maximumOwnedDefaultUnselectedRotationError,Is.LessThanOrEqualTo(.01f));Assert.That(row.maximumOwnedDefaultSelectedRotationError,Is.LessThanOrEqualTo(.5f));Assert.That(row.actualPoses+row.invalidAnatomicalPoses,Is.EqualTo(699));Assert.That(row.unsafeExpandedPlanningMisses,Is.Zero);
+        if(row.status.StartsWith("DERIVED_SINGLE_OWNED_SIZE_NATIVE_GEOMETRY_PASSED")){Assert.That(row.actualPoses,Is.EqualTo(699));Assert.That(row.invalidAnatomicalPoses,Is.Zero);Assert.That(row.exactOriginalBoxAcceptance&&row.originalFootprintFits,Is.True);Assert.That(row.candidateSatPairs,Is.Zero);Assert.That(row.candidateWheelContactPoses,Is.EqualTo(699));Assert.That(row.actualCandidateSkinScaleError,Is.LessThan(.001f));Assert.That(row.maximumActualWheelGap,Is.LessThanOrEqualTo(.03f));}
+        TestContext.WriteLine("ACTUAL_EXISTING_ALL_ACTION_MOUNTED_ADAPTER sourceCenter="+row.nativeMaterialRearward+" status="+row.status+" factor="+row.roundedCandidateFactor+" actual="+row.actualPoses+" invalid="+row.invalidAnatomicalPoses+" RAW_DEFAULT_CONTROL_PLUS_SEPARATE_SELECTED_ROTATION_PROOF_NOT_RUNTIME_COURSE_OR_COLDLOAD_ADOPTION");
+    }
+}
+#endif

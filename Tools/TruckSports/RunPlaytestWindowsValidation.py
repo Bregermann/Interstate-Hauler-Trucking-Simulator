@@ -13,6 +13,40 @@ from BuildIdentity import snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 
+DRAGON_SCENES = {'TruckDragonRiders', 'TruckHoardHeist', 'TruckDragonEggDelivery', 'TruckDragonEscape'}
+
+def dragon_terminal(evidence, pid, extra_args):
+    """Validate this player's own terminal JSON, never an unrelated old receipt."""
+    data = json.loads(evidence)
+    if data.get('platform') != 'WindowsPlayer' or data.get('pid') != pid:
+        raise ValueError('Dragon acceptance requires the actual owned Windows process receipt.')
+    if not str(data.get('scope', '')).startswith('ACTUAL_WINDOWS_AI_OBSERVATION_'):
+        raise ValueError('Unknown Dragon acceptance scope.')
+    requested = DRAGON_SCENES
+    if '-tsDragon08Scenes' in extra_args:
+        at = extra_args.index('-tsDragon08Scenes')
+        requested = set(extra_args[at + 1].split(','))
+    if not requested or not requested.issubset(DRAGON_SCENES):
+        raise ValueError('Use actual registered Dragon scene names.')
+    visits = data.get('visits', [])
+    if len(visits) != len(requested) or {visit.get('scene') for visit in visits} != requested:
+        raise ValueError('Dragon receipt does not cover every requested scene exactly once.')
+    complete = '-tsDragon08Complete' in extra_args
+    if data.get('completeRequested') != complete or data.get('splitAIViews') != ('-tsDragon08AIViews' in extra_args):
+        raise ValueError('Dragon receipt does not match requested match/camera scope.')
+    checks, errors = data.get('checks'), data.get('failures')
+    if type(checks) is not int or checks <= 0 or type(errors) is not int or errors < 0:
+        raise ValueError('Dragon receipt requires real executed check counts.')
+    if errors == 0:
+        if not all(visit.get('rematch') is True for visit in visits):
+            raise ValueError('Missing ordinary rematch acceptance.')
+        if complete and not all(visit.get('finished') is True and visit.get('physicalOutcomes', 0) > 0
+                                and visit.get('stopReason') == 'ORDINARY_RESULTS' for visit in visits):
+            raise ValueError('A deadline or no physical outcome is not a completed Dragon match.')
+        if data.get('captures', 0) < len(visits) * 2:
+            raise ValueError('Actual Windows images are required for each requested scene.')
+    return checks, errors
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -32,6 +66,8 @@ def main():
     digest = hashlib.sha256(dll.read_bytes()).hexdigest()
     content, _ = snapshot(exe.parent)
     folder = ROOT / "Logs/TruckSports/PlaytestRepair" / args.name
+    if args.flag == '-tsDragon08' and folder.exists():
+        raise ValueError('Preserve earlier Dragon Windows evidence; choose a fresh run name.')
     folder.mkdir(parents=True, exist_ok=True)
     command = [str(exe), args.flag]
     if args.mode:
@@ -55,7 +91,7 @@ def main():
         process.terminate()
         code = process.wait(timeout=30)
         print("Owned acceptance process exceeded its watchdog", flush=True)
-    result = (ROOT / args.result_file).resolve() if args.result_file else folder / "result.txt"
+    result = (ROOT / args.result_file).resolve() if args.result_file else folder / ("result.json" if args.flag == '-tsDragon08' else "result.txt")
     if not result.is_relative_to(ROOT):
         raise ValueError("Acceptance result must remain inside this workspace")
     evidence = result.read_text(encoding="utf-8-sig") if result.is_file() and result.stat().st_mtime >= wall_start else ""
@@ -92,6 +128,9 @@ def main():
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)
+    if args.flag == '-tsDragon08' and evidence:
+        checks, errors = dragon_terminal(evidence, process.pid, args.extra_arg)
+        completed = True
     # These original probes predate CHECKS=/ERRORS= footers. Require their
     # specific terminal evidence, real process exit and failure-free transcript;
     # an arbitrary PASS or an old results file cannot establish completion.

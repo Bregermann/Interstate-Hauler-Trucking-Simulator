@@ -1,0 +1,90 @@
+#if UNITY_EDITOR
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+
+public sealed class DragonRiderSavedFlightAuthoringTests
+{
+    const string Scene="Assets/TruckDragonRiders/Scenes/TruckDragonRiders.unity";
+    [Serializable]sealed class Report{public bool sourceBytesExact=false,nwhPhysicsExact=false,sceneGuidExact=false;public int choices=0,changed=0;public Profile[] profiles=Array.Empty<Profile>();}
+    [Serializable]sealed class Profile{public string species="",failure="",strictCoverage="";public float rootFlapFraction=0,maximumActualWheelGap=0;public bool effectiveFootprintFits=false,reusedExactSavedValidation=false;public int actualMappedPoses=0,actualAllSkinBoxIntersections=0,actualWheelContactPoses=0,strictNormalFlightPoses=0,strictNormalFlightIntersections=0,newGeometryIntersections=0;public float maximumExistingPenetrationDepthIncrease=0;}
+    static Type Author=>Type.GetType("LWS.TruckDragonRiders.Editor.DragonRiderSaddleAuthoring, Assembly-CSharp-Editor",true);
+    [Serializable]sealed class BreathScreen{public bool assetsExact=false,nwhExact=false,sceneBytesExact=false;public BreathSpecies[] species=Array.Empty<BreathSpecies>();}
+    [Serializable]sealed class BreathSpecies{public string species="";public bool qualified=false;public float chosenExtraNeck2=0,chosenExtraDistal=0;public BreathAttempt[] attempts=Array.Empty<BreathAttempt>();}
+    [Serializable]sealed class BreathAttempt{public float extraNeck2=0,extraDistal=0;public string failure="";public Profile measured;}
+    [Serializable]sealed class FiniteControlsReport{public FiniteControl[] controls=Array.Empty<FiniteControl>();}
+    [Serializable]sealed class FiniteControl{public bool passed=false,nativeClosestPointPassed=false;}
+    [Test]
+    public void FiniteOriginalNwhContactKeepsRealCrossingsAndRejectsOutsideProjectionFalsePositives()
+    {var report=JsonUtility.FromJson<FiniteControlsReport>((string)Author.GetMethod("InspectFiniteOriginalContactControlsWithoutSavingAssets").Invoke(null,null));Assert.That(report.controls.Length,Is.GreaterThanOrEqualTo(8));Assert.That(report.controls.All(value=>value.passed&&value.nativeClosestPointPassed),Is.True);TestContext.WriteLine("ACTUAL_ORIGINAL_TILTED_NWH_BOX_CONTROLS inside/outsideNativeClosestPoint,separatedOutsideProjection,outsidePointButCrossingTriangle,allVerticesOutsideCrossing=true sourceSceneUnchanged=true NO_BLANKET_RAY_IGNORE");}
+    [Serializable]sealed class RecalibrationReport{public bool assetsExact=false,nwhExact=false,sceneBytesExact=false;public RecalibrationSpecies[] species=Array.Empty<RecalibrationSpecies>();}
+    [Serializable]sealed class RecalibrationSpecies{public string species="";public bool qualified=false;public float selectedModelRearward=0;public RecalibrationAttempt[] attempts=Array.Empty<RecalibrationAttempt>();}
+    [Serializable]sealed class RecalibrationAttempt{public bool originalBindingControl=false,centeredSymmetricSpanned=false,qualified=false;public string failure="";public float modelRearward=0,longitudinalRadius=0,extraBreathNeck2=0,extraBreathDistal=0,longitudinalSpanWorld=0;public float[] actualTorsoWeights=Array.Empty<float>();public Profile boundedScreen,completeEffectiveActions,completeRealLayersAndBreath;}
+    [Test,Timeout(900000)]
+    public void ReadOnlyConnectedProximalPostureAndMeasuredTailRootPreserveFullOriginalGeometry()
+    {
+        var report=JsonUtility.FromJson<RecalibrationReport>((string)Author.GetMethod("InspectConnectedMountedPostureRecalibrationWithoutSavingAssets").Invoke(null,null));
+        Assert.That(report.assetsExact&&report.nwhExact&&report.sceneBytesExact,Is.True);
+        Assert.That(report.species.Length,Is.EqualTo(2));
+        foreach(var species in report.species)
+        {
+            Assert.That(species.attempts[0].originalBindingControl,Is.True);
+            Assert.That(species.qualified,Is.True);
+            var selected=species.attempts.Last();
+            Assert.That(selected.centeredSymmetricSpanned&&selected.qualified,Is.True);
+            Assert.That(selected.failure,Is.Null.Or.Empty);
+            Assert.That(selected.actualTorsoWeights.Length,Is.EqualTo(5));
+            Assert.That(selected.actualTorsoWeights.All(value=>value>.5f),Is.True);
+            if(species.species=="dragon-fire")
+            {
+                Assert.That(selected.modelRearward,Is.EqualTo(-.15f));Assert.That(selected.longitudinalRadius,Is.EqualTo(.065f));Assert.That(selected.extraBreathDistal,Is.EqualTo(10));
+            }
+            else
+            {
+                Assert.That(selected.modelRearward,Is.EqualTo(-.225f).Or.EqualTo(-.3f));Assert.That(selected.longitudinalRadius,Is.EqualTo(.15f));Assert.That(selected.extraBreathNeck2,Is.EqualTo(30));
+            }
+            Assert.That(selected.completeEffectiveActions.effectiveFootprintFits,Is.True);
+            foreach(var measured in new[]{selected.boundedScreen,selected.completeEffectiveActions,selected.completeRealLayersAndBreath})
+            {
+                Assert.That(measured.actualMappedPoses,Is.GreaterThan(20));Assert.That(measured.actualAllSkinBoxIntersections,Is.Zero);Assert.That(measured.strictNormalFlightIntersections,Is.Zero);
+                Assert.That(measured.newGeometryIntersections,Is.Zero);Assert.That(measured.maximumExistingPenetrationDepthIncrease,Is.LessThanOrEqualTo(.0002f));Assert.That(measured.maximumActualWheelGap,Is.LessThanOrEqualTo(.03f));
+            }
+            Assert.That(selected.completeEffectiveActions.actualMappedPoses,Is.GreaterThan(300));Assert.That(selected.completeRealLayersAndBreath.actualMappedPoses,Is.GreaterThan(200));
+            TestContext.WriteLine("ACTUAL_CONNECTED_POSTURE_FULL_SOURCE_PROFILE species="+species.species+" mappedPoses="+selected.completeEffectiveActions.actualMappedPoses+" anatomicalFivePointSupport=true originalFiniteContactAndAllSkinSAT0=true actualLayerAndEveryBreathFrame=true NO_SAVED_ASSET_OR_RUNTIME_OR_DEVICE_ACCEPTANCE");
+        }
+    }
+    [Test,Timeout(900000)]
+    public void ReadOnlyMeasuredCombinedPostureAndAnatomicalPatchRequireCompleteNativeGeometry()
+    {var report=JsonUtility.FromJson<RecalibrationReport>((string)Author.GetMethod("InspectMeasuredCombinedMountedRecalibrationWithoutSavingAssets").Invoke(null,null));Assert.That(report.assetsExact&&report.nwhExact&&report.sceneBytesExact,Is.True);Assert.That(report.species.Length,Is.EqualTo(2));foreach(var species in report.species){Assert.That(species.attempts[0].originalBindingControl,Is.True);Assert.That(species.qualified,Is.True);var selected=species.attempts.Last();Assert.That(selected.centeredSymmetricSpanned&&selected.qualified,Is.True);Assert.That(selected.failure,Is.Null.Or.Empty);Assert.That(species.selectedModelRearward,Is.EqualTo(species.species=="dragon-fire"?-.15f:selected.modelRearward));if(species.species=="dragon-inferno"){Assert.That(selected.modelRearward,Is.EqualTo(-.225f).Or.EqualTo(-.3f));Assert.That(selected.extraBreathNeck2,Is.EqualTo(30));Assert.That(selected.extraBreathDistal,Is.Zero);Assert.That(selected.longitudinalRadius,Is.EqualTo(.15f));}else Assert.That(selected.longitudinalRadius,Is.EqualTo(.065f));Assert.That(selected.actualTorsoWeights.Length,Is.EqualTo(5));Assert.That(selected.actualTorsoWeights.All(value=>value>.5f),Is.True);Assert.That(selected.longitudinalSpanWorld,Is.GreaterThanOrEqualTo(species.species=="dragon-fire"?.909f:1.499f));Assert.That(selected.completeEffectiveActions.effectiveFootprintFits,Is.True);foreach(var measured in new[]{selected.boundedScreen,selected.completeEffectiveActions,selected.completeRealLayersAndBreath}){Assert.That(measured.actualMappedPoses,Is.GreaterThan(20));Assert.That(measured.strictNormalFlightIntersections,Is.Zero);Assert.That(measured.actualAllSkinBoxIntersections,Is.Zero);Assert.That(measured.newGeometryIntersections,Is.Zero);Assert.That(measured.maximumExistingPenetrationDepthIncrease,Is.LessThanOrEqualTo(.0002f));Assert.That(measured.maximumActualWheelGap,Is.LessThanOrEqualTo(.03f));}Assert.That(selected.completeEffectiveActions.actualMappedPoses,Is.GreaterThan(300));Assert.That(selected.completeRealLayersAndBreath.actualMappedPoses,Is.GreaterThan(200));TestContext.WriteLine("ACTUAL_MEASURED_COMBINED_LOAD_POSTURE species="+species.species+" modelRearward="+species.selectedModelRearward+" longitudinalRadius="+selected.longitudinalRadius+" torsoWeights="+string.Join(",",selected.actualTorsoWeights)+" fullOriginalNwhFootprintAndAllSkin=true realLayersAndEveryBreathFrame=true NO_SAVED_BINDINGS_OR_RUNTIME_OR_HARDWARE_ACCEPTANCE");}}
+    [Test,Timeout(900000)]
+    public void ReadOnlyCenteredSkinRecalibrationUsesActualFivePointPatchesAndAllNativeGeometryBeforeSave()
+    {var report=JsonUtility.FromJson<RecalibrationReport>((string)Author.GetMethod("InspectCenteredMountedSkinRecalibrationWithoutSavingAssets").Invoke(null,null));Assert.That(report.assetsExact&&report.nwhExact&&report.sceneBytesExact,Is.True);Assert.That(report.species.Length,Is.EqualTo(2));foreach(var species in report.species){Assert.That(species.attempts[0].originalBindingControl,Is.True);Assert.That(species.qualified,Is.True);var selected=species.attempts.Last();Assert.That(selected.centeredSymmetricSpanned&&selected.qualified,Is.True);Assert.That(selected.failure,Is.Null.Or.Empty);Assert.That(species.selectedModelRearward,Is.InRange(-.45f,0));Assert.That(selected.completeEffectiveActions.effectiveFootprintFits,Is.True);foreach(var measured in new[]{selected.boundedScreen,selected.completeEffectiveActions,selected.completeRealLayersAndBreath}){Assert.That(measured.actualMappedPoses,Is.GreaterThan(20));Assert.That(measured.strictNormalFlightIntersections,Is.Zero);Assert.That(measured.actualAllSkinBoxIntersections,Is.Zero);Assert.That(measured.newGeometryIntersections,Is.Zero);Assert.That(measured.maximumExistingPenetrationDepthIncrease,Is.LessThanOrEqualTo(.0002f));Assert.That(measured.maximumActualWheelGap,Is.LessThanOrEqualTo(.03f));}Assert.That(selected.completeEffectiveActions.actualMappedPoses,Is.GreaterThan(300));Assert.That(selected.completeRealLayersAndBreath.actualMappedPoses,Is.GreaterThan(200));TestContext.WriteLine("ACTUAL_CENTERED_MATERIAL_RECALIBRATION species="+species.species+" declaredModelRearward="+species.selectedModelRearward+" originalControlRetained=true fivePointSourceSkin=true fullFootprintAndAllSkin=true actualLayerAndEveryBreathFrame=true originalNwhAndSource=true NO_SAVED_BINDINGS_OR_RUNTIME_ACCEPTANCE");}}
+    [Test,Timeout(600000)]
+    public void ReadOnlyProximalBreathFlexionUsesRealTwoLayerFixedDurationTransitionsAndKnownPureFailures()
+    {var report=JsonUtility.FromJson<BreathScreen>((string)Author.GetMethod("InspectActualLayerBreathFlexionWithoutSavingAssets").Invoke(null,null));Assert.That(report.assetsExact&&report.nwhExact&&report.sceneBytesExact,Is.True);Assert.That(report.species.Length,Is.EqualTo(2));foreach(var species in report.species){Assert.That(species.qualified,Is.True);var last=species.attempts.Last();Assert.That(last.failure,Is.Null.Or.Empty);Assert.That(last.measured.actualMappedPoses,Is.GreaterThanOrEqualTo(183));Assert.That(last.measured.strictNormalFlightIntersections,Is.Zero);Assert.That(last.measured.newGeometryIntersections,Is.Zero);TestContext.WriteLine("ACTUAL_NATIVE_TWO_LAYER_BREATH_SLICE species="+species.species+" extraMiddle="+species.chosenExtraNeck2+" extraDistal="+species.chosenExtraDistal+" poses="+last.measured.actualMappedPoses+" fixedEntryExitSeconds=.12 unchangedNativeController=true ORIGINAL_AIM_GATE=.5 NO_FULL_PROFILE_OR_SAVED_OR_GAMEPLAY_MODE_ACCEPTANCE");}}
+    [Test,Timeout(600000)]
+    public void ReadOnlyBoundedBreathFlexionPreservesOriginalAimAndMeasuresEverySourceFrameAndBoundary()
+    {var report=JsonUtility.FromJson<BreathScreen>((string)Author.GetMethod("InspectBoundedBreathFlexionCandidatesWithoutSavingAssets").Invoke(null,null));Assert.That(report.assetsExact&&report.nwhExact&&report.sceneBytesExact,Is.True);Assert.That(report.species.Length,Is.EqualTo(2));foreach(var species in report.species){Assert.That(species.qualified,Is.True);var last=species.attempts.Last();Assert.That(last.failure,Is.Null.Or.Empty);Assert.That(last.measured.actualMappedPoses,Is.GreaterThan(400));Assert.That(last.measured.strictNormalFlightIntersections,Is.Zero);Assert.That(last.measured.newGeometryIntersections,Is.Zero);TestContext.WriteLine("ACTUAL_BOUNDED_BREATH_RECIPE species="+species.species+" extraMiddle="+species.chosenExtraNeck2+" extraDistal="+species.chosenExtraDistal+" actualBreathFramesAndEntryExitPoses="+last.measured.actualMappedPoses+" originalHeadAndMuzzleAimGate=.5deg allSkinSAT0=true NO_SAVE_OR_WHOLE_ACTION_OR_RUNTIME_ACCEPTANCE");}}
+    [Test,Timeout(600000)]
+    public void ReadOnlySafeMountedActionProfilesUseNativeSamePoseCoverageOriginalAimAndPreserveAllAssets()
+    {
+        var report=JsonUtility.FromJson<Report>((string)Author.GetMethod("InspectTransientSafeMountedActionsWithoutSavingAssets").Invoke(null,null));Assert.That(report.sourceBytesExact&&report.nwhPhysicsExact&&report.sceneGuidExact,Is.True);Assert.That(report.profiles.Length,Is.EqualTo(2));foreach(var profile in report.profiles){Assert.That(profile.failure,Is.Null.Or.Empty);Assert.That(profile.strictCoverage,Does.Contain("TAKEOFF_LAND_DIVE_TURNS_BREATH"));Assert.That(profile.actualMappedPoses,Is.GreaterThan(300));Assert.That(profile.strictNormalFlightIntersections,Is.Zero);Assert.That(profile.newGeometryIntersections,Is.Zero);Assert.That(profile.maximumExistingPenetrationDepthIncrease,Is.LessThanOrEqualTo(.0002f));TestContext.WriteLine("ACTUAL_READONLY_MOUNTED_SAFE_ACTION_PROFILE species="+profile.species+" poses="+profile.actualMappedPoses+" strictMountedSAT="+profile.strictNormalFlightIntersections+" preExistingOtherSourceSAT="+profile.actualAllSkinBoxIntersections+" newPairs="+profile.newGeometryIntersections+" originalHeadMuzzleAimRetainedByIndependent240HzFactoryGate=true NO_SAVED_ASSETS_OR_RUNTIME_ACCEPTANCE");}
+    }
+    [Test]
+    public void MissingPositiveNormalFlightEvidenceNeverWritesOwnedAssets()
+    {
+        var before=Directory.GetFiles("Assets/TruckDragonRiders","*",SearchOption.AllDirectories).ToDictionary(path=>path,File.ReadAllBytes);var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-tsDragonOutput");string folder=at>=0&&at+1<args.Length?args[at+1]:Path.GetTempPath();string missing=Path.Combine(folder,"missing-rider-evidence-"+Guid.NewGuid().ToString("N")+".json");var error=Assert.Throws<TargetInvocationException>(()=>Author.GetMethod("InspectSavedNormalFlightAcceptanceOnly").Invoke(null,new object[]{missing}));Assert.That(error.InnerException,Is.TypeOf<FileNotFoundException>());Assert.That(Directory.GetFiles("Assets/TruckDragonRiders","*",SearchOption.AllDirectories).OrderBy(path=>path),Is.EqualTo(before.Keys.OrderBy(path=>path)));foreach(var pair in before)Assert.That(File.ReadAllBytes(pair.Key),Is.EqualTo(pair.Value));
+    }
+    [Test,Timeout(600000)]
+    public void ExplicitSavedNormalFlightProfilesRequireRealAcceptanceAndPreserveSkinNwhBaseAssetsAndRepeatBytes()
+    {
+        Assert.That(EditorApplication.isPlayingOrWillChangePlaymode,Is.False);var originalSceneMeta=File.ReadAllBytes(Scene+".meta");string sceneGuid=AssetDatabase.AssetPathToGUID(Scene);var originals=Directory.GetFiles("Assets/TruckDragonRiders/Animations","*",SearchOption.AllDirectories).Where(path=>!Path.GetFileName(path).StartsWith("Normal Flight V1",StringComparison.Ordinal)).ToDictionary(path=>path,File.ReadAllBytes);var method=Author.GetMethod("UpgradeSavedNormalFlightProfiles");var first=JsonUtility.FromJson<Report>((string)method.Invoke(null,null));Validate(first);var sceneBytes=File.ReadAllBytes(Scene);var saved=Directory.GetFiles("Assets/TruckDragonRiders/Animations","*",SearchOption.AllDirectories).ToDictionary(path=>path,File.ReadAllBytes);var second=JsonUtility.FromJson<Report>((string)method.Invoke(null,null));Validate(second);Assert.That(second.changed,Is.Zero);Assert.That(second.profiles.All(profile=>profile.reusedExactSavedValidation),Is.True,"Repeat reuses only hash-identical saved native validation; it does not claim a second physical simulation.");Assert.That(File.ReadAllBytes(Scene),Is.EqualTo(sceneBytes));Assert.That(File.ReadAllBytes(Scene+".meta"),Is.EqualTo(originalSceneMeta));Assert.That(AssetDatabase.AssetPathToGUID(Scene),Is.EqualTo(sceneGuid));Assert.That(Directory.GetFiles("Assets/TruckDragonRiders/Animations","*",SearchOption.AllDirectories).OrderBy(path=>path),Is.EqualTo(saved.Keys.OrderBy(path=>path)));foreach(var pair in saved)Assert.That(File.ReadAllBytes(pair.Key),Is.EqualTo(pair.Value),"Saved generated curves/controller/metadata must be byte-idempotent: "+pair.Key);foreach(var pair in originals)Assert.That(File.ReadAllBytes(pair.Key),Is.EqualTo(pair.Value),"Original mounted action/hover and source bytes must remain unchanged: "+pair.Key);TestContext.WriteLine("EXPLICIT_SAVED_NORMAL_FLIGHT_V1 choices="+first.choices+" changed="+first.changed+" originalSkinBindings=true originalNwhPhysics=true originalBaseAssets=true repeatSceneAndAssetBytesExact=true NOT_WINDOWS_OR_HUMAN_ACCEPTANCE");
+    }
+    static void Validate(Report report)
+    {Assert.That(report.sourceBytesExact&&report.nwhPhysicsExact&&report.sceneGuidExact,Is.True);Assert.That(report.choices,Is.EqualTo(8));Assert.That(report.profiles.Length,Is.EqualTo(2));foreach(var profile in report.profiles){Assert.That(profile.rootFlapFraction,Is.EqualTo(profile.species=="dragon-inferno"?.25f:.5f));Assert.That(profile.effectiveFootprintFits,Is.True);Assert.That(profile.actualMappedPoses,Is.GreaterThan(300));Assert.That(profile.strictNormalFlightPoses,Is.GreaterThan(30));Assert.That(profile.strictNormalFlightIntersections,Is.Zero);Assert.That(profile.newGeometryIntersections,Is.Zero);Assert.That(profile.maximumExistingPenetrationDepthIncrease,Is.LessThanOrEqualTo(.0002f));Assert.That(profile.actualWheelContactPoses,Is.GreaterThan(4));Assert.That(profile.maximumActualWheelGap,Is.LessThanOrEqualTo(.03f));}}
+}
+#endif

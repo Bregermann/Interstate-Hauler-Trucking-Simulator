@@ -70,6 +70,19 @@ namespace LWS.TruckFareFight
                 for(int entry=0;entry<2;entry++)
                 {
                     if(to.oneWay&&entry==1)continue;
+                    if(EndId(from,exit)==EndId(to,entry))
+                    {
+                        // Join the adapter's existing two sampled access legs
+                        // at their actual shared junction. There is no network
+                        // hop to ask the planner for. The preceding one-way
+                        // gates still determine which endpoints are legal.
+                        var node=graph.nodes.Find(value=>value.nodeId==EndId(from,exit));
+                        float width=Mathf.Max(3,Mathf.Max(from.laneWidthMeters*from.laneCount,to.laneWidthMeters*to.laneCount));
+                        if(node==null||Vector3.Distance(EndPoint(from,exit),node.position)>width||Vector3.Distance(EndPoint(to,entry),node.position)>width)continue;
+                        candidate.Clear();Add(candidate,origin);Leg(candidate,from,startDirection.DistanceAlongSegmentMeters,End(from,exit),startDirection.NearestPosition,EndPoint(from,exit));
+                        Add(candidate,node.position);Leg(candidate,to,End(to,entry),finishDirection.DistanceAlongSegmentMeters,EndPoint(to,entry),finishDirection.NearestPosition);Add(candidate,destination);
+                        float local=Length(candidate);if(local<distance){distance=local;output.Clear();output.AddRange(candidate);}continue;
+                    }
                     NetworkSearches++;
                     var route=planner.PlanRoute(new LwsRouteRequest{originNodeId=EndId(from,exit),destinationNodeId=EndId(to,entry),truckRouteRequired=true},graph);
                     if(!route.succeeded)continue;

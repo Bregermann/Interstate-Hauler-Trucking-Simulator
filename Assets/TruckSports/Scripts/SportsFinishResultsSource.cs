@@ -7,7 +7,7 @@ namespace LWS.TruckSports
 {
     // Explicit opt-in adapter. Existing sport rules supply every rank, winner
     // and statistic; specialized Poker/Bowling presentation is untouched.
-    public sealed class SportsFinishResultsSource : MonoBehaviour
+    public class SportsFinishResultsSource : MonoBehaviour
     {
         public SportsEventSession session;
         public LWS.TruckCornhole.CornholeMatch cornhole;
@@ -15,7 +15,7 @@ namespace LWS.TruckSports
         public string MatchId => session != null ? session.MatchId : cornhole != null ? cornhole.MatchId : wallball != null ? wallball.MatchId : null;
         public bool ResultReady => session != null ? session.Finished && session.menus.Screen == SportsEventScreen.Result : cornhole != null ? cornhole.InMatch && cornhole.Finished && cornhole.menus.Screen == LWS.TruckCornhole.CornholeScreen.Result : wallball != null && wallball.InMatch && wallball.rules.Phase == LWS.TruckWallball.WallballPhase.Finished && wallball.menus.Screen == LWS.TruckWallball.WallballScreen.Result;
         public TMPro.TMP_Text OriginalResult => session != null ? session.menus.result : cornhole != null ? cornhole.menus.resultText : wallball != null ? wallball.menus.resultText : null;
-        public bool TryCapture(out SportsResultsSnapshot snapshot)
+        public virtual bool TryCapture(out SportsResultsSnapshot snapshot)
         {
             snapshot = null;
             if (wallball != null)

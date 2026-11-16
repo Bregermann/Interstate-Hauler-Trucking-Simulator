@@ -27,6 +27,8 @@ def validate_public_path(relative):
     assert relative and "\\" not in relative and not Path(relative).is_absolute() and ".." not in Path(relative).parts, relative
     assert relative in (".gitignore", "TRUCK_SPORTS_ACCEPTANCE_LEDGER.md") or relative.startswith(("Assets/Truck", "Tools/TruckSports/", "Documentation/TruckSports/")), relative
     assert not relative.startswith(("Assets/TruckTaxi", "Assets/DeadAir", "Assets/LWS")) and "PrivateLicensed" not in relative, relative
+    riders_authored = "assets/truckdragonriders/animations/authored"
+    assert relative.casefold() not in (riders_authored, riders_authored + ".meta") and not relative.casefold().startswith(riders_authored + "/"), relative
     assert not (relative.startswith("Assets/TruckBeerPong/Carnival/") and ".anim" in Path(relative).name), relative
     assert relative not in ("Assets/TruckBeerPong/Carnival/Tailgate humanoid throw.FBX", "Assets/TruckBeerPong/Carnival/Tailgate humanoid throw.FBX.meta"), relative
     assert not (relative.startswith("Assets/TruckCornhole/Carnival/Yard ") and ".anim" in Path(relative).name), relative

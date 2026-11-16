@@ -32,9 +32,14 @@ namespace LWS.TruckSports
         public int primary=-1;
         public bool hasObjective,preferHuman=true;
         public Bounds objective;
+        public bool hasPreferredViewRotation;
+        public Quaternion preferredViewRotation;
         public string reason="LOCAL ACTION";
-        public void Reset(){primary=-1;hasObjective=false;preferHuman=true;reason="LOCAL ACTION";}
+        public void Reset(){primary=-1;hasObjective=false;hasPreferredViewRotation=false;preferHuman=true;reason="LOCAL ACTION";}
         public void Objective(Vector3 position,float radius=1){objective=new Bounds(position,Vector3.one*Mathf.Max(.1f,radius)*2);hasObjective=true;}
+        // Optional sport semantics; the existing rig still owns composition,
+        // readable distance, lens, damping and physical obstacle avoidance.
+        public void PreferredViewRotation(Quaternion rotation){preferredViewRotation=rotation;hasPreferredViewRotation=true;}
     }
 
     // LWS selects legitimate action and sets readability limits. Cinemachine retains
@@ -71,6 +76,15 @@ namespace LWS.TruckSports
         public string ShotReason=>action.reason;
         public Bounds PrimaryBounds{get;private set;}
         public Vector3 RequestedFocus{get;private set;}
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        // Read-only evidence of vendor composition and the existing final
+        // guards. No additional camera evaluation or simulation authority.
+        public Vector3 VendorPosition{get;private set;}
+        public Rect VendorProjection{get;private set;}
+        public Vector3 ReadabilityPosition{get;private set;}
+        public Vector3 VendorFocus{get;private set;}
+        public Vector3 TerrainSafetyAdjustment{get;private set;}
+#endif
         public bool OwnsShot=>enabled&&(source!=null?source.Playing:session!=null&&session.Running&&!session.Finished&&!session.ReplayControls&&session.BroadcastFramingApplicable)&&cameraRig!=null&&cameraRig.view!=null&&cameraRig.view.enabled;
         public readonly SportsBroadcastAction action=new SportsBroadcastAction();
         Renderer[][] renderers;
@@ -184,7 +198,7 @@ namespace LWS.TruckSports
             composer.m_GroupFramingSize=Configuration.groupFramingSize;composer.m_ScreenY=Configuration.screenY;
             var camera=cameraRig.view;camera.orthographic=useOrthographic;
             cameraRig.rig.m_Lens.ModeOverride=useOrthographic?LensSettings.OverrideModes.Orthographic:LensSettings.OverrideModes.Perspective;
-            Quaternion rotation=Quaternion.Euler(Configuration.elevation,Configuration.azimuth,0);
+            Quaternion rotation=action.hasPreferredViewRotation?action.preferredViewRotation:Quaternion.Euler(Configuration.elevation,Configuration.azimuth,0);
             float minDistance=length*Configuration.minimumDistanceInTruckLengths;
             float hardDistance=Mathf.Min(length*Configuration.maximumDistanceInTruckLengths,MaximumReadableCornersDistance(points,pointCount,focus,rotation,Configuration.fieldOfView,Configuration.minimumTruckHeight));
             float preferred=Mathf.Min(hardDistance,MaximumReadableCornersDistance(points,pointCount,focus,rotation,Configuration.fieldOfView,Configuration.preferredTruckHeight));
@@ -203,6 +217,9 @@ namespace LWS.TruckSports
             // Cinemachine's group framing may need to exceed a composition bound.
             // Read actual projected bounds and enforce readability after vendor evaluation.
             var projected=ProjectedTruckRect(camera,Primary);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            VendorPosition=camera.transform.position;VendorProjection=projected;VendorFocus=focus;
+#endif
             if(camera.orthographic)camera.orthographicSize=Mathf.Clamp(camera.orthographicSize,composer.m_MinimumOrthoSize,composer.m_MaximumOrthoSize);
             else if(projected.height<Configuration.minimumTruckHeight*.98f)
             {
@@ -210,7 +227,13 @@ namespace LWS.TruckSports
                 float ratio=Mathf.Clamp(projected.height/Mathf.Max(.04f,Configuration.minimumTruckHeight),.25f,1);
                 camera.transform.position=primary.center+delta*ratio;
             }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            ReadabilityPosition=camera.transform.position;
+#endif
             SafePosition(primary.center);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            TerrainSafetyAdjustment=camera.transform.position-ReadabilityPosition;
+#endif
             ProjectedTruckHeight=ProjectedTruckRect(camera,Primary).height;
             var objective=camera.WorldToViewportPoint(action.objective.center);
             ObjectiveVisible=!action.hasObjective||objective.z>camera.nearClipPlane&&objective.x>=.03f&&objective.x<=.97f&&objective.y>=.08f&&objective.y<=.92f;

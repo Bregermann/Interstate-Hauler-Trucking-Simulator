@@ -125,6 +125,32 @@ analytics.local.json.meta
 # Owned commercial animation source is imported locally by the Sports intake
 # tool and bundled in the playable build; never publish the raw vendor files.
 /Assets/TruckCheeseRolling/PrivateLicensedAnimations/
+/Assets/TruckDragonKingdom/PrivateLicensedDragons/
+/Assets/TruckDragonKingdom/PrivateLicensedDragons.meta
+/Assets/TruckDragonKingdom/PrivateLicensedAnimalController/
+/Assets/TruckDragonKingdom/PrivateLicensedAnimalController.meta
+/Assets/TruckDragonKingdom/PrivateLicensedEnvironment/
+/Assets/TruckDragonKingdom/PrivateLicensedEnvironment.meta
+/Assets/TruckDragonKingdom/PrivateLicensedAudioVfx/
+/Assets/TruckDragonKingdom/PrivateLicensedAudioVfx.meta
+# Generated overlay clips retain licensed source motion curves. Keep the
+# reproducible LWS authoring code public, the derived motion data local.
+/Assets/TruckDragonKingdom/Animations/Authored/
+/Assets/TruckDragonKingdom/Animations/Authored.meta
+# Riders hover derivatives retain licensed source animation curves. Generate
+# locally through owned authoring; never include them in the public payload.
+/Assets/TruckDragonRiders/Animations/dragon-fire/
+/Assets/TruckDragonRiders/Animations/dragon-fire.meta
+/Assets/TruckDragonRiders/Animations/dragon-inferno/
+/Assets/TruckDragonRiders/Animations/dragon-inferno.meta
+# Saved castle-launch clips retain licensed source motion curves. Keep the
+# generated authored folder local; publish its LWS recipe, never the payload.
+/Assets/TruckDragonRiders/Animations/Authored/
+/Assets/TruckDragonRiders/Animations/Authored.meta
+/Assets/TruckHoardHeist/PrivateLicensedPotteryFragments/
+/Assets/TruckHoardHeist/PrivateLicensedPotteryFragments.meta
+/Assets/TruckDragonEscape/PrivateLicensedFragments/
+/Assets/TruckDragonEscape/PrivateLicensedFragments.meta
 /Assets/TruckCheeseRolling/PrivateLicensedAnimations.meta
 /Assets/TruckCheeseRolling/PrivateLicensedVfx/
 /Assets/TruckCheeseRolling/PrivateLicensedVfx.meta
@@ -165,5 +191,30 @@ analytics.local.json.meta
 # Public sources retain the licensed author/build recipe, not generated caches.
 /Assets/DiggerData/Scenes/TruckArchaeology/
 /Assets/DiggerData/Scenes/TruckArchaeology.meta
+# Native Dragon Kingdom review voxel/mesh output is retained locally with
+# receipt hashes; licensed/generated dependencies stay outside public source.
+/Assets/DiggerData/Scenes/DK-RoundedIntegrated*/
+/Assets/DiggerData/Scenes/DK-RoundedIntegrated*.meta
 /Assets/StreamingAssets/DiggerData/archaeology-desert-07-01/
 /Assets/StreamingAssets/DiggerData/archaeology-desert-07-01.meta
+/Assets/TruckDragonKingdom/Ambience/PrivateLicensedAudio/
+/Assets/TruckDragonKingdom/Ambience/PrivateLicensedAudio.meta
+/Tools/TruckSports/Tests/__pycache__/
+
+# Local Python caches and raw automated probe output stay on disk, outside Git.
+__pycache__/
+*.py[cod]
+/Assets/Truck*/Native-*.json
+/Assets/Truck*/Native-*.json.meta
+/Assets/Truck*/*-SOURCE-*.json
+/Assets/Truck*/*-SOURCE-*.json.meta
+/Assets/Truck*/Source-Handoff.json
+/Assets/Truck*/Source-Handoff.json.meta
+/Documentation/TruckSports/Evidence/**/native-original-logs.zip
+/Tools/TruckSports/ArtworkSources/Drafts/
+# Superseded multi-gigabyte authoring experiments remain local; canonical
+# kingdom assets and their reproducible authoring scripts remain publishable.
+/Assets/TruckDragonKingdom/VisualCandidates/
+/Assets/TruckDragonKingdom/VisualCandidates.meta
+/Assets/TruckDragonKingdom/ReviewCandidates/
+/Assets/TruckDragonKingdom/ReviewCandidates.meta

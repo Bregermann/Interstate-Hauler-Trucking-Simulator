@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CLEAN = ROOT / ".sports-validation/TruckSportsPublicValidation"
 LOG = ROOT / "Logs/TruckSports/PlaytestRepair"
 UNITY = "C:/Program Files/Unity/Hub/Editor/6000.4.10f1/Editor/Unity.exe"
+EXPLICIT_SHARED_SOURCES = frozenset({'Assets/LWS/TruckTaxi/Scripts/TruckTaxiSnowSurface.cs'})
 
 
 def retain_sources(digest):
@@ -30,7 +31,7 @@ def retain_sources(digest):
     payloads = []
     for item in entries:
         relative = Path(item["path"])
-        assert relative.as_posix().startswith("Assets/Truck") and relative.suffix == ".cs"
+        assert (relative.as_posix().startswith("Assets/Truck") or relative.as_posix() in EXPLICIT_SHARED_SOURCES) and relative.suffix == ".cs"
         source = (CLEAN / relative).resolve()
         assert source.is_relative_to(CLEAN.resolve())
         data = source.read_bytes()
@@ -66,15 +67,56 @@ def record_build():
     print("Exact code AND asset build identity", json.dumps(identity), flush=True)
 
 
-def sync(deferred_path=None):
+def reviewed_additional_sources(manifest_path, baseline):
+    """Keep a committed new feature in build provenance without admitting vendor code."""
+    if not manifest_path:
+        return set()
+    entries = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    selected = set()
+    for item in entries:
+        relative = item["path"]
+        path = Path(relative)
+        if (path.is_absolute() or ".." in path.parts or "\\" in relative
+                or not (relative.startswith("Assets/Truck") or relative in EXPLICIT_SHARED_SOURCES) or path.suffix != ".cs"
+                or "PrivateLicensed" in relative or "/Animations/Authored/" in relative
+                or relative in baseline or relative in selected):
+            raise ValueError("Invalid or duplicate explicit owned source: " + relative)
+        source = (ROOT / path).resolve()
+        if not source.is_relative_to(ROOT.resolve()):
+            raise ValueError("Owned source resolves outside the project: " + relative)
+        if hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+            raise ValueError("Explicit owned source changed after review: " + relative)
+        selected.add(relative)
+    if not selected:
+        raise ValueError("An explicit source intake must contain reviewed owned code")
+    return selected
+
+
+def sync(deferred_path=None, additional_sources_path=None):
     baseline = {p["path"] for p in json.loads((LOG / "host-pending-baseline.json").read_text())}
     changed = set(filter(None, (subprocess.check_output(["git", "diff", "--name-only", "-z", "HEAD"], cwd=ROOT, stderr=subprocess.PIPE) + subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"], cwd=ROOT)).decode().split("\0")))
     # A scoped milestone commit must not make the next build forget which
     # already-tested repair sources it contains. Retain immutable prior inputs.
     known = set()
+    known_shared_hashes = {}
     for manifest in LOG.glob("build-*-sources.json"):
-        known.update(v["path"] for v in json.loads(manifest.read_text()))
-    sources = sorted(p for p in (changed | known) - baseline if p.startswith("Assets/Truck") and p.endswith(".cs"))
+        for fact in json.loads(manifest.read_text()):
+            known.add(fact['path'])
+            if fact['path'] in EXPLICIT_SHARED_SOURCES:
+                known_shared_hashes.setdefault(fact['path'],set()).add(fact['sha256'])
+    explicit = reviewed_additional_sources(additional_sources_path, baseline)
+    sources = sorted(p for p in (changed | known | explicit) - baseline if p.startswith("Assets/Truck") and p.endswith(".cs"))
+    # This one existing LWS adapter needs a configurable vendor mask budget for
+    # the new world. Never broaden intake to unrelated Truck Taxi source. A new
+    # adapter revision requires exact reviewed hashes; prior exact builds can
+    # continue to reuse their preserved input without another review manifest.
+    for relative in sorted((known | explicit) & EXPLICIT_SHARED_SOURCES):
+        if relative in baseline:
+            raise ValueError('Preserve unrelated pending shared source: ' + relative)
+        if relative not in explicit and hashlib.sha256((ROOT/relative).read_bytes()).hexdigest() not in known_shared_hashes[relative]:
+            raise ValueError('Shared adapter changed; provide exact reviewed additional source: ' + relative)
+        sources.append(relative)
+    sources.sort()
     deferred = set(json.loads(Path(deferred_path).read_text())) if deferred_path else set()
     if deferred:
         # Preserve a frozen tested source slice while the user-authorized next
@@ -201,12 +243,13 @@ def main():
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
     parser.add_argument("--defer-sources", help="Explicit owned WIP paths; existing CLEAN inputs must match the preceding frozen build.")
+    parser.add_argument("--additional-sources", help="Reviewed owned .cs path/hash manifest for new feature code already preserved in a local commit.")
     parser.add_argument("--execute-owned", help="Explicit additional LWS.TruckSports.Editor method for focused additive authoring; use with stage sync.")
     args = parser.parse_args()
     LOG.mkdir(parents=True, exist_ok=True)
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
-    sync(args.defer_sources)
+    sync(args.defer_sources, args.additional_sources)
     if args.execute_owned:
         assert args.stage == "sync" and args.execute_owned.startswith("LWS.TruckSports.Editor."), "Only an explicit owned authoring method is accepted here"
         run("score-presentation-authoring", ["-quit", "-executeMethod", args.execute_owned])

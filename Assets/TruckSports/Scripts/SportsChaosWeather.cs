@@ -27,7 +27,7 @@ public sealed class SportsChaosWeather:MonoBehaviour {
   if(clouds!=null)clouds.CloudSeed=seed;vendor.LastLocalProfile=activeProfile;vendor.RaiseWeatherProfileChanged(previous,activeProfile,.2f,float.MaxValue,true,null);
   if(previous!=null)Destroy(previous);Tick(0);
  }
- float phase,strength;ParticleSystem[] systems;bool[] playing;
+ float phase,strength;ParticleSystem[] systems;bool[] playing;bool particlesPaused;
  void Awake(){if(vendor==null)return;vendor.IsPermanent=false;lightning=vendor.GetComponentsInChildren<WeatherMakerLightningBoltScript>(true);foreach(var bolt in lightning)bolt.MultiThreaded=false;thunder=vendor.GetComponentInChildren<WeatherMakerThunderAndLightningScript>(true);BindLightningCamera();systems=vendor.GetComponentsInChildren<ParticleSystem>(true);playing=new bool[systems.Length];}
  public void Configure(int seed,int choice,int chaos){if(presets!=null){
   string id=CurrentMatchId;
@@ -39,7 +39,19 @@ public sealed class SportsChaosWeather:MonoBehaviour {
   precipitation.PrecipitationChangeDuration=0;precipitation.Precipitation=Kind==SportsWeatherKind.Clear?WeatherMakerPrecipitationType.None:Kind==SportsWeatherKind.Snow||Kind==SportsWeatherKind.Blizzard?WeatherMakerPrecipitationType.Snow:WeatherMakerPrecipitationType.Rain;precipitation.PrecipitationIntensity=Kind==SportsWeatherKind.Clear?0:Mathf.Clamp01((Kind==SportsWeatherKind.Blizzard||Kind==SportsWeatherKind.Hurricane?.85f:.65f)*strength);if(clouds!=null&&cloudProfiles!=null&&cloudProfiles.Length==3){clouds.CloudSeed=seed;clouds.ShowCloudsAnimated(cloudProfiles[Kind==SportsWeatherKind.Clear?0:Kind==SportsWeatherKind.Snow?2:1],0,.6f);}if(sun!=null)sun.intensity=Kind==SportsWeatherKind.Clear?1.8f:Kind==SportsWeatherKind.Hurricane?.7f:1.1f;Tick(0);matchTime?.Configure(seed,CurrentMatchId);matchTime?.ApplySnowPalette(Kind==SportsWeatherKind.Snow||Kind==SportsWeatherKind.Blizzard);
  }
  public void Tick(float age){if(PresetDriven){float scale=wind!=null&&wind.WindProfile!=null?wind.WindProfile.WindMainMultiplier:0;Flow=scale>.00001f?Vector3.ProjectOnPlane(wind.CurrentWindVelocity,Vector3.up)*(windUnitScale/scale):Vector3.zero;return;}float gust=Mathf.Sin(age*.61f+phase)+.4f*Mathf.Sin(age*1.27f+phase*.17f);float speed=Kind==SportsWeatherKind.Hurricane?10:Kind==SportsWeatherKind.Blizzard?6:Kind==SportsWeatherKind.Clear?1.5f:3;Flow=new Vector3(Mathf.Sin(phase)*speed+gust*speed*.35f,0,Mathf.Cos(phase)*speed*.5f+Mathf.Sin(age*.3f+phase)*speed*.2f)*strength;if(wind!=null){wind.WindIntensity=Mathf.Clamp01(Flow.magnitude/14);if(wind.WindZone!=null){wind.WindZone.transform.rotation=Quaternion.LookRotation(Flow.sqrMagnitude>.01f?Flow:Vector3.forward);wind.WindZone.windMain=Flow.magnitude*.12f;}}}
- public void Pause(bool pause){if(systems==null)return;for(int i=0;i<systems.Length;i++){if(pause){playing[i]=systems[i].isPlaying;systems[i].Pause();}else if(playing[i])systems[i].Play();}}
+ public void Pause(bool pause){
+  if(systems==null||pause==particlesPaused)return;
+  if(pause){
+   // Snapshot every system before changing any parent/child play state.
+   for(int i=0;i<systems.Length;i++)playing[i]=systems[i]!=null&&systems[i].isPlaying;
+   for(int i=0;i<systems.Length;i++)if(systems[i]!=null)systems[i].Pause(false);
+  }else{
+   for(int i=0;i<systems.Length;i++){if(playing[i]&&systems[i]!=null)systems[i].Play(false);playing[i]=false;}
+  }
+  // Setup/Start may request resume repeatedly. A consumed snapshot must never
+  // restart snow that the subsequently selected rain/clear profile retired.
+  particlesPaused=pause;
+ }
  // Split-screen cameras are intentionally untagged. The vendor bolt fallback
  // cannot discover them through Camera.main, so bind its supported Camera field.
  // Use the supported synchronous bolt generation option before vendor Start.

@@ -8,6 +8,17 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsResultsPresentationAuthoring
     {
+        // Explicit owned-scene extension. Existing installers keep their exact
+        // defaults; new modes reuse the same saved Heat/DOTween board and supply
+        // only a read-only rules adapter. Never flush unrelated dirty assets.
+        public static void InstallOwnedSceneResults(string[] names, System.Type sourceType)
+        {
+            if (names == null || names.Length == 0 || names.Distinct().Count() != names.Length ||
+                sourceType == null || sourceType.IsAbstract || !typeof(SportsFinishResultsSource).IsAssignableFrom(sourceType))
+                throw new System.ArgumentException("Explicit unique saved scenes and a concrete read-only results source are required.");
+            InstallScenes(names, sourceType, false);
+            InstallReadability(names, false);
+        }
         public static void InstallCornholeResults(){InstallScenes(new[] { "TruckCornhole" });InstallReadability(new[] { "TruckCornhole" });}
         public static void InstallWallballResults(){InstallScenes(new[] { "TruckWallball" });InstallReadability(new[] { "TruckWallball" });}
         public static void InstallMountainAndNinja() => InstallScenes(new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" });
@@ -15,7 +26,7 @@ namespace LWS.TruckSports.Editor
         public static void InstallContestBatch() => InstallScenes(new[] { "TruckHotPotato", "TruckBalloonBattle", "TruckTetherball", "TruckJousting", "TruckFrogger", "TruckRedLightGreenLight", "TruckVolleyball", "TruckFreezeTag" });
         public static void InstallAttemptBatch() => InstallScenes(new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" });
         public static void InstallAttemptReadability() => InstallReadability(new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" });
-        static void InstallReadability(string[] names)
+        static void InstallReadability(string[] names, bool saveAssets = true)
         {
             foreach (string name in names)
             {
@@ -32,7 +43,7 @@ namespace LWS.TruckSports.Editor
                 EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
                 Debug.Log("SPORTS_RESULTS_READABILITY " + name + " saved rounded noninteractive backing over busy venue scenery.");
             }
-            AssetDatabase.SaveAssets();
+            if (saveAssets) AssetDatabase.SaveAssets();
         }
         public static void InstallSurvivalBatch()
         {
@@ -54,7 +65,7 @@ namespace LWS.TruckSports.Editor
             var names = new[] { "TruckBeerPong", "TruckBungeeDemolition", "TruckCurling", "TruckDanceOff", "TruckDemolitionDerby", "TruckFareFight", "TruckMusicalParking", "TruckSnake" };
             InstallScenes(names); InstallReadability(names);
         }
-        static void InstallScenes(string[] names)
+        static void InstallScenes(string[] names, System.Type sourceType = null, bool saveAssets = true)
         {
             foreach (string name in names)
             {
@@ -67,7 +78,7 @@ namespace LWS.TruckSports.Editor
                 var root = SportsUIAuthoring.Rect("Authoritative ranked results", page.transform, new Vector2(1320, 560), Vector2.zero);
                 var presentation = root.AddComponent<SportsResultsPresentation>(); presentation.visibility = root.AddComponent<CanvasGroup>();
                 presentation.visibility.alpha = 0; presentation.visibility.interactable = presentation.visibility.blocksRaycasts = false;
-                presentation.menus = session != null ? session.menus : null; presentation.source = root.AddComponent<SportsFinishResultsSource>(); presentation.source.session = session; presentation.source.cornhole = cornhole; presentation.source.wallball = wallball;
+                presentation.menus = session != null ? session.menus : null; presentation.source = (SportsFinishResultsSource)root.AddComponent(sourceType ?? typeof(SportsFinishResultsSource)); presentation.source.session = session; presentation.source.cornhole = cornhole; presentation.source.wallball = wallball;
                 var theme = Resources.Load<SportsBroadcastTheme>("SportsBroadcastTheme");
                 presentation.heading = SportsUIAuthoring.Text("Outcome headline", root.transform, "", new Vector2(1280, 64), new Vector2(0, 205), 40); presentation.heading.font = theme.headingFont;
                 presentation.summary = SportsUIAuthoring.Text("Authoritative summary", root.transform, "", new Vector2(1280, 32), new Vector2(0, 158), 21); presentation.summary.font = theme.bodyFont;
@@ -92,7 +103,7 @@ namespace LWS.TruckSports.Editor
                 EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
                 Debug.Log("SPORTS_RESULTS_SAVED " + name + " additive read-only ranks, actual metrics and existing Heat navigation preserved.");
             }
-            AssetDatabase.SaveAssets();
+            if (saveAssets) AssetDatabase.SaveAssets();
         }
         static UnityEngine.UI.Image Block(string name, Transform parent, Vector2 position, Vector2 size)
         {

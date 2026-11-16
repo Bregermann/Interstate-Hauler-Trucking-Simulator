@@ -1,0 +1,68 @@
+#if UNITY_EDITOR && VISTA
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+
+namespace LWS.TruckDragonKingdom.Editor
+{
+    public static partial class DragonKingdomRegionalWorldIntegration
+    {
+        [Serializable]public sealed class AuthoredTerrainPalette
+        {public string scope="ACTUAL_V239C_SOURCE_POLYART_AUTHORED_PALETTE_CANDIDATE_ONLY_SAME_HEIGHT_ALPHA_HOLES_DIGGER_SHADER_NOT_VISUAL_ACCEPTANCE",diagnosticRun="V239c",recipe="source-polyart-authored11m";public int terrains,clonedOuterTerrainData;public bool passed,appearanceOperationsPreservedGeometryAndAlpha;public PaletteLayer[] layers;public PaletteTile[] tiles;public ArtistDependency[] sourceDependencies;}
+        [Serializable]public sealed class PaletteLayer
+        {public string source,sourceGuid,sourceSha256,sourceMetaSha256,candidate,candidateGuid,candidateSha256,candidateMetaSha256,properties;}
+        [Serializable]public sealed class PaletteTile
+        {public string name,sourceData,sourceDataGuid,sourceDataSha256,sourceDataMetaSha256,candidate,candidateGuid,candidateSha256,candidateMetaSha256,heightsBefore,heightsAfter,alphaBefore,alphaAfter,holesBefore,holesAfter,finalHoles,heightSourceBeforePreparation;public bool externalDataCloned,appearancePreservedGeometryAndAlpha,geometryPreparedBeforeAppearance;public Vector3 position,size;public int heightResolution,alphaWidth,alphaHeight,holesResolution;}
+        [Serializable]sealed class PaletteLayerProperties
+        {public string diffuse,normal,mask;public Vector2 tileSize,tileOffset;public Vector4 diffuseMin,diffuseMax,maskMin,maskMax;public Color specular;public float metallic,smoothness,normalScale;}
+        static string[] AuthoredPaletteSources()=>new[]{"GrassGreen","GrassYellow","Dirt","Rock"}.Select(n=>DragonKingdomWorldAuthoring.Art+"Polyart Studio/HandpaintedEnvironmentVol1/Terrain/"+n+".terrainlayer").ToArray();
+        static string PaletteTextureIdentity(Texture texture){if(texture==null)return "NONE";if(!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(texture,out string guid,out long id)||guid.Length!=32)throw new InvalidOperationException("Persistent actual terrain texture required.");return guid+":"+id.ToString(System.Globalization.CultureInfo.InvariantCulture);}
+        static string PaletteProperties(TerrainLayer layer)=>JsonUtility.ToJson(new PaletteLayerProperties{diffuse=PaletteTextureIdentity(layer.diffuseTexture),normal=PaletteTextureIdentity(layer.normalMapTexture),mask=PaletteTextureIdentity(layer.maskMapTexture),tileSize=layer.tileSize,tileOffset=layer.tileOffset,diffuseMin=layer.diffuseRemapMin,diffuseMax=layer.diffuseRemapMax,maskMin=layer.maskMapRemapMin,maskMax=layer.maskMapRemapMax,specular=layer.specular,metallic=layer.metallic,smoothness=layer.smoothness,normalScale=layer.normalScale});
+        static string PaletteAlphaHash(TerrainData data){var alpha=data.GetAlphamaps(0,0,data.alphamapWidth,data.alphamapHeight);var bytes=new byte[Buffer.ByteLength(alpha)];Buffer.BlockCopy(alpha,0,bytes,0,bytes.Length);return Hash(bytes);}
+        static string PaletteHolesHash(TerrainData data){var holes=data.GetHoles(0,0,data.holesResolution,data.holesResolution);var bytes=new byte[holes.Length];int i=0;foreach(bool value in holes)bytes[i++]=(byte)(value?1:0);return Hash(bytes);}
+        static AuthoredTerrainPalette InstallAuthoredInnerPalette(DragonKingdomWorld world,string folder)
+        {
+            if(!folder.StartsWith(Root+"VisualCandidates/",StringComparison.Ordinal))throw new InvalidOperationException("Fresh owned candidate required for authored palette.");var proof=new AuthoredTerrainPalette();Directory.CreateDirectory(Io(folder+"/Terrain/Palette"));AssetDatabase.Refresh();var layers=new List<PaletteLayer>();foreach(var path in AuthoredPaletteSources())
+            {var source=AssetDatabase.LoadAssetAtPath<TerrainLayer>(path);if(source==null||source.diffuseTexture==null)throw new InvalidOperationException("Pinned actual source-authored layer missing.");string target=folder+"/Terrain/Palette/"+Path.GetFileName(path);if(File.Exists(Io(target)))throw new InvalidOperationException("Never overwrite an existing candidate palette layer.");var clone=UnityEngine.Object.Instantiate(source);AssetDatabase.CreateAsset(clone,target);AssetDatabase.SaveAssetIfDirty(clone);if(PaletteProperties(source)!=PaletteProperties(clone))throw new InvalidOperationException("Candidate palette must preserve actual authored texture/scalar/UV fields.");layers.Add(new PaletteLayer{source=path,sourceGuid=AssetDatabase.AssetPathToGUID(path),sourceSha256=AssetSha(path),sourceMetaSha256=AssetSha(path+".meta"),candidate=target,candidateGuid=AssetDatabase.AssetPathToGUID(target),candidateSha256=AssetSha(target),candidateMetaSha256=AssetSha(target+".meta"),properties=PaletteProperties(source)});}
+            proof.layers=layers.ToArray();proof.sourceDependencies=AuthoredPaletteSources().SelectMany(p=>AssetDatabase.GetDependencies(p,true)).Distinct().OrderBy(p=>p,StringComparer.Ordinal).Where(p=>File.Exists(Io(p))).Select(p=>new ArtistDependency{path=p,guid=AssetDatabase.AssetPathToGUID(p),sha256=AssetSha(p),metaSha256=AssetSha(p+".meta")}).ToArray();proof.tiles=Array.Empty<PaletteTile>();ApplyAuthoredPalette(world,folder,proof,false);return proof;
+        }
+        static void ApplyAuthoredPalette(DragonKingdomWorld world,string folder,AuthoredTerrainPalette proof,bool outer)
+            =>ApplyAuthoredPaletteWithOwnedGeometry(world,folder,proof,outer,null);
+        static void ApplyAuthoredPaletteWithOwnedGeometry(DragonKingdomWorld world,string folder,AuthoredTerrainPalette proof,bool outer,Action<Terrain[]> prepareOwnedGeometry)
+        {
+            var tiles=proof.tiles.ToList();var layers=proof.layers.Select(p=>AssetDatabase.LoadAssetAtPath<TerrainLayer>(p.candidate)).ToArray();var outerRoot=world.transform.Find("Owned Vista coastal outskirts");var terrains=world.GetComponentsInChildren<Terrain>(true).Where(t=>outer?outerRoot!=null&&t.transform.IsChildOf(outerRoot):outerRoot==null||!t.transform.IsChildOf(outerRoot)).ToArray();if(terrains.Length!=(outer?12:4))throw new InvalidOperationException("Actual four inner/twelve outer terrain palette stage required.");
+            if(prepareOwnedGeometry!=null&&!outer)throw new InvalidOperationException("Current-core seam preparation is limited to the twelve fresh outer copies.");
+            var pending=new List<(Terrain terrain,TerrainData source,TerrainData data,PaletteTile tile)>();
+            foreach(var terrain in terrains)
+            {
+                var source=terrain.terrainData;string original=AssetDatabase.GetAssetPath(source);var collider=terrain.GetComponent<TerrainCollider>();if(collider==null||collider.terrainData!=source||source.terrainLayers.Length!=4)throw new InvalidOperationException("Original actual four-layer terrain/collision binding required.");var tile=new PaletteTile{name=PathOf(terrain.transform,world.transform),sourceData=original,sourceDataGuid=AssetDatabase.AssetPathToGUID(original),sourceDataSha256=AssetSha(original),sourceDataMetaSha256=AssetSha(original+".meta"),heightsBefore=HashHeights(source),alphaBefore=PaletteAlphaHash(source),holesBefore=PaletteHolesHash(source),position=terrain.transform.position,size=source.size,heightResolution=source.heightmapResolution,alphaWidth=source.alphamapWidth,alphaHeight=source.alphamapHeight,holesResolution=source.holesResolution,externalDataCloned=outer};var data=source;
+                if(outer){string target=folder+"/Terrain/Palette/Outer "+(tiles.Count+pending.Count)+".asset";if(File.Exists(Io(target)))throw new InvalidOperationException("Preserve existing outer palette data.");data=UnityEngine.Object.Instantiate(source);AssetDatabase.CreateAsset(data,target);terrain.terrainData=data;collider.terrainData=data;proof.clonedOuterTerrainData++;}else if(!original.StartsWith(folder+"/Terrain/",StringComparison.Ordinal))throw new InvalidOperationException("Only the four fresh candidate data may change in place.");pending.Add((terrain,source,data,tile));
+            }
+            if(prepareOwnedGeometry!=null)
+            {
+                prepareOwnedGeometry(terrains);foreach(var item in pending){item.tile.heightSourceBeforePreparation=item.tile.heightsBefore;item.tile.heightsBefore=HashHeights(item.data);item.tile.geometryPreparedBeforeAppearance=true;}
+            }
+            foreach(var item in pending)
+            {
+                var terrain=item.terrain;var source=item.source;var data=item.data;var tile=item.tile;string original=tile.sourceData;
+                var alpha=source.GetAlphamaps(0,0,source.alphamapWidth,source.alphamapHeight);data.terrainLayers=layers;data.SetAlphamaps(0,0,alpha);EditorUtility.SetDirty(data);AssetDatabase.SaveAssetIfDirty(data);terrain.Flush();tile.candidate=AssetDatabase.GetAssetPath(data);tile.heightsAfter=HashHeights(data);tile.alphaAfter=PaletteAlphaHash(data);tile.holesAfter=PaletteHolesHash(data);tile.appearancePreservedGeometryAndAlpha=tile.heightsAfter==tile.heightsBefore&&tile.alphaAfter==tile.alphaBefore&&tile.holesAfter==tile.holesBefore&&data.size==tile.size&&data.heightmapResolution==tile.heightResolution&&data.alphamapWidth==tile.alphaWidth&&data.alphamapHeight==tile.alphaHeight&&data.holesResolution==tile.holesResolution;
+                if(!tile.appearancePreservedGeometryAndAlpha||outer&&(AssetSha(original)!=tile.sourceDataSha256||AssetSha(original+".meta")!=tile.sourceDataMetaSha256))throw new InvalidOperationException("Authored terrain palette altered actual height/alpha/holes or immutable outer source.");tiles.Add(tile);
+            }
+            proof.tiles=tiles.ToArray();proof.terrains=tiles.Count;proof.appearanceOperationsPreservedGeometryAndAlpha=tiles.All(t=>t.appearancePreservedGeometryAndAlpha);
+        }
+        static void FinalizeAuthoredPalette(DragonKingdomWorld world,AuthoredTerrainPalette proof)
+        {
+            foreach(var tile in proof.tiles){var terrain=world.GetComponentsInChildren<Terrain>(true).Single(t=>PathOf(t.transform,world.transform)==tile.name);var data=terrain.terrainData;AssetDatabase.SaveAssetIfDirty(data);tile.candidateGuid=AssetDatabase.AssetPathToGUID(tile.candidate);tile.candidateSha256=AssetSha(tile.candidate);tile.candidateMetaSha256=AssetSha(tile.candidate+".meta");tile.finalHoles=PaletteHolesHash(data);if(HashHeights(data)!=tile.heightsAfter||PaletteAlphaHash(data)!=tile.alphaAfter)throw new InvalidOperationException("Post-excavation palette height/alpha changed; only documented native Digger hole cuts are permitted.");}proof.passed=proof.terrains==16&&proof.clonedOuterTerrainData==12&&proof.appearanceOperationsPreservedGeometryAndAlpha;if(!proof.passed)throw new InvalidOperationException("All16 actual saved palette bindings required.");
+        }
+        public static void ValidateSavedAuthoredPalette(DragonKingdomWorld world,AuthoredTerrainPalette proof)
+        {
+            foreach(var tile in proof?.tiles??Array.Empty<PaletteTile>())if(tile.geometryPreparedBeforeAppearance&&(!tile.externalDataCloned||string.IsNullOrEmpty(tile.heightSourceBeforePreparation)||HashHeights(AssetDatabase.LoadAssetAtPath<TerrainData>(tile.sourceData))!=tile.heightSourceBeforePreparation||tile.heightsBefore!=tile.heightsAfter))throw new InvalidOperationException("Owned outer geometry preparation must retain its actual original source height hash and separate unchanged appearance phase.");
+            if(proof==null||!proof.passed||proof.recipe!="source-polyart-authored11m"||proof.layers.Length!=4||proof.tiles.Length!=16||proof.clonedOuterTerrainData!=12||!proof.appearanceOperationsPreservedGeometryAndAlpha)throw new InvalidOperationException("Exact authored terrain palette proof missing.");foreach(var source in proof.sourceDependencies)if(AssetSha(source.path)!=source.sha256||AssetSha(source.path+".meta")!=source.metaSha256||AssetDatabase.AssetPathToGUID(source.path)!=source.guid)throw new InvalidOperationException("Immutable authored terrain layer/texture source differs.");foreach(var layer in proof.layers){var asset=AssetDatabase.LoadAssetAtPath<TerrainLayer>(layer.candidate);if(asset==null||AssetSha(layer.candidate)!=layer.candidateSha256||AssetSha(layer.candidate+".meta")!=layer.candidateMetaSha256||AssetDatabase.AssetPathToGUID(layer.candidate)!=layer.candidateGuid||PaletteProperties(asset)!=layer.properties)throw new InvalidOperationException("Saved source-authored candidate layer differs.");}
+            foreach(var tile in proof.tiles){var terrain=world.GetComponentsInChildren<Terrain>(true).Single(t=>PathOf(t.transform,world.transform)==tile.name);var data=terrain.terrainData;if(AssetDatabase.GetAssetPath(data)!=tile.candidate||terrain.GetComponent<TerrainCollider>().terrainData!=data||AssetSha(tile.candidate)!=tile.candidateSha256||AssetSha(tile.candidate+".meta")!=tile.candidateMetaSha256||AssetDatabase.AssetPathToGUID(tile.candidate)!=tile.candidateGuid||terrain.transform.position!=tile.position||data.size!=tile.size||HashHeights(data)!=tile.heightsAfter||PaletteAlphaHash(data)!=tile.alphaAfter||PaletteHolesHash(data)!=tile.finalHoles||!data.terrainLayers.Select(AssetDatabase.GetAssetPath).SequenceEqual(proof.layers.Select(p=>p.candidate))||!tile.appearancePreservedGeometryAndAlpha)throw new InvalidOperationException("Saved terrain palette geometry/alpha/holes/source binding differs.");if(tile.externalDataCloned&&(AssetSha(tile.sourceData)!=tile.sourceDataSha256||AssetSha(tile.sourceData+".meta")!=tile.sourceDataMetaSha256))throw new InvalidOperationException("Original outer Vista data changed.");}
+        }
+    }
+}
+#endif
