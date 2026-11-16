@@ -69,6 +69,7 @@ namespace LWS.TruckSports
         {
             if (string.IsNullOrWhiteSpace(sportId) || string.IsNullOrWhiteSpace(matchId)) throw new ArgumentException("Score receipts require a sport and match identity.");
             sport = sportId; match = matchId;
+            SportsSessionTelemetry.MatchStarted(match, sport);
         }
         public bool TryConfirm(string eventId, ISportsParticipantSlot player, int slot, double delta, double total,
             string reason, SportsScoreTier tier, string unit, string team, bool roundEnded, bool matchEnded, out SportsScoreEvent receipt)
@@ -80,6 +81,7 @@ namespace LWS.TruckSports
                 throw new ArgumentException("Confirmed scores require an event ID, stable participant identity, finite values and a reason.");
             if (!confirmed.Add(eventId)) return false;
             receipt = Latest = new SportsScoreEvent(sport, match, eventId, player, slot, delta, total, reason, tier, unit, team, roundEnded, matchEnded);
+            SportsSessionTelemetry.ConfirmedScore(receipt);
             return true;
         }
         public bool TryConfirmOutcome(string eventId, ISportsParticipantSlot player, int slot, double value,
@@ -92,6 +94,7 @@ namespace LWS.TruckSports
                 throw new ArgumentException("Confirmed outcomes require an event ID, stable identity, finite nonnegative measurement, reason and unit.");
             if (!confirmed.Add(eventId)) return false;
             receipt = Latest = new SportsScoreEvent(sport, match, eventId, player, slot, value, reason, tier, unit, roundEnded, matchEnded);
+            SportsSessionTelemetry.ConfirmedScore(receipt);
             return true;
         }
         public void Close() => closed = true;
@@ -105,6 +108,7 @@ namespace LWS.TruckSports
                 throw new ArgumentException("Confirmed team scores require an event ID, stable team identity/name, finite values and a reason.");
             if (!confirmed.Add(eventId)) return false;
             receipt = Latest = new SportsScoreEvent(sport, match, eventId, team, name, color, delta, total, reason, tier, unit, roundEnded, matchEnded);
+            SportsSessionTelemetry.ConfirmedScore(receipt);
             return true;
         }
     }
