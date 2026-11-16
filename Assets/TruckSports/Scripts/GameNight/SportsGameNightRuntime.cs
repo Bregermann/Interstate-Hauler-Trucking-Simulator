@@ -141,6 +141,7 @@ namespace LWS.TruckSports
         {
             if (Instance == null) return false;
             if (BlockSharedMenus) return true;
+            if (action == "back" && Active && owner.Page == 1 && Instance.State.Phase == SportsGameNightPhase.Selection) { Instance.ShowLobby(); return true; }
             if (action == "play") { Instance.Open(owner, SportsControllerKeyboard.SubmittingPad()); return true; }
             return false;
         }

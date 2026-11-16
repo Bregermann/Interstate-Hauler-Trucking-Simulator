@@ -29,6 +29,8 @@ namespace LWS.TruckSports
             public string message, stack, level, unit, reason, device, deviceChange;
             public int frame, slot, deviceId, sampleFrames, droppedEvents;
             public float realtime, framesPerSecond, minimumFrameMs, maximumFrameMs;
+            public float simulationTimeScale;
+            public bool applicationFocused;
             public long managedBytes, unityAllocatedBytes;
             public double delta, total, outcome;
             public bool ai, team, roundEnded, matchEnded, truncated;
@@ -173,6 +175,7 @@ namespace LWS.TruckSports
             if (sampleSeconds >= 10)
             {
                 Enqueue(new Record { kind = "performance_sample", sampleFrames = sampleFrames,
+                    simulationTimeScale = Time.timeScale, applicationFocused = Application.isFocused,
                     framesPerSecond = sampleFrames / sampleSeconds, minimumFrameMs = minFrame * 1000,
                     maximumFrameMs = maxFrame * 1000, managedBytes = GC.GetTotalMemory(false),
                     unityAllocatedBytes = Profiler.GetTotalAllocatedMemoryLong() });

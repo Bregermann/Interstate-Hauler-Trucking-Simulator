@@ -10,6 +10,16 @@ Local implementation checkpoints: `7acd4789`, `caf5a1fe`, `218b5ea3`, `e7163a98`
 
 **Latest evidence:** `Evidence/Foundation09/README.md` links inspected lobby, keyboard, saved-statistics and retained before-fix/initial-gameplay captures. Windows02's actual report contains two unique complete matches, real AI winners, zero human point awards, two human losses each and a telemetry end event. Windows04's short visual retake and the separate relaunch comparison pass their own assertions; all process-exit failures remain recorded. The latest scripts-only build exits0; existing saved scene/content data is reused. See the root ledger for permanent IDs.
 
+**Focused follow-up:** Windows05 visibly completes Dance-Off but reaches its360-second external limit during Whack. Recorded rendering remains about150–160FPS with no controller removal. StartupState01 separately passes five seconds of Whack: unpaused Play screen, time scale1, both controllers ready, actual rules clock0→3.68. Existing `SportsFocusPolicy` intentionally pauses humans on focus loss; the original full-match driver never resumed that menu, which is consistent with the visible waits but not proven for every historical run. Added focus/pause/resume and sampled time-scale/focus diagnostics to the existing observer; normal gameplay decisions are unchanged. The DirectInput shutdown API experiment did not resolve exit and was fully reverted. Native module/cause remains unconfirmed. No further full-match retry is part of this closeout.
+
+Windows automation uses software controller input for join, profile entry, ready, drive, confirm, return and export. Registered sport actions and explicit button-focus aids select the two test modes. This does not certify unaided physical-controller browsing through the entire catalog.
+
+The current menu pass also implements the explicit category-filter requirement using existing serialized cards and a cloned Heat pager control. The original All Sports roster remains available; filtered cards reuse the authored grid cells and DOTween presentation. Category preference is saved through SportsPrefs. Selection cancellation now routes controller B/Back to the existing shared lobby. Targeted rendered/host-only acceptance is tracked under RF09-FILTER-001 and RF09-BACK-001; no scene reconstruction or new sports were introduced.
+
+**Final focused results:** corrected focus-diagnostic build exits0 after124.67s; category/Back build exits0 after242.82s. FocusResume01 passes real Whack clock advancement, explicit simulated focus pause and actual host-controller resume; the corresponding stream events are present and the reported version is0.9.0. CatalogueControls01 passes host category filtering, nonhost rejection, canvas restoration and actual B-button return to lobby; its720p image is inspected. Both player processes still fail during native exit. The failed diagnostic compile used a nonexistent match-ID property; corrected to the existing MatchId and verified by fast/native compilation. Failed logs remain intact. The rejected DirectInput quit adapter and its meta were removed from both source and the final build.
+
+**Closeout boundary:** no further full-match repetition, engine upgrade, vendor modification or unrelated world repair. Native exit remains the concrete release blocker. Physical devices/listening, unaided entire-catalog browsing and1080p/ultrawide layout acceptance remain unverified. The source and candidate are reviewable; the previous working executable is preserved.
+
 ## Implemented so far
 
 - One persistent game-night owner, four independent seats, stable profile/device ownership, host selection, ready checks, optional AI and guest profiles. No played-sports checklist.
@@ -38,9 +48,9 @@ The first actual common-session match/results/rematch/menu loop passes. Permanen
 
 ## Vendor accounting
 
-- **VENDOR ASSETS AUDITED:** existing Heat button/menu implementation, TMP input validation APIs, Unity Input System UI/device APIs, DOTween presentation, existing preference/profile and sport lifecycle adapters.
+- **VENDOR ASSETS AUDITED:** existing Heat button/menu implementation, TMP input validation APIs, Unity Input System UI/device APIs, DOTween presentation, DirectInput manager/input-device lifecycle APIs and README, existing preference/profile and sport lifecycle adapters.
 - **VENDOR ASSETS USED:** Heat/uGUI, TMP, Input System, DOTween. NWH and individual sport rules/physics remain their existing authorities.
-- **RELEVANT ASSETS NOT USED:** Pixel Crushers career-save orchestration is not substituted for the established independent Sports profile preference boundary; world/traffic/weather packages are unchanged by this flow.
+- **RELEVANT ASSETS NOT USED:** Pixel Crushers career-save orchestration is not substituted for the established independent Sports profile preference boundary; world/traffic/weather packages are unchanged by this flow. The vendor shutdown-call experiment did not eliminate the native exit failure and was removed.
 - **CUSTOM SYSTEMS CREATED:** game-night semantics and vendor/UI/session coordination, typed result projections and focused regression tests.
 - **VENDOR SOURCE MODIFIED:** none.
 - **DUPLICATE VENDOR FUNCTIONALITY CREATED:** none; no vehicle physics, UI animation engine, device backend or career-save framework replacement.

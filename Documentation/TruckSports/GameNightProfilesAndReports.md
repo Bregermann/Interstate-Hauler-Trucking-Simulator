@@ -39,6 +39,8 @@ Reports contain the session/version/timestamps, selected human identities, actua
 
 The report retains512match summaries and512recent events. Older details remain in the stream, with explicit omission counts. Performance is sampled rather than logged every frame. Poker reports contain public final results, not private card contents.
 
+Performance-sample records additionally carry `simulationTimeScale` and `applicationFocused`; these optional fields describe samples, not other event kinds. Focus loss and common-session pause/resume have explicit events. This preserves the existing focus policy while making unexpected waits easier to distinguish from intentional pauses. The additions remain compatible with schema1 readers that ignore unknown fields.
+
 Automated preferences, reports and telemetry are isolated below a validation scope. Software-controller tests are not physical-controller, listening or human-playtest acceptance.
 
 ## Ownership and vendor accounting

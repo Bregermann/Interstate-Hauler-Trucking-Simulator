@@ -8,6 +8,8 @@ Release candidate, blocked on native Windows shutdown and a visible full-match f
 - Player 1 chooses the sport and controls shared match settings. Other drivers keep control of their own profile and ready status. The committee has been replaced with a steering wheel.
 - Game Night carries driver identities, colors, assigned controllers and session points between sports.
 - Existing sports, rules, artwork, weather options and vehicle systems remain in place. This update adds no new sports.
+- Added category browsing to the existing sport cards: Racing, Ball & Table, Aim & Launch, Party & Collision and Dragon Sports, plus All Sports. The selected filter is remembered.
+- Back from Game Night's sport selection now returns to the lobby with the party intact.
 
 ## Your Crew
 

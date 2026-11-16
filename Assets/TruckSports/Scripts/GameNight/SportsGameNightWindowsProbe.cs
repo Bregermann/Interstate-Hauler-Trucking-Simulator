@@ -58,6 +58,7 @@ namespace LWS.TruckSports
                 var plainFront = FindAnyObjectByType<SportsFrontEnd>();
                 Check(plainFront != null && !SportsProbeInputIsolation.Active, "Plain launch must use the real menu without development input isolation.");
                 result.status = "quit requested"; result.purpose = "ordinary menu quit / no software-input isolation";
+                result.softwareControllers = false;
                 File.WriteAllText(Path.Combine(folder, "ordinary-quit.json"), JsonUtility.ToJson(result, true));
                 plainFront.Action("quit"); yield break;
             }
@@ -111,9 +112,21 @@ namespace LWS.TruckSports
                 {
                     result.purpose = "lobby visual retake only"; result.stage = "title canvas hidden under game-night lobby";
                     Check(!front.GetComponentInParent<Canvas>().enabled, "Title canvas still draws over the game-night lobby.");
+                    yield return Press(host, GamepadButton.Start);
+                    Check(night.State.Phase == SportsGameNightPhase.Selection && front.GetComponentInParent<Canvas>().enabled, "Sport selection did not restore its saved canvas.");
+                    yield return null; yield return null;
+                    var catalogue = front.catalogue; Check(catalogue.CategoryControl != null, "The controller category filter is missing.");
+                    EventSystem.current.SetSelectedGameObject(catalogue.CategoryControl); yield return Press(host, GamepadButton.South);
+                    Check(catalogue.CurrentCategory != SportsCatalogue.Category.All && catalogue.FilteredCount > 0 && catalogue.FilteredCount < catalogue.cards.Length, "Controller category selection did not filter the existing roster.");
+                    var selectedCategory = catalogue.CurrentCategory; yield return Press(second, GamepadButton.South);
+                    Check(catalogue.CurrentCategory == selectedCategory, "A nonhost controller changed the category.");
+                    yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("category-filter-720p");
+                    yield return Press(host, GamepadButton.East);
+                    Check(night.State.Phase == SportsGameNightPhase.Lobby && night.LobbyVisible && !front.GetComponentInParent<Canvas>().enabled, "Controller Back did not return sport selection to the lobby.");
+                    result.stage += "; host-only category filter / controller Back passed";
                     success = true; yield break;
                 }
-                foreach (string scene in new[] { SportsNavigation.DanceOff, SportsNavigation.Whack })
+                foreach (string scene in args.Contains("-tsGameNightStartState") ? new[] { SportsNavigation.Whack } : new[] { SportsNavigation.DanceOff, SportsNavigation.Whack })
                 {
                     result.stage = "select / configure " + scene;
                     yield return Press(host, GamepadButton.Start); Check(night.State.Phase == SportsGameNightPhase.Selection, "Host sport selection failed.");
@@ -141,6 +154,22 @@ namespace LWS.TruckSports
                         InputSystem.QueueStateEvent(host, new GamepadState());
                     }
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("gameplay-" + scene + "-720p");
+                    if (args.Contains("-tsGameNightStartState"))
+                    {
+                        result.purpose = "five-second startup-state check only";
+                        var whack = (LWS.TruckWhackAMole.WhackMatch)session; float before = whack.rules.Clock;
+                        yield return new WaitForSecondsRealtime(5);
+                        result.stage = "running=" + session.Running + "; paused=" + session.Paused + "; screen=" + session.menus.Screen + "; timeScale=" + Time.timeScale + "; ready=" + session.Ready(0) + "/" + session.Ready(1) + "; clock=" + before + " -> " + whack.rules.Clock;
+                        yield return new WaitForEndOfFrame(); Capture("startup-state-720p");
+                        Check(session.Live && Time.timeScale > 0 && whack.rules.Clock > before + 1, "Startup simulation did not advance: " + result.stage);
+                        SportsFocusPolicy.InstallScene().SendMessage("OnApplicationFocus", false, SendMessageOptions.RequireReceiver);
+                        yield return null; yield return null;
+                        Check(session.Paused && Time.timeScale == 0, "Existing focus policy did not pause human play.");
+                        yield return Press(host, GamepadButton.Start);
+                        Check(session.Live && Time.timeScale == 1, "Host controller did not resume the focus-paused match.");
+                        result.stage += "; simulated focus pause / controller resume passed";
+                        success = true; yield break;
+                    }
                     while (!session.Finished) { Check(Time.realtimeSinceStartupAsDouble < deadline, "Sport did not reach its normal result: " + scene); yield return null; }
                     yield return null; yield return null; Check(night.State.Phase == SportsGameNightPhase.Results, "Official results did not reach the game-night owner.");
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("results-" + scene + "-720p");
@@ -169,7 +198,7 @@ namespace LWS.TruckSports
         {
             if (finished) return; finished = true; result.status = success ? "passed" : "failed"; result.error = error;
             var args = Environment.GetCommandLineArgs();
-            SportsSessionTelemetry.FlushNow(); File.WriteAllText(Path.Combine(folder, args.Contains("-tsGameNightReload") ? "windows-relaunch.json" : args.Contains("-tsGameNightVisual") ? "windows-visual.json" : "windows-game-night.json"), JsonUtility.ToJson(result, true));
+            SportsSessionTelemetry.FlushNow(); File.WriteAllText(Path.Combine(folder, args.Contains("-tsGameNightReload") ? "windows-relaunch.json" : args.Contains("-tsGameNightVisual") ? "windows-visual.json" : args.Contains("-tsGameNightStartState") ? "windows-start-state.json" : "windows-game-night.json"), JsonUtility.ToJson(result, true));
             if (host != null && host.added) InputSystem.RemoveDevice(host); if (second != null && second.added) InputSystem.RemoveDevice(second);
             InputSystem.settings.backgroundBehavior = previousBackground;
             preferences?.Dispose(); SportsParticipantRegistry.ForgetCache(); Application.Quit(success ? 0 : 2);

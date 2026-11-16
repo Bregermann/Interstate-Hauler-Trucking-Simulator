@@ -28,7 +28,7 @@ namespace LWS.TruckSports {
  void MissingKeyboard(){if(!UsesKeyboard()||Keyboard.current!=null&&Keyboard.current.added&&Keyboard.current.enabled)return;if(sport!=null&&sport.Running&&!sport.Finished){if(!sport.Paused)sport.Pause(0,true);else sport.menus.Show(SportsEventScreen.Join);}else if(bowling!=null&&bowling.InMatch&&!bowling.Finished)bowling.Pause(0,true);else if(cornhole!=null&&cornhole.InMatch&&!cornhole.Finished)cornhole.Pause(0,true);else if(cheese!=null&&cheese.InMatch&&!cheese.Finished)cheese.Pause(0,true);else if(hockey!=null&&hockey.InMatch)hockey.Pause(true);else if(air!=null&&air.InMatch)air.Pause(true);else if(wall!=null&&wall.InMatch)wall.Pause(true);else if(billiards!=null&&billiards.InMatch)billiards.Disconnect();}
  static void DeviceChanged(InputDevice device,InputDeviceChange change){if(current==null)return;if(change==InputDeviceChange.Disabled&&device.added)current.PauseHuman();else if(device is Keyboard&&(change==InputDeviceChange.Removed||change==InputDeviceChange.Disconnected))current.MissingKeyboard();}
  public static bool Suspended(InputDevice device,InputDeviceChange change){if(change!=InputDeviceChange.Disabled||device==null||!device.added)return false;if(current!=null)current.PauseHuman();return true;}
- void OnApplicationFocus(bool focus){if(!focus)PauseHuman();}
+ void OnApplicationFocus(bool focus){if(!focus){SportsSessionTelemetry.GameNightEvent("focus_lost",sport!=null?sport.MatchId:null,gameObject.scene.name);PauseHuman();}}
  void OnApplicationPause(bool paused){if(paused)PauseHuman();}
  }
 }
