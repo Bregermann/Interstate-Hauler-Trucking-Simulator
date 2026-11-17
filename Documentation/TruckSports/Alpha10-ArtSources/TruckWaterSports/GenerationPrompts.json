@@ -1,0 +1,35 @@
+{
+  "tool": "built-in image_gen",
+  "created": "2026-11-17",
+  "assets": [
+    {
+      "key": "PaddlePals",
+      "prompt": "Use case: logo-brand. Create an ORIGINAL finished transparent PNG game-logo asset for TRUCK SPORTS: PARTY!, with the handmade energy of a 1998–2003 console arcade party-game box. Exact text: small upper line \"TRUCK CANOEING\", massive hero title \"PADDLE PALS\". The title is the image, not a scene or poster. Strong wide compact silhouette, richly painted custom bent chunky letters with asymmetrical rhythmic shapes, thick deep-navy ink outlines, warm ivory edge, chunky imperfect 3D depth. Sun-faded mustard yellow and warm orange hero lettering with distressed chipped paint, woodgrain nicks, scuffed print texture; lagoon teal/cobalt splashes and forest-green accents. Clever sport-specific composition: two small exaggerated semi-truck cabs seated in one absurd wooden canoe, one red-orange and one turquoise, each visibly holding a paddle, working together; canoe hull woven through the baseline, crossed battered paddles structurally integrated into the letterforms, rope knots and painted whitewater curves. These visual details support the words, not clutter them. Grungier and more hand-painted than clean glossy AI esports branding; reminiscent of an original PS1/PS2-era illustrated box logo, WITHOUT copying any existing game's characters, fonts or composition. Lettering readable at 320px menu width. No glossy chrome, no generic stock font, no modern vector minimalist emblem, no giant backing rectangle, no photographic rendering, no checkerboard drawn into the image, no watermark. Genuine transparent background around the whole isolated artwork; preserve a small clean transparent margin so no lettering or paddles are cropped. High resolution."
+    },
+    {
+      "key": "WhitewaterWipeout",
+      "prompt": "Use case: logo-brand. Create an ORIGINAL high-resolution transparent PNG logo for an outrageous 1998–2003 console arcade sport. Exact text: small header \"TRUCK KAYAKING\", dominant first word \"WHITEWATER\", even bolder lower word \"WIPEOUT\". Strong compact WIDE silhouette with every letter readable at 320px. Handmade PS1/PS2-era illustrated game-box typography: violently bent custom jagged letters like cracked painted river-rock, thick midnight-blue/black ink outlines, off-white cutout edge, imperfect deep painted extrusion, brush highlights, worn screen-print speckle, chips and grunge, limited bold color separations. Palette DISTINCT from other sports: ice-white and pale aqua WHITEWATER, ferocious coral-red/orange WIPEOUT, deep petrol-blue shadows and lime-yellow hazard accents. Integrate original sport imagery directly into the lettering: a ridiculous tiny red kayak squeezed beneath an oversized turquoise semi-truck cab, pitching over a stylized waterfall between the words; a paddle slashes through one letter, curled whitewater and a few sharp boulders create the baseline. Energetic curved motion and a convincing hand-painted vintage console identity, not a clean faceted generic esports badge. Do not copy any protected game logos, characters, fonts or designs. No stock font, no modern glossy chrome, no scene backdrop, no backing plaque, no tiny slogans, no watermark. Genuine transparent background, no painted checkerboard. Modest transparent safety margin, all artwork fully inside canvas."
+    },
+    {
+      "key": "Blackwater",
+      "prompt": "Use case: logo-brand. Create an ORIGINAL finished transparent PNG horror-sport game logo with a 1999–2003 PS2 supernatural thriller box-art aesthetic, still recognizably an exaggerated painted arcade-sports collection logo. Exact text: enormous hero word \"BLACKWATER\"; small but very readable subtitle \"SOMETHING BELOW\". A strong WIDE low silhouette, dark handmade slab letterforms with hooked irregular corners and subtle concave bends, weathered ivory/dirty pale-mint faces, corroded brass edges, thick charcoal/near-black outline, deep petrol and moss-green painted dimensional shadows. Distressed cracked enamel, hand-painted gouges, grainy vintage printed ink, salt stains and subtle torn brush edges. Art integrated into the logo rather than a background scene: the BLACKWATER baseline becomes an oily dark lake surface; one tiny original truck-bearing work barge with two headlight cones cuts between the letters above a single immense curved submerged creature form, only ridged back and an ambiguous hooked fin visibly breaching through the lower lettering. Dark jade/cold teal wake shapes curl around the subtitle; two dull amber navigation lights provide precise accent color. Suspense, weight, uneasy scale; no gore, no skull clichés, no cartoon smiling monster, no photorealism. NOT generic modern metallic esports typography; genuinely evocative of hand-illustrated PS2 box logos and 90s horror comic cover lettering, without copying any existing commercial logo or creature. Keep lettering highly readable at menu size through dirty-ivory faces and strong outlines. No rectangular backing plate, no environmental background, no drawn checkerboard, no watermark. True transparent alpha around isolated logo, including interior negative spaces; clean modest transparent safety margin."
+    }
+  ],
+  "refinements": [
+    {
+      "asset": "WhitewaterWipeout",
+      "change": "Removed human kayaker; placed turquoise truck itself inside red kayak; preserved typography and grunge; added transparent safety margin.",
+      "source": "exec-f7e1f9d8-d992-4820-ac57-62991d533b7c.png"
+    },
+    {
+      "asset": "PaddlePals",
+      "prompt": "Correct only the hero title lettering in this existing logo: it must read exactly PADDLE PALS, with ONE E in PADDLE, not a duplicated or stacked E near the crossed paddles. Repaint the central L and single E cleanly so P A D D L E are six unmistakable letters, followed by PALS. Preserve the existing small header TRUCK CANOEING, both truck characters, canoe, crossed wooden paddles, all palette, worn wood/paint grunge, thick navy outline, ivory cutout edge and transparent background. Do not redesign or add words. Keep the single E clear of the crossed paddles and the P of PALS. Preserve complete art inside canvas. Genuine transparent alpha.",
+      "source": "exec-b933eebc-c0c5-4d2c-8c1e-07a5b3d341bc.png"
+    }
+  ],
+  "originalOutputs": {
+    "PaddlePals": "exec-d71568d4-0be6-4bfd-a1e9-72c6f812ba5c.png",
+    "WhitewaterWipeout": "exec-7882059b-2027-4545-b6e0-e43c221a8998.png",
+    "Blackwater": "exec-e04cd635-eaff-43c2-ba6a-b777dbf62d2b.png"
+  }
+}
