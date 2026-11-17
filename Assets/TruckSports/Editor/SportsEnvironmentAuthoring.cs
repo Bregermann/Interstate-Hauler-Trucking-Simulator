@@ -1343,7 +1343,7 @@ namespace LWS.TruckSports.Editor
         // Explicit new-venue bridge to the existing weather/time authority.
         // New worlds supply their own authored lamps instead of pretending to
         // have one of the audited legacy arena footprints below.
-        public static SportsMatchTime BindAuthoredOutdoorSession(SportsEventSession session, string folder, Light[] venueLamps)
+        public static SportsMatchTime BindAuthoredOutdoorSession(SportsEventSession session, string folder, Light[] venueLamps, string assetFolder = null)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode || session == null || session.presentationWeather == null
                 || string.IsNullOrEmpty(session.gameObject.scene.path) || session.gameObject.scene.name != folder)
@@ -1361,7 +1361,7 @@ namespace LWS.TruckSports.Editor
             binding.nightLights = venueLamps ?? Array.Empty<Light>();
             var cameras = All<SportsEventCamera>(scene).Select(rig => rig.view).Where(camera => camera != null).Distinct().ToArray();
             weather.vendor.AllowCameras.Clear(); weather.vendor.AllowCameras.AddRange(cameras);
-            SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, folder);
+            SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, assetFolder ?? folder);
             InstallHeadlights(scene, binding); weather.matchTime = binding;
             var picker = All<SportsWeatherPicker>(scene).FirstOrDefault(p => !p.timeOfDay)
                 ?? SportsWeatherPickerAuthoring.Install(session, weather.presets, new Vector2(0, 336));

@@ -73,7 +73,7 @@ namespace LWS.TruckSports {
  public virtual float RaceCountdownSeconds=>-1;
  public virtual float RaceStartSeconds=>-1;
  public virtual string ControlCaption(int slot)=>Controls(slot);
- public string PreferenceKey{get{
+ public virtual string PreferenceKey{get{
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
  return (SportsProbeInputIsolation.Active?"Validation.":"")+GetType().Name+".Setup.v1";
 #else
