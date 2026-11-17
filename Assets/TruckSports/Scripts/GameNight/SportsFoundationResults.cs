@@ -11,6 +11,7 @@ namespace LWS.TruckSports
         {
             snapshot = null;
             if (session == null || !session.Finished) return false;
+            if (SportsHitchesResults.TryCapture(session, out snapshot)) return true;
             switch (session)
             {
                 case LWS.TruckBakeOff.BakeMatch m:

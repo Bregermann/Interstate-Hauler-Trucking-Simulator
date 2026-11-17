@@ -62,6 +62,11 @@ namespace LWS.TruckSports.Editor
                 var logo = AssetDatabase.LoadAssetAtPath<Sprite>(SportsRetroMenuAuthoring.LogoFolder + entry.scene + ".png");
                 if (logo != null) icons["sport-" + entry.key] = logo;
             }
+            foreach (var entry in SportsHitchesGames.All)
+            {
+                var logo = AssetDatabase.LoadAssetAtPath<Sprite>(SportsRetroMenuAuthoring.LogoFolder + entry.scene + ".png");
+                if (logo != null) icons["sport-" + entry.key] = logo;
+            }
             var subtitle=front.pages[1].transform.Find("Subtitle")?.GetComponent<TMP_Text>();if(subtitle!=null){Position(subtitle.rectTransform,new Vector2(1400,32),new Vector2(0,330));subtitle.fontSizeMax=22;subtitle.fontSizeMin=19;subtitle.color=new Color(.66f,.75f,.82f);}
             int missing = 0, updated = 0;
             var cards = front.catalogue.cards.ToList();
@@ -118,6 +123,7 @@ namespace LWS.TruckSports.Editor
         { rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f,.5f); rect.sizeDelta = size; rect.anchoredPosition = position; }
         public static string SceneFor(string key)
         {
+            if (SportsHitchesGames.TryFindKey(key, out var hitches)) return hitches.scene;
             if (SportsDragonGames.TryFindKey(key, out var dragon)) return dragon.scene;
             if (SportsImpossibleGames.TryFindKey(key, out var impossible)) return impossible.scene;
             var map = new Dictionary<string,string> {

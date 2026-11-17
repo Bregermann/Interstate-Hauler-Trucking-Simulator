@@ -9,7 +9,7 @@ using TMPro;
 namespace LWS.TruckSports {
 public sealed class SportsCatalogue:MonoBehaviour {
  public GameObject[] cards;public TMP_Text indicator;public GameObject previous,next;public int pageSize=8;int page;
- public enum Category { All, Racing, BallAndTable, AimAndLaunch, PartyAndCollision, Dragon }
+ public enum Category { All, Racing, BallAndTable, AimAndLaunch, PartyAndCollision, Dragon, Water, Horror, Trailer }
  Category category;
  Category[] families;
  Vector2[] cells;
@@ -23,14 +23,14 @@ public sealed class SportsCatalogue:MonoBehaviour {
  static readonly HashSet<string> racing=new HashSet<string>{"cheese","terrier","mattress","wife","redlight","frogger","avalanche","ninjawarrior","bog","skytow"};
  static readonly HashSet<string> ball=new HashSet<string>{"billiards","practice","poker","beerpong","hockey","airhockey","keepaway","keepawayfp","buzkashi","kickball","fieldgoal","volleyball","dodgeball","wallball","tetherball"};
  static readonly HashSet<string> aiming=new HashSet<string>{"dock","cornhole","bowling","curling","targetlaunch","skee","minefield","swing","bungee","basejump","trailerplug","fishing"};
- static string Label(Category value)=>value==Category.All?"ALL SPORTS":value==Category.Racing?"RACING":value==Category.BallAndTable?"BALL & TABLE":value==Category.AimAndLaunch?"AIM & LAUNCH":value==Category.Dragon?"DRAGON SPORTS":"PARTY & COLLISION";
+ static string Label(Category value)=>value==Category.Water?"WATER SPORTS":value==Category.Horror?"HORROR":value==Category.Trailer?"TRAILER SPORTS":value==Category.All?"ALL SPORTS":value==Category.Racing?"RACING":value==Category.BallAndTable?"BALL & TABLE":value==Category.AimAndLaunch?"AIM & LAUNCH":value==Category.Dragon?"DRAGON SPORTS":"PARTY & COLLISION";
  void EnsureLayout(){
   if(cards==null||families!=null&&families.Length==cards.Length)return;
   pageSize=Mathf.Max(1,pageSize);cells=new Vector2[pageSize];scales=new Vector3[cards.Length];families=new Category[cards.Length];
   for(int i=0;i<cards.Length;i++){
    var card=cards[i];if(card==null)continue;scales[i]=card.transform.localScale;if(i<cells.Length)cells[i]=card.GetComponent<RectTransform>().anchoredPosition;
    var action=card.GetComponentsInChildren<SportsMenuAction>(true).FirstOrDefault();string key=action!=null?action.action:"";
-   families[i]=SportsDragonGames.TryFindKey(key,out _)?Category.Dragon:racing.Contains(key)?Category.Racing:ball.Contains(key)?Category.BallAndTable:aiming.Contains(key)?Category.AimAndLaunch:Category.PartyAndCollision;
+   families[i]=SportsHitchesGames.TryFindKey(key,out var h)?(h.family==SportsHitchesGames.Family.Water?Category.Water:h.family==SportsHitchesGames.Family.Horror?Category.Horror:Category.Trailer):SportsDragonGames.TryFindKey(key,out _)?Category.Dragon:racing.Contains(key)?Category.Racing:ball.Contains(key)?Category.BallAndTable:aiming.Contains(key)?Category.AimAndLaunch:Category.PartyAndCollision;
   }
  }
  bool Matches(int index)=>cards[index]!=null&&(category==Category.All||families[index]==category);

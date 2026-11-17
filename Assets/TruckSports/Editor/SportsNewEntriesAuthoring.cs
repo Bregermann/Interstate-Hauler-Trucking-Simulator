@@ -54,9 +54,9 @@ namespace LWS.TruckSports.Editor
             front.catalogue.Step(0);
             if(System.IO.Directory.Exists("Assets/TruckSports/Art/Previews"))SportsMenuArtAuthoring.InstallInto(front);
         }
-        static void Add(SportsFrontEnd front, string key, string name, string title, string description, string folder)
+        static void Add(SportsFrontEnd front, string key, string name, string title, string description, string folder, string explicitScenePath = null)
         {
-            string scenePath = "Assets/" + folder + "/Scenes/" + folder + ".unity";
+            string scenePath = explicitScenePath ?? ("Assets/" + folder + "/Scenes/" + folder + ".unity");
             if (!System.IO.File.Exists(scenePath)) return;
             var parent = front.pages[1].transform;
             var card = parent.Find(name + " Sport Card");
