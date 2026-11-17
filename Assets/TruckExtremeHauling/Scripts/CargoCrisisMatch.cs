@@ -110,7 +110,7 @@ namespace LWS.TruckExtremeHauling
                 Vector3 local = trucks[i].transform.InverseTransformPoint(AlignedRoot(i, target));
                 float angle = Mathf.Atan2(local.x, Mathf.Max(.2f, -local.z));
                 float speed = Vector3.Dot(trucks[i].body.linearVelocity, trucks[i].transform.forward);
-                if(Vector3.Angle(trucks[i].transform.forward,target.transform.forward)>12||Mathf.Abs(local.x)>1.5f||local.z>2)
+                if(Vector3.Angle(trucks[i].transform.forward,target.transform.forward)>12||Mathf.Abs(Vector3.Dot(trucks[i].body.position-AlignedRoot(i,target),target.transform.right))>1.5f||local.z>2)
                 {SetStage(i,RescueStage.ClearSide);return Vector2.zero;}
                 if(transmission.Gear>=0)
                 {
@@ -119,7 +119,7 @@ namespace LWS.TruckExtremeHauling
                 }
                 float gap=Vector3.Distance(hitches[i].Anchor.position,target.Kingpin.position);
                 float requested=-Mathf.Clamp(gap*.25f,.12f,2.5f);
-                return new Vector2(Mathf.Clamp(-angle*1.8f,-1,1),gap<.6f?0:Mathf.Clamp((requested-speed)*.7f,-.75f,.7f));
+                return new Vector2(Mathf.Clamp(angle*1.8f,-1,1),gap<.6f?0:Mathf.Clamp((requested-speed)*.7f,-.75f,.7f));
             }
             return DriveToward(i, Destination(i), stage[i] == RescueStage.Approach ? 5 : 6, true);
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -74,7 +74,7 @@ namespace LWS.TruckHitchSports.Editor
             match.trailers = new TrailerBody[count];
             for (int i = 0; i < count; i++)
             {
-                var position = i < 4 ? match.trucks[i].body.position : new Vector3((i - 5.5f) * 30, 1.2f, 35);
+                var position = i < 4 ? match.trucks[i].transform.position : new Vector3((i - 5.5f) * 30, 1.2f, 35);
                 match.trailers[i] = surf ? HitchAuthoring.CreateFlatbed(position, Quaternion.identity) : HitchAuthoring.CreateTrailer(position, Quaternion.identity);
                 if (!(match is HitchRunMatch) && !surf) HitchAuthoring.PlaceCoupledAtStart(match.couplers[i], match.trailers[i]);
                 else if (match is HitchRunMatch) match.trailers[i].transform.position = new Vector3((i % 4 - 1.5f) * 38, 1.2f, i < 4 ? 5 : 50);
@@ -99,6 +99,7 @@ namespace LWS.TruckHitchSports.Editor
             SportsScenicGradeAuthoring.Install(match.gameObject, match.cameras, Folder, -.2f);
             EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Scene(key));
             if (match is TrebuchetMatch) CoreHitchSetupRepairs.RepairActiveTrebuchetApparatus();
+            if(match is HitchRunMatch)CoreHitchSetupRepairs.RepairActiveHitchRunLandingGear();
             SportsProductionAuthoring.InstallScene(); SportsFocusPolicy.InstallScene();
             EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Scene(key)); AssetDatabase.SaveAssets();
             Debug.Log("ALPHA10_HITCH_AUTHORED " + key + " native fifth wheels, axles, trailer rigidbodies and assigned controls; gameplay acceptance pending.");
@@ -127,7 +128,7 @@ namespace LWS.TruckHitchSports.Editor
             match.landingPads = new Transform[4]; match.exhaust = new ParticleSystem[4];
             for (int i = 0; i < 4; i++)
             {
-                float x = match.trucks[i].body.position.x;
+                float x = match.trucks[i].transform.position.x;
                 match.landingPads[i] = SportsEventAuthoring.Box("Precision recovery pad " + (i + 1), new Vector3(x, .12f, 130), new Vector3(24, .25f, 24), steel, contact).transform;
                 var boosterBounds = HitchAuthoring.Bounds(match.trailers[i].gameObject);
                 for (int booster = 0; booster < 4; booster++)
@@ -166,7 +167,7 @@ namespace LWS.TruckHitchSports.Editor
             match.engines = new TrebuchetArm[4]; match.targets = new Transform[4];
             for (int i = 0; i < 4; i++)
             {
-                float x = match.trucks[i].body.position.x;
+                float x = match.trucks[i].transform.position.x;
                 var support = SportsEventAuthoring.Box("Trebuchet pivot tower", new Vector3(x + 7, 4, 15), new Vector3(2, 8, 4), wood, contact);
                 var armObject = SportsEventAuthoring.Box("Physical siege arm", new Vector3(x, 9, 15), new Vector3(1.5f, 1.3f, 26), wood, contact);
                 armObject.transform.rotation = Quaternion.Euler(35, 0, 0);

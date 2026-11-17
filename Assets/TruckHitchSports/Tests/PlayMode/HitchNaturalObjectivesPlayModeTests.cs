@@ -63,10 +63,18 @@ public sealed class HitchNaturalObjectivesPlayModeTests
             for (int t = 0; t < trailers.Length; t++) origin[t] = TrailerBody(trailers.GetValue(t)).position;
             var attached = new bool[Count(match)];
             var probes = new HitchNaturalImpactProbe[trailers.Length];
+            HitchNaturalImpactProbe[] tractorContacts = null;
+            float nextTrebuchetSample = 10; int trebuchetSamples = 0;
             bool loaded = false, released = false;
             float releasedHeight = 0, flightRise = 0, flightSpeed = 0;
             if (className == "TrebuchetMatch")
+            {
                 for (int t = 0; t < trailers.Length; t++) probes[t] = TrailerBody(trailers.GetValue(t)).gameObject.AddComponent<HitchNaturalImpactProbe>();
+                var firstTractor = (Component)((Array)Read(match, "trucks")).GetValue(0);
+                // The native cab is a separate physical body. Observe its
+                // contacts too, so roof strikes are not hidden by a root probe.
+                tractorContacts = firstTractor.GetComponentsInChildren<Rigidbody>(true).Select(body => body.gameObject.AddComponent<HitchNaturalImpactProbe>()).ToArray();
+            }
             try
             {
                 Time.timeScale = PlaybackRate;
@@ -87,10 +95,16 @@ public sealed class HitchNaturalObjectivesPlayModeTests
                             flightRise = Mathf.Max(flightRise, body.position.y - releasedHeight);
                             flightSpeed = Mathf.Max(flightSpeed, body.linearVelocity.magnitude);
                         }
+                        if ((float)Property(match, "Elapsed") >= nextTrebuchetSample && trebuchetSamples < 18)
+                        {
+                            nextTrebuchetSample += 10; trebuchetSamples++;
+                            Debug.Log("HH10_TREBUCHET_APPROACH " + TrebuchetPhysicalSample(match, probes[0], tractorContacts));
+                        }
                     }
                     yield return null;
                 }
                 string diagnostics = Diagnostics(match, className, travel);
+                if (className == "TrebuchetMatch") Debug.Log("HH10_TREBUCHET_TERMINAL " + TrebuchetPhysicalSample(match, probes[0], tractorContacts));
                 Assert.That((bool)Property(match, "Finished"), Is.True, scene + " must resolve naturally within its authored length." + diagnostics);
                 var scores = (double[])Read(match, "Scores");
                 if (className == "HighwireMatch")
@@ -174,6 +188,15 @@ public sealed class HitchNaturalObjectivesPlayModeTests
             }
         }
     }
+    static string TrebuchetPhysicalSample(object match, HitchNaturalImpactProbe cargoContacts, HitchNaturalImpactProbe[] tractorContacts)
+    {
+        object truck = ((Array)Read(match, "trucks")).GetValue(0), cargo = ((Array)Read(match, "trailers")).GetValue(0);
+        var tractor = (Rigidbody)Read(truck, "body"); var trailer = TrailerBody(cargo);
+        var wheels = ((Array)Read(truck, "wheels")).Cast<object>().ToArray();
+        int grounded = wheels.Count(wheel => (bool)Property(wheel, "IsGrounded"));
+        string contacts = string.Join(" | ", tractorContacts.Select(probe => probe.gameObject.name + ":" + probe.LastContact));
+        return "age=" + ((float)Property(match, "Elapsed")).ToString("F1") + " tractorPos=" + tractor.position.ToString("F2") + " tractorCOM=" + tractor.worldCenterOfMass.ToString("F2") + " tractorVel=" + tractor.linearVelocity.ToString("F2") + " heading=" + (tractor.rotation * Vector3.forward).ToString("F3") + " wheelGrounded=" + grounded + "/" + wheels.Length + " trailerCOM=" + trailer.worldCenterOfMass.ToString("F2") + " trailerVel=" + trailer.linearVelocity.ToString("F2") + " trailerWheelContact=" + Property(cargo, "WheelContact") + " " + Call(match, "TrebuchetLoadingDiagnostic", 0) + " tractorContacts=[" + contacts + "] cargoContact=[" + cargoContacts.LastContact + "]";
+    }
     static string Diagnostics(object match, string className, float[] travel)
     {
         var couplers = (Array)Read(match, "couplers"); var trailers = (Array)Read(match, "trailers"); var trucks = (Array)Read(match, "trucks");
@@ -184,7 +207,11 @@ public sealed class HitchNaturalObjectivesPlayModeTests
             data += " [seat=" + i + " truck=" + Position(trucks.GetValue(i)).ToString("F1") + " trailer=" + TrailerBody(trailers.GetValue(t)).position.ToString("F1") + " " + Call(couplers.GetValue(i), "DiagnosticState", trailers.GetValue(t)) + "]";
         }
         if (className == "HighwireMatch") data += " gates=" + string.Join(",", ((int[])Read(match, "gate"))) + " failed=" + string.Join(",", ((bool[])Read(match, "failed")));
-        else if (className == "HitchRunMatch") data += " deliveries=" + string.Join(",", ((int[])Read(match, "Deliveries")).Take(Count(match))) + " approach=" + string.Join(",", ((int[])Read(match, "approachStage")));
+        else if (className == "HitchRunMatch")
+        {
+            data += " deliveries=" + string.Join(",", ((int[])Read(match, "Deliveries")).Take(Count(match))) + " approach=" + string.Join(",", ((int[])Read(match, "approachStage")));
+            for (int i = 0; i < Count(match); i++) data += " [actualTarget " + i + " " + Call(match, "HitchRunApproachDiagnostic", i) + "]";
+        }
         else if (className == "HandoffMatch") data += " legs=" + string.Join(",", ((int[])Read(match, "leg"))) + " released=" + string.Join(",", ((bool[])Read(match, "released"))) + " finished=" + string.Join(",", ((bool[])Read(match, "finishedTeam")));
         else if (className == "TrebuchetMatch")
         {
@@ -202,7 +229,37 @@ public sealed class HitchNaturalImpactProbe : MonoBehaviour
     public bool armed;
     public int impacts;
     public float maximumImpactSpeed;
+    Collider lastOther, lastSelf;
+    string lastNames;
+    Vector3 lastPoint, lastNormal;
+    float lastSpeed, lastAt;
+    public string LastContact => lastOther == null ? "none" : lastNames + " point=" + lastPoint.ToString("F2") + " normal=" + lastNormal.ToString("F2") + " speed=" + lastSpeed.ToString("F2") + " age=" + (Time.time - lastAt).ToString("F1");
     void OnCollisionEnter(Collision collision)
-    { if (armed) { impacts++; maximumImpactSpeed = Mathf.Max(maximumImpactSpeed, collision.relativeVelocity.magnitude); } }
+    {
+        Observe(collision);
+        if (armed) { impacts++; maximumImpactSpeed = Mathf.Max(maximumImpactSpeed, collision.relativeVelocity.magnitude); }
+    }
+    void OnCollisionStay(Collision collision) => Observe(collision);
+    void Observe(Collision collision)
+    {
+        Collider other = collision.collider, self = null;
+        if (collision.contactCount > 0)
+        {
+            var contact = collision.GetContact(0); lastPoint = contact.point; lastNormal = contact.normal;
+            other = contact.otherCollider; self = contact.thisCollider;
+        }
+        if (lastOther != other || lastSelf != self)
+        {
+            lastOther = other; lastSelf = self;
+            lastNames = "other=" + (lastOther != null ? ShortPath(lastOther.transform) : "none") + " self=" + (lastSelf != null ? ShortPath(lastSelf.transform) : "none");
+        }
+        lastSpeed = collision.relativeVelocity.magnitude; lastAt = Time.time;
+    }
+    static string ShortPath(Transform transform)
+    {
+        string name = transform.name;
+        for (int level = 0; level < 2 && transform.parent != null; level++) { transform = transform.parent; name = transform.name + "/" + name; }
+        return name;
+    }
 }
 #endif

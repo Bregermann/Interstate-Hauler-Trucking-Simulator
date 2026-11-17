@@ -83,11 +83,14 @@ namespace LWS.TruckHitchSports
                     continue;
                 }
                 int depot = option % 4 == 2 ? i % 2 : i;
-                trucks[i].TickDrive(ai ? DriveTo(i, depots[depot].position + Vector3.forward * 10, 9) : commands[i]);
+                float receivingDistance=Vector3.Distance(owned.Body.worldCenterOfMass,depots[depot].position);
+                Vector3 receivingTarget=depots[depot].position+trucks[i].body.position-owned.Body.worldCenterOfMass;
+                float receivingSpeed=Mathf.Min(9,Mathf.Sqrt(2*1.8f*Mathf.Max(0,receivingDistance-3)));
+                trucks[i].TickDrive(ai?DriveTo(i,receivingTarget,receivingSpeed):commands[i]);
                 if (!ai && actions[i]) { couplers[i].Release(); owned.SetBrakes(1); continue; }
                 bool delivered = Vector3.Distance(owned.Body.worldCenterOfMass, depots[depot].position) < deliveryRadius && owned.Body.linearVelocity.magnitude < .8f && trucks[i].body.linearVelocity.magnitude < .8f;
                 deliveryQuiet[i] = delivered ? deliveryQuiet[i] + dt : 0;
-                if (ai && Vector3.Distance(owned.Body.worldCenterOfMass, depots[depot].position) < deliveryRadius)
+                if (ai && receivingDistance < Mathf.Min(5,deliveryRadius*.6f))
                 {
                     ParkAI(i);
                 }

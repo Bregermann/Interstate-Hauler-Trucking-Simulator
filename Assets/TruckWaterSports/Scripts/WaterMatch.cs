@@ -30,7 +30,9 @@ public abstract class WaterMatch:SportsEventSession {
  }
  protected virtual void AfterBoats(float dt){}
  protected abstract void TickBoat(WaterVessel vessel,int index,float dt);
- protected Vector2 Pilot(int slot,WaterVessel v,int gate){if(slot>=setup.count||setup.players[slot].source==BowlingSource.AI)return Navigate(slot,v,course.Point(gate));return commands[slot];}
+ public Vector3 RouteAim(int slot,WaterVessel vessel,Vector3 ordinaryTarget){var fork=option==1?GetComponent<RiverForkChallenge>():null;return fork!=null?fork.Aim(vessel,ordinaryTarget,slot):ordinaryTarget;}
+ public float RoutePenaltySeconds(int slot){var fork=option==1?GetComponent<RiverForkChallenge>():null;return fork!=null?fork.PenaltySeconds(Vessel(slot)):0;}
+ protected Vector2 Pilot(int slot,WaterVessel v,int gate){if(slot>=setup.count||setup.players[slot].source==BowlingSource.AI)return Navigate(slot,v,RouteAim(slot,v,course.Point(gate)));return commands[slot];}
  protected Vector2 Navigate(int slot,WaterVessel v,Vector3 target,Rigidbody contactTarget=null){int skill=slot<setup.count?(int)setup.players[slot].difficulty:1;target+=Vector3.right*Mathf.Sin(Clock*.4f+slot)*(2-skill)*1.5f;var delta=Vector3.ProjectOnPlane(target-v.body.position,Vector3.up);float yaw=Vector3.SignedAngle(v.transform.forward,delta,Vector3.up);float steer=Mathf.Clamp(yaw/(45-skill*7),-1,1);if(Physics.SphereCast(v.body.position+Vector3.up*.4f,1,v.transform.forward,out var hit,10+skill*2,~0,QueryTriggerInteraction.Ignore)&&hit.rigidbody!=v.body&&(contactTarget==null||hit.rigidbody!=contactTarget))steer=Vector3.Dot(hit.normal,v.transform.right)>0?1:-1;return new Vector2(steer,1-Mathf.Abs(steer)*.32f);}
  // Kayaks and powered barges need closed-loop heading/speed control. Keep the
  // accepted two-station canoe path untouched. Multi-hit probes discard all own

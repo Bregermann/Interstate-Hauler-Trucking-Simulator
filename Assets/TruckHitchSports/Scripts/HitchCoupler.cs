@@ -22,6 +22,7 @@ namespace LWS.TruckHitchSports
             float distance = Anchor != null && trailer != null && trailer.Kingpin != null ? Vector3.Distance(Anchor.position, trailer.Kingpin.position) : -1;
             float angle = trailer != null ? Quaternion.Angle(transform.rotation, trailer.transform.rotation) : -1;
             return "reason=" + LastReason + " distance=" + distance.ToString("F5") + " rotation=" + angle.ToString("F2") +
+                (Anchor!=null&&trailer!=null?" anchor="+Anchor.position.ToString("F4")+" pin="+trailer.Kingpin.position.ToString("F4")+" delta="+(trailer.Kingpin.position-Anchor.position).ToString("F4"):"") +
                 " tractorReady=" + (vc != null && vc.IsInitialized) + " trailerReady=" + (tv != null && tv.IsInitialized) +
                 " nativeAttached=" + (Hitch != null && Hitch.module.attached) + " hitches=" + SuccessfulHitches +
                 " hitchModuleReady=" + (Hitch != null && Hitch.module.IsActive) + " joints=" + GetComponents<ConfigurableJoint>().Length;

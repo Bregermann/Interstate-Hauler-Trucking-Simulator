@@ -275,6 +275,10 @@ namespace LWS.TruckHorrorSports
                 if (rules.outcome[i] != HorrorOutcome.Active) { trucks[i].TickDrive(Vector2.zero); continue; }
                 anyActive = true; rules.survival[i] += dt;
                 bool ai = setup.players[i].source == BowlingSource.AI;
+                bool cargoRecovery = sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && cargo[i] != null
+                    && (ai ? Vector3.Dot(cargo[i].Body.rotation * Vector3.up, Vector3.up) < .4f && trucks[i].body.linearVelocity.magnitude < 1.2f : actions[i]) && cargo[i].RequestRecovery();
+                if(cargoRecovery)Say(setup.players[i].name+" · BRACING THE CURSED LOAD",3);
+
                 Vector2 drive = ai ? DriveAI(i, dt) : commands[i];
                 if (sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && !cargo[i].Ready) drive = Vector2.zero;
                 var foot = footAgents != null && i < footAgents.Length ? footAgents[i] : null;
@@ -290,7 +294,7 @@ namespace LWS.TruckHorrorSports
                 int task = NearestTask(i);
                 int rescue = NearbyRescue(i);
                 bool held = ai ? task >= 0 || rescue >= 0 : ActionHeld(i);
-                if (!ai && actions[i] && task < 0 && rescue < 0) lights[i] = !lights[i];
+                if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0) lights[i] = !lights[i];
                 if (headlights != null && i < headlights.Length && headlights[i] != null) headlights[i].enabled = lights[i];
                 if (foot != null && foot.flashlight != null) foot.flashlight.enabled = foot.Outside && lights[i];
                 if (rescue >= 0 && held && trucks[i].body.linearVelocity.magnitude < 1.4f)
@@ -496,14 +500,36 @@ namespace LWS.TruckHorrorSports
             aiParking[slot] = false;
             if (sport == HorrorSport.CursedCargo && option == 0 && backingFromWard[slot])
             {
+                var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
+                transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
+                float speed = Vector3.Dot(truck.body.linearVelocity, truck.transform.forward);
                 float retreat = Vector3.Dot(truck.body.position - wardDeparture[slot], wardReverseDirection[slot]);
                 if (retreat < 18)
                 {
-                    float articulation = Vector3.SignedAngle(truck.transform.forward, cargo[slot].Body.transform.forward, Vector3.up);
-                    float reverseSpeed = -Vector3.Dot(truck.body.linearVelocity, truck.transform.forward);
-                    float brake = reverseSpeed > 2 ? .65f : -.55f;
-                    return new Vector2(Mathf.Clamp(-articulation / 35, -.65f, .65f), brake);
+                    // A brake request alone may leave NWH's heavy automatic rig in drive/neutral.
+                    // Select the real reverse gear only after the original assembly has stopped.
+                    if (transmission.Gear >= 0)
+                    {
+                        aiParking[slot] = true;
+                        if (truck.body.linearVelocity.magnitude < .35f) transmission.ShiftInto(-1);
+                        return Vector2.zero;
+                    }
+                    Vector3 reverseTarget = wardDeparture[slot] + wardReverseDirection[slot] * 18;
+                    Vector3 bayLocal = truck.transform.InverseTransformPoint(reverseTarget);
+                    // NWH's reversing rig turns toward a behind-right goal with positive steer.
+                    // The old negative articulation feedback could steer away from the open court.
+                    float steer = Mathf.Atan2(bayLocal.x, Mathf.Max(.2f, -bayLocal.z));
+                    float requested = -Mathf.Clamp((18 - retreat) * .3f, .2f, 2);
+                    return new Vector2(Mathf.Clamp(steer * 1.6f, -.6f, .6f), Mathf.Clamp((requested - speed) * .7f, -.75f, .7f));
                 }
+                // Stop the actual backing rig before selecting forward for the next road leg.
+                if (transmission.Gear <= 0 || truck.body.linearVelocity.magnitude >= .35f)
+                {
+                    aiParking[slot] = true;
+                    if (truck.body.linearVelocity.magnitude < .35f) transmission.ShiftInto(1);
+                    return Vector2.zero;
+                }
+                transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
                 backingFromWard[slot] = false; nextPlan[slot] = 0;
             }
             bool carefulDriver = sport == HorrorSport.ScarecrowSeason || sport == HorrorSport.CursedCargo;
@@ -574,6 +600,34 @@ namespace LWS.TruckHorrorSports
             float desiredSpeed = 10 + skill * 2;
             if (sport == HorrorSport.DeadEnd) desiredSpeed = pursuerDistance < 65 ? 20 + skill : 14 + skill * 2;
             return new Vector2(Mathf.Clamp(angle / (28 + 4 - skill), -1, 1), Mathf.Min(throttle, truck.body.linearVelocity.magnitude > desiredSpeed ? .2f : 1));
+        }
+        public string CursedBayDiagnostic(int slot)
+        {
+            if (sport != HorrorSport.CursedCargo || slot < 0 || slot >= setup.count) return "not an active cursed rig";
+            var truck = trucks[slot]; var vehicle = truck.tractorMotor.vehicle; var transmission = vehicle.powertrain.transmission;
+            var input = vehicle.input; var load = cargo[slot].trailer; var trailerVehicle = load.Vehicle;
+            float tractorWheelBrake = 0, trailerWheelBrake = 0;
+            var wheelDetails = new StringBuilder();
+            foreach (var wheel in truck.GetComponentsInChildren<NWH.WheelController3D.WheelController>(true))
+            {
+                tractorWheelBrake = Mathf.Max(tractorWheelBrake, wheel.BrakeTorque);
+                wheelDetails.Append(wheel.name).Append(":M=").Append(wheel.MotorTorque.ToString("F1"))
+                    .Append(",B=").Append(wheel.BrakeTorque.ToString("F1")).Append(",omega=").Append(wheel.wheel.angularVelocity.ToString("F1"))
+                    .Append(",ground=").Append(wheel.IsGrounded).Append(",hit=").Append(wheel.HitCollider != null ? wheel.HitCollider.name : "none").Append(';');
+            }
+            var engine = vehicle.powertrain.engine;
+            var modifierNames = new StringBuilder();
+            foreach (var modifier in engine.runModifiers) modifierNames.Append(modifier.Method.DeclaringType != null ? modifier.Method.DeclaringType.Name : "unknown").Append('.').Append(modifier.Method.Name).Append(';');
+            foreach (var modifier in engine.powerModifiers) modifierNames.Append(modifier.Method.DeclaringType != null ? modifier.Method.DeclaringType.Name : "unknown").Append('.').Append(modifier.Method.Name).Append(';');
+            foreach (var wheel in load.GetComponentsInChildren<NWH.WheelController3D.WheelController>(true)) trailerWheelBrake = Mathf.Max(trailerWheelBrake, wheel.BrakeTorque);
+            return "backing=" + backingFromWard[slot] + " ward=" + departedWard[slot] + " retreat=" + Vector3.Dot(truck.body.position - wardDeparture[slot], wardReverseDirection[slot]).ToString("F2")
+                + " gear=" + transmission.Gear + " dnr=" + transmission.automaticTransmissionDNRShiftType + " signedSpeed=" + Vector3.Dot(truck.body.linearVelocity, truck.transform.forward).ToString("F2")
+                + " heading=" + truck.transform.eulerAngles.y.ToString("F1") + " trailerUpY=" + load.transform.up.y.ToString("F2") + " trailerEulerX=" + load.transform.eulerAngles.x.ToString("F1") + " trailerEulerZ=" + load.transform.eulerAngles.z.ToString("F1") + " articulation=" + Vector3.SignedAngle(truck.transform.forward, load.transform.forward, Vector3.up).ToString("F1")
+                + " lod=" + vehicle.activeLODIndex + " camDistance=" + vehicle.vehicleToCamDistance.ToString("F1") + " engineActive=" + engine.IsActive + " engine[running=" + engine.IsRunning + ",ignition=" + engine.ignition + ",stalled=" + engine.IsStalled + ",rpm=" + engine.OutputRPM.ToString("F1") + ",powerKW=" + engine.generatedPower.ToString("F2") + ",outTorque=" + engine.outputTorque.ToString("F1") + ",throttle=" + engine.ThrottlePosition.ToString("F2") + ",modifiers=" + modifierNames + "] wheels[" + wheelDetails + "]"
+                + " park=" + aiParking[slot] + " powered=" + truck.Powered + " grounded=" + truck.Grounded + " kinematic=" + truck.body.isKinematic + " nativeEnabled=" + vehicle.enabled
+                + " tractorRaw[T=" + input.states.throttleRaw.ToString("F2") + ",B=" + input.states.brakesRaw.ToString("F2") + ",H=" + input.states.handbrakeRaw.ToString("F2") + ",S=" + input.states.steeringRaw.ToString("F2") + "]"
+                + " tractorEffective[T=" + input.InputSwappedThrottle.ToString("F2") + ",B=" + input.InputSwappedBrakes.ToString("F2") + ",H=" + input.Handbrake.ToString("F2") + ",wheelBrakeMax=" + tractorWheelBrake.ToString("F1") + ",handbrakeType=" + vehicle.brakes.handbrakeType + "]"
+                + " trailer[gear=" + trailerVehicle.powertrain.transmission.Gear + ",T=" + trailerVehicle.input.InputSwappedThrottle.ToString("F2") + ",B=" + trailerVehicle.input.InputSwappedBrakes.ToString("F2") + ",H=" + trailerVehicle.input.Handbrake.ToString("F2") + ",wheelBrakeMax=" + trailerWheelBrake.ToString("F1") + "]";
         }
         bool OwnsWardApproach(int slot, int ward)
         {

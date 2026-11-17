@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Linq;
 using UnityEditor;
@@ -33,6 +33,20 @@ namespace LWS.TruckHitchSports.Editor
             Physics.SyncTransforms(); EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
             Debug.Log("HH10_HIGHWIRE_RECEIVING_SURFACES_REPAIRED original platform footprints and gates preserved; road/platform tops are physically flush.");
         }
+        public static void RepairActiveHitchRunLandingGear()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before setting the receiving jacks.");
+            var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if(scene.path!="Assets/TruckHitchSports/Scenes/HitchAndRun.unity")throw new InvalidOperationException("Open the saved Hitch and Run venue.");
+            var match=UnityEngine.Object.FindAnyObjectByType<HitchRunMatch>();
+            foreach(var load in match.trailers)
+            {
+                var stand=load.Module.module.trailerStand.transform;
+                Undo.RecordObject(stand,"Set native loading-jack extension");
+                var position=stand.localPosition;position.y=.499f;stand.localPosition=position;EditorUtility.SetDirty(stand);
+            }
+            EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+        }
         [MenuItem("LWS/Truck Sports/Alpha 0.10/Repair Active Trebuchet Apparatus")]
         public static void RepairActiveTrebuchetApparatus()
         {
@@ -41,15 +55,34 @@ namespace LWS.TruckHitchSports.Editor
             if (scene.path != "Assets/TruckHitchSports/Scenes/TrailerTrebuchet.unity") throw new InvalidOperationException("This targeted repair only applies to the saved TrailerTrebuchet scene.");
             var match = UnityEngine.Object.FindAnyObjectByType<TrebuchetMatch>();
             if (match == null || match.gameObject.scene != scene) throw new InvalidOperationException("The active scene must own the trebuchet match.");
-            var ramps = UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(t => t.name == "Physical siege loading ramp" && t.gameObject.scene == scene).ToArray();
-            var towers = UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(t => t.name == "Trebuchet pivot tower" && t.gameObject.scene == scene).ToArray();
-            foreach (var engine in match.engines)
+            // Root hierarchy order is serialized. The original creator added
+            // one ramp/tower per engine in this same order; never choose a
+            // nearest item again after moving it (that reuses the same item).
+            var sceneRoots = scene.GetRootGameObjects().OrderBy(g => g.transform.GetSiblingIndex()).ToArray();
+            var ramps = sceneRoots.Where(g => g.name == "Physical siege loading ramp").Select(g => g.transform).ToArray();
+            var towers = sceneRoots.Where(g => g.name == "Trebuchet pivot tower").Select(g => g.transform).ToArray();
+            if (match.engines.Length != match.trucks.Length || match.targets.Length != match.engines.Length || ramps.Length != match.engines.Length || towers.Length != match.engines.Length) throw new InvalidOperationException("Each existing tractor lane must retain exactly one engine, ramp, tower and target zone.");
+            var targetBlocks = match.GetComponentsInChildren<SiegeTarget>(true);
+            for (int lane = 0; lane < match.engines.Length; lane++) if (!targetBlocks.Any(t => t.Match == match && t.Lane == lane)) throw new InvalidOperationException("Preserve each existing lane's physical siege targets before repairing its equipment.");
+            for (int lane = 0; lane < match.engines.Length; lane++)
             {
+                var engine = match.engines[lane];
                 var arm = engine.Arm; var root = arm.transform;
                 var cradle = engine.LoadingCradle.transform.parent;
-                // The existing physical loading lane remains authoritative on
-                // repeat repairs. Only the apparatus moves sideways, not actors.
-                float laneX = cradle.position.x;
+                // Native Rigidbody.position can remain at the prefab pose in
+                // stopped authoring. The actual saved tractor Transform owns
+                // the lane; actors themselves are never moved by this repair.
+                float laneX = match.trucks[lane].transform.position.x;
+                float targetDeltaX = laneX - match.targets[lane].position.x;
+                match.targets[lane].position += Vector3.right * targetDeltaX;
+                EditorUtility.SetDirty(match.targets[lane]);
+                foreach (var target in targetBlocks) if (target.Match == match && target.Lane == lane)
+                {
+                    target.transform.position += Vector3.right * targetDeltaX;
+                    var targetBody = target.GetComponent<Rigidbody>();
+                    if (targetBody != null) { targetBody.position = target.transform.position; EditorUtility.SetDirty(targetBody); }
+                    EditorUtility.SetDirty(target.transform);
+                }
                 var original = root.GetComponent<MeshRenderer>();
                 var visual = root.Find("Metre-scaled physical siege beam visual");
                 if (visual == null)
@@ -83,8 +116,7 @@ namespace LWS.TruckHitchSports.Editor
                 // Runtime holds the measured authored loading angle. A zero-based
                 // limit would rotate this apparatus away from its loading ramp.
                 pivot.useLimits = false;
-                var ramp = ramps.OrderBy(t => Mathf.Abs(t.position.x - laneX)).FirstOrDefault();
-                if (ramp == null) throw new InvalidOperationException("Preserve the original physical loading ramp.");
+                var ramp = ramps[lane];
                 // Connect ground to the level, physically load-bearing cradle.
                 float rear = -18, front = cradle.position.z - 7.5f;
                 float rearCenter = -.25f;
@@ -93,21 +125,21 @@ namespace LWS.TruckHitchSports.Editor
                 float span = front - rear;
                 ramp.position = new Vector3(laneX, rearCenter + rise / 2, (rear + front) / 2);
                 ramp.rotation = Quaternion.Euler(-Mathf.Atan2(rise, span) * Mathf.Rad2Deg, 0, 0);
-                ramp.localScale = new Vector3(8, .6f, Mathf.Sqrt(span * span + rise * rise));
-                var tower = towers.OrderBy(t => Mathf.Abs(t.position.x - (laneX + 7))).FirstOrDefault();
+                ramp.localScale = new Vector3(16, .6f, Mathf.Sqrt(span * span + rise * rise));
+                var tower = towers[lane];
                 if (tower != null)
                 {
                     tower.position = new Vector3(laneX + 7, 6, position.z); tower.localScale = new Vector3(2, 12, 4);
                     // The static shaft begins beyond the rotating beam's
                     // 0.75m half-width: never overlap a world-constrained arm.
                     float axleLeft = position.x + 1, axleRight = tower.position.x + 1;
-                    PhysicalBox(match.transform, "Physical elevated trebuchet axle " + Array.IndexOf(match.engines, engine), new Vector3((axleLeft + axleRight) * .5f, 12, position.z), new Vector3(axleRight - axleLeft, 1, 2), original.sharedMaterial, beam.sharedMaterial);
+                    PhysicalBox(match.transform, "Physical elevated trebuchet axle " + lane, new Vector3((axleLeft + axleRight) * .5f, 12, position.z), new Vector3(axleRight - axleLeft, 1, 2), original.sharedMaterial, beam.sharedMaterial);
                     EditorUtility.SetDirty(tower);
                 }
                 EditorUtility.SetDirty(root); EditorUtility.SetDirty(arm); EditorUtility.SetDirty(beam); EditorUtility.SetDirty(pivot); EditorUtility.SetDirty(counterweight); EditorUtility.SetDirty(cradle); EditorUtility.SetDirty(volume); EditorUtility.SetDirty(engine.LoadingCradle); EditorUtility.SetDirty(ramp);
             }
             Physics.SyncTransforms(); EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
-            Debug.Log("HH10_TREBUCHET_APPARATUS_REPAIRED metre-scaled side arm/counterweight/hinge, actual crossbar, unchanged loading lane and connected ramp; native tractors/trailers untouched.");
+            Debug.Log("HH10_TREBUCHET_APPARATUS_REPAIRED metre-scaled side arm/counterweight/hinge, actual crossbar and four distinct actor-aligned loading/target lanes; native tractors/trailers untouched.");
         }
         static Transform PhysicalBox(Transform parent, string name, Vector3 position, Vector3 size, Material material, PhysicsMaterial contact)
         {

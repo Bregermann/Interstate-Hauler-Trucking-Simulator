@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 namespace LWS.TruckHitchSports
 {
     public sealed class TrebuchetArm : MonoBehaviour
@@ -20,8 +20,18 @@ namespace LWS.TruckHitchSports
         public bool TryLoad(TrailerBody trailer)
         {
             if (Load != null || trailer == null || trailer.Module.module.attached || !LoadingCradle.bounds.Contains(trailer.Body.worldCenterOfMass) || trailer.Body.linearVelocity.magnitude > 2) return false;
-            Load = trailer; sling = Arm.gameObject.AddComponent<FixedJoint>(); sling.connectedBody = trailer.Body;
-            sling.breakForce = sling.breakTorque = Arm.mass * 1000;
+            // The loading cradle/sling supports this load; native parking legs
+            // lowered by OnDetach must not spear that same physical platform.
+            if(trailer.Module.module.trailerStand!=null)trailer.Module.module.trailerStand.SetActive(false);
+            Load = trailer; sling = Arm.gameObject.AddComponent<FixedJoint>();
+            // A commanded siege latch stays closed until the release input;
+            // its break threshold is not an applied force. Match both anchors
+            // at the actual suspended mass, avoiding an off-centre virtual lever.
+            var point=trailer.Body.worldCenterOfMass;sling.autoConfigureConnectedAnchor=false;
+            sling.anchor=Arm.transform.InverseTransformPoint(point);sling.connectedBody=trailer.Body;
+            sling.connectedAnchor=trailer.Body.transform.InverseTransformPoint(point);
+            sling.breakForce=sling.breakTorque=float.PositiveInfinity;
+            trailer.Body.solverIterations=32;trailer.Body.solverVelocityIterations=12;
             sling.enableCollision = false; sling.enablePreprocessing = false; trailer.SetBrakes(0); return true;
         }
         public void Aim(float offsetDegrees)

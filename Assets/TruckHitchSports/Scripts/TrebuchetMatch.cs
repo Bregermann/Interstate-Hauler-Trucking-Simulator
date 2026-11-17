@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 namespace LWS.TruckHitchSports
 {
     public sealed class TrebuchetMatch : HitchCompetitionSession
@@ -57,7 +57,7 @@ namespace LWS.TruckHitchSports
                 if (engine.Load == null)
                 {
                     Vector3 target = engine.LoadingCradle.bounds.center;
-                    if (ai) trucks[i].TickDrive(DriveTo(i, target + Vector3.forward * 14, 2)); else trucks[i].TickDrive(commands[i]);
+                    if (ai) DriveLoadingLane(i,target); else trucks[i].TickDrive(commands[i]);
                     bool inCradle = engine.LoadingCradle.bounds.Contains(trailer.Body.worldCenterOfMass);
                     if (ai && inCradle) ParkAI(i);
                     if ((ai || actions[i]) && inCradle && trailer.Body.linearVelocity.magnitude < 2)
@@ -109,6 +109,22 @@ namespace LWS.TruckHitchSports
                     else Completed[i] = true;
                 }
             }
+        }
+        void DriveLoadingLane(int slot,Vector3 cradle)
+        {
+            var truck=trucks[slot];var transmission=truck.tractorMotor.vehicle.powertrain.transmission;
+            // A loading approach is a forward haul, not generic unsticking.
+            // Speed magnitude would mistake an accidental reverse for forward
+            // travel and feed more reverse throttle through native Auto DNR.
+            transmission.automaticTransmissionDNRShiftType=NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
+            float forward=Vector3.Dot(truck.body.linearVelocity,truck.transform.forward);
+            if(transmission.Gear<=0&&Mathf.Abs(forward)<.4f)transmission.ShiftInto(1);
+            Vector3 laneTarget=new Vector3(cradle.x,truck.body.position.y,Mathf.Min(cradle.z+14,truck.body.position.z+12));
+            Vector3 local=truck.transform.InverseTransformPoint(laneTarget);
+            float steering=Mathf.Clamp(Mathf.Atan2(local.x,local.z)*2.4f,-1,1);
+            float desired=Mathf.Abs(steering)>.6f?1.2f:2;
+            float demand=transmission.Gear<=0?1:Mathf.Clamp((desired-forward)*.65f,-1,1);
+            truck.TickDrive(new Vector2(steering,demand));
         }
         bool ShouldReleaseAI(int slot)
         {

@@ -86,7 +86,11 @@ namespace LWS.TruckHitchSports
             {
                 for (int i = 0; i < setup.count; i++)
                 {
-                    trucks[i].TickDrive(new Vector2(0, -1));
+                    // Negative drive selects reverse in native Auto DNR; hold
+                    // the stationary countdown with the parking brake instead.
+                    trucks[i].TickDrive(Vector2.zero);
+                    var holdInput=trucks[i].tractorMotor.vehicle.input;
+                    holdInput.states.handbrake=holdInput.states.handbrakeRaw=1;
                     if (StartsCoupled && !initialCoupling[i] && i < trailers.Length)
                     {
                         initialCoupling[i] = couplers[i].TryCouple(trailers[i]);

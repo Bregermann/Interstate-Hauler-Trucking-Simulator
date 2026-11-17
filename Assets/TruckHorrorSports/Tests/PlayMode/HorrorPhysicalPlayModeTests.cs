@@ -111,11 +111,35 @@ public sealed class HorrorPhysicalPlayModeTests
                 // Select the normal advertised mode. Duration, authored objectives and physics are unchanged.
                 match.GetType().GetField("option").SetValue(match, 0);
                 Call(match, "AllBots"); Assert.That((bool)Call(match, "StartMatch"), Is.True);
-                float wallStart = Time.realtimeSinceStartup, deadline = wallStart + 120;
+                float wallStart = Time.realtimeSinceStartup, deadline = wallStart + 120, nextBaySample = 0;
                 var deliverySeen = new bool[12]; var delivered = new bool[12]; var deliveryEvidence = new string[12];
+                if (requirePhysicalDelivery)
+                {
+                    var trucks = (Array)Field(match, "trucks"); var loads = (Array)Field(match, "cargo");
+                    int seats = (int)Field(Field(match, "setup"), "count");
+                    for (int seat = 0; seat < seats; seat++)
+                    {
+                        ((Rigidbody)Field(trucks.GetValue(seat), "body")).gameObject.AddComponent<CursedBayContactProbe>();
+                        ((Rigidbody)Property(loads.GetValue(seat), "Body")).gameObject.AddComponent<CursedBayContactProbe>();
+                    }
+                }
                 Time.timeScale = 3; // Real fixed-step simulation, accelerated for bounded AI acceptance.
                 while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
-                { if (requirePhysicalDelivery) ObserveDeliveries(match, deliverySeen, delivered, deliveryEvidence); yield return null; }
+                {
+                    if (requirePhysicalDelivery)
+                    {
+                        ObserveDeliveries(match, deliverySeen, delivered, deliveryEvidence);
+                        float age = (float)Property(match, "Age");
+                        if (age >= nextBaySample && (int)Property(Field(match, "rules"), "TotalTasks") > 0)
+                        {
+                            nextBaySample = age + 15;
+                            int seats = (int)Field(Field(match, "setup"), "count");
+                            for (int seat = 0; seat < seats; seat++)
+                                Debug.Log("ALPHA10_CURSED_BAY_SAMPLE clock=" + age.ToString("F1") + " P" + (seat + 1) + " " + Call(match, "CursedBayDiagnostic", seat) + " " + CursedContactDiagnostics(match, seat));
+                        }
+                    }
+                    yield return null;
+                }
                 if (requirePhysicalDelivery) ObserveDeliveries(match, deliverySeen, delivered, deliveryEvidence);
                 Time.timeScale = 1;
                 string diagnostics = name + " wall=" + (Time.realtimeSinceStartup - wallStart).ToString("F1") + "s at 3x · " + NightDiagnostics(match);
@@ -164,6 +188,13 @@ public sealed class HorrorPhysicalPlayModeTests
             evidence[i] = "P" + (i + 1) + " at receipt clock=" + Property(match, "Age") + " load=" + body.position.ToString("F1") + " receiverDistance=" + distance.ToString("F1") + " condition=" + condition.ToString("F2") + " originalHitch=" + coupled;
         }
     }
+    static string CursedContactDiagnostics(object match, int slot)
+    {
+        var trucks = (Array)Field(match, "trucks"); var loads = (Array)Field(match, "cargo");
+        var tractor = ((Rigidbody)Field(trucks.GetValue(slot), "body")).GetComponent<CursedBayContactProbe>();
+        var trailer = ((Rigidbody)Property(loads.GetValue(slot), "Body")).GetComponent<CursedBayContactProbe>();
+        return "tractorContacts={" + (tractor != null ? tractor.Snapshot() : "not sampled") + "} trailerContacts={" + (trailer != null ? trailer.Snapshot() : "not sampled") + "}";
+    }
     static string NightDiagnostics(object match)
     {
         var rules = Field(match, "rules"); var trucks = (Array)Field(match, "trucks");
@@ -179,9 +210,37 @@ public sealed class HorrorPhysicalPlayModeTests
                 .Append(" position=").Append(body.position.ToString("F1"));
             var loads = Field(match, "cargo") as Array;
             if (loads != null && i < loads.Length && loads.GetValue(i) != null)
-            { var load = loads.GetValue(i); text.Append(" load=").Append(((Rigidbody)Property(load, "Body")).position.ToString("F1")).Append(" condition=").Append(Property(load, "Condition")).Append(" coupled=").Append(Property(Field(load, "coupler"), "Attached") != null); }
+            { var load = loads.GetValue(i); text.Append(" load=").Append(((Rigidbody)Property(load, "Body")).position.ToString("F1")).Append(" condition=").Append(Property(load, "Condition")).Append(" coupled=").Append(Property(Field(load, "coupler"), "Attached") != null).Append(" bay={").Append(Call(match, "CursedBayDiagnostic", i)).Append('}').Append(' ').Append(CursedContactDiagnostics(match, i)); }
         }
         return text.ToString();
+    }
+}
+// Test-only passive observation. Eight recent physical contact pairs per body;
+// no forces, collision filtering, pose changes or game-state mutation.
+public sealed class CursedBayContactProbe : MonoBehaviour
+{
+    struct Contact { public int id; public string pair; public float time, impulse, separation; }
+    readonly Contact[] recent = new Contact[8]; int next;
+    void OnCollisionEnter(Collision collision) { Observe(collision); }
+    void OnCollisionStay(Collision collision) { Observe(collision); }
+    void Observe(Collision collision)
+    {
+        if (collision.contactCount == 0) return;
+        var point = collision.GetContact(0); var other = point.otherCollider; var own = point.thisCollider;
+        if (other == null || own == null) return;
+        int id = other.GetInstanceID() ^ own.GetInstanceID(), index = -1;
+        for (int i = 0; i < recent.Length; i++) if (recent[i].id == id) { index = i; break; }
+        if (index < 0) { index = next; next = (next + 1) % recent.Length; }
+        recent[index] = new Contact { id = id, pair = Path(own.transform) + " -> " + Path(other.transform) + " [body=" + (other.attachedRigidbody != null ? other.attachedRigidbody.name : "static") + "]", time = Time.fixedTime, impulse = collision.impulse.magnitude, separation = point.separation };
+    }
+    static string Path(Transform shape)
+    { return (shape.parent != null ? shape.parent.name + "/" : "") + shape.name; }
+    public string Snapshot()
+    {
+        var text = new StringBuilder();
+        foreach (var contact in recent) if (contact.pair != null && Time.fixedTime - contact.time < 1)
+            text.Append(contact.pair).Append(" impulse=").Append(contact.impulse.ToString("F1")).Append(" separation=").Append(contact.separation.ToString("F4")).Append(';');
+        return text.Length > 0 ? text.ToString() : "no contact observed in last simulated second";
     }
 }
 #endif
