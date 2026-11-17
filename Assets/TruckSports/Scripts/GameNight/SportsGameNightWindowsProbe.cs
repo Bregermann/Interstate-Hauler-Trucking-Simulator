@@ -126,7 +126,10 @@ namespace LWS.TruckSports
                     result.stage += "; host-only category filter / controller Back passed";
                     success = true; yield break;
                 }
-                foreach (string scene in args.Contains("-tsGameNightStartState") ? new[] { SportsNavigation.Whack } : new[] { SportsNavigation.DanceOff, SportsNavigation.Whack })
+                int expansionArg=Array.IndexOf(args,"-tsGameNightSports");
+                string[] selectedScenes=expansionArg>=0&&expansionArg+1<args.Length?args[expansionArg+1].Split(',').Select(key=>SportsHitchesGames.TryFindKey(key,out var entry)?entry.scene:throw new InvalidOperationException("Unregistered expansion selection: "+key)).ToArray():args.Contains("-tsGameNightStartState")?new[]{SportsNavigation.Whack}:new[]{SportsNavigation.DanceOff,SportsNavigation.Whack};
+                Check(selectedScenes.Length==2||args.Contains("-tsGameNightStartState"),"The existing persistence pass expects exactly two actual matches.");
+                foreach (string scene in selectedScenes)
                 {
                     result.stage = "select / configure " + scene;
                     yield return Press(host, GamepadButton.Start); Check(night.State.Phase == SportsGameNightPhase.Selection, "Host sport selection failed.");
@@ -135,10 +138,12 @@ namespace LWS.TruckSports
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("selection-" + scene + "-720p");
                     // Select the real registered menu action; controller navigation
                     // and physical hardware are reported separately from this focus aid.
-                    string action = scene == SportsNavigation.DanceOff ? "danceoff" : "whackamole";
+                    string action = SportsHitchesGames.All.FirstOrDefault(entry=>entry.scene==scene)?.key ?? (scene == SportsNavigation.DanceOff ? "danceoff" : "whackamole");
                     front.Action(action); yield return null; yield return null; yield return null; yield return null;
                     var session = FindAnyObjectByType<SportsEventSession>(); Check(session != null && session.gameObject.scene.name == scene, "Registered sport action did not load " + scene);
                     session.setup.count = 4; session.option = 0; session.Save();
+                    if(expansionArg>=0 && session.presentationWeather!=null && session.presentationWeather.presets!=null && !(session is LWS.TruckWaterSports.BlackwaterMatch))
+                    { session.presentationWeather.presets.Select("9aad5ff5dfa09ce468205f676714f891");SportsTimeOfDay.Select(SportsTimeChoice.Day); }
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("setup-" + scene + "-720p");
                     yield return Press(host, GamepadButton.Start); yield return Press(second, GamepadButton.Start);
                     var start = session.menus.GetComponentsInChildren<SportsMenuAction>(true).FirstOrDefault(a => a.action == "start" && a.gameObject.activeInHierarchy);
@@ -170,14 +175,32 @@ namespace LWS.TruckSports
                         result.stage += "; simulated focus pause / controller resume passed";
                         success = true; yield break;
                     }
-                    while (!session.Finished) { Check(Time.realtimeSinceStartupAsDouble < deadline, "Sport did not reach its normal result: " + scene); yield return null; }
+                    float actualStart=Time.time;bool pushed=false;
+                    while (!session.Finished)
+                    {
+                        Check(Time.realtimeSinceStartupAsDouble < deadline, "Sport did not reach its normal result: " + scene);
+                        // Optional expansion checks drive the same assigned software pads through real rules.
+                        // They never change scores, gates, body poses, match clocks or completion state.
+                        if(expansionArg>=0 && session is LWS.TruckWaterSports.PaddlePalsMatch water)
+                        {
+                            var vessel=water.Vessel(0);var delta=Vector3.ProjectOnPlane(water.course.Point(water.Gates[0])-vessel.body.position,Vector3.up);
+                            float steer=Mathf.Clamp(Vector3.SignedAngle(vessel.transform.forward,delta,Vector3.up)/38,-1,1);
+                            var state=new GamepadState{leftStick=new Vector2(steer,0),rightTrigger=1-Mathf.Abs(steer)*.32f};
+                            if(vessel.Capsized)state=state.WithButton(GamepadButton.South);
+                            InputSystem.QueueStateEvent(host,state);InputSystem.QueueStateEvent(second,state);
+                        }
+                        else if(expansionArg>=0 && session is LWS.TruckExtremeHauling.DominoDerbyMatch domino && Time.time-actualStart>domino.setupSeconds+1 && !pushed)
+                        { pushed=true;yield return Press(host,GamepadButton.South);yield return Press(second,GamepadButton.South); }
+                        yield return null;
+                    }
+                    InputSystem.QueueStateEvent(host,new GamepadState());InputSystem.QueueStateEvent(second,new GamepadState());
                     yield return null; yield return null; Check(night.State.Phase == SportsGameNightPhase.Results, "Official results did not reach the game-night owner.");
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("results-" + scene + "-720p");
                     var back = session.menus.GetComponentsInChildren<SportsMenuAction>(true).FirstOrDefault(a => a.action == "front" && a.gameObject.activeInHierarchy);
                     Check(back != null, "A visible controller Return button is missing.");
                     EventSystem.current.SetSelectedGameObject(back.button.gameObject); yield return Press(host, GamepadButton.South);
                     yield return null; yield return null; Check(night.State.Phase == SportsGameNightPhase.Lobby, "Controller return did not restore the lobby.");
-                    if (scene == SportsNavigation.DanceOff) { yield return Press(host, GamepadButton.South); yield return Press(second, GamepadButton.South); }
+                    if (scene != selectedScenes[selectedScenes.Length-1]) { yield return Press(host, GamepadButton.South); yield return Press(second, GamepadButton.South); }
                 }
                 result.stage = "statistics / final report";
                 yield return Press(second, GamepadButton.North); yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("statistics-720p");

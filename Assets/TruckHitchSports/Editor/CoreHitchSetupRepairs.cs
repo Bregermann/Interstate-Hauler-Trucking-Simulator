@@ -126,6 +126,15 @@ namespace LWS.TruckHitchSports.Editor
                 ramp.position = new Vector3(laneX, rearCenter + rise / 2, (rear + front) / 2);
                 ramp.rotation = Quaternion.Euler(-Mathf.Atan2(rise, span) * Mathf.Rad2Deg, 0, 0);
                 ramp.localScale = new Vector3(16, .6f, Mathf.Sqrt(span * span + rise * rise));
+                // A full-size tractor must clear the cradle before firing.
+                // Connect its far edge to the apron with a real descending
+                // roadway rather than dropping the cab nose-first off a 3m lip.
+                float unloadRear=cradle.position.z+7.5f,unloadFront=unloadRear+35;
+                float unloadRise=frontCenter+.25f;
+                var unloading=PhysicalBox(match.transform,"Physical siege unloading ramp "+lane,
+                    new Vector3(laneX,(frontCenter-.25f)*.5f,(unloadRear+unloadFront)*.5f),
+                    new Vector3(16,.6f,Mathf.Sqrt(35*35+unloadRise*unloadRise)),original.sharedMaterial,beam.sharedMaterial);
+                unloading.rotation=Quaternion.Euler(Mathf.Atan2(unloadRise,35)*Mathf.Rad2Deg,0,0);
                 var tower = towers[lane];
                 if (tower != null)
                 {

@@ -104,7 +104,7 @@ namespace LWS.TruckHorrorSports
              sport == HorrorSport.ScarecrowSeason ? "Find the ritual objects in the maze, restore the four wards and escape through the farm gate. Corn passages change only while clear of vehicles. The scarecrow moves faster when nobody watches and hears engines. Face it with headlights to slow its approach; use alternate passages to escape. HOLD ACTION beside a ward to activate it." :
              sport == HorrorSport.DeadEnd ? "Follow the road, read the numbered exit clues and drive the correct route gates. The black semi is a physical pursuer: brake, turn and use junctions to avoid it. Repeated landmarks and contradictory signs are intentional. Complete the route before taking the last exit. Survival variants award actual time alive." :
              "The load is fighting you. Tow your physically attached trailer between the containment depots. Stop both tractor AND trailer at each ward and HOLD ACTION to contain its cargo. Haunted sway, brakes and shifting weight affect real momentum. Keep the load intact and deliver it to the final depot.") +
-            ModeInstructions + "\n\nMovement uses your assigned driving controls. ACTION away from a station toggles headlights. Each human keeps an independent truck and camera. Cooperative variants share objectives and never award individual winner points. Eliminated participants spectate surviving trucks. Rematch restores the whole venue, cargo and encounters. Default match: four minutes.";
+            ModeInstructions + "\n\nMovement uses your assigned driving controls. ACTION braces a tipped cursed load using physical restoring torque; otherwise ACTION away from a station toggles headlights. Each human keeps an independent truck and camera. Cooperative variants share objectives and never award individual winner points. Eliminated participants spectate surviving trucks. Rematch restores the whole venue, cargo and encounters. Default match: four minutes.";
         string ModeInstructions => TaskRush ? "\n\nTASK RUSH: bank as many real night-shift jobs as possible before the clock expires. Completing the full task route opens another circuit without moving your truck or clearing earned jobs. No extraction is required. The most completed jobs wins." :
             ConvoyMode ? "\n\nHAUNTED CONVOY: every real rig must stop at each ward before the shared route advances. Park in your own lane. Everyone and every surviving attached load must reach the final receiving area; one driver cannot deliver the whole team." :
             FreightSurvival ? "\n\nSURVIVAL FREIGHT: keep circulating between containment wards. Each physical stop briefly calms the load. Parking indefinitely increases its unrest. Survive the complete clock with the original cargo intact; containment stops break ties." :
@@ -294,6 +294,12 @@ namespace LWS.TruckHorrorSports
                 int task = NearestTask(i);
                 int rescue = NearbyRescue(i);
                 bool held = ai ? task >= 0 || rescue >= 0 : ActionHeld(i);
+                // Holding the real ward begins suppressing the haunting while
+                // the physical assembly settles; progress still requires both
+                // bodies stopped and the ordinary uninterrupted channel time.
+                if(sport==HorrorSport.CursedCargo&&task>=0&&held&&cargo[i].Ready&&trucks[i].body.linearVelocity.magnitude<1.4f
+                    &&Vector3.Distance(cargo[i].Body.position,TaskPosition(i,task))<interactionRadius+8) cargo[i].Contain(.25f);
+
                 if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0) lights[i] = !lights[i];
                 if (headlights != null && i < headlights.Length && headlights[i] != null) headlights[i].enabled = lights[i];
                 if (foot != null && foot.flashlight != null) foot.flashlight.enabled = foot.Outside && lights[i];
@@ -717,7 +723,9 @@ namespace LWS.TruckHorrorSports
             {
                 var input = truck.tractorMotor.vehicle.input;
                 input.states.throttle = input.states.throttleRaw = 0;
-                input.states.brakes = input.states.brakesRaw = 1;
+                // Native Auto DNR interprets the brake axis as reverse throttle at rest.
+                // The handbrake holds the stopped task without feeding the engine.
+                input.states.brakes = input.states.brakesRaw = 0;
                 input.states.handbrake = input.states.handbrakeRaw = 1;
             }
             else if (truck.wheels != null)

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 namespace LWS.TruckHitchSports
 {
     public sealed class HitchRunMatch : HitchCompetitionSession
@@ -192,7 +192,7 @@ namespace LWS.TruckHitchSports
         void ParkAI(int slot)
         {
             trucks[slot].TickDrive(Vector2.zero); var input = trucks[slot].tractorMotor.vehicle.input;
-            input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 1;
+            input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 0;
         }
         void ConfigureCargo(int index) => trailers[index].AddCargo(option % 4 == 3 ? index % 3 * 3500 : 0);
         void UpdateDispatchedLoads()

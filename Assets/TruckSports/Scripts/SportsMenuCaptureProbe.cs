@@ -16,7 +16,7 @@ namespace LWS.TruckSports
     {
         [Serializable] public sealed class Manifest { public string[] paths; }
         [Serializable] public sealed class Entry
-        { public string scene, path, authority, result, screenshot720, screenshot1080; public int exceptions, listeners, cameras; }
+        { public string scene, path, authority, result, screenshot720, screenshot1080, weather; public int exceptions, listeners, cameras; }
         [Serializable] public sealed class Receipt { public string evidence; public Entry[] scenes; public int errors; }
         readonly List<Entry> entries = new List<Entry>();
         readonly List<string> problems = new List<string>();
@@ -64,6 +64,10 @@ namespace LWS.TruckSports
                     if (eventMatch != null)
                     {
                         authority = eventMatch;
+                        // Explicit preview art direction lives inside this probe's isolated preference lease.
+                        // Narrative horror owns its midnight forecast; production choices are never written.
+                        if(eventMatch.presentationWeather != null && eventMatch.presentationWeather.presets != null && !(eventMatch is LWS.TruckWaterSports.BlackwaterMatch))
+                            eventMatch.presentationWeather.presets.Select("9aad5ff5dfa09ce468205f676714f891");
                         eventMatch.setup.count = Mathf.Clamp(4, eventMatch.MinimumPlayers, eventMatch.MaximumPlayers);
                         if (eventMatch.TeamSport) { eventMatch.teamA = eventMatch.teamB = eventMatch.MaximumPlayers >= 12 ? 3 : 2; }
                         eventMatch.NormalizeSetup(); eventMatch.AllBots(); started = eventMatch.StartMatch(); canvas = eventMatch.menus.GetComponent<Canvas>();
@@ -82,6 +86,7 @@ namespace LWS.TruckSports
                         if(canvas==null)throw new InvalidOperationException("Saved legacy menu pages have no parent canvas.");
                     }
                     current.authority = authority.GetType().FullName;
+                    current.weather = authority is SportsEventSession measured && measured.presentationWeather != null ? measured.presentationWeather.Description : "Narrative/indoor authority";
                     if (!started) throw new InvalidOperationException("AI configuration did not start the saved scene.");
                     current.result = "STARTED";
                 }
@@ -89,7 +94,7 @@ namespace LWS.TruckSports
                 if (started)
                 {
                     Time.timeScale = scene == "TruckDanceOff" ? 1 : 3;
-                    yield return new WaitForSecondsRealtime(scene == "TruckDanceOff" ? 3.5f : 2.2f);
+                    yield return new WaitForSecondsRealtime(authority is LWS.TruckExtremeHauling.DominoDerbyMatch domino ? (domino.setupSeconds + 5) / Time.timeScale : scene == "TruckDanceOff" ? 3.5f : 2.2f);
                     try
                     {
                         var cameras = authority is SportsEventSession session ? session.cameras : FindObjectsByType<Camera>(FindObjectsInactive.Exclude)

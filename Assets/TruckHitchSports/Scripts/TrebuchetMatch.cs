@@ -14,7 +14,7 @@ namespace LWS.TruckHitchSports
         readonly float[] assistPower = new float[4], aimAngle = new float[4], aimAge = new float[4], swingAge = new float[4];
         public override string Title => "TRAILER TREBUCHET";
         public override string OptionLabel => new[] { "LONGEST TRAILER TOSS", "TARGET ACCURACY", "CASTLE DEMOLITION", "MULTI-ROUND SIEGE" }[option % 4];
-        public override string Help => "Tow into the loading cradle and stop. Press ACTION to unhitch and lock the actual sling. While loaded, movement UP/DOWN adjusts winch assist and LEFT/RIGHT changes the mechanically locked arm's physical starting angle. Press ACTION to start the counterweight swing, then press ACTION during the swing to release the real trailer at its current velocity. Longest Toss scores supported throw distance. Accuracy scores final distance from the target. Castle Demolition scores genuine trailer/target collision chains. Multi-Round Siege gives three independently loaded physical throws with cumulative distance, accuracy and damage. Let the projectile land and settle; a timeout or fall earns no unproven resting-position bonus.";
+        public override string Help => "Tow into the loading cradle and stop. After locking the sling, drive clear of the loading platform before beginning the swing. Press ACTION to unhitch and lock the actual sling. While loaded, movement UP/DOWN adjusts winch assist and LEFT/RIGHT changes the mechanically locked arm's physical starting angle. Press ACTION to start the counterweight swing, then press ACTION during the swing to release the real trailer at its current velocity. Longest Toss scores supported throw distance. Accuracy scores final distance from the target. Castle Demolition scores genuine trailer/target collision chains. Multi-Round Siege gives three independently loaded physical throws with cumulative distance, accuracy and damage. Let the projectile land and settle; a timeout or fall earns no unproven resting-position bonus.";
         protected override void BeginCompetition()
         {
             for (int i = 0; i < engines.Length; i++) { engines[i].Pivot.useLimits = false; engines[i].ResetForRound(); quiet[i] = flightTime[i] = resetAt[i] = longestThrow[i] = totalThrowDistance[i] = aimAngle[i] = aimAge[i] = swingAge[i] = 0; assistPower[i] = .65f; attempts[i] = targetsHit[i] = 0; release[i] = Vector3.zero; }
@@ -66,10 +66,13 @@ namespace LWS.TruckHitchSports
                 }
                 if (!engine.Swinging)
                 {
-                    ParkAI(i); aimAge[i] += dt;
+                    bool tractorClear=Vector3.ProjectOnPlane(trucks[i].body.worldCenterOfMass-engine.LoadingCradle.bounds.center,Vector3.up).magnitude>18;
+                    if(ai&&!tractorClear)DriveLoadingLane(i,engine.LoadingCradle.bounds.center+Vector3.forward*34);
+                    else ParkAI(i);
+                    aimAge[i] += dt;
                     if (!ai) { assistPower[i] = Mathf.Clamp01(assistPower[i] + commands[i].y * dt * .45f); aimAngle[i] = Mathf.Clamp(aimAngle[i] + commands[i].x * dt * 12, -15, 10); }
                     engine.Aim(aimAngle[i]);
-                    if (ai ? aimAge[i] > 1.5f : actions[i])
+                    if (tractorClear && (ai ? aimAge[i] > 1.5f : actions[i]))
                     {
                         engine.BeginSwing(assistPower[i]);
                         // Physical winch assist, expressed as joint torque.
@@ -148,7 +151,7 @@ namespace LWS.TruckHitchSports
         void ParkAI(int slot)
         {
             trucks[slot].TickDrive(Vector2.zero); var input = trucks[slot].tractorMotor.vehicle.input;
-            input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 1;
+            input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 0;
         }
     }
 }
