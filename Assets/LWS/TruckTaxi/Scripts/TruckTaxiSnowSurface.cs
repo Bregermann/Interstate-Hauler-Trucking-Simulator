@@ -63,6 +63,9 @@ namespace LWS.TruckTaxi
         private Texture2D snowSparkleTexture;
         private float lastAppliedCoverage = -1;
         private int depthRendererIndex = -1;
+        // Existing scenes retain the established budget. Explicit new-mode
+        // authoring may select the installed vendor's supported higher budget.
+        [SerializeField, Range(16, 4096)] private int traceMaskResolution = 1024;
         private float minimumContactDepthSpan;
 
         private struct GroundBinding
@@ -293,9 +296,14 @@ namespace LWS.TruckTaxi
             if (target == null) return;
             Vector3 offset = type.GetField("targetPosOffset", BindingFlags.Instance | BindingFlags.Public)?.GetValue(current) is Vector3 value ? value : Vector3.zero;
             float threshold = Mathf.Lerp(0, ReadFloat(current, "areaSize", 100) * .5f, ReadFloat(current, "updateDistanceThreshold", .3f));
-            if (Vector3.Distance(target.position + offset, current.transform.position) <= threshold) return;
+            RenderTexture vsm = Shader.GetGlobalTexture("_SRS_depth") as RenderTexture;
+            bool needsDepthInitialization = vsm == null || !vsm.IsCreated();
+            if (!needsDepthInitialization && Vector3.Distance(target.position + offset, current.transform.position) <= threshold) return;
             // CoverageBase.UpdateDepth stops its PositionUpdate coroutine. Use the vendor's own move/UV-scroll API,
             // under the same threshold, without Init (which reallocates and clears the trace history).
+            // Its initial UpdateDepthRoutine waits for end-of-frame, unavailable
+            // in batch Editor execution. This public API also synchronously
+            // renders the genuine VSM when that resource is missing/released.
             type.GetMethod("UpdateSRSPosition", BindingFlags.Instance | BindingFlags.Public)?.Invoke(current, null);
         }
 
@@ -564,7 +572,7 @@ namespace LWS.TruckTaxi
             SetField(generator, "traceSurfLayermask", new LayerMask { value = 1 << SurfaceLayer });
             SetField(generator, "traceObjsLayermask", new LayerMask { value = 1 << TraceLayer });
             SetField(generator, "decaySpeed", .003f);
-            SetField(generator, "maskRes", 1024);
+            SetField(generator, "maskRes", Mathf.ClosestPowerOfTwo(Mathf.Clamp(traceMaskResolution > 0 ? traceMaskResolution : 1024, 16, 4096)));
             SetField(generator, "blurKernelSize", 2);
             SetField(generator, "borderIntensity", .7f);
             SetField(generator, "normalSpread", 1.3f);
@@ -591,7 +599,13 @@ namespace LWS.TruckTaxi
                 if (renderer == null) continue;
                 Material material = renderer.sharedMaterial;
                 if (material == null || !material.HasProperty("_TracesOverride")) continue;
-                if (!tracedMaterials.TryGetValue(renderer, out Material previous) || previous != material)
+                // A scene-owned weather bridge can restore the same runtime
+                // material from its authored source after clear weather. Its
+                // identity survives, but the restored shader's trace switches
+                // still need the existing vendor binding reapplied.
+                if (!tracedMaterials.TryGetValue(renderer, out Material previous) || previous != material ||
+                    material.GetFloat("_TracesOverride") < .5f || material.GetFloat("_Traces") < .5f ||
+                    !material.IsKeywordEnabled("_TRACES_ON"))
                 {
                     material.SetFloat("_TracesOverride", 1);
                     material.SetFloat("_Traces", 1);
@@ -789,6 +803,10 @@ namespace LWS.TruckTaxi
                             if (source.HasProperty(property)) snow.SetFloat(property, source.GetFloat(property));
                         if (source.IsKeywordEnabled("_TERRAIN_BLEND_HEIGHT")) snow.EnableKeyword("_TERRAIN_BLEND_HEIGHT");
                         if (source.IsKeywordEnabled("_NORMALMAP")) snow.EnableKeyword("_NORMALMAP");
+                        // Preserve the authored water/channel openings when switching
+                        // to Weatherade's runtime terrain material; restore still owns the original.
+                        if (source.IsKeywordEnabled("_ALPHATEST_ON")) snow.EnableKeyword("_ALPHATEST_ON");
+                        else snow.DisableKeyword("_ALPHATEST_ON");
                         environmentMaterials.Add(source, snow);
                     }
                     binding = new TerrainBinding { original = source, snow = snow, detailDensity = terrain.detailObjectDensity };
