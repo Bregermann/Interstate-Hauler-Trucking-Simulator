@@ -73,6 +73,11 @@ namespace LWS.TruckSports.Editor
             }
             AssetDatabase.SaveAssets();
         }
+        public static void RepairSavedUnhitchedLanes()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/Unhitched.unity");
+            LWS.TruckHitchSports.Editor.CoreHitchSetupRepairs.RepairActiveUnhitchedLanes();AssetDatabase.SaveAssets();
+        }
         public static void RepairSavedHitchRunLandingGear()
         {
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/HitchAndRun.unity");

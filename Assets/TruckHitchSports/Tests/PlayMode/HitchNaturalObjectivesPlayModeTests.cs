@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Linq;
@@ -41,6 +41,9 @@ public sealed class HitchNaturalObjectivesPlayModeTests
         => NaturalRound("HitchHandoff", "HandoffMatch", false);
     [UnityTest] public IEnumerator NaturalUnhitchedAICompletesSupportedTrailerRideAndRematches()
         => NaturalRound("Unhitched", "UnhitchedMatch", true);
+
+    [UnityTest] public IEnumerator NaturalFourDriverUnhitchedUsesIndependentPhysicalSurfRigs()
+        => NaturalRound("Unhitched", "UnhitchedMatch", false);
 
     IEnumerator NaturalRound(string scene, string className, bool single)
     {
@@ -152,12 +155,15 @@ public sealed class HitchNaturalObjectivesPlayModeTests
                 }
                 else
                 {
-                    Assert.That(attached[0], Is.False, "Unhitched has no invisible native coupling between rider and deck." + diagnostics);
-                    Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(3), "Actual wheel/deck support must sustain the ride." + diagnostics);
-                    Assert.That(travel[0], Is.GreaterThan(8), "The independently physical trailer must actually travel." + diagnostics);
-                    Assert.That(((bool[])Read(match, "Completed"))[0] || (float)Property(match, "Elapsed") >= (float)Read(match, "matchSeconds"), Is.True, "A genuine supported ride ends through the normal dismount or authored round limit." + diagnostics);
-                    Assert.That(scores[0], Is.GreaterThan(0), diagnostics);
-                    Assert.That((bool)Call(match, "ResultEligible", 0), Is.True, diagnostics);
+                    for(int seat=0;seat<Count(match);seat++)
+                    {
+                    Assert.That(attached[seat], Is.False, "Unhitched has no invisible native coupling between rider and deck." + diagnostics);
+                    Assert.That(((float[])Read(match, "supportedRideSeconds"))[seat], Is.GreaterThanOrEqualTo(3), "Actual wheel/deck support must sustain the ride." + diagnostics);
+                    Assert.That(travel[seat], Is.GreaterThan(8), "The independently physical trailer must actually travel." + diagnostics);
+                    Assert.That(((bool[])Read(match, "Completed"))[seat] || (float)Property(match, "Elapsed") >= (float)Read(match, "matchSeconds"), Is.True, "A genuine supported ride ends through the normal dismount or authored round limit." + diagnostics);
+                    Assert.That(scores[seat], Is.GreaterThan(0), diagnostics);
+                    Assert.That((bool)Call(match, "ResultEligible", seat), Is.True, diagnostics);
+                    }
                 }
                 string matchId = (string)Property(match, "MatchId");
                 Call(match, "SetupScreen"); yield return null;

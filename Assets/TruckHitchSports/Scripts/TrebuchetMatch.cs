@@ -25,7 +25,7 @@ namespace LWS.TruckHitchSports
         {
             if (slot < 0 || slot >= setup.count) return "invalid seat";
             var engine = engines[slot]; var load = trailers[slot];
-            return "angle=" + engine.Pivot.angle.ToString("F1") + " loadingLock=" + engine.Arm.isKinematic + " worldPitch=" + engine.Arm.rotation.eulerAngles.x.ToString("F1") + " limits=" + engine.Pivot.useLimits + " cradle=" + engine.LoadingCradle.bounds.ToString() + " cargoCOM=" + load.Body.worldCenterOfMass.ToString("F1") + " loaded=" + (engine.Load != null) + " swinging=" + engine.Swinging + " released=" + engine.Released;
+            return "angle=" + engine.Pivot.angle.ToString("F1") + " loadingLock=" + engine.Arm.isKinematic + " worldPitch=" + engine.Arm.rotation.eulerAngles.x.ToString("F1") + " limits=" + engine.Pivot.useLimits + " cradle=" + engine.LoadingCradle.bounds.ToString() + " cargoCOM=" + load.Body.worldCenterOfMass.ToString("F1") + " loaded=" + (engine.Load != null) + " swinging=" + engine.Swinging + " released=" + engine.Released + " sling=" + engine.SlingDiagnostic();
         }
         public void TargetHit(int slot)
         {
@@ -58,7 +58,7 @@ namespace LWS.TruckHitchSports
                 {
                     Vector3 target = engine.LoadingCradle.bounds.center;
                     if (ai) DriveLoadingLane(i,target); else trucks[i].TickDrive(commands[i]);
-                    bool inCradle = engine.LoadingCradle.bounds.Contains(trailer.Body.worldCenterOfMass);
+                    bool inCradle = engine.CanLoad(trailer);
                     if (ai && inCradle) ParkAI(i);
                     if ((ai || actions[i]) && inCradle && trailer.Body.linearVelocity.magnitude < 2)
                     { couplers[i].Release(); engine.TryLoad(trailer); }

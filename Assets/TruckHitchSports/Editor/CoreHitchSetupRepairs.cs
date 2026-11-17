@@ -33,6 +33,28 @@ namespace LWS.TruckHitchSports.Editor
             Physics.SyncTransforms(); EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
             Debug.Log("HH10_HIGHWIRE_RECEIVING_SURFACES_REPAIRED original platform footprints and gates preserved; road/platform tops are physically flush.");
         }
+        public static void RepairActiveUnhitchedLanes()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before repairing the saved surf lanes.");
+            var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if(scene.path!="Assets/TruckHitchSports/Scenes/Unhitched.unity")throw new InvalidOperationException("Open only the saved Unhitched venue.");
+            var match=UnityEngine.Object.FindAnyObjectByType<UnhitchedMatch>();
+            var ramps=scene.GetRootGameObjects().Where(g=>g.name=="Trailer surf launch ramp").OrderBy(g=>g.transform.GetSiblingIndex()).ToArray();
+            if(match==null||match.trailers.Length!=4||match.trucks.Length!=4||ramps.Length!=12)throw new InvalidOperationException("Preserve four existing surf rigs and their twelve ramps.");
+            for(int lane=0;lane<4;lane++)
+            {
+                float dx=(lane-1.5f)*55-match.trailers[lane].transform.position.x;
+                MoveSavedBody(match.trailers[lane].transform,dx);MoveSavedBody(match.trucks[lane].transform,dx);
+                for(int n=0;n<3;n++){ramps[lane*3+n].transform.position+=Vector3.right*dx;EditorUtility.SetDirty(ramps[lane*3+n].transform);}
+            }
+            Physics.SyncTransforms();EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+            Debug.Log("HH10_UNHITCHED_FOUR_LANES_REPAIRED existing rigs/decks/ramps separated at authored lane spacing; no runtime placement override.");
+        }
+        static void MoveSavedBody(Transform root,float dx)
+        {
+            root.position+=Vector3.right*dx;EditorUtility.SetDirty(root);
+            foreach(var body in root.GetComponentsInChildren<Rigidbody>(true)){body.position=body.transform.position;EditorUtility.SetDirty(body);}
+        }
         public static void RepairActiveHitchRunLandingGear()
         {
             if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before setting the receiving jacks.");
