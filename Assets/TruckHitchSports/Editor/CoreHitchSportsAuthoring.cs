@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -98,6 +98,7 @@ namespace LWS.TruckHitchSports.Editor
             SportsEventAuthoring.UI(match);
             SportsScenicGradeAuthoring.Install(match.gameObject, match.cameras, Folder, -.2f);
             EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Scene(key));
+            if (match is TrebuchetMatch) CoreHitchSetupRepairs.RepairActiveTrebuchetApparatus();
             SportsProductionAuthoring.InstallScene(); SportsFocusPolicy.InstallScene();
             EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Scene(key)); AssetDatabase.SaveAssets();
             Debug.Log("ALPHA10_HITCH_AUTHORED " + key + " native fifth wheels, axles, trailer rigidbodies and assigned controls; gameplay acceptance pending.");
@@ -116,7 +117,7 @@ namespace LWS.TruckHitchSports.Editor
                     deck.transform.rotation = Quaternion.LookRotation(direction);
                     last = next;
                 }
-                SportsEventAuthoring.Box("Finish receiving platform", last + Vector3.forward * 10, new Vector3(12, 1, 50), steel, contact);
+                SportsEventAuthoring.Box("Finish receiving platform", last + Vector3.forward * 10 - Vector3.up * .5f, new Vector3(12, 1, 50), steel, contact);
             }
             SportsEventAuthoring.Box("Distant ravine terrain", new Vector3(40, -15, 100), new Vector3(450, 10, 600), road, contact);
             SportsRallyAuthoring.Prop(null, "Assets/WeatherMaker/Demo/DemoResources/Models/Terrain/MountainPeaks/Mountains.prefab", new Vector3(45, -80, 150), new Vector3(1000, 270, 1100));

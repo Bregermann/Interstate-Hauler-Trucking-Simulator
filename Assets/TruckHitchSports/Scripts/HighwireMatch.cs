@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 namespace LWS.TruckHitchSports
 {
     public sealed class HighwireMatch : HitchCompetitionSession
@@ -39,7 +39,7 @@ namespace LWS.TruckHitchSports
             {
                 if (Completed[i]) continue;
                 Vector3 target = route[Mathf.Min(gate[i], route.Length - 1)] + Vector3.right * (i * 24);
-                Vector2 aiDrive = DriveTo(i, target, 5 + (int)setup.players[i].difficulty);
+                Vector2 aiDrive = FollowPhysicalRoadway(i);
                 bool technical = option % 4 == 3 && gate[i] == route.Length - 1;
                 if (technical && !reverseEntered[i])
                 {
@@ -74,6 +74,34 @@ namespace LWS.TruckHitchSports
                 if (trucks[i].body.position.y < fallHeight || trailers[i].Body.position.y < fallHeight || couplers[i].Attached == null)
                 { if (option % 4 == 2 && survival[i] > 0) { AddScore(i, survival[i] * 1000, "highwire-survival"); survival[i] = 0; } Completed[i] = failed[i] = true; Notice = setup.players[i].name + " LOST THE HIGHWIRE"; }
             }
+        }
+        Vector2 FollowPhysicalRoadway(int slot)
+        {
+            int segment = Mathf.Min(gate[slot], route.Length - 1);
+            Vector3 offset = Vector3.right * slot * 24;
+            Vector3 a = segment == 0 ? starts[slot] : route[segment - 1] + offset;
+            Vector3 b = route[segment] + offset;
+            Vector3 line = Vector3.ProjectOnPlane(b - a, Vector3.up);
+            Vector3 position = trucks[slot].body.position;
+            float along = line.sqrMagnitude > .01f ? Mathf.Clamp01(Vector3.Dot(Vector3.ProjectOnPlane(position - a, Vector3.up), line) / line.sqrMagnitude) : 1;
+            Vector3 closest = a + line * along;
+            float speed = Vector3.ProjectOnPlane(trucks[slot].body.linearVelocity, Vector3.up).magnitude;
+            float lookahead = 5 + Mathf.Min(speed, 5) * .4f;
+            float remaining = line.magnitude * (1 - along);
+            Vector3 target = closest + line.normalized * Mathf.Min(remaining, lookahead);
+            if (remaining < lookahead && segment + 1 < route.Length)
+            {
+                Vector3 next = Vector3.ProjectOnPlane(route[segment + 1] + offset - b, Vector3.up);
+                target = b + next.normalized * Mathf.Min(lookahead - remaining, next.magnitude);
+            }
+            float requested = 4.5f + (int)setup.players[slot].difficulty * .3f;
+            if (remaining < 16 && segment + 1 < route.Length) requested = Mathf.Min(requested, 3.3f);
+            float articulation = Vector3.Angle(trucks[slot].transform.forward, trailers[slot].transform.forward);
+            if (articulation > 35) requested = Mathf.Min(requested, 2.5f);
+            Vector3 local = trucks[slot].transform.InverseTransformPoint(target);
+            float steer = Mathf.Clamp(Mathf.Atan2(local.x, local.z) * 1.8f, -1, 1);
+            float forward = Vector3.Dot(trucks[slot].body.linearVelocity, trucks[slot].transform.forward);
+            return new Vector2(steer, Mathf.Clamp((requested - forward) * .4f, -.7f, .75f));
         }
         float RouteDeviation(int slot)
         {

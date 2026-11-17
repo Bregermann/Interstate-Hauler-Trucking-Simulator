@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 namespace LWS.TruckHitchSports
 {
     public sealed class HitchRunMatch : HitchCompetitionSession
@@ -50,6 +50,9 @@ namespace LWS.TruckHitchSports
             for (int i = 0; i < setup.count; i++)
             {
                 var owned = couplers[i].Attached; bool ai = IsAI(i);
+                // Close AI backing may choose R explicitly; every other path
+                // retains the existing NWH automatic D/N/R behavior.
+                trucks[i].tractorMotor.vehicle.powertrain.transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
                 if (owned == null)
                 {
                     TrailerBody candidate = null; float nearest = float.MaxValue, priority = float.MaxValue;
@@ -117,9 +120,9 @@ namespace LWS.TruckHitchSports
             switch (approachStage[slot])
             {
                 case 0: target += right * side * 12 - forward * 14; break;
-                case 1: target += right * side * 12 + forward * 20; break;
-                case 2: target += contestOnly ? right * side * 3 : forward * 40; break;
-                case 3: target += forward * 80; break;
+                case 1: target += right * side * 12 + forward * 18; break;
+                case 2: target += contestOnly ? right * side * 3 : forward * 16; break;
+                case 3: target += forward * 26; break;
             }
             float distance = Vector3.ProjectOnPlane(target - trucks[slot].body.position, Vector3.up).magnitude;
             if (contestOnly && approachStage[slot] >= 2)
@@ -132,15 +135,56 @@ namespace LWS.TruckHitchSports
             }
             if (approachStage[slot] == 3)
             {
-                trucks[slot].TickDrive(DriveTo(slot, target, 5));
-                if (Vector3.Angle(trucks[slot].transform.forward, forward) < 6 && Mathf.Abs(Vector3.Dot(trucks[slot].body.position - root, right)) < .5f && Vector3.Dot(trucks[slot].body.position - root, forward) > 20) approachStage[slot]++;
+                Vector3 offset = trucks[slot].body.position - root;
+                float ahead = Vector3.Dot(offset, forward), sideError = Vector3.Dot(offset, right);
+                // Stay in the real open gap before the second row of parked
+                // trailers. Align the lane geometrically, not by driving into
+                // the next load until an arbitrary sub-metre waypoint is hit.
+                Vector3 lanePoint = root + forward * Mathf.Min(26, ahead + 10);
+                Vector3 localPoint = trucks[slot].transform.InverseTransformPoint(lanePoint);
+                float alignmentHeading = Vector3.Angle(trucks[slot].transform.forward, forward);
+                float alignmentSpeed = Vector3.Dot(trucks[slot].body.linearVelocity, trucks[slot].transform.forward);
+                float alignmentSteer = Mathf.Clamp(Mathf.Atan2(localPoint.x, localPoint.z) * 1.8f - trucks[slot].body.angularVelocity.y * .3f, -1, 1);
+                trucks[slot].TickDrive(new Vector2(alignmentSteer, Mathf.Clamp((2.5f - alignmentSpeed) * .5f, -.7f, .6f)));
+                if (alignmentHeading < 8 && Mathf.Abs(sideError) < 1.25f && ahead > 8) approachStage[slot]++;
                 return false;
             }
-            Vector3 local = trucks[slot].transform.InverseTransformPoint(root);
+            // Use the same measured close-approach controller that physically
+            // completed Handoff's native recoupling. The old always-negative
+            // speed target kept reversing after passing the pin, then steered
+            // a turned-around tractor hundreds of metres away from its cargo.
+            float heading = Vector3.Angle(trucks[slot].transform.forward, forward);
+            Vector3 error = trucks[slot].body.position - root;
+            if (heading > 35 || Mathf.Abs(Vector3.Dot(error, right)) > 6 || Vector3.Dot(error, forward) < -2)
+            { approachStage[slot] = 0; trucks[slot].TickDrive(Vector2.zero); return false; }
+            var vehicle = trucks[slot].tractorMotor.vehicle;
+            var transmission = vehicle.powertrain.transmission;
+            transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
             float speed = Vector3.Dot(trucks[slot].body.linearVelocity, trucks[slot].transform.forward);
-            float requested = -Mathf.Min(1.5f, Mathf.Max(.05f, local.magnitude * .35f));
-            trucks[slot].TickDrive(new Vector2(Mathf.Clamp(-Mathf.Atan2(local.x, Mathf.Max(.2f, -local.z)) * 1.8f, -1, 1), Mathf.Clamp((requested - speed) * .5f, -.5f, .5f)));
+            if (transmission.Gear >= 0)
+            {
+                ParkAI(slot);
+                if (Mathf.Abs(speed) < .35f) transmission.ShiftInto(-1);
+                return false;
+            }
+            float pinDistance = Vector3.Distance(couplers[slot].Anchor.position, trailer.Kingpin.position);
+            float lateralError = Vector3.Dot(error, right);
+            float lookahead = Mathf.Clamp(Mathf.Abs(Vector3.Dot(error, forward)), 4, 12);
+            Vector3 desiredHeading = Quaternion.AngleAxis(Mathf.Atan2(lateralError, lookahead) * Mathf.Rad2Deg, Vector3.up) * forward;
+            float headingError = Vector3.SignedAngle(trucks[slot].transform.forward, desiredHeading, Vector3.up);
+            float steer = Mathf.Clamp(-headingError * .07f + trucks[slot].body.angularVelocity.y * .6f, -.65f, .65f);
+            float requested = -Mathf.Clamp(pinDistance * .25f, .12f, 2.5f);
+            float effort = Mathf.Clamp((requested - speed) * .7f, -.75f, .7f);
+            // Once within native capture range, let the real bounded kingpin
+            // guide force brake and center the bodies rather than driving past.
+            trucks[slot].TickDrive(new Vector2(steer, pinDistance < .6f ? 0 : effort));
             return couplers[slot].GuideCoupling(trailer, dt);
+        }
+        public string HitchRunApproachDiagnostic(int slot)
+        {
+            if (slot < 0 || slot >= setup.count) return "invalid seat";
+            var target = aiTarget[slot]; var vehicle = trucks[slot].tractorMotor.vehicle;
+            return "stage=" + approachStage[slot] + " target=" + (target != null ? target.name : "none") + " gear=" + vehicle.powertrain.transmission.Gear + " speed=" + Vector3.Dot(trucks[slot].body.linearVelocity, trucks[slot].transform.forward).ToString("F2") + " throttle=" + vehicle.input.InputSwappedThrottle.ToString("F2") + " brakes=" + vehicle.input.InputSwappedBrakes.ToString("F2") + (target != null ? " " + couplers[slot].DiagnosticState(target) : "");
         }
         void ParkAI(int slot)
         {

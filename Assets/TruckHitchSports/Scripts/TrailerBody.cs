@@ -22,7 +22,8 @@ namespace LWS.TruckHitchSports
         Vector3 originalCenter;
         NWH.WheelController3D.WheelController[] wheels;
         float[] originalLongitudinalGrip, originalLateralGrip;
-        public void SetGripMultiplier(float multiplier)
+        public void SetGripMultiplier(float multiplier) => SetGripMultipliers(multiplier,multiplier);
+        public void SetGripMultipliers(float longitudinal,float lateral)
         {
             if(wheels==null||Vehicle==null||!Vehicle.IsInitialized)return;
             if(originalLongitudinalGrip==null)
@@ -30,7 +31,7 @@ namespace LWS.TruckHitchSports
                 originalLongitudinalGrip=new float[wheels.Length];originalLateralGrip=new float[wheels.Length];
                 for(int i=0;i<wheels.Length;i++){originalLongitudinalGrip[i]=wheels[i].LongitudinalFrictionGrip;originalLateralGrip[i]=wheels[i].LateralFrictionGrip;}
             }
-            for(int i=0;i<wheels.Length;i++){wheels[i].LongitudinalFrictionGrip=originalLongitudinalGrip[i]*Mathf.Max(.01f,multiplier);wheels[i].LateralFrictionGrip=originalLateralGrip[i]*Mathf.Max(.01f,multiplier);}
+            for(int i=0;i<wheels.Length;i++){wheels[i].LongitudinalFrictionGrip=originalLongitudinalGrip[i]*Mathf.Max(.01f,longitudinal);wheels[i].LateralFrictionGrip=originalLateralGrip[i]*Mathf.Max(.01f,lateral);}
         }
         Rigidbody[] parts;
         Vector3[] partPositions;
