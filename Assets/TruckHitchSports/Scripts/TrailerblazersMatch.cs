@@ -14,7 +14,7 @@ namespace LWS.TruckHitchSports
         public float aiStageAltitude = 75, attitudeGain = 5, attitudeDamping = 3.2f;
         readonly float[] fuel = new float[4], flight = new float[4], peak = new float[4], quiet = new float[4];
         readonly bool[] ignited = new bool[4], separated = new bool[4];
-        readonly bool[] controlledLanding = new bool[4];
+        readonly bool[] controlledLanding = new bool[4], precisionTouchdown = new bool[4];
         readonly int[] stageReleases = new int[4];
         readonly float[] distanceTravelled = new float[4];
         readonly float[] airborneSeconds = new float[4];
@@ -52,7 +52,7 @@ namespace LWS.TruckHitchSports
         public string FlightDiagnostic(int slot) => "slot=" + slot + " elapsed=" + Elapsed.ToString("F2") + " peak=" + peak[slot].ToString("F2") + " air=" + airborneSeconds[slot].ToString("F2") + " fuelUsed=" + (fuelSeconds - fuel[slot]).ToString("F2") + " releases=" + stageReleases[slot] + " assemblyKg=" + assemblyMassObserved[slot].ToString("F0") + " stageUpAtPeak=" + peakStageUp[slot].ToString("F3") + " minPoweredUp=" + minimumPoweredUp[slot].ToString("F3") + " maxThrustMomentNm=" + maximumThrustMoment[slot].ToString("F0") + " unexpectedStageLoss=" + unexpectedStageLoss[slot] + " controlledLanding=" + controlledLanding[slot];
         public override string ResultDetail(int slot) => option % 4 == 1 ? controlledAirSeconds[slot].ToString("F1") + "s CONTROLLED AIRTIME · " + (controlledLanding[slot] ? "CONTROLLED LANDING" : "FAILED LANDING") : option % 4 == 2 ? landingError[slot].ToString("F1") + "m PAD ERROR · " + guidedDescentSeconds[slot].ToString("F1") + "s GUIDED DESCENT" : peak[slot].ToString("F1") + "m ALTITUDE · " + flight[slot].ToString("F1") + "s FLIGHT · " + (fuelSeconds - fuel[slot]).ToString("F1") + "s FUEL";
         public override string OptionLabel => new[] { "HIGHEST ALTITUDE", "CONTROLLED FLIGHT", "PRECISION LANDING", "ROCKET DISTANCE" }[option % 4];
-        public override string Help => "Ignite a physically coupled booster trailer with ACTION. Steer pitch/yaw with your movement controls and use the shown independent ROLL bindings; hold ACTION to burn fuel, release then press again after three seconds to separate the booster. After separation, hold ACTION for the air brake/parachute. Land on your illuminated pad for a controlled-landing bonus. Fuel, altitude, distance and impact are measured from the real rig. Detached boosters remain physical objects. Each participant has an independent launch lane. Precision Landing adds steerable descent: after staging, hold ACTION and use movement controls to guide the physical air brake toward your pad; centered controls damp sideways drift. Controlled Flight scores only actual airborne time with a stable upright rig, followed by a controlled landing. Whole pads roll with LB/RB; shared left-stick players use D-pad left/right and shared right-stick players use west/east face buttons. Keyboard roll keys are shown per participant and avoid assigned driving/action/horn keys. AI difficulty changes real attitude control, reaction, staging height and guidance; Normal retains its established flight law.";
+        public override string Help => "Ignite the coupled booster with ACTION. Steer pitch and yaw with movement controls and use the shown ROLL bindings. Hold ACTION to burn fuel. Release and press it again after three seconds to separate the booster. After staging, hold ACTION for the descent brake. In Precision Landing, use movement controls to guide the canopy toward your lit pad. The parking brake engages at actual wheel contact with that pad. Controlled Flight rewards stable airtime followed by an upright landing. Whole gamepads roll with LB/RB, shared left-stick drivers with D-pad left/right and shared right-stick drivers with the west/east buttons. Each driver has a separate launch lane.";
         protected override void BeginCompetition()
         {
             EnsureRollBindings();
@@ -60,7 +60,7 @@ namespace LWS.TruckHitchSports
             {
                 fuel[i] = fuelSeconds; flight[i] = peak[i] = quiet[i] = distanceTravelled[i] = airborneSeconds[i] = maximumThrustMoment[i] = controlledAirSeconds[i] = guidedDescentSeconds[i] = landingError[i] = 0;
                 stageReleases[i] = 0; minimumPoweredUp[i] = 1; peakStageUp[i] = 1; appliedBrakeNewtons[i] = brakeSeconds[i] = maximumImpact[i] = 0;
-                controlledLanding[i] = ignited[i] = separated[i] = unexpectedStageLoss[i] = false;
+                controlledLanding[i] = precisionTouchdown[i] = ignited[i] = separated[i] = unexpectedStageLoss[i] = false;
                 tractorBodies[i] = trucks[i].GetComponentsInChildren<Rigidbody>(true);
                 var bodies = new System.Collections.Generic.List<Rigidbody>(tractorBodies[i]);
                 foreach (var part in trailers[i].GetComponentsInChildren<Rigidbody>(true)) if (!bodies.Contains(part)) bodies.Add(part);
@@ -111,7 +111,16 @@ namespace LWS.TruckHitchSports
                 if (body.position.y - starts[i].y > peak[i]) { peak[i] = body.position.y - starts[i].y; peakStageUp[i] = Vector3.Dot(trailers[i].transform.up, Vector3.up); }
                 if (!separated[i] && !couplers[i].Hitch.module.attached) unexpectedStageLoss[i] = true;
                 distanceTravelled[i] = Vector3.ProjectOnPlane(body.position - starts[i], Vector3.up).magnitude;
-                if (ai)
+                if (option % 4 == 2 && separated[i] && airborneSeconds[i] > 1 &&
+                    !precisionTouchdown[i] && Vector3.Dot(body.transform.up, Vector3.up) > .65f)
+                    precisionTouchdown[i] = OnAssignedPad(i);
+                if (precisionTouchdown[i])
+                {
+                    var input = trucks[i].tractorMotor.vehicle.input;
+                    input.states.handbrake = input.states.handbrakeRaw = 1;
+                    Notice = "PAD CONTACT · PARKING BRAKE ENGAGED";
+                }
+                else if (ai)
                 {
                     Vector3 desiredUp = AILaunchUp(i);
                     StabilizeAttitude(body, desiredUp, i);
@@ -137,7 +146,7 @@ namespace LWS.TruckHitchSports
                     separated[i] = true;
                     if (exhaust != null && i < exhaust.Length && exhaust[i] != null) exhaust[i].Stop();
                 }
-                if (separated[i] && body.linearVelocity.y < 0 && burn)
+                if (separated[i] && !precisionTouchdown[i] && body.linearVelocity.y < 0 && burn)
                 {
                     float height = Mathf.Max(0, body.position.y - starts[i].y);
                     // Precision guidance estimates its remaining glide using a
@@ -175,6 +184,17 @@ namespace LWS.TruckHitchSports
                 }
             }
         }
+        bool OnAssignedPad(int slot)
+        {
+            if (landingPads == null || slot >= landingPads.Length || landingPads[slot] == null) return false;
+            Transform pad = landingPads[slot];
+            foreach (var wheel in trucks[slot].wheels)
+                if (wheel != null && wheel.IsGrounded && wheel.HitCollider != null &&
+                    wheel.HitCollider.transform == pad && Vector3.Dot(wheel.HitNormal, pad.up) > .8f)
+                    return true;
+            return false;
+        }
+
         void GuidePrecisionDescent(int slot, float mass, float liftAcceleration, bool ai, float dt)
         {
             var body = trucks[slot].body;
