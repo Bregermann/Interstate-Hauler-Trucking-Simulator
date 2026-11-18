@@ -1,7 +1,7 @@
 # TRUCK SPORTS: PARTY!
 # ALPHA 0.10.0 — HITCHES, HORRORS & HIGH WATER
 
-**Development preview — expansion in progress.** Windows candidate 3 is available at `Builds/TruckSportsAlpha10Candidate3/TruckSports.exe` from commit `5ca15da7`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and subsequent source improvements. Previous working installations are preserved.
+**Development preview, expansion in progress.** Windows Candidate 5 is available at `Builds/TruckSportsAlpha10Candidate5/TruckSports.exe` from commit `91c46f65`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and newer source. Previous working installations are preserved.
 
 ## New Sports
 
@@ -72,6 +72,6 @@ NWH, Archimeds, shared weather and the existing Game Night services remain the f
 
 ## Known Issues
 
-Candidate 4 is a development preview. It adds the shared canoe camera, cooperative Blackwater extraction, the target-owned Dead End pursuer cue, recovery of contested Hitch & Run cargo and a real Unhitched quarter-turn flight window. Targeted play checks also passed Obstacle Relay and Skyhook Slalom.
+Candidate 5 includes the shared canoe camera and repaired riverbed, cooperative Blackwater and Scarecrow extraction, the Dead End pursuer cue, physical Hitch & Run steals, the Highway Pileup recovery scenario and the Unhitched quarter-turn trick. Targeted play checks also passed Obstacle Relay, Skyhook Slalom and Skyhook High-Wind Hauling.
 
-The full Windows export completed Domino Derby and Paddle Pals in Game Night with two software controllers. The lobby, standings, statistics and telemetry were written. A separate Candidate 3 relaunch previously confirmed profile persistence. Native exit `0xC0000005` still blocks promotion. Full Graveyard services, Thin Ice shore recovery, Unhitched ground remounts, alternate routes and physical-controller, listening and human acceptance remain open. The permanent ledger records each outstanding item.
+The full Windows export completed Cargo Crisis and Paddle Pals in Game Night with two software controllers, returned to the lobby and saved standings, statistics and telemetry. A Candidate 3 relaunch previously confirmed profile persistence. The native exit crash (`0xC0000005`) still blocks promotion. Full-night Graveyard survival, Thin Ice shore recovery, precision rocket landing, Unhitched ground remounts, alternate routes and physical-controller, listening and human acceptance remain open. The permanent ledger records each outstanding item.
