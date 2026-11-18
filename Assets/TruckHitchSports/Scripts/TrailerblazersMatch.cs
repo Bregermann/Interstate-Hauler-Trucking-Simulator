@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using LWS.TruckSports;
+using LWS.TruckBowling;
+using UnityEngine.InputSystem;
 
 namespace LWS.TruckHitchSports
 {
@@ -7,6 +9,7 @@ namespace LWS.TruckHitchSports
     {
         public Transform[] landingPads;
         public ParticleSystem[] exhaust;
+        public RocketFlightPresentation[] flightPresentation = System.Array.Empty<RocketFlightPresentation>();
         public float fuelSeconds = 12, thrustToWeight = 2.4f;
         public float aiStageAltitude = 75, attitudeGain = 5, attitudeDamping = 3.2f;
         readonly float[] fuel = new float[4], flight = new float[4], peak = new float[4], quiet = new float[4];
@@ -21,6 +24,10 @@ namespace LWS.TruckHitchSports
         readonly Transform[][] boosterNozzles = new Transform[4][];
         readonly float[] assemblyMassObserved = new float[4], peakStageUp = new float[4], minimumPoweredUp = new float[4], maximumThrustMoment = new float[4];
         readonly bool[] unexpectedStageLoss = new bool[4];
+        readonly float[] appliedBrakeNewtons = new float[4], brakeSeconds = new float[4], maximumImpact = new float[4];
+        readonly Key[] rollLeft = new Key[4], rollRight = new Key[4];
+        int rollBindingSignature = int.MinValue;
+        static readonly Key[] RollCandidates = { Key.Z, Key.X, Key.Delete, Key.PageDown, Key.Semicolon, Key.Quote, Key.LeftBracket, Key.RightBracket, Key.Numpad1, Key.Numpad3, Key.Numpad4, Key.Numpad6, Key.Numpad7, Key.Numpad9, Key.Backslash, Key.Backquote, Key.Numpad2, Key.Numpad5, Key.Numpad8, Key.Numpad0, Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9, Key.Digit0, Key.Insert, Key.End, Key.PageUp, Key.U, Key.O, Key.P, Key.B, Key.N, Key.M, Key.R, Key.T, Key.F, Key.G, Key.H, Key.J, Key.K, Key.L };
         public override string Title => "TRAILERBLAZERS: ROCKET LAUNCH";
         public float PeakAltitude(int slot) => peak[slot];
         public float AirborneSeconds(int slot) => airborneSeconds[slot];
@@ -29,16 +36,30 @@ namespace LWS.TruckHitchSports
         public float ControlledFlightSeconds(int slot) => controlledAirSeconds[slot];
         public float GuidedDescentSeconds(int slot) => guidedDescentSeconds[slot];
         public float LandingErrorMetres(int slot) => landingError[slot];
+        public float AppliedAirBrakeNewtons(int slot) => appliedBrakeNewtons[slot];
+        public bool HasIgnited(int slot) => ignited[slot];
+        public float MaximumImpactSpeed(int slot) => maximumImpact[slot];
+        public void ObserveRocketImpact(int slot, float normalSpeed)
+        { if (slot >= 0 && slot < setup.count && Live && ignited[slot] && airborneSeconds[slot] > .25f) maximumImpact[slot] = Mathf.Max(maximumImpact[slot], normalSpeed); }
+        public override string ControlCaption(int slot) => base.ControlCaption(slot) + " · ROLL: " + RollCaption(slot);
+        public override bool TryReadScoreCard(int slot, out string value, out string detail)
+        {
+            if (slot < 0 || slot >= setup.count) { value = detail = null; return false; }
+            value = Completed[slot] ? Scores[slot].ToString("F0") : peak[slot].ToString("F0") + "m";
+            detail = Completed[slot] ? (controlledLanding[slot] ? "CONTROLLED LANDING" : "FLIGHT ENDED") : "FUEL " + fuel[slot].ToString("F1") + "s · ROLL " + RollCaption(slot);
+            return true;
+        }
         public string FlightDiagnostic(int slot) => "slot=" + slot + " elapsed=" + Elapsed.ToString("F2") + " peak=" + peak[slot].ToString("F2") + " air=" + airborneSeconds[slot].ToString("F2") + " fuelUsed=" + (fuelSeconds - fuel[slot]).ToString("F2") + " releases=" + stageReleases[slot] + " assemblyKg=" + assemblyMassObserved[slot].ToString("F0") + " stageUpAtPeak=" + peakStageUp[slot].ToString("F3") + " minPoweredUp=" + minimumPoweredUp[slot].ToString("F3") + " maxThrustMomentNm=" + maximumThrustMoment[slot].ToString("F0") + " unexpectedStageLoss=" + unexpectedStageLoss[slot] + " controlledLanding=" + controlledLanding[slot];
         public override string ResultDetail(int slot) => option % 4 == 1 ? controlledAirSeconds[slot].ToString("F1") + "s CONTROLLED AIRTIME · " + (controlledLanding[slot] ? "CONTROLLED LANDING" : "FAILED LANDING") : option % 4 == 2 ? landingError[slot].ToString("F1") + "m PAD ERROR · " + guidedDescentSeconds[slot].ToString("F1") + "s GUIDED DESCENT" : peak[slot].ToString("F1") + "m ALTITUDE · " + flight[slot].ToString("F1") + "s FLIGHT · " + (fuelSeconds - fuel[slot]).ToString("F1") + "s FUEL";
         public override string OptionLabel => new[] { "HIGHEST ALTITUDE", "CONTROLLED FLIGHT", "PRECISION LANDING", "ROCKET DISTANCE" }[option % 4];
-        public override string Help => "Ignite a physically coupled booster trailer with ACTION. Steer pitch/yaw with your movement controls; hold ACTION to burn fuel, release then press again after three seconds to separate the booster. After separation, hold ACTION for the air brake/parachute. Land on your illuminated pad for a controlled-landing bonus. Fuel, altitude, distance and impact are measured from the real rig. Detached boosters remain physical objects. Each participant has an independent launch lane. Precision Landing adds steerable descent: after staging, hold ACTION and use movement controls to guide the physical air brake toward your pad; centered controls damp sideways drift. Controlled Flight scores only actual airborne time with a stable upright rig, followed by a controlled landing.";
+        public override string Help => "Ignite a physically coupled booster trailer with ACTION. Steer pitch/yaw with your movement controls and use the shown independent ROLL bindings; hold ACTION to burn fuel, release then press again after three seconds to separate the booster. After separation, hold ACTION for the air brake/parachute. Land on your illuminated pad for a controlled-landing bonus. Fuel, altitude, distance and impact are measured from the real rig. Detached boosters remain physical objects. Each participant has an independent launch lane. Precision Landing adds steerable descent: after staging, hold ACTION and use movement controls to guide the physical air brake toward your pad; centered controls damp sideways drift. Controlled Flight scores only actual airborne time with a stable upright rig, followed by a controlled landing. Whole pads roll with LB/RB; shared left-stick players use D-pad left/right and shared right-stick players use west/east face buttons. Keyboard roll keys are shown per participant and avoid assigned driving/action/horn keys. AI difficulty changes real attitude control, reaction, staging height and guidance; Normal retains its established flight law.";
         protected override void BeginCompetition()
         {
+            EnsureRollBindings();
             for (int i = 0; i < 4; i++)
             {
                 fuel[i] = fuelSeconds; flight[i] = peak[i] = quiet[i] = distanceTravelled[i] = airborneSeconds[i] = maximumThrustMoment[i] = controlledAirSeconds[i] = guidedDescentSeconds[i] = landingError[i] = 0;
-                stageReleases[i] = 0; minimumPoweredUp[i] = 1; peakStageUp[i] = 1;
+                stageReleases[i] = 0; minimumPoweredUp[i] = 1; peakStageUp[i] = 1; appliedBrakeNewtons[i] = brakeSeconds[i] = maximumImpact[i] = 0;
                 controlledLanding[i] = ignited[i] = separated[i] = unexpectedStageLoss[i] = false;
                 tractorBodies[i] = trucks[i].GetComponentsInChildren<Rigidbody>(true);
                 var bodies = new System.Collections.Generic.List<Rigidbody>(tractorBodies[i]);
@@ -48,6 +69,7 @@ namespace LWS.TruckHitchSports
                 foreach (var part in trailers[i].GetComponentsInChildren<Transform>(true)) if (part.name == "Booster thrust nozzle") nozzles.Add(part);
                 if (nozzles.Count != 4) throw new System.InvalidOperationException("Rocket stage requires its four authored physical booster nozzles.");
                 boosterNozzles[i] = nozzles.ToArray();
+                if (flightPresentation != null && i < flightPresentation.Length && flightPresentation[i] != null) flightPresentation[i].ResetForRound(setup.players[i].color);
                 if (exhaust != null && i < exhaust.Length && exhaust[i] != null) exhaust[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             }
         }
@@ -58,6 +80,7 @@ namespace LWS.TruckHitchSports
             RecordMetric(slot, "rocket_ignition_elapsed_seconds", flight[slot]);
             RecordMetric(slot, "rocket_fuel_seconds_consumed", Mathf.Max(0, fuelSeconds - fuel[slot]));
             RecordMetric(slot, "rocket_stage_releases", stageReleases[slot]);
+            RecordMetric(slot, "rocket_air_brake_seconds", brakeSeconds[slot]); RecordMetric(slot, "rocket_maximum_normal_impact_mps", maximumImpact[slot]);
             RecordMetric(slot, "rocket_controlled_landing", controlledLanding[slot] ? 1 : 0);
             RecordMetric(slot, "rocket_distance_metres", distanceTravelled[slot]);
             if (option % 4 == 1) RecordMetric(slot, "rocket_controlled_airborne_seconds", controlledAirSeconds[slot]);
@@ -72,11 +95,12 @@ namespace LWS.TruckHitchSports
             Notice = option % 4 == 2 ? "ACTION IGNITE / STAGE · HOLD ACTION + MOVE TO GUIDE DESCENT" : "ACTION IGNITE / STAGE · HOLD FOR THRUST OR DESCENT BRAKE";
             for (int i = 0; i < setup.count; i++)
             {
+                appliedBrakeNewtons[i] = 0;
                 if (Completed[i]) continue;
                 var body = trucks[i].body;
                 bool ai = IsAI(i);
-                bool aiStage = flight[i] > 3 && peak[i] >= aiStageAltitude && Vector3.Dot(trailers[i].transform.up, Vector3.up) > .8f;
-                bool pressed = ai ? !ignited[i] || aiStage && !separated[i] : actions[i];
+                bool aiStage = flight[i] > 3 && peak[i] >= DifficultyValue(i, aiStageAltitude * .8f, aiStageAltitude, aiStageAltitude * 1.1f) && Vector3.Dot(trailers[i].transform.up, Vector3.up) > .8f;
+                bool pressed = ai ? !ignited[i] && Elapsed >= DifficultyValue(i, 3.75f, 3, 3) || aiStage && !separated[i] : actions[i];
                 if (!ignited[i] && pressed && couplers[i].Attached != null)
                 { ignited[i] = true; trucks[i].TickDrive(Vector2.zero); trailers[i].SetBrakes(0); }
                 if (!ignited[i]) { trucks[i].TickDrive(Vector2.zero); continue; }
@@ -90,14 +114,14 @@ namespace LWS.TruckHitchSports
                 if (ai)
                 {
                     Vector3 desiredUp = AILaunchUp(i);
-                    StabilizeAttitude(body, desiredUp);
-                    if (!separated[i]) StabilizeAttitude(trailers[i].Body, desiredUp);
+                    StabilizeAttitude(body, desiredUp, i);
+                    if (!separated[i]) StabilizeAttitude(trailers[i].Body, desiredUp, i);
                 }
                 else
                 {
                     Vector2 control = commands[i];
                     Vector3 localRates = body.transform.InverseTransformDirection(body.angularVelocity);
-                    body.AddRelativeTorque(new Vector3(control.y, control.x, -localRates.z * .15f) * body.mass * 1.4f);
+                    body.AddRelativeTorque(new Vector3(control.y, control.x, ReadRollInput(i) - localRates.z * .15f) * body.mass * 1.4f);
                 }
                 bool burn = ai || ActionHeld(i);
                 if (!separated[i] && fuel[i] > 0 && burn)
@@ -120,6 +144,7 @@ namespace LWS.TruckHitchSports
                     float upwardAcceleration = Mathf.Clamp(Physics.gravity.magnitude + (-descentSpeed - body.linearVelocity.y) * 1.4f, 0, 30);
                     float tractorMass = 0; foreach (var part in tractorBodies[i]) tractorMass += part.mass;
                     body.AddForce(Vector3.up * tractorMass * upwardAcceleration);
+                    appliedBrakeNewtons[i] = tractorMass * upwardAcceleration; if (upwardAcceleration > 0) brakeSeconds[i] += dt;
                     if (option % 4 == 2 && height > 3) GuidePrecisionDescent(i, tractorMass, upwardAcceleration, ai, dt);
                     if (!ai) body.AddTorque(Vector3.Cross(body.transform.up, Vector3.up) * body.mass * 2 - body.angularVelocity * body.mass * .4f);
                 }
@@ -155,7 +180,7 @@ namespace LWS.TruckHitchSports
             {
                 float height = Mathf.Max(0, body.position.y - landingPads[slot].position.y);
                 float remaining = Mathf.Max(2, height / Mathf.Max(6, -body.linearVelocity.y));
-                desiredVelocity = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(landingPads[slot].position - body.position, Vector3.up) / remaining, 8);
+                desiredVelocity = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(landingPads[slot].position - body.position, Vector3.up) / remaining, DifficultyValue(slot, 6, 8, 9));
             }
             else
             {
@@ -184,20 +209,74 @@ namespace LWS.TruckHitchSports
             float predictedApex = height + rising * rising / (2 * gravity);
             float travelSeconds = Mathf.Max(5, rising / gravity + predictedApex / 12);
             Vector3 offset = Vector3.ProjectOnPlane(landingPads[slot].position - body.position, Vector3.up);
-            Vector3 desiredVelocity = Vector3.ClampMagnitude(offset / travelSeconds, 10);
-            Vector3 horizontalAcceleration = Vector3.ClampMagnitude((desiredVelocity - Vector3.ProjectOnPlane(body.linearVelocity, Vector3.up)) * .8f, 2);
+            Vector3 desiredVelocity = Vector3.ClampMagnitude(offset / travelSeconds, DifficultyValue(slot, 8, 10, 12));
+            Vector3 horizontalAcceleration = Vector3.ClampMagnitude((desiredVelocity - Vector3.ProjectOnPlane(body.linearVelocity, Vector3.up)) * .8f, DifficultyValue(slot, 1.5f, 2, 2.3f));
             return (Vector3.up + horizontalAcceleration / gravity).normalized;
         }
-        void StabilizeAttitude(Rigidbody body, Vector3 desiredUp)
+        void StabilizeAttitude(Rigidbody body, Vector3 desiredUp, int aiSlot = -1)
         {
             Quaternion.FromToRotation(body.transform.up, desiredUp).ToAngleAxis(out float angle, out Vector3 axis);
             if (angle > 180) angle -= 360;
-            Vector3 acceleration = axis * angle * Mathf.Deg2Rad * attitudeGain - body.angularVelocity * attitudeDamping;
+            float gain = aiSlot < 0 ? attitudeGain : DifficultyValue(aiSlot, attitudeGain * .75f, attitudeGain, attitudeGain * 1.2f);
+            float damping = aiSlot < 0 ? attitudeDamping : DifficultyValue(aiSlot, attitudeDamping * .85f, attitudeDamping, attitudeDamping * 1.15f);
+            Vector3 acceleration = axis * angle * Mathf.Deg2Rad * gain - body.angularVelocity * damping;
             acceleration = Vector3.ClampMagnitude(acceleration, 4);
             Quaternion principalAxes = body.rotation * body.inertiaTensorRotation;
             Vector3 principalAcceleration = Quaternion.Inverse(principalAxes) * acceleration;
             Vector3 torque = principalAxes * Vector3.Scale(body.inertiaTensor, principalAcceleration);
             body.AddTorque(torque, ForceMode.Force);
+        }
+        float DifficultyValue(int slot, float easy, float normal, float hard)
+            => setup.players[slot].difficulty == BowlingDifficulty.Easy ? easy : setup.players[slot].difficulty == BowlingDifficulty.Hard ? hard : normal;
+        void EnsureRollBindings()
+        {
+            var horn = GetComponent<SportsUniversalHorn>();
+            int signature = setup.count;
+            unchecked { for (int i = 0; i < setup.count; i++) { var p = setup.players[i]; signature = signature * 31 + (int)p.source; signature = signature * 31 + (int)p.forward; signature = signature * 31 + (int)p.back; signature = signature * 31 + (int)p.left; signature = signature * 31 + (int)p.right; signature = signature * 31 + (int)actionKeys[i]; signature = signature * 31 + (int)(horn != null ? horn.HornKey(i) : Key.None); } }
+            if (signature == rollBindingSignature) return;
+            rollBindingSignature = signature;
+            var reserved = new System.Collections.Generic.HashSet<Key> { Key.None, Key.Escape, Key.Tab, Key.C, Key.Q, Key.E };
+            for (int i = 0; i < setup.count; i++)
+            {
+                var p = setup.players[i]; if (p.source != BowlingSource.Keyboard) continue;
+                reserved.Add(p.forward); reserved.Add(p.back); reserved.Add(p.left); reserved.Add(p.right); reserved.Add(actionKeys[i]);
+                if (horn != null) reserved.Add(horn.HornKey(i));
+            }
+            int next = 0;
+            for (int i = 0; i < setup.count; i++)
+            {
+                rollLeft[i] = rollRight[i] = Key.None;
+                if (setup.players[i].source != BowlingSource.Keyboard) continue;
+                while (next < RollCandidates.Length && reserved.Contains(RollCandidates[next])) next++;
+                if (next < RollCandidates.Length) { rollLeft[i] = RollCandidates[next++]; reserved.Add(rollLeft[i]); }
+                while (next < RollCandidates.Length && reserved.Contains(RollCandidates[next])) next++;
+                if (next < RollCandidates.Length) { rollRight[i] = RollCandidates[next++]; reserved.Add(rollRight[i]); }
+            }
+        }
+        public string RollCaption(int slot)
+        {
+            EnsureRollBindings();
+            var source = setup.players[slot].source;
+            if (source == BowlingSource.AI) return "AI ATTITUDE";
+            if (source == BowlingSource.WholeController) return "LB / RB";
+            if (source == BowlingSource.LeftStick) return "D-PAD LEFT / RIGHT";
+            if (source == BowlingSource.RightStick) return "WEST / EAST";
+            return rollLeft[slot] + " / " + rollRight[slot];
+        }
+        public Key RollKey(int slot, bool positive) { EnsureRollBindings(); return positive ? rollRight[slot] : rollLeft[slot]; }
+        public float ReadRollInput(int slot)
+        {
+            if (slot < 0 || slot >= setup.count || !Live || SportsControllerKeyboard.InputBlocked || !Ready(slot) || !setup.players[slot].released) return 0;
+            var p = setup.players[slot];
+            if (p.source == BowlingSource.Keyboard)
+            {
+                EnsureRollBindings();
+                return (rollRight[slot] != Key.None && SportsDeviceInput.KeyHeld(rollRight[slot]) ? 1 : 0) - (rollLeft[slot] != Key.None && SportsDeviceInput.KeyHeld(rollLeft[slot]) ? 1 : 0);
+            }
+            if (p.source == BowlingSource.WholeController) return (p.pad.rightShoulder.isPressed ? 1 : 0) - (p.pad.leftShoulder.isPressed ? 1 : 0);
+            if (p.source == BowlingSource.LeftStick) return (p.pad.dpad.right.isPressed ? 1 : 0) - (p.pad.dpad.left.isPressed ? 1 : 0);
+            if (p.source == BowlingSource.RightStick) return (p.pad.buttonEast.isPressed ? 1 : 0) - (p.pad.buttonWest.isPressed ? 1 : 0);
+            return 0;
         }
         void ApplyBoosterThrust(int slot)
         {

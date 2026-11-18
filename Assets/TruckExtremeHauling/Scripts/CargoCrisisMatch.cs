@@ -13,7 +13,12 @@ namespace LWS.TruckExtremeHauling
         public Transform[] recoveryEyes;
         public float cableReach = 22, reelSpeed = .85f, uprightThreshold = .97f;
         public Material cableMaterial;
-        enum RescueStage { Approach, Winching, ClearSide, AlignLane, Straighten, ReverseHitch, Tow, Delivered }
+        public CargoEmergencyScenarios emergencySites;
+        TrailerBody[] defaultTrailers;
+        Transform[] defaultObjectives;
+        Vector3[] defaultStarts;
+        Quaternion[] defaultRotations;
+        enum RescueStage { Approach, Winching, ClearSide, AlignLane, Straighten, ReverseHitch, Tow, Delivered, Failed }
         readonly RescueStage[] stage = new RescueStage[4];
         readonly int[] assigned = new int[4];
         readonly int[] recoveryAttempts = new int[4];
@@ -25,21 +30,37 @@ namespace LWS.TruckExtremeHauling
         public string RecoveryPhase(int slot) => stage[slot].ToString();
         public bool CableConnected(int slot) => winches != null && winches[slot] != null && winches[slot].connectedBody != null;
         public bool CooperativeSuccess => Cooperative && deliveredTargets != null && SharedRescues == Mathf.Min(setup.count, deliveredTargets.Length);
-        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"cargo_recovery_attempts",recoveryAttempts[i]);RecordMetric(i,"cargo_shared_rescues",SharedRescues);var target=Target(i);if(target!=null)RecordMetric(i,"rescued_cargo_condition",target.CargoCondition); }
+        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"cargo_recovery_attempts",recoveryAttempts[i]);RecordMetric(i,"cargo_shared_rescues",SharedRescues);var target=Target(i);if(target!=null)RecordMetric(i,"rescued_cargo_condition",target.CargoCondition);if(emergencySites!=null&&emergencySites.Active!=null){RecordMetric(i,"cargo_fire_exposure_seconds",emergencySites.HeatSeconds[i]);RecordMetric(i,"cargo_water_immersion_seconds",emergencySites.ImmersedSeconds[i]);RecordMetric(i,"cargo_physical_cable_tow_metres",emergencySites.CableTowMetres[i]);RecordMetric(i,"cargo_flood_extracted",emergencySites.Extracted[i]?1:0);} }
         public override string Title => "CARGO CRISIS";
-        protected override string[] Modes => new[] { "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS", "HIGH-RISK RECOVERY" };
+        public override int OptionCount => 6;
+        protected override string[] Modes => new[] { "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS", "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE" };
         public override bool Cooperative => option == 2;
         protected override string ActionHint => "HOOK / RELEASE CABLE · HOLD REEL / ALIGN HITCH";
-        public override string Status => Cooperative ? "TEAM RECOVERY · " + SharedRescues + "/" + Mathf.Min(setup.count, trailers.Length) + " LOADS SAFE · " + ActionHint : "PHYSICAL RECOVERY · " + ActionHint;
+        public override string Status => emergencySites!=null&&emergencySites.Active!=null ? emergencySites.Status : Cooperative ? "TEAM RECOVERY · " + SharedRescues + "/" + Mathf.Min(setup.count, trailers.Length) + " LOADS SAFE · " + ActionHint : "PHYSICAL RECOVERY · " + ActionHint;
         public override string Results => (Cooperative ? (CooperativeSuccess ? "ALL CARGO RECOVERED — TEAM SUCCESS" : "TEAM RECOVERY INCOMPLETE") + "\n" : "") + base.Results;
-        public override string Help => "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points.";
+        public override string Help => "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points. Industrial Fire: visible burning freight damages exposed cargo; extract it quickly and preserve its condition. Flooded Loading: remain on the dry right bank, use the longer recovery cable and physically reel the floating load up the extraction slope. Native wheel support on the dry bank is required before hitching; buoyant or cable-only arrivals cannot qualify.";
 
         public override bool TryReadScoreCard(int card, out string value, out string detail)
         {
             value=detail=null;if(card<0||card>=setup.count)return false;
-            value=scores[card].ToString("0");detail=(Cooperative?"TEAM "+SharedRescues+" SAFE · ":"")+stage[card].ToString().ToUpperInvariant();return true;
+            value=scores[card].ToString("0");detail=(Cooperative?"TEAM "+SharedRescues+" SAFE · ":"")+stage[card].ToString().ToUpperInvariant();if(emergencySites!=null&&emergencySites.Active!=null)detail+=" · "+emergencySites.PlayerStatus(card);return true;
         }
 
+        protected override void BeginGame()
+        {
+            if(defaultTrailers==null){defaultTrailers=trailers;defaultObjectives=objectives;defaultStarts=(Vector3[])starts.Clone();defaultRotations=(Quaternion[])rotations.Clone();}
+            // A round boundary selects an already authored incident. Coupling and rescue
+            // never use these setup poses; all active movement remains native physics.
+            if(hitches!=null)foreach(var hitch in hitches)hitch?.Release();
+            if(winches!=null)for(int i=0;i<winches.Length;i++)if(winches[i]!=null)DetachCable(i);
+            if(option>=4&&emergencySites==null)throw new InvalidOperationException("Install the saved Cargo Crisis emergency sites before selecting this scenario.");
+            emergencySites?.Select(option);
+            var site=emergencySites!=null?emergencySites.Active:null;
+            trailers=site!=null?site.loads:defaultTrailers;objectives=site!=null?site.depots:defaultObjectives;
+            for(int i=0;i<trucks.Length;i++){starts[i]=site!=null?site.truckStarts[i].position:defaultStarts[i];rotations[i]=site!=null?site.truckStarts[i].rotation:defaultRotations[i];}
+            foreach(var trailer in defaultTrailers)trailer.gameObject.SetActive(site==null);
+            base.BeginGame();
+        }
         protected override void BeginMechanic()
         {
             SharedRescues = 0; deliveredTargets = new bool[trailers.Length];
@@ -53,7 +74,10 @@ namespace LWS.TruckExtremeHauling
                 if (option == 3) trailers[assigned[i]].AddCargo(trailers[assigned[i]].InitialMass * .4f);
                 EnsureCable(i); cables[i].enabled = false;
             }
+            emergencySites?.BeginRound();
         }
+        float EffectiveCableReach=>emergencySites!=null&&emergencySites.Active!=null?emergencySites.Active.cableReach:cableReach;
+        bool HitchReady(int i,TrailerBody target)=>emergencySites==null||emergencySites.Active==null||emergencySites.HitchReady(i,target);
         TrailerBody Target(int i) => assigned[i] >= 0 && assigned[i] < trailers.Length ? trailers[assigned[i]] : null;
         bool Upright(TrailerBody trailer) => Vector3.Dot(trailer.transform.up, Vector3.up) > uprightThreshold;
         Vector3 Eye(TrailerBody trailer)
@@ -82,8 +106,8 @@ namespace LWS.TruckExtremeHauling
             Vector3 aligned = AlignedRoot(i, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
             switch (stage[i])
             {
-                case RescueStage.Approach: return target.Body.position + RecoverySide(target) * (recoveryAttempts[i] == 0 ? 12 : 17) - forward * 2;
-                case RescueStage.ClearSide: return aligned + RecoverySide(target) * 18 + forward * 12;
+                case RescueStage.Approach: return emergencySites!=null&&emergencySites.FloodActive?emergencySites.DryBankApproach(i,target):target.Body.position + RecoverySide(target) * (recoveryAttempts[i] == 0 ? 12 : 17) - forward * 2;
+                case RescueStage.ClearSide: return aligned + (emergencySites!=null&&emergencySites.FloodActive?Vector3.right:RecoverySide(target)) * 18 + forward * 12;
                 case RescueStage.AlignLane: return aligned + forward * 22;
                 case RescueStage.Straighten: return aligned + forward * 50;
                 case RescueStage.ReverseHitch: return aligned;
@@ -97,7 +121,8 @@ namespace LWS.TruckExtremeHauling
             transmission.automaticTransmissionDNRShiftType=stage[i]==RescueStage.ReverseHitch
                 ? NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput
                 : NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
-            if(stage[i]==RescueStage.Winching)return Vector2.zero;
+            if(stage[i]==RescueStage.Winching)return emergencySites!=null&&emergencySites.FrontRecoveryTow(i)&&!emergencySites.Extracted[i]
+                ?DriveToward(i,emergencySites.FrontTowDestination(i),4,true):Vector2.zero;
             if (hitches[i].Attached != null)
             {
                 Vector3 destination = base.Destination(i);
@@ -148,27 +173,42 @@ namespace LWS.TruckExtremeHauling
             var target = Target(i); if (target == null) { if (ai) Park(i); return; }
             if (hitches[i].Attached != null && hitches[i].Attached != target)
             { assigned[i] = Array.IndexOf(trailers, hitches[i].Attached); target = Target(i); }
+            if(emergencySites!=null&&emergencySites.Active!=null)
+            {
+                emergencySites.Step(i,target,winches[i],dt);
+                if(target.CargoCondition<=0){DetachCable(i);hitches[i].Release();SetStage(i,RescueStage.Failed);retired[i]=true;return;}
+            }
             float eyeDistance = Vector3.Distance(trucks[i].transform.TransformPoint(winches[i].anchor), Eye(target));
             bool tipped = !Upright(target);
             if (ai && stage[i] == RescueStage.Approach)
             {
-                if (!tipped) SetStage(i, RescueStage.ClearSide);
+                if (!tipped&&HitchReady(i,target)) SetStage(i, RescueStage.ClearSide);
                 else if (Vector3.ProjectOnPlane(trucks[i].body.position - Destination(i), Vector3.up).magnitude < 3 && trucks[i].body.linearVelocity.magnitude < 1.5f)
                 { HookCable(i, target); SetStage(i, RescueStage.Winching); }
             }
             if (!ai && actions[i] && hitches[i].Attached == null)
             {
-                if (winches[i].connectedBody != null) DetachCable(i);
-                else if (!tipped && Vector3.Distance(hitches[i].Anchor.position, target.Kingpin.position) < .65f) hitches[i].GuideCoupling(target, dt);
-                else if (eyeDistance < cableReach) HookCable(i, target);
+                if (winches[i].connectedBody != null) { emergencySites?.ParkExtractedLandingGear(i,target);DetachCable(i); }
+                else if (!tipped && HitchReady(i,target) && Vector3.Distance(hitches[i].Anchor.position, target.Kingpin.position) < .65f) hitches[i].GuideCoupling(target, dt);
+                else if (eyeDistance < EffectiveCableReach) HookCable(i, target);
             }
             if (winches[i].connectedBody != null)
             {
+                if(emergencySites!=null&&emergencySites.FloodActive&&!emergencySites.FrontRecoveryTow(i)&&!tipped&&(ai||ActionHeld(i)))
+                {
+                    // Stop pulling the roof as soon as it is actually upright.
+                    // A roof cable kept until bank arrival simply rolls a floating
+                    // trailer onto its OTHER side. Re-hook the existing joint at
+                    // the real native front kingpin and use actual wheel towing.
+                    Vector3 frontEye=target.Kingpin.position;
+                    if(Vector3.Distance(trucks[i].transform.TransformPoint(winches[i].anchor),frontEye)<=EffectiveCableReach)
+                    {ConfigureRecoveryCable(winches[i],trucks[i].body,target.Body,frontEye,EffectiveCableReach);emergencySites.SetFloodTowPhase(i,target,true);stable[i]=0;}
+                }
                 if (ai || ActionHeld(i))
                     winches[i].maxDistance = Mathf.Max(2, winches[i].maxDistance - reelSpeed * dt * (option == 3 ? .8f : 1));
-                if (ai) Park(i);
-                stable[i] = !tipped && target.Body.angularVelocity.magnitude < .65f ? stable[i] + dt : 0;
-                if (ai && stable[i] > 1) { DetachCable(i); target.SetBrakes(1); SetStage(i, RescueStage.ClearSide); }
+                if (ai&&!(emergencySites!=null&&emergencySites.FrontRecoveryTow(i)&&!emergencySites.Extracted[i])) Park(i);
+                stable[i] = !tipped && HitchReady(i,target) && target.Body.angularVelocity.magnitude < .65f ? stable[i] + dt : 0;
+                if (ai && stable[i] > 1) { emergencySites?.ParkExtractedLandingGear(i,target);DetachCable(i); target.SetBrakes(1); SetStage(i, RescueStage.ClearSide); }
                 else if (ai && stageTime[i] > 25 && tipped)
                 { DetachCable(i); recoveryAttempts[i]++; SetStage(i, RescueStage.Approach); }
             }
@@ -182,7 +222,7 @@ namespace LWS.TruckExtremeHauling
                 if (heading < 5 && lateral < .45f && Vector3.Dot(trucks[i].body.position - aligned, target.transform.forward) > 18)
                     SetStage(i, RescueStage.ReverseHitch);
             }
-            if (hitches[i].Attached == null && !tipped && (ai && stage[i] == RescueStage.ReverseHitch || !ai && ActionHeld(i)))
+            if (hitches[i].Attached == null && !tipped && HitchReady(i,target) && (ai && stage[i] == RescueStage.ReverseHitch || !ai && ActionHeld(i)))
             {
                 if (hitches[i].Hitch.module.vehicleController != null && target.Vehicle.IsInitialized && hitches[i].GuideCoupling(target, dt))
                 { DetachCable(i); SetStage(i, RescueStage.Tow); }
@@ -191,13 +231,13 @@ namespace LWS.TruckExtremeHauling
             if (hitches[i].Attached != null)
             {
                 DetachCable(i); stage[i] = RescueStage.Tow;
-                bool inDepot = AtRestIn(i, target.Body, objectives[i]) && Upright(target) && trucks[i].body.linearVelocity.magnitude < 1;
+                bool inDepot = AtRestIn(i, target.Body, objectives[i]) && Upright(target) && trucks[i].body.linearVelocity.magnitude < 1 && (emergencySites==null||emergencySites.Active==null||emergencySites.DeliveryReady(i,target));
                 if (ai && Vector3.ProjectOnPlane(target.Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude < 6) Park(i);
                 stable[i] = inDepot ? stable[i] + dt : 0;
                 if (stable[i] >= 2 && !deliveredTargets[assigned[i]])
                 {
                     deliveredTargets[assigned[i]] = true; SharedRescues++;
-                    Award(i, option==1 ? 500 + Mathf.Max(0,matchSeconds-age)*15 : (option==3?2000:1000) * target.CargoCondition + Mathf.Max(0, matchSeconds - age) * 3, "cargo_rescued");
+                    Award(i, option==1 ? 500 + Mathf.Max(0,matchSeconds-age)*15 : (option>=3?2000:1000) * target.CargoCondition + Mathf.Max(0, matchSeconds - age) * 3, "cargo_rescued");
                     hitches[i].Release(); target.SetBrakes(1); SetStage(i, RescueStage.Delivered);
                     if (!Cooperative) retired[i] = true;
                     else if (CooperativeSuccess) for (int slot = 0; slot < setup.count; slot++) retired[slot] = true;
@@ -212,7 +252,14 @@ namespace LWS.TruckExtremeHauling
             trucks[i].TickDrive(Vector2.zero);
             var input = trucks[i].tractorMotor.vehicle.input;
             input.states.handbrake = input.states.handbrakeRaw = 1;
-            input.states.brakes = input.states.brakesRaw = 1;
+            if(emergencySites!=null&&emergencySites.Active!=null)
+            {
+                // Native AutoDNR interprets a held brake axis at standstill as
+                // reverse. A recovery-site parked truck uses its actual handbrake.
+                input.states.throttle=input.states.throttleRaw=0;
+                input.states.brakes=input.states.brakesRaw=0;
+            }
+            else input.states.brakes = input.states.brakesRaw = 1;
         }
         void SetStage(int i, RescueStage next)
         {
@@ -233,15 +280,27 @@ namespace LWS.TruckExtremeHauling
         void HookCable(int i, TrailerBody target)
         {
             var winch = winches[i];
-            Vector3 eye = Eye(target), anchor = trucks[i].transform.TransformPoint(winch.anchor);
-            if (target.Module.module.attached || Vector3.Distance(eye, anchor) > cableReach) return;
-            winch.autoConfigureConnectedAnchor = false; winch.connectedBody = target.Body;
-            winch.connectedAnchor = target.transform.InverseTransformPoint(eye);
-            float mass = Mathf.Min(target.Body.mass, trucks[i].body.mass);
-            winch.spring = mass * 10; winch.damper = Mathf.Sqrt(winch.spring * mass) * 1.4f;
-            winch.minDistance = 0; winch.maxDistance = Mathf.Max(2, Vector3.Distance(anchor, eye) - .1f);
-            winch.breakForce = mass * 80; winch.enableCollision = true; winch.tolerance = .05f;
+            bool frontTow=emergencySites!=null&&emergencySites.FloodActive&&Upright(target);
+            Vector3 eye = frontTow?target.Kingpin.position:Eye(target), anchor = trucks[i].transform.TransformPoint(winch.anchor);
+            if (target.Module.module.attached || Vector3.Distance(eye, anchor) > EffectiveCableReach) return;
+            ConfigureRecoveryCable(winch,trucks[i].body,target.Body,eye,EffectiveCableReach);
+            if(emergencySites!=null&&emergencySites.FloodActive)emergencySites.SetFloodTowPhase(i,target,frontTow);
             target.SetBrakes(0); stable[i] = 0;
+        }
+        // One cable tuning authority for Cargo Crisis and the thin-ice rescue adapter.
+        // Callers own the meaningful hook action and distance/ownership checks.
+        public static void ConfigureRecoveryCable(SpringJoint joint,Rigidbody tractor,Rigidbody load,Vector3 worldEye,float reach)
+        {
+            if(joint==null||tractor==null||load==null)throw new ArgumentNullException("A physical recovery joint, tractor and cargo body are required.");
+            Vector3 anchor=tractor.transform.TransformPoint(joint.anchor);
+            float distance=Vector3.Distance(anchor,worldEye);
+            if(distance>reach)throw new InvalidOperationException("The cargo eye is outside the recovery cable reach.");
+            joint.autoConfigureConnectedAnchor=false; joint.connectedBody=load;
+            joint.connectedAnchor=load.transform.InverseTransformPoint(worldEye);
+            float mass=Mathf.Min(load.mass,tractor.mass);
+            joint.spring=mass*10; joint.damper=Mathf.Sqrt(joint.spring*mass)*1.4f;
+            joint.minDistance=0; joint.maxDistance=Mathf.Max(2,distance-.1f);
+            joint.breakForce=mass*80; joint.enableCollision=true; joint.tolerance=.05f;
         }
         void DetachCable(int i)
         {
@@ -273,7 +332,7 @@ namespace LWS.TruckExtremeHauling
             { float t = point / 11f; cables[i].SetPosition(point, Vector3.Lerp(a, b, t) + Vector3.down * Mathf.Sin(t * Mathf.PI) * Mathf.Min(.7f, slack * .35f)); }
         }
         protected override void StopGame()
-        { if (winches != null) for (int i = 0; i < winches.Length; i++) if (winches[i] != null) DetachCable(i); base.StopGame(); }
+        { if (winches != null) for (int i = 0; i < winches.Length; i++) if (winches[i] != null) DetachCable(i); base.StopGame();emergencySites?.StopRound(); }
         protected override void OnDestroy()
         { if (ownedCableMaterial != null) Destroy(ownedCableMaterial); base.OnDestroy(); }
     }

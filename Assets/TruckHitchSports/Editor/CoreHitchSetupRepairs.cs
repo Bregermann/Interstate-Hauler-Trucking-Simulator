@@ -69,6 +69,21 @@ namespace LWS.TruckHitchSports.Editor
             }
             EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
         }
+        public static void RepairActiveHandoffLandingGear()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before extending relay receiving jacks.");
+            var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if(scene.path!="Assets/TruckHitchSports/Scenes/HitchHandoff.unity")throw new InvalidOperationException("Open the saved Hitch Handoff venue.");
+            var match=UnityEngine.Object.FindAnyObjectByType<HandoffMatch>();
+            if(match==null)throw new InvalidOperationException("Preserve the original relay rigs.");
+            foreach(var load in match.trailers)
+            {
+                var stand=load.Module.module.trailerStand.transform;Undo.RecordObject(stand,"Extend physical relay receiving jack");
+                var before=stand.localPosition;var after=before;after.y=.499f;stand.localPosition=after;EditorUtility.SetDirty(stand);
+                Debug.Log("HH10_HANDOFF_JACK "+load.name+" "+before.ToString("F4")+" -> "+after.ToString("F4"));
+            }
+            Physics.SyncTransforms();EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+        }
         [MenuItem("LWS/Truck Sports/Alpha 0.10/Repair Active Trebuchet Apparatus")]
         public static void RepairActiveTrebuchetApparatus()
         {

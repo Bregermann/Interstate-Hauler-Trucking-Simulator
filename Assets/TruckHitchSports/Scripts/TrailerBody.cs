@@ -86,10 +86,14 @@ namespace LWS.TruckHitchSports
         {
             get { if (wheels != null) foreach (var wheel in wheels) if (wheel != null && wheel.IsGrounded) return true; return false; }
         }
+        public void DamageCargo(float fraction)
+        {
+            if(!float.IsNaN(fraction)&&!float.IsInfinity(fraction))CargoCondition=Mathf.Max(0,CargoCondition-Mathf.Max(0,fraction));
+        }
         void OnCollisionEnter(Collision collision)
         {
             LastImpact = collision.relativeVelocity.magnitude;
-            if (LastImpact > 3) CargoCondition = Mathf.Max(0, CargoCondition - (LastImpact - 3) * .012f);
+            if (LastImpact > 3) DamageCargo((LastImpact - 3) * .012f);
         }
     }
 }

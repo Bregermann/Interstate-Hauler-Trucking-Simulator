@@ -1,0 +1,171 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using LWS.TruckHitchSports.Editor;
+using LWS.TruckSports;
+using LWS.TruckSports.Editor;
+
+namespace LWS.TruckExtremeHauling.Editor
+{
+    public static class ThinIceRescueAuthoring
+    {
+        const string Folder = "TruckExtremeHauling";
+        [MenuItem("Truck Sports/Alpha 0.10/Install active Thin Ice convoy rescue")]
+        public static void InstallActiveConvoyRescue() => UpgradeActiveScene();
+
+        public static ThinIceRescueObjectives UpgradeActiveScene()
+        {
+            if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Stop Play Mode before authoring the rescue incident.");
+            var scene = SceneManager.GetActiveScene();
+            if (scene.path != "Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity")
+                throw new InvalidOperationException("Open the existing saved IceRoadReckoning scene.");
+            var match = UnityEngine.Object.FindAnyObjectByType<ThinIceMatch>();
+            if (match == null || match.gameObject.scene != scene || match.ice == null || match.ice.Length == 0)
+                throw new InvalidOperationException("Preserve the original load-sensitive lake and match.");
+            if (match.trucks == null || match.trucks.Length != 4 || match.trailers == null || match.trailers.Length != 4)throw new InvalidOperationException("The original four-slot recovery rig configuration is required.");
+            if (match.rescue != null) { RepairFlotation(match.rescue); return match.rescue; }
+            var contact = AssetDatabase.LoadAssetAtPath<PhysicsMaterial>("Assets/TruckExtremeHauling/Materials/Freight concrete.asset");
+            var ground = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckExtremeHauling/Materials/Quarry and depot asphalt.mat");
+            var steel = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckExtremeHauling/Materials/Freight tower gunmetal.mat");
+            var safety = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckExtremeHauling/Materials/Freight safety orange.mat");
+            var water = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckWaterSports/Materials/BlackwaterMatch river surface.mat");
+            if (contact == null || ground == null || steel == null || safety == null || water == null)
+                throw new InvalidOperationException("Existing freight contact/materials and owned River Modeler water material are required.");
+
+            var rescue = match.gameObject.AddComponent<ThinIceRescueObjectives>(); rescue.match = match;
+            var equipment = new GameObject("Convoy Rescue · original stranded cargo and northern recovery station").transform;
+            equipment.SetParent(match.transform, false); rescue.equipment = equipment;
+            rescue.incidentIce = match.ice.OrderBy(tile => Vector3.SqrMagnitude(tile.transform.position - new Vector3(105,0,70))).First();
+            var cargo = HitchAuthoring.CreateTrailer(rescue.incidentIce.transform.position + Vector3.up * 1.2f, Quaternion.identity, "Original NPC freight trailer · real ice breakthrough rescue");
+            cargo.transform.SetParent(equipment, true); rescue.strandedCargo = cargo;
+            RepairFlotation(rescue);
+            var first = match.ice[0].surface.bounds;
+            foreach (var tile in match.ice) first.Encapsulate(tile.surface.bounds);
+            rescue.waterBounds = new Bounds(first.center, new Vector3(first.size.x,100,first.size.z));
+            rescue.cableMaterial = safety;
+
+            var shore = new GameObject("Northern shore physical convoy rescue destination").transform;
+            shore.SetParent(equipment, false); shore.position = new Vector3(105,.35f,340); rescue.shore = shore;
+            SportsEventAuthoring.Box("Supported northern rescue station apron", new Vector3(105,-.65f,335), new Vector3(350,2,90), ground, contact, equipment);
+            // An actual shallow ramp prevents a buoyant trailer meeting an
+            // impossible vertical ice edge. Native wheels/contacts do the lift.
+            Vector3 low = rescue.incidentIce.transform.position + new Vector3(0,-3,0);
+            Vector3 high = rescue.incidentIce.transform.position + new Vector3(0,.35f,22);
+            var ramp = SportsEventAuthoring.Box("Physical submerged extraction ramp", (low+high)*.5f, new Vector3(9,.35f,Vector3.Distance(low,high)), steel, contact, equipment);
+            ramp.transform.rotation = Quaternion.Euler(-Mathf.Atan2(high.y-low.y,high.z-low.z)*Mathf.Rad2Deg,0,0);
+            var waterPatch = GameObject.CreatePrimitive(PrimitiveType.Quad); waterPatch.name = "Actual lake water below fractured ice sheets";
+            waterPatch.transform.SetParent(equipment, false); waterPatch.transform.position = new Vector3(rescue.waterBounds.center.x,-.55f,rescue.waterBounds.center.z);
+            waterPatch.transform.rotation = Quaternion.Euler(90,0,0); waterPatch.transform.localScale = new Vector3(rescue.waterBounds.size.x,rescue.waterBounds.size.z,1);
+            waterPatch.GetComponent<Renderer>().sharedMaterial = water; UnityEngine.Object.DestroyImmediate(waterPatch.GetComponent<Collider>());
+            foreach (int side in new[] { -1,1 })
+            {
+                OwnedProp(equipment, "Assets/ShipContainerPack/URP/Prefabs/ShipContainerGray_URP.prefab", new Vector3(105+side*36,.35f,365), new Vector3(12,5,6));
+                OwnedProp(equipment, "Assets/RoadPropsPack/URP/Prefabs/RoadBlock02_URP.prefab", new Vector3(105+side*12,.35f,323), new Vector3(3,1.3f,.7f));
+                var beacon = new GameObject("Recovery shore amber beacon").AddComponent<Light>(); beacon.transform.SetParent(equipment,false);
+                beacon.transform.position = new Vector3(105+side*12,3,323); beacon.type = LightType.Point; beacon.color = new Color(1,.45f,.08f); beacon.range = 22; beacon.intensity = 4;
+            }
+            equipment.gameObject.SetActive(false); match.rescue = rescue;
+            EditorUtility.SetDirty(match); EditorUtility.SetDirty(rescue); EditorSceneManager.MarkSceneDirty(scene);
+            Debug.Log("Convoy Rescue authored: original NWH NPC trailer, actual load-stressed incident ice, Archimeds recovery buoyancy, extraction ramp and supported shore. Options0–2 geometry stays inactive. Save explicitly; runtime acceptance is pending.");
+            return rescue;
+        }
+
+        static void OwnedProp(Transform parent, string source, Vector3 position, Vector3 size)
+        {
+            var holder = new GameObject("Owned rescue station equipment").transform; holder.SetParent(parent,false); holder.position = position;
+            LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(holder,source,size,0,true,Folder);
+        }
+
+        static SportsFloatingBody AddFlotation(Rigidbody body, ThinIceMatch match, string label, bool cargo)
+        {
+            var existing = body.GetComponent<SportsFloatingBody>();
+            if (existing != null && existing.session != match) throw new InvalidOperationException("This body already has a different flotation authority; preserve it rather than duplicating.");
+            var boxes = body.GetComponentsInChildren<BoxCollider>(true).Where(c => !c.isTrigger && OwningBody(c) == body && (!cargo || c.name == "trailer")).ToArray();
+            if (boxes.Length == 0) throw new InvalidOperationException("Original sealed hull colliders required for recovery displacement: " + body.name + "; found " + string.Join(", ", body.GetComponentsInChildren<BoxCollider>(true).Select(c=>c.name+" owner="+(OwningBody(c)!=null?OwningBody(c).name:"none")+" trigger="+c.isTrigger)));
+            // collider.bounds can still describe the prefab's previous world pose in
+            // stopped authoring immediately after CreateTrailer/moving a Transform.
+            // Transform the exact collider-local vertices; no physics AABB or stale
+            // world pose is involved, and every original closed box remains closed.
+            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var source = cube.GetComponent<MeshFilter>().sharedMesh;
+            var unitVertices = source.vertices; var unitTriangles = source.triangles;
+            UnityEngine.Object.DestroyImmediate(cube);
+            var vertices = new List<Vector3>(); var triangles = new List<int>();
+            foreach (var collider in boxes)
+            {
+                int first = vertices.Count;
+                var toBody = body.transform.worldToLocalMatrix * collider.transform.localToWorldMatrix;
+                foreach (var vertex in unitVertices) vertices.Add(toBody.MultiplyPoint3x4(collider.center + Vector3.Scale(vertex, collider.size)));
+                bool mirrored = toBody.determinant < 0;
+                for (int index = 0; index < unitTriangles.Length; index += 3)
+                {
+                    triangles.Add(first + unitTriangles[index]);
+                    triangles.Add(first + unitTriangles[index + (mirrored ? 2 : 1)]);
+                    triangles.Add(first + unitTriangles[index + (mirrored ? 1 : 2)]);
+                }
+            }
+            string path = "Assets/TruckExtremeHauling/Art/"+label+".asset";
+            var rebuilt = new Mesh { name = label }; rebuilt.SetVertices(vertices); rebuilt.SetTriangles(triangles, 0);
+            rebuilt.RecalculateNormals(); rebuilt.RecalculateBounds();
+            var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+            if (mesh == null)
+            {
+                Directory.CreateDirectory("Assets/TruckExtremeHauling/Art"); AssetDatabase.CreateAsset(rebuilt, path); mesh = rebuilt;
+            }
+            else { EditorUtility.CopySerialized(rebuilt, mesh); UnityEngine.Object.DestroyImmediate(rebuilt); EditorUtility.SetDirty(mesh); }
+            var floating = existing != null ? existing : body.gameObject.AddComponent<SportsFloatingBody>();
+            floating.body=body;floating.proxy=mesh;floating.session=match;floating.waterHeight=-.55f;floating.waveAmplitude=.025f;floating.enabled=false;
+            EditorUtility.SetDirty(floating);
+            Debug.Log("CONVOY_RESCUE_HULL " + body.name + " mass=" + body.mass + " localCenter=" + mesh.bounds.center + " localSize=" + mesh.bounds.size + " sealedVolume=" + Volume(mesh).ToString("F3") + "m3");
+            return floating;
+        }
+
+        static void RepairFlotation(ThinIceRescueObjectives rescue)
+        {
+            var match = rescue.match;
+            rescue.cargoFloat = AddFlotation(rescue.strandedCargo.Body, match, "Stranded original cargo sealed displacement", true);
+            rescue.playerFloats = new SportsFloatingBody[match.trucks.Length];
+            var auxiliary = new List<SportsFloatingBody>();
+            for (int i = 0; i < match.trucks.Length; i++)
+            {
+                var tractor = match.trucks[i];
+                rescue.playerFloats[i] = AddFlotation(tractor.body, match, "Recovery tractor sealed displacement", false);
+                foreach (var body in tractor.GetComponentsInChildren<Rigidbody>(true))
+                {
+                    if (body == tractor.body || !body.GetComponentsInChildren<BoxCollider>(true).Any(c => !c.isTrigger && OwningBody(c) == body)) continue;
+                    // The original NWH cab is a separate 1500kg physical body with
+                    // its own sealed 8.813m3 collider. Omitting it leaves only a
+                    // 4.657m3 chassis supporting an 8900kg assembly: it must sink.
+                    // Keep that jointed cab and apply the same vendor hydrostatic
+                    // authority once on its actual body, without changing its mass.
+                    auxiliary.Add(AddFlotation(body, match, "Recovery " + body.name + " sealed displacement", false));
+                }
+            }
+            rescue.auxiliaryFloats = auxiliary.ToArray();
+            EditorUtility.SetDirty(rescue); EditorSceneManager.MarkSceneDirty(rescue.gameObject.scene);
+            Debug.Log("CONVOY_RESCUE_HULLS_REPAIRED: exact collider-local closed meshes, original asset GUIDs retained; " + auxiliary.Count + " native child bodies retain their own vendor hydrostatics. Rescue option only; no global water, gravity, mass or joint changes.");
+        }
+        static float Volume(Mesh mesh)
+        {
+            var vertices = mesh.vertices; var triangles = mesh.triangles; double volume = 0;
+            for (int i = 0; i < triangles.Length; i += 3)
+                volume += Vector3.Dot(vertices[triangles[i]], Vector3.Cross(vertices[triangles[i + 1]], vertices[triangles[i + 2]])) / 6d;
+            return (float)Math.Abs(volume);
+        }
+        static Rigidbody OwningBody(Collider collider)
+        {
+            // Resolve the same nearest-parent Rigidbody ownership from the saved
+            // hierarchy. PhysX attachedRigidbody can be null while an entire authored
+            // incident is inactive; authoring must not activate it to query ownership.
+            for(var cursor=collider.transform;cursor!=null;cursor=cursor.parent)
+            { var body=cursor.GetComponent<Rigidbody>();if(body!=null)return body; }
+            return null;
+        }
+    }
+}

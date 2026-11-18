@@ -13,6 +13,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  readonly FixedJoint[] cargoJoints=new FixedJoint[4];readonly int[] boatCargo={-1,-1,-1,-1},cargoOwner={-1,-1,-1,-1};
  readonly bool[] banked=new bool[4];readonly Vector3[] cargoStarts=new Vector3[4];
  readonly Light[] healingAt=new Light[4];readonly float[] rescueProgress=new float[4],quietSeconds=new float[4];Light[] shelterLights=System.Array.Empty<Light>();bool capturedCargoStarts;float nextStrike,targetSwitch;int hunted;
+ readonly Collider[][] vesselHulls=new Collider[4][];float creatureCrown;
  protected override bool Canoe=>false;public override string Title=>"BLACKWATER: SOMETHING BELOW";public override bool Cooperative=>option==3;
  public override string OptionLabel=>new[]{"MIDNIGHT CROSSING","SUPPLY RUN","SURVIVAL","COOPERATIVE BLACKWATER ESCAPE"}[option];
  public override string ResultUnit=>Cooperative?"DELIVERIES":"SEC";public override bool ResultHigherIsBetter=>option==2||Cooperative;
@@ -28,7 +29,18 @@ public sealed class BlackwaterMatch:WaterMatch {
  public override string Results=>Cooperative?(CooperativeEscaped?"CONVOY ESCAPED":"COOPERATIVE EXTRACTION FAILED")+"\nShared supplies "+BankedSupplies+" / "+SharedSuppliesNeeded+"\n"+Standings:base.Results;
  // Capture the saved positions before the setup screen can leave gravity-only
  // crates falling while their match-gated flotation is inactive.
- protected override void Awake(){base.Awake();if(vessels!=null)foreach(var vessel in vessels)if(vessel!=null)vessel.HullImpact+=ContactImpact;var lights=new System.Collections.Generic.List<Light>();foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))if(light.type==LightType.Point&&light.color.g>light.color.r*1.3f&&light.color.g>light.color.b*1.1f)lights.Add(light);shelterLights=lights.ToArray();if(supplies==null||supplies.Length<4)return;for(int cargo=0;cargo<4;cargo++)if(supplies[cargo]!=null){cargoStarts[cargo]=supplies[cargo].position;supplies[cargo].isKinematic=true;}capturedCargoStarts=true;}
+ protected override void Awake(){base.Awake();CachePhysicalHulls();if(vessels!=null)foreach(var vessel in vessels)if(vessel!=null)vessel.HullImpact+=ContactImpact;var lights=new System.Collections.Generic.List<Light>();foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))if(light.type==LightType.Point&&light.color.g>light.color.r*1.3f&&light.color.g>light.color.b*1.1f)lights.Add(light);shelterLights=lights.ToArray();if(supplies==null||supplies.Length<4)return;for(int cargo=0;cargo<4;cargo++)if(supplies[cargo]!=null){cargoStarts[cargo]=supplies[cargo].position;supplies[cargo].isKinematic=true;}capturedCargoStarts=true;}
+ void CachePhysicalHulls(){
+  var shape=entity!=null?entity.GetComponent<BoxCollider>():null;
+  if(shape!=null)creatureCrown=(shape.center.y+shape.size.y*.5f)*Mathf.Abs(shape.transform.lossyScale.y);
+  if(vessels==null)return;
+  for(int i=0;i<Mathf.Min(4,vessels.Length);i++)if(vessels[i]!=null){
+   var hulls=new System.Collections.Generic.List<Collider>();
+   foreach(var hull in vessels[i].GetComponentsInChildren<Collider>(true))if(!hull.isTrigger&&hull.GetComponentInParent<Rigidbody>(true)==vessels[i].body)hulls.Add(hull);
+   vesselHulls[i]=hulls.ToArray();
+  }
+ }
+ float HullBottom(int slot){float bottom=vessels[slot].body.position.y;if(vesselHulls[slot]!=null)foreach(var hull in vesselHulls[slot])if(hull!=null&&hull.enabled)bottom=Mathf.Min(bottom,hull.bounds.min.y);return bottom;}
  protected override void BeginWater(){
   nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;entity.position=new Vector3(0,-5,90);
   for(int i=0;i<4;i++){
@@ -132,8 +144,14 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(Clock>=targetSwitch){targetSwitch=Clock+12;float loudest=-1;for(int i=0;i<setup.count;i++){float sound=vessels[i].body.linearVelocity.sqrMagnitude;if(!Stranded[i]&&Integrity[i]>0&&FinishTimes[i]<0&&sound>loudest){loudest=sound;hunted=i;}}}
   var victim=vessels[hunted];if(Integrity[hunted]<=0||FinishTimes[hunted]>=0)return;
   bool quiet=victim.body.linearVelocity.magnitude<.8f&&quietSeconds[hunted]<7,sheltered=LightShelter(victim.body.position);
-  Vector3 desired=victim.body.position-Vector3.up*3;if(Clock<35||quiet||sheltered)desired+=victim.transform.forward*30;
-  Vector3 delta=desired-entity.position;entity.MovePosition(entity.position+Vector3.ClampMagnitude(delta,entitySpeed*dt));if(delta.sqrMagnitude>1)entity.MoveRotation(Quaternion.LookRotation(delta.normalized));
+  // A 24m-long kinematic hull must not pitch vertically through a boat while
+  // pursuing a tiny depth error. Keep the actual creature horizontal below
+  // both the waterline and the target's real hull. Wakes/strikes remain physical.
+  Vector3 desired=victim.body.position;
+  desired.y=Mathf.Min(course.Point(0).y,HullBottom(hunted))-creatureCrown-.6f;
+  if(Clock<35||quiet||sheltered)desired+=Vector3.ProjectOnPlane(victim.transform.forward,Vector3.up).normalized*30;
+  Vector3 delta=desired-entity.position;entity.MovePosition(entity.position+Vector3.ClampMagnitude(delta,entitySpeed*dt));
+  Vector3 heading=Vector3.ProjectOnPlane(delta,Vector3.up);if(heading.sqrMagnitude>1)entity.MoveRotation(Quaternion.LookRotation(heading.normalized,Vector3.up));
   float proximity=Vector3.Distance(entity.position,victim.body.position);
   if(proximity<18){victim.body.AddForce((victim.body.position-entity.position).normalized*Mathf.Sin(Clock*2)*2,ForceMode.Acceleration);victim.flotation.waveAmplitude=.1f+(18-proximity)*.035f;}else victim.flotation.waveAmplitude=.1f;
   if(proximity>=7||Clock<nextStrike||Clock<35||quiet||sheltered)return;

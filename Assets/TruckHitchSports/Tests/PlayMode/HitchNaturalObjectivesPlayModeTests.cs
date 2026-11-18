@@ -55,8 +55,9 @@ public sealed class HitchNaturalObjectivesPlayModeTests
             // These are ordinary setup choices, not changes to the course, timer,
             // physics parameters, actor poses or any gameplay result.
             match.GetType().GetField("option").SetValue(match, 0);
-            if (single) Read(match, "setup").GetType().GetField("count").SetValue(Read(match, "setup"), 1);
+            Read(match, "setup").GetType().GetField("count").SetValue(Read(match, "setup"), single ? 1 : 4);
             Call(match, "NormalizeSetup"); Call(match, "AllBots");
+            Assert.That(Count(match), Is.EqualTo(single ? 1 : 4), "The requested participant count must be exercised explicitly.");
             object weather = Read(match, "presentationWeather");
             if (weather != null && Read(weather, "presets") != null) Call(Read(weather, "presets"), "Select", "9aad5ff5dfa09ce468205f676714f891");
             Assert.That((bool)Call(match, "StartMatch"), Is.True, scene + " must start through the ordinary menu/session entry point.");

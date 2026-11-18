@@ -87,6 +87,62 @@ public sealed class HorrorPhysicalPlayModeTests
             Assert.That((string)Property(match, "Results"), Is.Not.Empty, diagnostics); Call(match, "SetupScreen");
         }
     }
+    [UnityTest, Timeout(90000)]
+    public IEnumerator GraveyardPhysicalSupplyIsCarriedReleasedSupportedThenRestockedAndReset()
+    {
+        var prefs = Type.GetType("LWS.TruckSports.SportsPrefs, Assembly-CSharp", true);
+        float previousScale = Time.timeScale; UnityEngine.Object match = null;
+        using ((IDisposable)prefs.GetMethod("IsolateValidation").Invoke(null, new object[] { "Alpha10PhysicalSupply" }))
+        {
+            try
+            {
+                EditorSceneManager.LoadSceneInPlayMode("Assets/TruckHorrorSports/GraveyardShift/Scenes/GraveyardShift.unity", new LoadSceneParameters(LoadSceneMode.Single));
+                yield return null; yield return null;
+                match = UnityEngine.Object.FindObjectsByType(MatchType, FindObjectsSortMode.None).Single();
+                var job = Field(match, "supplyJob"); Assert.That(job, Is.Not.Null, "Apply the explicit physical-objective scene upgrade before this acceptance check.");
+                Field(match, "setup").GetType().GetField("count").SetValue(Field(match, "setup"), 1);
+                match.GetType().GetField("option").SetValue(match, 0); Call(match, "AllBots"); Assert.That((bool)Call(match, "StartMatch"), Is.True);
+                var parcel = ((Rigidbody[])Field(job, "parcels"))[0]; var receiver = ((BoxCollider[])Field(job, "receivers"))[0];
+                var shape = parcel.GetComponent<BoxCollider>(); Vector3 start = parcel.position;
+                Assert.That((bool)Call(job, "Delivered", 0), Is.False);
+                bool sawCarried = false, sawReleasedResting = false;
+                float nextSupplyObservation=30;int supplyObservations=0;
+                float deadline = Time.realtimeSinceStartup + 45; Time.timeScale = 3;
+                while (!(bool)Call(job, "Delivered", 0) && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                {
+                    if(supplyObservations<4 && (float)Property(match,"Age")>=nextSupplyObservation)
+                    {nextSupplyObservation+=30;supplyObservations++;Debug.Log("HH10_SUPPLY_STATE clock="+Property(match,"Age")+" "+Call(job,"Diagnostic",0)+" "+SupplyPathDiagnostic(match,0));}
+                    bool carrying = (bool)Call(job, "Carrying", 0);
+                    if (carrying) { sawCarried = true; Assert.That((bool)Call(job, "Delivered", 0), Is.False, "A carried parcel cannot already be restocked."); }
+                    if (sawCarried && !carrying && shape.bounds.min.y >= receiver.bounds.max.y - .08f && shape.bounds.min.y <= receiver.bounds.max.y + .12f && parcel.linearVelocity.magnitude < .7f)
+                        sawReleasedResting = true;
+                    yield return new WaitForFixedUpdate();
+                }
+                string state = "carried=" + sawCarried + " releasedResting=" + sawReleasedResting + " parcel=" + parcel.position + " velocity=" + parcel.linearVelocity + " target=" + receiver.bounds + " · " + NightDiagnostics(match)+" · "+Call(job,"Diagnostic",0)+" "+SupplyPathDiagnostic(match,0);
+                Assert.That((bool)Call(job, "Delivered", 0), Is.True, "The normal AI/input/physics route must actually restock its supply parcel. " + state);
+                Assert.That(sawCarried, Is.True, state); Assert.That(sawReleasedResting, Is.True, state);
+                Assert.That((bool)Call(job, "Carrying", 0), Is.False, state);
+                Assert.That(Vector3.Distance(parcel.position, start), Is.GreaterThan(5), "Restocking must transport the original physical parcel. " + state);
+                Assert.That(shape.bounds.min.y, Is.InRange(receiver.bounds.max.y - .08f, receiver.bounds.max.y + .12f), state);
+                Assert.That(receiver.bounds.Contains(new Vector3(shape.bounds.center.x, receiver.bounds.center.y, shape.bounds.center.z)), Is.True, state);
+                Call(match, "SetupScreen"); yield return null; Assert.That((bool)Call(match, "StartMatch"), Is.True);
+                yield return new WaitForFixedUpdate();
+                Assert.That((bool)Call(job, "Delivered", 0), Is.False, "Normal rematch must clear the actual restocking receipt.");
+                Assert.That((bool)Call(job, "Carrying", 0), Is.False, "Normal rematch must release the previous carry joint.");
+                Assert.That(Vector3.Distance(parcel.position, start), Is.LessThan(.5f), "Normal rematch must return the original parcel to the incoming delivery.");
+                Debug.Log("ALPHA10_PHYSICAL_SUPPLY_PASS original parcel carried, physically released and supported before restock; normal reset cleared receipt. " + state);
+                Call(match, "SetupScreen");
+            }
+            finally
+            { try { if (match != null && (bool)Property(match, "Running")) Call(match, "SetupScreen"); } finally { Time.timeScale = previousScale; } }
+        }
+    }
+    static string SupplyPathDiagnostic(object match,int slot)
+    {
+        var field=match.GetType().GetField("pathCorners",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
+        var paths=(Vector3[][])field.GetValue(match);
+        return "cachedFootCorners="+(paths[slot]==null?"none":string.Join(" / ",paths[slot].Take(6).Select(c=>c.ToString("F2"))));
+    }
     [UnityTest, Timeout(150000)]
     public IEnumerator ScarecrowSeasonNaturalDefaultEscapesAndRematches()
     { return NaturalDefaultNight("ScarecrowSeason", false); }
@@ -142,7 +198,7 @@ public sealed class HorrorPhysicalPlayModeTests
                 }
                 if (requirePhysicalDelivery) ObserveDeliveries(match, deliverySeen, delivered, deliveryEvidence);
                 Time.timeScale = 1;
-                string diagnostics = name + " wall=" + (Time.realtimeSinceStartup - wallStart).ToString("F1") + "s at 3x · " + NightDiagnostics(match);
+                string diagnostics = name + " wall=" + (Time.realtimeSinceStartup - wallStart).ToString("F1") + "s at 3x Â· " + NightDiagnostics(match);
                 Assert.That((bool)Property(match, "Finished"), Is.True, "The default match must resolve through its normal rules. " + diagnostics);
                 var rules = Field(match, "rules"); int totalTasks = (int)Property(rules, "TotalTasks");
                 Assert.That(totalTasks, Is.GreaterThan(0), "A zero-objective timeout is not acceptance. " + diagnostics);
@@ -154,7 +210,7 @@ public sealed class HorrorPhysicalPlayModeTests
                     escaped++;
                     Assert.That((int)Call(match, "Objectives", i), Is.GreaterThanOrEqualTo(expectedObjectives), "An escape must follow the actual authored objective route. " + diagnostics);
                     if (!requirePhysicalDelivery) continue;
-                    Assert.That(deliverySeen[i] && delivered[i], Is.True, "The original intact trailer must be physically received while still attached. " + deliveryEvidence[i] + " · " + diagnostics);
+                    Assert.That(deliverySeen[i] && delivered[i], Is.True, "The original intact trailer must be physically received while still attached. " + deliveryEvidence[i] + " Â· " + diagnostics);
                 }
                 Assert.That(escaped, Is.GreaterThan(0), "The default escape/delivery objective must be reachable; timer expiry alone does not pass. " + diagnostics);
                 Assert.That((string)Property(match, "Results"), Is.Not.Empty, diagnostics);

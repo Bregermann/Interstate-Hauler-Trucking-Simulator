@@ -34,7 +34,10 @@ namespace LWS.TruckWaterSports.Tests
             var text=new StringBuilder("clock=").Append(Clock(match));
             for(int i=0;i<count;i++)text.Append(" | ").Append(i).Append(" pos=").Append(Body(match,i).position.ToString("F1"))
                 .Append(" gate=").Append(((int[])Field(match,"Gates"))[i]).Append(" capsize=").Append(Property(Vessel(match,i),"Capsizes"))
-                .Append(" finish=").Append(((float[])Field(match,"FinishTimes"))[i]).Append(" score=").Append(((float[])Field(match,"Scores"))[i]);
+                .Append(" finish=").Append(((float[])Field(match,"FinishTimes"))[i]).Append(" score=").Append(((float[])Field(match,"Scores"))[i])
+                .Append(" speed=").Append(Body(match,i).linearVelocity.magnitude.ToString("F1")).Append(" air=").Append(Property(Vessel(match,i),"AirborneSeconds"))
+                .Append(" landings=").Append(Property(Vessel(match,i),"Landings")).Append(" landingQuality=").Append(Property(Vessel(match,i),"LastLandingQuality"));
+            if(match.GetType().Name=="BlackwaterMatch")text.Append(" banked=").Append(Property(match,"BankedSupplies")).Append(" creatureEuler=").Append(((Rigidbody)Field(match,"entity")).rotation.eulerAngles.ToString("F1"));
             return text.ToString();
         }
         [UnityTest]public IEnumerator NaturalTeamPaddleChallengeAwardsMovingSynchronizationAndSharedResults()=>Run("PaddlePals","PaddlePalsMatch",3,4);

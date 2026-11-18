@@ -17,6 +17,11 @@ namespace LWS.TruckHorrorSports
         public HauntedCargo[] cargo;
         public Light[] headlights, venueLights;
         public HorrorFootAgent[] footAgents;
+        public HorrorSupplyJob supplyJob;
+        public GraveyardNightServices nightServices;
+        public CursedConvoyRoad convoyRoad;
+        public HorrorHarvestObjects harvestObjects;
+        public DeadEndJunctionPuzzle junctionPuzzle;
         public Transform[] roadRoute;
         public Transform exit;
         public Transform ritualAltar;
@@ -100,8 +105,8 @@ namespace LWS.TruckHorrorSports
             if (helpCopy != null) helpCopy.text = Help;
         }
         public override string Help => "KEEP YOUR HEADLIGHTS ON. TRUST YOUR EYES, NOT EVERY SIGN.\n\n" +
-            (sport == HorrorSport.GraveyardShift ? "An ordinary overnight shift: collect deliveries, service pumps, repair the breaker, answer the CB and restart the generator. Stop beside a marked station and HOLD ACTION to complete real work. Tasks unlock the final extraction. The stop changes as your shift progresses. Restored power repels the visitor. Complete every task to finish the night." :
-             sport == HorrorSport.ScarecrowSeason ? "Find the ritual objects in the maze, restore the four wards and escape through the farm gate. Corn passages change only while clear of vehicles. The scarecrow moves faster when nobody watches and hears engines. Face it with headlights to slow its approach; use alternate passages to escape. HOLD ACTION beside a ward to activate it." :
+            (sport == HorrorSport.GraveyardShift ? "An ordinary overnight shift: collect deliveries, service pumps, repair the breaker, answer the CB and restart the generator. Stop beside a marked station and HOLD ACTION to complete real work. Tasks unlock the final extraction. The stop changes as your shift progresses. Restored power repels the visitor. Complete every task to finish the night. For the delivery, exit the cab beside your colored parcel and hold ACTION to pick it up. Carry it to your matching shelf and hold ACTION to set it down; supplies count only after resting on that shelf." :
+             sport == HorrorSport.ScarecrowSeason ? "Find the ritual objects in the maze, restore the four wards and escape through the farm gate. Corn passages change only while clear of vehicles. The scarecrow moves faster when nobody watches and hears engines. Face it with headlights to slow its approach; use alternate passages to escape. HOLD ACTION beside a ward to activate it. The barn key physically opens a locked shortcut; in Ritual Hunt your carried effigy must return to the barn altar before the next search." :
              sport == HorrorSport.DeadEnd ? "Follow the road, read the numbered exit clues and drive the correct route gates. The black semi is a physical pursuer: brake, turn and use junctions to avoid it. Repeated landmarks and contradictory signs are intentional. Complete the route before taking the last exit. Survival variants award actual time alive." :
              "The load is fighting you. Tow your physically attached trailer between the containment depots. Stop both tractor AND trailer at each ward and HOLD ACTION to contain its cargo. Haunted sway, brakes and shifting weight affect real momentum. Keep the load intact and deliver it to the final depot.") +
             ModeInstructions + "\n\nMovement uses your assigned driving controls. ACTION braces a tipped cursed load using physical restoring torque; otherwise ACTION away from a station toggles headlights. Each human keeps an independent truck and camera. Cooperative variants share objectives and never award individual winner points. Eliminated participants spectate surviving trucks. Rematch restores the whole venue, cargo and encounters. Default match: four minutes.";
@@ -109,7 +114,7 @@ namespace LWS.TruckHorrorSports
             ConvoyMode ? "\n\nHAUNTED CONVOY: every real rig must stop at each ward before the shared route advances. Park in your own lane. Everyone and every surviving attached load must reach the final receiving area; one driver cannot deliver the whole team." :
             FreightSurvival ? "\n\nSURVIVAL FREIGHT: keep circulating between containment wards. Each physical stop briefly calms the load. Parking indefinitely increases its unrest. Survive the complete clock with the original cargo intact; containment stops break ties." :
             sport == HorrorSport.CursedCargo && option == 2 ? "\n\nEXORCISM RUN: channel each ward for twice the normal duration while controlling the load. The final successful ward permanently banishes the haunting and completes your attempt there; no final depot delivery is needed." :
-            RoadPuzzle ? "\n\nROUTE PUZZLE: gates alternate between LIGHTS ON and LIGHTS OFF. Read the current exit instruction. Passing with the wrong signal incurs a real three-second lockout and a 25-point penalty; correct it without stopping on the pursuer's route." :
+            RoadPuzzle ? "\n\nROUTE PUZZLE: take the west service junction. Real fork signs reveal different clues in headlights and darkness. Wrong forks lead through physical detours and cost points. Clear the generator-road closure, then choose Dawn with LIGHTS ON or the hidden Unlit exit with LIGHTS OFF. Gates alternate between LIGHTS ON and LIGHTS OFF. Read the current exit instruction. Passing with the wrong signal incurs a real three-second lockout and a 25-point penalty; correct it without stopping on the pursuer's route." :
             RoadPursuit ? "\n\nPURSUIT SURVIVAL: survive the full clock while covering real road distance and successive gates. Keep circulating; leaving the visible highway for more than a few seconds exposes you to damage." :
             sport == HorrorSport.DeadEnd && option == 3 ? "\n\nLAST HEADLIGHT STANDING: outlast the other trucks. The final surviving truck resolves the round; stay on the highway and dodge the physical pursuer." :
             sport == HorrorSport.ScarecrowSeason && option == 3 ? "\n\nCOOPERATIVE NIGHTMARE: hold ACTION beside a fallen teammate for three seconds to rescue them. Every teammate must be alive and reach the escape area after the shared ritual. AI partners can drive over and perform the same rescue." :
@@ -117,7 +122,16 @@ namespace LWS.TruckHorrorSports
         public override string Header => Title + " · " + OptionLabel + " · " + Mathf.Max(0, matchSeconds - Age).ToString("F0") + "s";
         public override string Status => Age < announcementUntil ? announcement : "STAGE " + (Escalation + 1) + " · " + (Cooperative ? "SHARED OBJECTIVES" : "COMPLETE OBJECTIVES AND ESCAPE");
         public override string Standings { get { text.Clear(); for (int i = 0; i < setup.count; i++) text.Append(setup.players[i].name).Append(" · ").Append(Objectives(i)).Append(" OBJECTIVES · ").Append(rules.health[i].ToString("F0")).Append("% · ").Append(rules.outcome[i]).Append('\n'); return text.ToString(); } }
-        public override string Results => Ending + "\n\n" + Standings;
+        public override string Results
+        {
+            get
+            {
+                string summary=Ending+"\n\n"+Standings;
+                if(junctionPuzzle!=null&&junctionPuzzle.Active)for(int i=0;i<setup.count;i++)summary+="\n"+setup.players[i].name+" · "+junctionPuzzle.EndingCaption(i);
+                if(nightServices!=null)for(int i=0;i<setup.count;i++)summary+="\n"+setup.players[i].name+" · "+nightServices.EndingFor(i);
+                return summary;
+            }
+        }
         public override bool CompactBroadcastStatus => true;
         public override bool CompactViewportHud => true;
         public override bool SupportsSplitAIViews => true;
@@ -131,6 +145,11 @@ namespace LWS.TruckHorrorSports
             detail = ParticipantState(slot) + (rules.outcome[slot] == HorrorOutcome.Active ? " · " + (sport == HorrorSport.CursedCargo ? ConditionText(slot) : rules.health[slot].ToString("F0") + "%") : " · " + Clock(rules.survival[slot]));
             if (!SurvivalMode && Cooperative) detail = "TEAM · " + detail;
             if (TaskRush) detail = "JOBS · " + detail;
+            if(nightServices!=null)
+            {
+                string cue=nightServices.CaptionFor(slot);
+                if(!string.IsNullOrEmpty(cue))detail+=" · "+cue;
+            }
             return true;
         }
         public override float ParticipantProgress(int slot) => SurvivalMode || slot < 0 || slot >= setup.count || objectives == null || objectives.Length == 0 ? -1 : Mathf.Clamp01((TaskRush ? rules.tasks[slot] % objectives.Length : CompletedTasks(slot)) / (float)objectives.Length);
@@ -155,6 +174,7 @@ namespace LWS.TruckHorrorSports
         public override string ViewportContextPrompt(int view)
         {
             if (!TryViewportOwner(view, out int slot) || rules.outcome[slot] != HorrorOutcome.Active) return null;
+            if(nightServices!=null&&nightServices.CanAnswerSecondCall(slot))return nightServices.InteractionFor(slot);
             int rescue = NearbyRescue(slot);
             if (rescue >= 0) return "HOLD ACTION · RESCUE\n" + setup.players[rescue].name;
             int task = NearestTask(slot);
@@ -162,7 +182,8 @@ namespace LWS.TruckHorrorSports
             var foot = footAgents != null && slot < footAgents.Length ? footAgents[slot] : null;
             if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[slot].body.position) < 4) return "ACTION · ENTER CAB";
             int next = NextObjective(slot);
-            if (foot != null && !foot.Outside && next >= 0 && objectives[next].requiresFoot && Vector3.Distance(trucks[slot].body.position, objectives[next].truckApproach) < 8)
+            if(supplyJob!=null && next==supplyJob.objectiveIndex && foot!=null && foot.Outside)return supplyJob.Instruction(slot);
+            if (foot != null && !foot.Outside && next >= 0 && objectives[next].requiresFoot && Vector3.Distance(trucks[slot].body.position, TaskTruckApproach(slot,next)) < 8)
                 return trucks[slot].body.linearVelocity.magnitude < 1.4f ? "ACTION · EXIT CAB" : "STOP TO EXIT CAB";
             return FreightSurvival && stationarySeconds[slot] > 6 ? "KEEP MOVING · THE LOAD IS WAKING" : null;
         }
@@ -247,9 +268,11 @@ namespace LWS.TruckHorrorSports
                 trucks[i].Prepare(starts[i], rotations[i]); pathCorners[i] = Array.Empty<Vector3>();
                 if (cargo != null && i < cargo.Length && cargo[i] != null) cargo[i].ResetCargo();
             }
+            supplyJob?.ResetJobs(); nightServices?.ResetServices(); harvestObjects?.ResetObjects(); junctionPuzzle?.ResetPuzzle(sport==HorrorSport.DeadEnd&&option==2);
             foreach (var a in anomalies) if (a != null) a.ResetEvent();
             foreach (var task in objectives) { task.ResetObjective(); if (task.securityMonitor != null) task.securityMonitor.ResetFeed(); }
             if (antagonist != null) antagonist.ResetActor(this);
+            convoyRoad?.ResetRoute(ConvoyMode);
             if (atmosphere != null && presets != null)
             {
                 int seed = UnityEngine.Random.Range(1, int.MaxValue); SportsWeatherPresets.Entry forecast = null;
@@ -269,25 +292,48 @@ namespace LWS.TruckHorrorSports
             int completed = rules.TotalTasks;
             int stage = Mathf.Min(4, Mathf.FloorToInt(Age / 45) + completed / Mathf.Max(1, setup.count * 2));
             if (stage > Escalation) { Escalation = stage; TriggerEvent(stage); }
+            junctionPuzzle?.Tick(dt);
             bool anyActive = false;
             for (int i = 0; i < setup.count; i++)
             {
                 if (rules.outcome[i] != HorrorOutcome.Active) { trucks[i].TickDrive(Vector2.zero); continue; }
                 anyActive = true; rules.survival[i] += dt;
+                if(junctionPuzzle!=null&&junctionPuzzle.Active)
+                {
+                    junctionPuzzle.ObserveParticipant(i,lights[i]);int turns=junctionPuzzle.ConsumeWrongTurns(i);
+                    if(turns>0){rules.wrongSignals[i]+=turns;roadPenaltyUntil[i]=Age+3;SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"wrong_physical_fork",setup.players[i].participantId,"Actual wrong-road detour",turns);}
+                }
                 bool ai = setup.players[i].source == BowlingSource.AI;
                 bool cargoRecovery = sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && cargo[i] != null
                     && (ai ? Vector3.Dot(cargo[i].Body.rotation * Vector3.up, Vector3.up) < .4f && trucks[i].body.linearVelocity.magnitude < 1.2f : actions[i]) && cargo[i].RequestRecovery();
                 if(cargoRecovery)Say(setup.players[i].name+" · BRACING THE CURSED LOAD",3);
 
+                supplyJob?.TickParticipant(i, ai || ActionHeld(i), dt);
                 Vector2 drive = ai ? DriveAI(i, dt) : commands[i];
                 if (sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && !cargo[i].Ready) drive = Vector2.zero;
                 var foot = footAgents != null && i < footAgents.Length ? footAgents[i] : null;
                 int wanted = NextObjective(i);
-                if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, objectives[wanted].truckApproach) < 8 && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
+                if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i,wanted)) < 8 && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
                 { foot.LeaveCab(trucks[i].body.position + trucks[i].transform.right * 2.2f + Vector3.up * .5f, trucks[i].transform.rotation); }
                 else if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4 && (ai ? wanted < 0 || !objectives[wanted].requiresFoot : actions[i])) foot.EnterCab();
                 if (foot != null && foot.Outside)
-                { trucks[i].TickDrive(new Vector2(0, trucks[i].body.linearVelocity.magnitude > .3f ? -.7f : 0)); if (ai) { Vector3 target = wanted < 0 ? trucks[i].body.position : objectives[wanted].requiresFoot ? objectives[wanted].transform.position : trucks[i].body.position; if (wanted >= 0 && objectives[wanted].requiresFoot && paths[i] != null && paths[i].status == NavMeshPathStatus.PathComplete) for (int c = 1; c < pathCorners[i].Length; c++) if (Vector3.Distance(foot.transform.position, pathCorners[i][c]) > 1.2f) { target = pathCorners[i][c]; break; } Vector3 local = foot.transform.InverseTransformPoint(target); drive = new Vector2(Mathf.Clamp(Mathf.Atan2(local.x, local.z) * Mathf.Rad2Deg / 45, -1, 1), local.magnitude > 1.4f ? 1 : 0); } foot.Move(drive, dt); }
+                {
+                    trucks[i].HoldForInteraction();
+                    if(ai)
+                    {
+                        bool supply=supplyJob!=null&&wanted==supplyJob.objectiveIndex;
+                        Vector3 target=wanted<0?trucks[i].body.position:objectives[wanted].requiresFoot?TaskPosition(i,wanted):trucks[i].body.position;
+                        if(wanted>=0&&objectives[wanted].requiresFoot&&paths[i]!=null&&paths[i].status==NavMeshPathStatus.PathComplete)
+                            for(int c=1;c<pathCorners[i].Length;c++)
+                            {
+                                float cornerDistance=supply?Vector3.ProjectOnPlane(foot.transform.position-pathCorners[i][c],Vector3.up).magnitude:Vector3.Distance(foot.transform.position,pathCorners[i][c]);
+                                if(cornerDistance>(supply ? .45f : 1.2f)){target=pathCorners[i][c];break;}
+                            }
+                        Vector3 local=foot.transform.InverseTransformPoint(target);
+                        drive=supply?supplyJob.FootCommand(i,target):new Vector2(Mathf.Clamp(Mathf.Atan2(local.x,local.z)*Mathf.Rad2Deg/45,-1,1),local.magnitude>1.4f?1:0);
+                    }
+                    foot.Move(drive,dt);
+                }
                 else trucks[i].TickDrive(drive);
                 if (ai && aiParking[i]) HoldAITaskBrake(trucks[i]);
                 if (atmosphere != null && !trucks[i].body.isKinematic) { trucks[i].grip = Mathf.Max(.65f, atmosphere.Grip); if (trucks[i].tractorMotor != null) trucks[i].tractorMotor.gripScale = Mathf.Max(.65f, atmosphere.Grip); trucks[i].body.AddForce(atmosphere.Flow * .04f, ForceMode.Acceleration); }
@@ -300,7 +346,8 @@ namespace LWS.TruckHorrorSports
                 if(sport==HorrorSport.CursedCargo&&task>=0&&held&&cargo[i].Ready&&trucks[i].body.linearVelocity.magnitude<1.4f
                     &&Vector3.Distance(cargo[i].Body.position,TaskPosition(i,task))<interactionRadius+8) cargo[i].Contain(.25f);
 
-                if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0) lights[i] = !lights[i];
+                nightServices?.ObserveAction(i,!ai&&ActionHeld(i),dt);
+                if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0 && (nightServices==null||!nightServices.CanAnswerSecondCall(i))) lights[i] = !lights[i];
                 if (headlights != null && i < headlights.Length && headlights[i] != null) headlights[i].enabled = lights[i];
                 if (foot != null && foot.flashlight != null) foot.flashlight.enabled = foot.Outside && lights[i];
                 if (rescue >= 0 && held && trucks[i].body.linearVelocity.magnitude < 1.4f)
@@ -309,7 +356,7 @@ namespace LWS.TruckHorrorSports
                     rescueWork[i] += dt; work[i] = 0; working[i] = -1;
                     if (rescueWork[i] >= 3) CompleteRescue(i, rescue);
                 }
-                else if (task >= 0 && held && (foot != null && foot.Outside || trucks[i].body.linearVelocity.magnitude < 1.4f) && CargoAtTask(i, task) && (objectives[task].securityMonitor == null || objectives[task].securityMonitor.HasFrame))
+                else if (task >= 0 && held && (foot != null && foot.Outside || trucks[i].body.linearVelocity.magnitude < 1.4f) && CargoAtTask(i, task) && (supplyJob==null || task!=supplyJob.objectiveIndex || supplyJob.Delivered(i)) && (objectives[task].securityMonitor == null || objectives[task].securityMonitor.HasFrame))
                 {
                     rescueWork[i] = 0; rescuing[i] = -1;
                     if (working[i] != task) { working[i] = task; work[i] = 0; }
@@ -323,17 +370,18 @@ namespace LWS.TruckHorrorSports
                     }
                 }
                 else { work[i] = rescueWork[i] = 0; working[i] = rescuing[i] = -1; }
+                harvestObjects?.SetCarried(i,carryingRelic[i]);
                 if (sport == HorrorSport.DeadEnd) { UpdateRoadExposure(i, dt); CheckRoadGates(i); }
                 if (cargo != null && i < cargo.Length && cargo[i] != null)
                 {
                     stationarySeconds[i] = FreightSurvival && cargo[i].Body.linearVelocity.magnitude < 2 ? stationarySeconds[i] + dt : Mathf.Max(0, stationarySeconds[i] - dt * 2);
-                    cargo[i].TickHaunting(dt, Escalation, Live, lights[i], FreightSurvival ? 1 + Mathf.Max(0, stationarySeconds[i] - 6) / 12 : 1);
+                    cargo[i].TickHaunting(dt, Escalation, Live, lights[i], (FreightSurvival ? 1 + Mathf.Max(0, stationarySeconds[i] - 6) / 12 : 1)*(convoyRoad!=null&&convoyRoad.Active?convoyRoad.UnrestFor(i):1));
                     if (cargo[i].Condition <= 0 || cargo[i].Body.position.y < -12)
                     { rules.Damage(i, 100); Say(setup.players[i].name + " · THE ORIGINAL LOAD IS LOST", 5); SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "cargo_lost", setup.players[i].participantId, "physical cargo condition or fall", cargo[i].Condition); }
                 }
                 if (trucks[i].body.position.y < -12) rules.Damage(i, 100);
                 bool groupExtraction = ConvoyMode || sport == HorrorSport.ScarecrowSeason && option == 3;
-                if (!TaskRush && !SurvivalMode && rules.outcome[i] == HorrorOutcome.Active && NextObjective(i) < 0 && Vector3.Distance(trucks[i].body.position, ExitPosition(i)) < (groupExtraction ? 8 : 7) && CargoAtExit(i))
+                if (!TaskRush && !SurvivalMode && rules.outcome[i] == HorrorOutcome.Active && NextObjective(i) < 0 && Vector3.Distance(trucks[i].body.position, ExitPosition(i)) < (groupExtraction ? 8 : 7) && CargoAtExit(i) && (junctionPuzzle==null||!junctionPuzzle.Active||junctionPuzzle.CanExtract(i,lights[i])))
                 {
                     if (groupExtraction)
                     {
@@ -344,10 +392,13 @@ namespace LWS.TruckHorrorSports
                     physicallyExtracted[i] = true;
                     rules.outcome[i] = sport == HorrorSport.GraveyardShift ? HorrorOutcome.NightComplete : sport == HorrorSport.CursedCargo && option == 2 ? HorrorOutcome.Contained : HorrorOutcome.Escaped;
                     ConfirmOutcome("escape:" + i, i, Age, rules.outcome[i].ToString());
-                    SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "escape", setup.players[i].participantId, rules.outcome[i].ToString(), Age);
+                    SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "escape", setup.players[i].participantId, rules.outcome[i].ToString()+(junctionPuzzle!=null&&junctionPuzzle.Active?" · "+junctionPuzzle.EndingCaption(i):""), Age);
                     if (Cooperative) { Successful = true; for (int p = 0; p < setup.count; p++) if (rules.outcome[p] == HorrorOutcome.Active) rules.outcome[p] = rules.outcome[i]; FinishNight(); return; }
                 }
             }
+            nightServices?.TickServices(dt);
+            convoyRoad?.TickRoad(dt);
+            harvestObjects?.TickObjects(dt);
             if (antagonist != null) antagonist.TickActor(dt);
             for (int i = 0; i < anomalies.Length; i++) if (anomalies[i] != null) anomalies[i].TickEvent(this, dt);
             foreach (var lamp in venueLights) if (lamp != null) lamp.enabled = Age >= blackoutUntil;
@@ -379,6 +430,7 @@ namespace LWS.TruckHorrorSports
                 return;
             }
             if (!rules.Commit(slot, task)) return;
+            nightServices?.ObserveCompletedObjective(slot,task);
             if (sport == HorrorSport.CursedCargo && option == 0 && setup.players[slot].source == BowlingSource.AI)
             {
                 // The receiving wards are beside warehouse walls. Pulling a full articulated
@@ -416,9 +468,10 @@ namespace LWS.TruckHorrorSports
             for (int i = 0; i < objectives.Length; i++) if (!rules.Done(slot, i) && (!ConvoyMode || !rules.ConvoyArrived(slot, i)) && (objectives[i].requires < 0 || rules.Done(slot, objectives[i].requires)) && (!objectives[i].requiresFoot || footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside) && Vector3.Distance(PlayerPosition(slot), TaskPosition(slot, i)) < (objectives[i].requiresFoot ? 2.2f : interactionRadius)) return i;
             return -1;
         }
-        Vector3 TaskPosition(int slot, int task) => ConvoyMode ? ConvoyLane(objectives[task].transform.position, slot) : objectives[task].transform.position;
+        Vector3 TaskPosition(int slot, int task) => convoyRoad!=null&&convoyRoad.Active?convoyRoad.WardPosition(slot,task):junctionPuzzle!=null&&junctionPuzzle.Active?RoadGatePosition(task):supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.Target(slot) : ConvoyMode ? ConvoyLane(objectives[task].transform.position, slot) : objectives[task].transform.position;
+        Vector3 TaskTruckApproach(int slot,int task) => supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.TruckApproach(slot) : objectives[task].truckApproach;
         Vector3 ConvoyLane(Vector3 center, int slot) => center + Vector3.right * (center.x < 0 ? 8 * slot : -8 * slot);
-        Vector3 ExitPosition(int slot) => ConvoyMode ? ConvoyLane(exit.position, slot) : sport == HorrorSport.ScarecrowSeason && option == 3 ? exit.position + new Vector3((slot - (setup.count - 1) * .5f) * 4, 0, 7) : exit.position;
+        Vector3 ExitPosition(int slot) => convoyRoad!=null&&convoyRoad.Active?convoyRoad.ExitPosition(slot):junctionPuzzle!=null&&junctionPuzzle.Active?junctionPuzzle.ExitPosition(slot):ConvoyMode ? ConvoyLane(exit.position, slot) : sport == HorrorSport.ScarecrowSeason && option == 3 ? exit.position + new Vector3((slot - (setup.count - 1) * .5f) * 4, 0, 7) : exit.position;
         bool CargoAtTask(int slot, int task) => sport != HorrorSport.CursedCargo || cargo != null && slot < cargo.Length && cargo[slot] != null && cargo[slot].Ready && cargo[slot].Condition > 0 && Vector3.Distance(cargo[slot].Body.position, TaskPosition(slot, task)) < interactionRadius + 8 && cargo[slot].Body.linearVelocity.magnitude < 1.5f;
         bool CargoAtExit(int slot) => sport != HorrorSport.CursedCargo || cargo != null && slot < cargo.Length && cargo[slot] != null && cargo[slot].Ready && cargo[slot].Condition > 0 && Vector3.Distance(cargo[slot].Body.position, ExitPosition(slot)) < 16;
         bool TeamAtExit()
@@ -464,6 +517,7 @@ namespace LWS.TruckHorrorSports
                 Vector3 segment = b - a; float t = segment.sqrMagnitude > .001f ? Mathf.Clamp01(Vector3.Dot(position - a, segment) / segment.sqrMagnitude) : 0;
                 best = Mathf.Min(best, Vector3.Distance(position, a + segment * t));
             }
+            if(junctionPuzzle!=null&&junctionPuzzle.Active)best=Mathf.Min(best,junctionPuzzle.DistanceFromRoad(position));
             return best;
         }
         void UpdateRoadExposure(int slot, float dt)
@@ -478,12 +532,14 @@ namespace LWS.TruckHorrorSports
             { nextRoadWarning[slot] = Age + 7; Say(setup.players[slot].name + " · THE DARKNESS OFF THE HIGHWAY IS NOT SAFE · RETURN TO THE ROAD", 5); }
             if (rules.exposure[slot] > 6) Hit(slot, 20);
         }
+        Vector3 RoadGatePosition(int id)=>junctionPuzzle!=null&&junctionPuzzle.Active?junctionPuzzle.GatePosition(id):objectives[id].transform.position;
         void CheckRoadGates(int slot)
         {
             int id = NextObjective(slot); if (id < 0) return;
-            if (Vector3.Distance(trucks[slot].body.position, objectives[id].transform.position) >= objectives[id].passageRadius || rules.outcome[slot] != HorrorOutcome.Active) return;
+            if (Vector3.Distance(trucks[slot].body.position, RoadGatePosition(id)) >= objectives[id].passageRadius || rules.outcome[slot] != HorrorOutcome.Active) return;
             if (RoadPuzzle)
             {
+                if(junctionPuzzle!=null&&junctionPuzzle.Active&&!junctionPuzzle.CanAcceptGate(slot,id))return;
                 if (lights[slot] != (id % 2 == 0))
                 {
                     if (lastWrongGate[slot] != id)
@@ -504,6 +560,7 @@ namespace LWS.TruckHorrorSports
         {
             var truck = trucks[slot]; int id = NextObjective(slot);
             aiParking[slot] = false;
+            if(convoyRoad!=null&&convoyRoad.TryDriveAI(slot,out var roadDrive,out var park)){aiParking[slot]=park;return roadDrive;}
             if (sport == HorrorSport.CursedCargo && option == 0 && backingFromWard[slot])
             {
                 var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
@@ -540,7 +597,7 @@ namespace LWS.TruckHorrorSports
             }
             bool carefulDriver = sport == HorrorSport.ScarecrowSeason || sport == HorrorSport.CursedCargo;
             bool outside = footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside;
-            Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? objectives[id].truckApproach : TaskPosition(slot, id);
+            Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
             if (sport == HorrorSport.ScarecrowSeason && option == 1 && carryingRelic[slot] >= 0 && ritualAltar != null) destination = ritualAltar.position;
             if (ScarecrowSurvival && objectives.Length > 0)
             {
@@ -575,13 +632,15 @@ namespace LWS.TruckHorrorSports
                 { stuck[slot] = 0; aiParking[slot] = true; return Vector2.zero; }
             }
             Vector3 target = destination;
+            if(junctionPuzzle!=null&&junctionPuzzle.Active&&junctionPuzzle.TryDriveAI(slot,id,out var branchDrive,out var branchLights))
+            {lights[slot]=branchLights;return branchDrive;}
             if (sport == HorrorSport.DeadEnd && roadRoute != null && roadRoute.Length > 0)
             {
                 int waypoint = routeIndex[slot] % roadRoute.Length;
                 target = roadRoute[waypoint].position;
                 if (Vector3.Distance(truck.body.position, target) < 7) routeIndex[slot]++;
                 if (!SurvivalMode && id < 0 && Vector3.Distance(truck.body.position, exit.position) < 45) target = ExitPosition(slot);
-                if (RoadPuzzle && id >= 0 && Vector3.Distance(truck.body.position, objectives[id].transform.position) < 35) lights[slot] = id % 2 == 0;
+                if (RoadPuzzle && id >= 0 && Vector3.Distance(truck.body.position, RoadGatePosition(id)) < 35) lights[slot] = id % 2 == 0;
             }
             else if (Age >= nextPlan[slot])
             {
@@ -771,6 +830,8 @@ namespace LWS.TruckHorrorSports
         {
             if (FinalMetricsRecorded) return;
             FinalMetricsRecorded = true;
+            nightServices?.ReportFinal();
+            convoyRoad?.ReportFinal();
             string context = "match=" + MatchId + ";mode=" + option + ";cooperative=" + (Cooperative ? "true" : "false");
             SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_match_seconds", null, context + ";unit=SEC", Age);
             for (int i = 0; i < setup.count; i++)
@@ -814,8 +875,8 @@ namespace LWS.TruckHorrorSports
                 }
             }
         }
-        protected override void StopGame() { if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
-        protected override void StopSounds() { if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
+        protected override void StopGame() { convoyRoad?.Freeze(); nightServices?.Freeze(); supplyJob?.FreezeJobs(); if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
+        protected override void StopSounds() { convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
         protected override void SetPaused(bool paused) { if (ambience != null) { if (paused) ambience.Pause(); else ambience.UnPause(); } if (encounterAudio != null) { if (paused) encounterAudio.Pause(); else encounterAudio.UnPause(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (paused) a.spatialSound.Pause(); else a.spatialSound.UnPause(); } if (atmosphere != null) atmosphere.Pause(paused); }
     }
 }

@@ -20,7 +20,7 @@ public sealed class WhitewaterWipeoutMatch:WaterMatch {
  public int QualifiedFreestyleLandings(int slot)=>qualifiedLandings[slot];
  protected override void BeginWater(){
   survivalFloor=1;for(int gate=1;gate<course.stations.Length;gate++)if(course.Point(gate-1).y-course.Point(gate).y>2.5f)survivalFloor=Mathf.Min(gate+1,course.stations.Length-2);
-  for(int i=0;i<4;i++){side[i]=0;paddleArmed[i]=false;survivalGate[i]=1;upstream[i]=false;distance[i]=0;lastPosition[i]=vessels[i].body.position;notifiedLandings[i]=qualifiedLandings[i]=0;qualifiedFreestyle[i]=0;if(!wavesCaptured)originalWaves[i]=vessels[i].flotation.waveAmplitude;vessels[i].flotation.waveAmplitude=originalWaves[i];}
+  for(int i=0;i<4;i++){vessels[i].useHorizontalSurface=option==2;side[i]=0;paddleArmed[i]=false;survivalGate[i]=1;upstream[i]=false;distance[i]=0;lastPosition[i]=vessels[i].body.position;notifiedLandings[i]=qualifiedLandings[i]=0;qualifiedFreestyle[i]=0;if(!wavesCaptured)originalWaves[i]=vessels[i].flotation.waveAmplitude;vessels[i].flotation.waveAmplitude=originalWaves[i];}
   wavesCaptured=true;
  }
  protected override void TickBoat(WaterVessel vessel,int index,float dt){

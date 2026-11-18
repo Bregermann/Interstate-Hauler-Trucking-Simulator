@@ -19,6 +19,7 @@ namespace LWS.TruckExtremeHauling.Tests
         [UnityTest] public IEnumerator NaturalDominoAICompletesPhysicalChainRound() => Natural("DominoDerby", "DominoDerbyMatch");
         [UnityTest] public IEnumerator NaturalPlinkoAIReachesSupportedScoringBin() => Natural("TrailerPlinko", "TrailerPlinkoMatch");
         [UnityTest] public IEnumerator NaturalCableAIReleasesAndDeliversLoad() => Natural("SkyhookSprint", "SkyhookSprintMatch");
+        [UnityTest] public IEnumerator NaturalCableAIHooksTransfersAndDeliversTheSameLoad()=>Natural("SkyhookSprint","SkyhookSprintMatch",1);
         [UnityTest] public IEnumerator NaturalOrbitalAICouplesAndDeliversCargo() => Natural("ZeroGHitchUp", "ZeroGHitchMatch");
         [UnityTest] public IEnumerator NaturalCargoAIRecoversAndDeliversNativeTrailer() => Natural("CargoCrisis", "CargoCrisisMatch");
         [UnityTest] public IEnumerator NaturalIceAIProducesSupportedArticulatedDrift() => Natural("JackknifeOnIce", "JackknifeIceMatch");
@@ -32,6 +33,8 @@ namespace LWS.TruckExtremeHauling.Tests
             if(type=="SkyhookSprintMatch")
             {
                 var car=((Array)Field(match,"cableCars")).GetValue(0);var trolley=(Rigidbody)Field(car,"trolley");var cable=(SpringJoint)Field(car,"cable");
+                var routes=(Array)Field(match,"transferRoutes");
+                if(routes!=null&&routes.Length>0&&routes.GetValue(0)!=null){var route=routes.GetValue(0);detail+=" route="+Property(route,"Instruction")+" transfers="+Property(route,"Transfers")+" hook="+((Rigidbody)Field(Field(route,"firstHook"),"body")).position.ToString("F2");}
                 detail+=" trolley="+trolley.position.ToString("F2")+" trolleyV="+trolley.linearVelocity.ToString("F2")+" released="+Property(car,"Released")+" cable="+cable.maxDistance+" localAnchor="+cable.anchor.ToString("F2")+" loadCOM="+load.centerOfMass.ToString("F2");
             }
             if(type=="ZeroGHitchMatch")
@@ -48,7 +51,7 @@ namespace LWS.TruckExtremeHauling.Tests
             if(type=="JackknifeIceMatch")detail+=" "+Call(match,"DriftDiagnostic",0);
             return detail;
         }
-        IEnumerator Natural(string scene, string type)
+        IEnumerator Natural(string scene, string type,int mode=0)
         {
             var prefs = Type.GetType("LWS.TruckSports.SportsPrefs, Assembly-CSharp", true);
             using ((IDisposable)prefs.GetMethod("IsolateValidation").Invoke(null, new object[] { "Alpha10NaturalHauling" }))
@@ -56,6 +59,7 @@ namespace LWS.TruckExtremeHauling.Tests
                 EditorSceneManager.LoadSceneInPlayMode("Assets/TruckExtremeHauling/Scenes/" + scene + ".unity", new LoadSceneParameters(LoadSceneMode.Single));
                 yield return null; yield return null;
                 object match = UnityEngine.Object.FindObjectsByType(Runtime(type), FindObjectsSortMode.None).Single();
+                match.GetType().GetField("option").SetValue(match,mode);
                 object setup = Field(match, "setup"); setup.GetType().GetField("count").SetValue(setup, 1);
                 Call(match, "NormalizeSetup"); Call(match, "AllBots");
                 var weather = Field(match, "presentationWeather");
@@ -64,7 +68,7 @@ namespace LWS.TruckExtremeHauling.Tests
                 try
                 {
                     Time.timeScale = 3;
-                    float deadline = Time.realtimeSinceStartup + 70;
+                    float deadline = Time.realtimeSinceStartup + (type=="SkyhookSprintMatch"&&mode==1?105:70);
                     float nextObservation=Time.realtimeSinceStartup;
                     while (!(bool)Property(match,"Finished") && Time.realtimeSinceStartup < deadline)
                     {
@@ -76,6 +80,19 @@ namespace LWS.TruckExtremeHauling.Tests
                     Assert.That((bool)Property(match,"Finished"),Is.True,"Normal match must resolve. " + measured);
                     Assert.That((int)Call(match,"ObjectivesCompleted",0),Is.GreaterThan(0),"AI must physically perform a qualifying objective, not merely exhaust the timer. " + measured);
                     Assert.That((bool)Call(match,"ResultWinner",0),Is.True,"A real qualifying competitive result is required. " + measured);
+                    if(type=="SkyhookSprintMatch"&&mode==1)
+                    {
+                        var route=((Array)Field(match,"transferRoutes")).GetValue(0);
+                        Assert.That((int)Property(route,"Transfers"),Is.EqualTo(1),"The original load must physically rest at and leave the intermediate transfer station.");
+                        Assert.That((int)Property(Field(route,"firstHook"),"Captures"),Is.GreaterThan(0));
+                        Assert.That((int)Property(Field(route,"secondHook"),"Captures"),Is.GreaterThan(0));
+                        Assert.That((bool)Property(route,"Delivered"),Is.True);
+                    }
+                    if(type=="HitchRingTossMatch")
+                    {
+                        Assert.That((int)Call(match,"AttemptsResolved",0),Is.EqualTo((int)Field(match,"throwsPerPlayer")),"All configured physical throws must resolve.");
+                        Assert.That((int)Call(match,"ObjectivesCompleted",0),Is.LessThanOrEqualTo((int)Field(match,"throwsPerPlayer")),"At most one complete aperture passage per actual throw.");
+                    }
                     string previousId=(string)Property(match,"MatchId");
                     Call(match,"SetupScreen"); yield return null;
                     Assert.That((bool)Property(match,"Finished"),Is.False,"Returning to setup clears the completed presentation state.");
