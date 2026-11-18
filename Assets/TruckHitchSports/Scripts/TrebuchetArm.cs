@@ -150,7 +150,24 @@ namespace LWS.TruckHitchSports
             if (!Swinging || Released || sling == null) return false;
             ReleaseWorldVelocity = Load.Body.linearVelocity; ReleaseWorldPosition = Load.Body.worldCenterOfMass;
             PrepareReleaseClearance();
-            Object.Destroy(sling); sling = null; Released = true; releasedAt = Time.fixedTime; return true;
+            // Free the latch immediately. Destroy alone is deferred until the
+            // frame boundary, and the arm brake must never slow a still-latched load.
+            sling.xMotion = sling.yMotion = sling.zMotion = ConfigurableJointMotion.Free;
+            sling.angularXMotion = sling.angularYMotion = sling.angularZMotion = ConfigurableJointMotion.Free;
+            Object.Destroy(sling);
+            sling = null;
+            Released = true;
+            releasedAt = Time.fixedTime;
+
+            // Brace the arm against the stand after release. The live crossbar
+            // otherwise overtakes the departing trailer and hits it from below.
+            // A finite motor brake preserves the physical arm, cargo and contacts.
+            var brake = Pivot.motor;
+            brake.targetVelocity = 0;
+            brake.freeSpin = false;
+            brake.force = fullAssistTorque * 4f;
+            Pivot.motor = brake;
+            return true;
         }
         void PrepareReleaseClearance()
         {
