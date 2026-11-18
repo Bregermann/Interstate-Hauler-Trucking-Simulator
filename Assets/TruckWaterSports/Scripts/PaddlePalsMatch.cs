@@ -2,7 +2,9 @@ using UnityEngine;
 using LWS.TruckBowling;
 namespace LWS.TruckWaterSports {
 public sealed class PaddlePalsMatch:WaterMatch {
- readonly float[] chaosDisengageUntil=new float[2];
+ readonly float[] chaosDisengageUntil=new float[2],chaosProgressAt=new float[2];
+ readonly int[] chaosProgressGate=new int[2];
+ readonly RaycastHit[] chaosObstacles=new RaycastHit[24];
  readonly int[] chaosDecision=new int[2],chaosInterceptions=new int[2],chaosEvasions=new int[2];
  public int ChaosInterceptionAttempts(int slot)=>chaosInterceptions[slot/2];
  public int ChaosEvasionAttempts(int slot)=>chaosEvasions[slot/2];
@@ -17,7 +19,7 @@ public sealed class PaddlePalsMatch:WaterMatch {
  public override bool ResultHasOutcome(int slot)=>slot>=0&&slot<setup.count&&(option<2?FinishTimes[slot]>=0:option==3?Gates[slot]>1&&(qualifiedSynchronization[slot/2]>0||GateAccuracyPoints[slot]>0):Gates[slot]>1||Vessel(slot).CreditedBumps>0);
  public override string Help=>"Each truck controls a real paddle station. Drive for forward/reverse strokes; steer changes stroke angle; ACTION rights a capsize. AI partners follow a human's actual cadence. River Sprint: quickest full crossing. Rapid Rally: tighter gates and a physical fork. Choose the orange log shortcut or green shallow channel; missing both branch gates adds three seconds. Ordinary misses and collision/capsize penalties still apply. Canoe Chaos: watch for timber swinging on riverbed tethers. Only the canoe providing greater closing momentum earns a bump; capsizing an opponent adds a bonus. AI crews alternate interceptions with evasive gate lines, disengage after actual contact and avoid attacking across waterfalls. Steer aside and brace to spoil an incoming ram. Team Paddle Challenge: synchronization counts only while moving forward and upright; accurate gates also score. Partners share their canoe's result.";
  public override string Status=>option==2?"CLEAN BUMPS · FORCE A CAPSIZE · REACH THE FINISH":option==3?"PADDLE TOGETHER · KEEP MOVING · CENTER THE GATES":base.Status;
- protected override void BeginWater(){System.Array.Clear(lastSynchronization,0,2);System.Array.Clear(qualifiedSynchronization,0,2);System.Array.Clear(lastBumps,0,2);System.Array.Clear(lastCapsizes,0,2);System.Array.Clear(chaosDisengageUntil,0,2);System.Array.Clear(chaosDecision,0,2);System.Array.Clear(chaosInterceptions,0,2);System.Array.Clear(chaosEvasions,0,2);}
+ protected override void BeginWater(){System.Array.Clear(lastSynchronization,0,2);System.Array.Clear(qualifiedSynchronization,0,2);System.Array.Clear(lastBumps,0,2);System.Array.Clear(lastCapsizes,0,2);System.Array.Clear(chaosDisengageUntil,0,2);System.Array.Clear(chaosDecision,0,2);System.Array.Clear(chaosInterceptions,0,2);System.Array.Clear(chaosEvasions,0,2);System.Array.Clear(chaosProgressAt,0,2);System.Array.Clear(chaosProgressGate,0,2);}
  protected override void TickBoat(WaterVessel vessel,int index,float dt){
   int first=index*2;if(FinishTimes[first]>=0)return;
   var left=Pilot(first,vessel,Gates[first]);var right=Pilot(first+1,vessel,Gates[first]);
@@ -47,8 +49,14 @@ public sealed class PaddlePalsMatch:WaterMatch {
  }
  bool TryChaosCommand(int first,WaterVessel vessel,int index,out Vector2 command){
   command=default;int decision=0;WaterVessel opponent=null;
+  if(chaosProgressGate[index]!=Gates[first]){chaosProgressGate[index]=Gates[first];chaosProgressAt[index]=Clock;}
   for(int other=0;other<vessels.Length;other++)if(other!=index&&vessels[other].gameObject.activeSelf&&FinishTimes[other*2]<0){opponent=vessels[other];break;}
   if(opponent==null||vessel.Capsized||opponent.Capsized){chaosDecision[index]=0;return false;}
+  // The13m hulls must clear the launch and both opening checkpoints before
+  // any side contest. Run103 showed a launch-side pursuit could strand gate1.
+  // A crew that stops making real gate progress or falls behind races first.
+  if(Gates[first]<3||Gates[opponent.firstSlot]<3||Clock-chaosProgressAt[index]>6||
+     Gates[first]+1<Gates[opponent.firstSlot]){chaosDecision[index]=0;return false;}
   if(vessel.Touching(opponent))chaosDisengageUntil[index]=Clock+1.2f;
   // Real contact triggers a brief return to the gate, so two crews do not
   // endlessly grind their hulls together instead of completing the river.
@@ -61,7 +69,9 @@ public sealed class PaddlePalsMatch:WaterMatch {
   Vector3 target;
   if(attacking){
    target=opponent.body.position+opponent.body.linearVelocity*(.4f+skill*.15f);
-   if(Vector3.Dot(target-vessel.body.position,courseForward)<-4||!SafeChaosLine(vessel.body.position,target)){chaosDecision[index]=0;return false;}
+   Vector3 intercept=Vector3.ProjectOnPlane(target-vessel.body.position,Vector3.up);
+   if(Vector3.Dot(offset,courseForward)>22||Vector3.Angle(Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up),intercept)>55||
+      Vector3.Dot(intercept,courseForward)<0||!SafeChaosLine(vessel,target,opponent.body)){chaosDecision[index]=0;return false;}
    decision=1;command=Navigate(first,vessel,target,opponent.body);
   }else{
    Vector3 towardSelf=Vector3.ProjectOnPlane(-offset,Vector3.up).normalized;
@@ -70,13 +80,14 @@ public sealed class PaddlePalsMatch:WaterMatch {
    Vector3 right=Vector3.Cross(Vector3.up,courseForward);
    float side=Vector3.Dot(vessel.body.position-opponent.body.position,right)>=0?1:-1;
    target=course.Point(Gates[first])+right*side*(3.5f+skill*.5f);
-   if(!SafeChaosLine(vessel.body.position,target)){chaosDecision[index]=0;return false;}
+   if(!SafeChaosLine(vessel,target,opponent.body)){chaosDecision[index]=0;return false;}
    decision=2;command=Navigate(first,vessel,target);
   }
   if(chaosDecision[index]!=decision){if(decision==1)chaosInterceptions[index]++;else chaosEvasions[index]++;}
   chaosDecision[index]=decision;return true;
  }
- bool SafeChaosLine(Vector3 start,Vector3 end){
+ bool SafeChaosLine(WaterVessel vessel,Vector3 end,Rigidbody opponent){
+  Vector3 start=vessel.body.position;
   // No interception across waterfall levels or into the bank. All propulsion,
   // steering, bracing and impacts still use the ordinary two paddle stations.
   float startingHeight=course.SurfacePointXZ(start).y;
@@ -84,6 +95,11 @@ public sealed class PaddlePalsMatch:WaterMatch {
    Vector3 at=Vector3.Lerp(start,end,sample/4f),water=course.SurfacePointXZ(at);
    if(Mathf.Abs(water.y-startingHeight)>2.5f||Vector3.ProjectOnPlane(at-water,Vector3.up).magnitude>course.width*.5f-3.6f)return false;
   }
+  Vector3 delta=Vector3.ProjectOnPlane(end-start,Vector3.up);
+  if(delta.sqrMagnitude<.01f)return false;
+  int hits=Physics.SphereCastNonAlloc(start+Vector3.up*.5f,1.8f,delta.normalized,chaosObstacles,delta.magnitude,~0,QueryTriggerInteraction.Ignore);
+  if(hits==chaosObstacles.Length)return false;
+  for(int hit=0;hit<hits;hit++)if(chaosObstacles[hit].rigidbody!=vessel.body&&chaosObstacles[hit].rigidbody!=opponent)return false;
   return true;
  }
  protected override void RecordModeFinalMetrics(int slot){if(option==2){FinalMetric(slot,"chaos_interception_attempts",ChaosInterceptionAttempts(slot),"shared_canoe_"+(slot/2));FinalMetric(slot,"chaos_evasion_attempts",ChaosEvasionAttempts(slot),"shared_canoe_"+(slot/2));FinalMetric(slot,"credited_bumps",Vessel(slot).CreditedBumps,"shared_canoe_"+(slot/2));FinalMetric(slot,"opponents_capsized",Vessel(slot).CausedCapsizes,"shared_canoe_"+(slot/2));}if(option==3){FinalMetric(slot,"moving_synchronized_pairs",qualifiedSynchronization[slot/2],"shared_canoe_"+(slot/2));FinalMetric(slot,"gate_accuracy_points",GateAccuracyPoints[slot],"shared_canoe_"+(slot/2));}}

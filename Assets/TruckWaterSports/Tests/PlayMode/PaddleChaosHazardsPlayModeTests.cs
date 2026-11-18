@@ -118,6 +118,12 @@ namespace LWS.TruckWaterSports.Tests
                 }
                 Time.timeScale=1;
                 string observed="clock="+Property(match,"Clock")+" gates="+string.Join(",",(int[])Field(match,"Gates"))+" finishes="+string.Join(",",(float[])Field(match,"FinishTimes"));
+                for(int index=0;index<vessels.Length;index++)
+                {
+                    var vessel=vessels.GetValue(index);var body=(Rigidbody)Field(vessel,"body");
+                    observed+=" canoe"+index+"="+body.position+" strokes="+Property(vessel,"Strokes")+" bumps="+Property(vessel,"OpponentBumps")+
+                        " intercepts="+Call(match,"ChaosInterceptionAttempts",index*2)+" evasions="+Call(match,"ChaosEvasionAttempts",index*2);
+                }
                 bool finish=false;foreach(float time in (float[])Field(match,"FinishTimes"))finish|=time>=0;
                 Assert.That((bool)Property(match,"Finished"),Is.True,observed);
                 Assert.That((float)Field(match,"matchDuration"),Is.EqualTo(duration),"The real configured competition length must remain unchanged.");
