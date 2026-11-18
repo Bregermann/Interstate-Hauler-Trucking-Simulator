@@ -32,6 +32,49 @@ namespace LWS.TruckExtremeHauling.Editor
         [MenuItem("Truck Sports/Alpha 0.10/Upgrade active advanced hauling surroundings")]
         public static void UpgradeActiveVenue() { InstallActiveVenue(); }
 
+        public static void AuthorSavedThinIceSurface()
+        {
+            if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Stop Play Mode before saving the ice surface.");
+            var scene = EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity", OpenSceneMode.Single);
+            var match = scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<ThinIceMatch>(true)).Single();
+            var original = Need<Material>("Assets/TruckExtremeHauling/Materials/Northern blue ice.mat");
+            var layer = Need<TerrainLayer>("Assets/TruckSkyTow/Art/Arctic ice crust.terrainlayer");
+            const string path = Folder + "/IceRoadReckoning/Materials/Readable load-bearing ice.mat";
+            var surface = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (layer.diffuseTexture == null || match.ice == null || match.ice.Length == 0 ||
+                match.ice.Any(tile => tile == null || tile.surface == null || tile.iceRenderer == null ||
+                    tile.iceRenderer.sharedMaterial != original && tile.iceRenderer.sharedMaterial != surface))
+                throw new InvalidOperationException("Preserve the existing authored load-bearing ice tiles and customized renderer assignments.");
+            if (surface == null)
+            {
+                surface = new Material(original) { name = "Readable load-bearing ice" };
+                surface.SetTexture("_BaseMap", layer.diffuseTexture);
+                surface.SetTextureScale("_BaseMap", Vector2.one * 2);
+                surface.SetFloat("_Smoothness", .32f);
+                surface.SetFloat("_Metallic", 0);
+                if (layer.normalMapTexture != null)
+                {
+                    surface.SetTexture("_BumpMap", layer.normalMapTexture);
+                    surface.SetTextureScale("_BumpMap", Vector2.one * 2);
+                    surface.SetFloat("_BumpScale", .65f);
+                    surface.EnableKeyword("_NORMALMAP");
+                }
+                AssetDatabase.CreateAsset(surface, path);
+            }
+            foreach (var tile in match.ice)
+            {
+                if (tile.iceRenderer.sharedMaterial == surface) continue;
+                tile.iceRenderer.sharedMaterial = surface;
+                EditorUtility.SetDirty(tile.iceRenderer);
+                EditorSceneManager.MarkSceneDirty(scene);
+            }
+            if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
+                throw new InvalidOperationException("Could not save the textured load-bearing ice.");
+            AssetDatabase.SaveAssets();
+            Debug.Log("HH10_THIN_ICE_SURFACE_SAVED sheets=" + match.ice.Length + " existing Arctic textures, physical thickness and colliders preserved.");
+        }
+
         public static void RepairSavedCargoCrisisApronGap()
         {
             if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
