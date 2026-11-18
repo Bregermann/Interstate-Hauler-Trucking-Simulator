@@ -212,7 +212,12 @@ namespace LWS.TruckHitchSports
                         BankSupportedRide(i);
                     }
                 }
-                bool touchedOtherSupport = trucks[i].Grounded && !supported && hit.collider != null && hit.rigidbody != deck;
+                bool touchedOtherSupport = false;
+                if (!supported)
+                    foreach (var wheel in trucks[i].wheels)
+                        if (wheel != null && wheel.IsGrounded && wheel.HitCollider != null &&
+                            wheel.HitCollider.attachedRigidbody != deck)
+                            touchedOtherSupport = true;
                 if (physicalSupport[i] != null) foreach (var contact in physicalSupport[i]) touchedOtherSupport |= contact != null && contact.SupportedOutside(deck);
                 if (touchedOtherSupport) rampRiderAboard[i] = false;
                 ObserveRamp(i, dt, supported);
