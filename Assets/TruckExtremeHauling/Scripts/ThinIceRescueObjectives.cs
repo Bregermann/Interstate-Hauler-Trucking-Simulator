@@ -173,7 +173,7 @@ namespace LWS.TruckExtremeHauling
             var truck=match.trucks[slot].body;var cargo=strandedCargo.Body;var cable=cables[slot];
             string state="park="+parkAI[slot]+" waypoint="+observedRoute[slot].ToString("F2")+" destination="+Destination(slot).ToString("F2")
                 +" truckEuler="+truck.rotation.eulerAngles.ToString("F1")+" cargoEuler="+cargo.rotation.eulerAngles.ToString("F1")+" cargoUp="+strandedCargo.transform.up.ToString("F2")+" cargoWheel="+strandedCargo.WheelContact+" jackDeployed="+(strandedCargo.Module.module.trailerStand!=null&&strandedCargo.Module.module.trailerStand.activeSelf);
-            if(cable!=null)state+=" cableMax="+cable.maxDistance.ToString("F2")+" cableForce="+cable.currentForce.ToString("F1")+" anchor="+truck.transform.TransformPoint(cable.anchor).ToString("F2")+" eye="+Eye(cargo).ToString("F2");
+            if(cable!=null)state+=" cableMax="+cable.maxDistance.ToString("F2")+" cableForce="+cable.currentForce.ToString("F1")+" anchor="+truck.transform.TransformPoint(cable.anchor).ToString("F2")+" eye="+(cable.connectedBody==cargo?cargo.transform.TransformPoint(cable.connectedAnchor):Eye(cargo)).ToString("F2");
             state+=" supportToWaypoint="+SupportDiagnostic(truck.position,observedRoute[slot])+" supportToGoal="+SupportDiagnostic(truck.position,Destination(slot));
             return state;
         }
@@ -191,7 +191,14 @@ namespace LWS.TruckExtremeHauling
 
         Vector3 Eye(Rigidbody load)
         {
-            if (load == strandedCargo.Body) return load.transform.TransformPoint(new Vector3(.95f, 3.1f, -.5f));
+            if (load == strandedCargo.Body)
+            {
+                // The upright load needs a low, centered tow point. Pulling
+                // from the high rollover eye drives its nose into the ramp.
+                if (Vector3.Dot(load.rotation * Vector3.up, Vector3.up) > .65f)
+                    return strandedCargo.Kingpin.position;
+                return load.transform.TransformPoint(new Vector3(.95f, 3.1f, -.5f));
+            }
             return load.worldCenterOfMass + load.transform.up * 1.3f;
         }
 
