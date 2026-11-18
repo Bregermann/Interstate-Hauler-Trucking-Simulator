@@ -6,6 +6,7 @@ namespace LWS.TruckHitchSports
         public TrebuchetArm[] engines;
         Collider[][] tractorShapes;
         public Transform[] targets;
+        readonly Bounds[] masonryBounds = new Bounds[4];
         readonly float[] quiet = new float[4], flightTime = new float[4];
         readonly Vector3[] release = new Vector3[4];
         readonly int[] attempts = new int[4];
@@ -41,7 +42,15 @@ namespace LWS.TruckHitchSports
             float botAssist = (option % 4) switch { 0 => 1, 2 => .85f, _ => .65f };
             for (int i = 0; i < engines.Length; i++) { engines[i].Pivot.useLimits = false; engines[i].ResetForRound(); quiet[i] = flightTime[i] = resetAt[i] = longestThrow[i] = totalThrowDistance[i] = aimAngle[i] = aimAge[i] = swingAge[i] = 0; assistPower[i] = IsAI(i) ? botAssist : .65f; trajectoryPeak[i] = default; peakReported[i] = false; peakDeclineSeconds[i] = 0; bestProjectedRange[i] = observedProjectedRange[i] = observedElevation[i] = 0; attempts[i] = targetsHit[i] = 0; release[i] = Vector3.zero; }
             Physics.SyncTransforms();
-            foreach (var target in GetComponentsInChildren<SiegeTarget>()) target.ResetTarget();
+            System.Array.Clear(masonryBounds, 0, masonryBounds.Length);
+            foreach (var target in GetComponentsInChildren<SiegeTarget>())
+            {
+                target.ResetTarget();
+                if (option % 4 != 2 || !target.TryGetComponent<Collider>(out var shape)) continue;
+                ref Bounds wall = ref masonryBounds[target.Lane];
+                if (wall.size.sqrMagnitude < .001f) wall = shape.bounds;
+                else wall.Encapsulate(shape.bounds);
+            }
         }
         public string TrebuchetLoadingDiagnostic(int slot)
         {
@@ -189,12 +198,18 @@ namespace LWS.TruckHitchSports
         {
             var body = trailers[slot].Body; Vector3 velocity = body.linearVelocity;
             if (swingAge[slot] < .2f) return false;
-            Vector3 direction = Vector3.ProjectOnPlane(targets[slot].position - body.worldCenterOfMass, Vector3.up).normalized;
+            bool aimAtWall = option % 4 == 2 && masonryBounds[slot].size.sqrMagnitude > .001f;
+            Vector3 destination = aimAtWall ? masonryBounds[slot].center : targets[slot].position;
+            Vector3 direction = Vector3.ProjectOnPlane(destination - body.worldCenterOfMass, Vector3.up).normalized;
             float forwardSpeed = Vector3.Dot(velocity, direction);
             float flatSpeed = Vector3.ProjectOnPlane(velocity, Vector3.up).magnitude;
             float elevation = Mathf.Atan2(velocity.y, Mathf.Max(.01f, flatSpeed)) * Mathf.Rad2Deg;
-            float gravity = Mathf.Max(.1f, Physics.gravity.magnitude), height = Mathf.Max(0, body.worldCenterOfMass.y - targets[slot].position.y);
-            float flightSeconds = (velocity.y + Mathf.Sqrt(velocity.y * velocity.y + 2 * gravity * height)) / gravity;
+            float gravity = Mathf.Max(.1f, Physics.gravity.magnitude);
+            float height = body.worldCenterOfMass.y - destination.y;
+            if (!aimAtWall) height = Mathf.Max(0, height);
+            float discriminant = velocity.y * velocity.y + 2 * gravity * height;
+            if (discriminant < 0) return false;
+            float flightSeconds = (velocity.y + Mathf.Sqrt(discriminant)) / gravity;
             float range = Mathf.Max(0, forwardSpeed) * flightSeconds;
             float previousBest = bestProjectedRange[slot];
             observedProjectedRange[slot] = range; observedElevation[slot] = elevation;
@@ -217,7 +232,7 @@ namespace LWS.TruckHitchSports
             bool passedPeak = peakDeclineSeconds[slot] >= .06f;
             if (option % 4 == 0) return passedPeak;
             Vector3 predicted = body.worldCenterOfMass + velocity * flightSeconds;
-            float miss = Vector3.ProjectOnPlane(predicted - targets[slot].position, Vector3.up).magnitude;
+            float miss = Vector3.ProjectOnPlane(predicted - destination, Vector3.up).magnitude;
             float difficulty = (int)setup.players[slot].difficulty / 2f;
             // A castle is a physical wall beyond the unloading road. Starting
             // the throw within a loose scoring radius can land on that road.
