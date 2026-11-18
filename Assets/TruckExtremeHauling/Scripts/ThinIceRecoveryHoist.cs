@@ -51,12 +51,21 @@ namespace LWS.TruckExtremeHauling
                 Mathf.Abs(Eye.x-carrier.trolley.position.x)>3||Mathf.Abs(Eye.z-carrier.trolley.position.z)>3) return false;
             Owner = slot; Phase = RecoveryPhase.AlignHook; initialPinHeight = Cargo.Kingpin.position.y; return true;
         }
+        Vector3 CouplingPosition(int slot)
+        {
+            var tractor = rescue.match.trucks[slot];
+            Vector3 localAnchor = tractor.transform.InverseTransformPoint(Coupler(slot).Anchor.position);
+            return Cargo.Kingpin.position - Cargo.transform.rotation * localAnchor;
+        }
+
         public Vector3 TractorDestination(int slot)
         {
-            var tractor = rescue.match.trucks[slot]; var hitch = Coupler(slot);
-            Vector3 localAnchor = tractor.transform.InverseTransformPoint(hitch.Anchor.position);
-            Vector3 aligned = Cargo.Kingpin.position - Cargo.transform.rotation * localAnchor;
-            return Phase == RecoveryPhase.ReverseHitch ? aligned : aligned + Cargo.transform.forward * 25;
+            Vector3 aligned = CouplingPosition(slot);
+            if (Phase == RecoveryPhase.ReverseHitch) return aligned;
+            // Keep the look-ahead on the trailer's centerline while the driver
+            // straightens. A fixed parking point can stop a yawed cab in place.
+            float ahead = Vector3.Dot(rescue.match.trucks[slot].body.position - aligned, Cargo.transform.forward);
+            return aligned + Cargo.transform.forward * Mathf.Clamp(ahead + 12, 25, 48);
         }
         public Vector2 DriveAI(int slot)
         {
@@ -127,7 +136,7 @@ namespace LWS.TruckExtremeHauling
                 Phase = RecoveryPhase.AlignTractor;
             if (Phase == RecoveryPhase.AlignTractor)
             {
-                var truck = rescue.match.trucks[slot]; Vector3 aligned = TractorDestination(slot) - Cargo.transform.forward * 25;
+                var truck = rescue.match.trucks[slot]; Vector3 aligned = CouplingPosition(slot);
                 float lateral = Mathf.Abs(Vector3.Dot(truck.body.position - aligned, Cargo.transform.right));
                 if (Vector3.Angle(truck.transform.forward, Cargo.transform.forward) < 5 && lateral < .45f && Vector3.Dot(truck.body.position - aligned, Cargo.transform.forward) > 18)
                     Phase = RecoveryPhase.ReverseHitch;
