@@ -176,6 +176,18 @@ namespace LWS.TruckExtremeHauling.Editor
             }
             foreach (Transform board in match.boardOrigins)
             {
+                for (int bin = 0; bin < match.binPoints.Length; bin++)
+                {
+                    var label = board.Find("Bin points " + bin)?.GetComponent<TMPro.TextMeshPro>();
+                    if (label == null) continue;
+                    Vector3 face = new Vector3(-20 + bin * 10, -52.75f, -6.5f) * match.boardScale;
+                    if (label.transform.localPosition == face && label.fontSize == 42) continue;
+                    label.transform.localPosition = face;
+                    label.fontSize = 42;
+                    label.rectTransform.sizeDelta = new Vector2(22, 8);
+                    EditorUtility.SetDirty(label);
+                    changed = true;
+                }
                 var existing = board.Find(screenName);
                 if (existing == null || existing.gameObject.layer == screenLayer) continue;
                 existing.gameObject.layer = screenLayer;
