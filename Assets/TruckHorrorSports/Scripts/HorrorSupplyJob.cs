@@ -19,6 +19,7 @@ namespace LWS.TruckHorrorSports
         Quaternion[] rotations;
         Vector3[] anchorVelocity;
         Collider[] parcelShapes;
+        const float ShelfReach = 1.8f;
         public Vector3 TruckApproach(int slot) => truckApproach + Vector3.right * ((slot - 1.5f) * 4);
         public bool Delivered(int slot) => slot >= 0 && slot < parcels.Length && delivered[slot];
         public bool Carrying(int slot) => grips != null && slot >= 0 && slot < grips.Length && grips[slot] != null;
@@ -49,6 +50,18 @@ namespace LWS.TruckHorrorSports
         public Vector2 FootCommand(int slot,Vector3 navigationTarget,bool refineToSupply=true)
         {
             var foot=carriers[slot];Vector3 interaction=refineToSupply?Target(slot):navigationTarget;
+            if (refineToSupply && Carrying(slot))
+            {
+                // At the real hand-off distance, face the shelf and stop. Continuing
+                // to face the approach waypoint can turn the parcel back into the aisle.
+                Vector3 shelf = Vector3.ProjectOnPlane(receivers[slot].bounds.center - foot.transform.position, Vector3.up);
+                if (shelf.sqrMagnitude < ShelfReach * ShelfReach)
+                {
+                    Vector3 facing = foot.transform.InverseTransformDirection(shelf);
+                    float turn = Mathf.Atan2(facing.x, facing.z) * Mathf.Rad2Deg;
+                    return new Vector2(Mathf.Clamp(turn / 45, -1, 1), 0);
+                }
+            }
             // A truck-sized baked navigation clearance may stop short of a hand task.
             // Refine only the final four metres, using the real character capsule sweep.
             Vector3 approach=Vector3.ProjectOnPlane(interaction-foot.transform.position,Vector3.up);
@@ -154,7 +167,7 @@ namespace LWS.TruckHorrorSports
                 // Carry at actual hand/waist height; the former +1.6m target was above
                 // the character's head and pulled the real breakable grip violently.
                 Vector3 hand=foot.transform.position+foot.transform.forward*.9f+Vector3.up*.65f;
-                bool placing=held&&Vector3.ProjectOnPlane(foot.transform.position-receiver.bounds.center,Vector3.up).magnitude<1.8f
+                bool placing=held&&Vector3.ProjectOnPlane(foot.transform.position-receiver.bounds.center,Vector3.up).magnitude<ShelfReach
                     &&Vector3.Dot(foot.transform.forward,Vector3.ProjectOnPlane(receiver.bounds.center-foot.transform.position,Vector3.up).normalized)>.6f;
                 if(placing)hand=new Vector3(receiver.bounds.center.x,receiver.bounds.max.y+parcelShapes[slot].bounds.extents.y+.15f,receiver.bounds.center.z);
                 Vector3 requested=Vector3.ClampMagnitude((hand-carryingAnchors[slot].position)*4,5);
