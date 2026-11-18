@@ -635,6 +635,8 @@ namespace LWS.TruckHorrorSports
                 backingFromWard[slot] = false; nextPlan[slot] = 0;
             }
             bool carefulDriver = sport == HorrorSport.ScarecrowSeason || sport == HorrorSport.CursedCargo;
+            bool graveyardServiceDrive = sport == HorrorSport.GraveyardShift && nightServices != null && !outside &&
+                (id < 0 || supplyJob == null || id != supplyJob.objectiveIndex);
             bool outside = footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside;
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
             if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
@@ -695,12 +697,13 @@ namespace LWS.TruckHorrorSports
             {
                 nextPlan[slot] = Age + .65f;
                 if (NavMesh.SamplePosition(PlayerPosition(slot), out var origin, 8, NavMesh.AllAreas) && NavMesh.SamplePosition(destination, out var dest, 8, NavMesh.AllAreas)) { NavMesh.CalculatePath(origin.position, dest.position, NavMesh.AllAreas, paths[slot]); pathCorners[slot] = paths[slot].corners;
-                    if (carefulDriver) ClearAICorners(pathCorners[slot], truck.tractorMotor != null ? 4.5f : 2.8f);
+                    if (carefulDriver || graveyardServiceDrive)
+                        ClearAICorners(pathCorners[slot], truck.tractorMotor != null ? 4.5f : 2.8f);
                 }
             }
             if (sport != HorrorSport.DeadEnd && paths[slot] != null && paths[slot].status == NavMeshPathStatus.PathComplete)
             { var corners = pathCorners[slot]; for (int c = 1; c < corners.Length; c++) if (Vector3.Distance(truck.body.position, corners[c]) > 3) { target = corners[c]; break; } }
-            if (carefulDriver) return DriveObjectiveAI(slot, destination, target, dt);
+            if (carefulDriver || graveyardServiceDrive) return DriveObjectiveAI(slot, destination, target, dt);
             float pursuerDistance = antagonist != null ? Vector3.Distance(truck.body.position, antagonist.body.position) : float.MaxValue;
             if (sport == HorrorSport.DeadEnd && pursuerDistance < 25)
             { float side = Vector3.Dot(antagonist.body.position - truck.body.position, truck.transform.right); target += truck.transform.right * (side >= 0 ? -4 : 4); }

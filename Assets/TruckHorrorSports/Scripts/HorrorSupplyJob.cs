@@ -20,6 +20,7 @@ namespace LWS.TruckHorrorSports
         Vector3[] anchorVelocity;
         Collider[] parcelShapes;
         const float ShelfReach = 1.8f;
+        const float ShelfApproachSlack = .18f;
         public Vector3 TruckApproach(int slot) => truckApproach + Vector3.right * ((slot - 1.5f) * 4);
         public bool Delivered(int slot) => slot >= 0 && slot < parcels.Length && delivered[slot];
         public bool Carrying(int slot) => grips != null && slot >= 0 && slot < grips.Length && grips[slot] != null;
@@ -55,7 +56,8 @@ namespace LWS.TruckHorrorSports
                 // At the real hand-off distance, face the shelf and stop. Continuing
                 // to face the approach waypoint can turn the parcel back into the aisle.
                 Vector3 shelf = Vector3.ProjectOnPlane(receivers[slot].bounds.center - foot.transform.position, Vector3.up);
-                if (shelf.sqrMagnitude < ShelfReach * ShelfReach)
+                float stanceReach = ShelfReach - ShelfApproachSlack;
+                if (shelf.sqrMagnitude < stanceReach * stanceReach)
                 {
                     Vector3 facing = foot.transform.InverseTransformDirection(shelf);
                     float turn = Mathf.Atan2(facing.x, facing.z) * Mathf.Rad2Deg;
@@ -212,7 +214,13 @@ namespace LWS.TruckHorrorSports
                 Vector3 hand=foot.transform.position+foot.transform.forward*.9f+Vector3.up*.65f;
                 bool placing=held&&Vector3.ProjectOnPlane(foot.transform.position-receiver.bounds.center,Vector3.up).magnitude<ShelfReach
                     &&Vector3.Dot(foot.transform.forward,Vector3.ProjectOnPlane(receiver.bounds.center-foot.transform.position,Vector3.up).normalized)>.6f;
-                if(placing)hand=new Vector3(receiver.bounds.center.x,receiver.bounds.max.y+parcelShapes[slot].bounds.extents.y+.15f,receiver.bounds.center.z);
+                if (placing)
+                {
+                    // Holding the parcel with both hands steadies it before release.
+                    // The grip still has to lift the real collider; the tray decides delivery.
+                    parcel.AddTorque(-parcel.angularVelocity * 7, ForceMode.Acceleration);
+                    hand = new Vector3(receiver.bounds.center.x, receiver.bounds.max.y + parcelShapes[slot].bounds.extents.y + .15f, receiver.bounds.center.z);
+                }
                 Vector3 requested=Vector3.ClampMagnitude((hand-carryingAnchors[slot].position)*4,5);
                 anchorVelocity[slot]=Vector3.MoveTowards(anchorVelocity[slot],requested,dt*6);
                 carryingAnchors[slot].MovePosition(carryingAnchors[slot].position+anchorVelocity[slot]*dt);
