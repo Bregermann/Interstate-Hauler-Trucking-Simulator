@@ -17,6 +17,7 @@ namespace LWS.TruckExtremeHauling
         readonly bool[] entering = new bool[4], blocked = new bool[4], crossed = new bool[4], delivered = new bool[4];
         readonly Vector3[] previous = new Vector3[4];
         Collider[][] loadShapes;
+        float[] authoredCableLengths;
         string reportedMatch;
         readonly string[] lastSlalomContact = new string[4];
         protected override Vector3 CameraFocus(int slot) => cableCars[CameraParticipant(slot)].load.position;
@@ -24,7 +25,7 @@ namespace LWS.TruckExtremeHauling
         public override string Status => option==1&&transferRoutes!=null&&transferRoutes.Length>0?"HOOK · HOIST · TRANSFER THE SAME LOAD · RECAPTURE":option==0?base.Status:option==2?"CLEAR EVERY OPENING · RELEASE AFTER FINAL GATE":option==1?"BRAKE THE SWING · CENTER THE LANDING":"HAUL THROUGH GUSTS · PRESERVE CARGO";
         protected override string[] Modes => new[] { "SKYHOOK SPRINT", "PRECISION CABLE DELIVERY", "SUSPENDED SLALOM", "HIGH-WIND HAULING" };
         protected override string ActionHint => option==1&&transferRoutes!=null&&transferRoutes.Length>0?"HOOK / RELEASE · HOLD + DRIVE: WINCH":"RELEASE CABLE";
-        public override string Help => option==1&&transferRoutes!=null&&transferRoutes.Length>0 ? "TWO-STATION PRECISION: drive forward/reverse along the active trolley rail; steer sways its physical hook. HOLD ACTION + forward/back to winch up/down. With drive released, TAP ACTION near the lifting eye to attach/release. Lift from the loading platform, carry to the middle platform, lower and release the original load there. Lower the second hook and recapture that SAME load, then haul, lower and release it at the final platform. Close hook distance and matched velocity are required. A supported dropped load can be recaptured; falls into the ravine are final. No transported load is teleported." : "Throttle accelerates the physical overhead trolley; brake controls momentum and steering shifts the real suspended load. ACTION releases its cable. Sprint rewards an upright settled delivery and speed. Precision judges the final landing offset, tilt, preserved cargo, actual impacts and accumulated swing; rushing adds no precision bonus. Suspended Slalom requires the entire trailer to clear all four alternating marked openings in order before a successful platform landing can score. High-Wind Hauling applies real extra gusts and rewards successful forward transport through them, with impact and landing penalties. Release timing, swing and momentum matter; an early release or missed slalom opening is a failed slalom attempt.";
+        public override string Help => option==1&&transferRoutes!=null&&transferRoutes.Length>0 ? "TWO-STATION PRECISION: drive forward/reverse along the active trolley rail; steer sways its physical hook. HOLD ACTION + forward/back to winch up/down. With drive released, TAP ACTION near the lifting eye to attach/release. Lift from the loading platform, carry to the middle platform, lower and release the original load there. Lower the second hook and recapture that SAME load, then haul, lower and release it at the final platform. Close hook distance and matched velocity are required. A supported dropped load can be recaptured; falls into the ravine are final. No transported load is teleported." : "Throttle accelerates the physical overhead trolley; brake controls momentum and steering shifts the real suspended load. ACTION releases its cable. Sprint rewards an upright settled delivery and speed. Precision judges the final landing offset, tilt, preserved cargo, actual impacts and accumulated swing; rushing adds no precision bonus. Suspended Slalom requires the entire trailer to clear all four alternating marked openings in order before a successful platform landing can score. High-Wind Hauling uses real gusts and lowers the cable when you brake near the delivery bay. Steady the trailer and release it over the platform. Impact and landing penalties still apply. Release timing, swing and momentum matter; an early release or missed slalom opening is a failed slalom attempt.";
         public int SlalomGatesPassed(int slot) => passed[slot];
         public int SlalomGatesMissed(int slot) => missed[slot];
         public float LandingErrorMetres(int slot) => landingError[slot];
@@ -51,7 +52,19 @@ namespace LWS.TruckExtremeHauling
             if(ordinaryMatchSeconds<=0)ordinaryMatchSeconds=matchSeconds;
             matchSeconds=option==1&&transferRoutes!=null&&transferRoutes.Length>0?Mathf.Max(ordinaryMatchSeconds,transferMatchSeconds):ordinaryMatchSeconds;
             for(int i=0;i<setup.count;i++){trucks[i].Power(false);foreach(var body in trucks[i].GetComponentsInChildren<Rigidbody>(true))body.isKinematic=true;}
-            foreach (var car in cableCars) { car.trolley.isKinematic = false; car.ResetCable(); }
+            if (authoredCableLengths == null)
+            {
+                authoredCableLengths = new float[cableCars.Length];
+                for (int i = 0; i < cableCars.Length; i++)
+                    authoredCableLengths[i] = cableCars[i].cable.maxDistance;
+            }
+            for (int i = 0; i < cableCars.Length; i++)
+            {
+                var car = cableCars[i];
+                car.cable.maxDistance = authoredCableLengths[i];
+                car.trolley.isKinematic = false;
+                car.ResetCable();
+            }
             System.Array.Clear(passed, 0, 4); System.Array.Clear(missed, 0, 4); System.Array.Clear(nextGate, 0, 4); System.Array.Clear(gateQuality, 0, 4); System.Array.Clear(quiet, 0, 4); System.Array.Clear(impactSeverity, 0, 4); System.Array.Clear(maximumImpact, 0, 4); System.Array.Clear(swingIntegral, 0, 4); System.Array.Clear(windMetres, 0, 4); System.Array.Clear(landingError, 0, 4); System.Array.Clear(entering, 0, 4); System.Array.Clear(blocked, 0, 4); System.Array.Clear(crossed, 0, 4); System.Array.Clear(delivered, 0, 4);
             reportedMatch = null; System.Array.Clear(lastSlalomContact, 0, lastSlalomContact.Length); loadShapes = new Collider[cableCars.Length][];
             if (slalomMarkers != null) for (int i = 0; i < slalomMarkers.Length; i++) if (slalomMarkers[i] != null) slalomMarkers[i].SetActive(option == 2 && i < setup.count);
@@ -162,6 +175,7 @@ namespace LWS.TruckExtremeHauling
                 car.load.AddForce(Vector3.right * drive.x * HighWindTrimAcceleration, ForceMode.Acceleration);
                 Vector3 pitchAndRoll = Vector3.ProjectOnPlane(car.load.angularVelocity, Vector3.up);
                 car.load.AddTorque(-pitchAndRoll * .7f, ForceMode.Acceleration);
+                LowerHighWindLoad(i, dt);
             }
             float gust = option == 3 ? Mathf.Sin(age * WindFrequency) * WindAcceleration : 0;
             if (option == 3) car.load.AddForce(Vector3.right * gust, ForceMode.Acceleration);
@@ -187,7 +201,7 @@ namespace LWS.TruckExtremeHauling
             if (option == 3)
             {
                 Vector3 spin = Vector3.ProjectOnPlane(car.load.angularVelocity, Vector3.up);
-                ready = Vector3.Dot(car.load.transform.up, Vector3.up) > .94f && spin.magnitude < .32f;
+                ready = height <= 15 && Vector3.Dot(car.load.transform.up, Vector3.up) > .94f && spin.magnitude < .32f;
             }
             float releaseWindow = option == 1 ? 3.5f : option == 3 ? 5.5f : 8;
             if (actions[i] || ai && ready && error < releaseWindow) car.Release();
@@ -213,6 +227,19 @@ namespace LWS.TruckExtremeHauling
             }
             if (car.load.position.y < -20) retired[i] = true;
         }
+        void LowerHighWindLoad(int slot, float dt)
+        {
+            var car = cableCars[slot];
+            float forwardGap = Mathf.Abs(car.trolley.position.z - objectives[slot].position.z);
+            if (forwardGap > 24 || Mathf.Abs(car.trolley.linearVelocity.z) > 4) return;
+            float clearance = car.load.worldCenterOfMass.y - objectives[slot].position.y;
+            if (clearance <= 10) return;
+            float safeLength = car.trolley.position.y - objectives[slot].position.y - 8;
+            float reelRate = Mathf.Min(4, (clearance - 10) * .8f);
+            if (car.cable.maxDistance < safeLength)
+                car.cable.maxDistance = Mathf.MoveTowards(car.cable.maxDistance, safeLength, reelRate * dt);
+        }
+
         const float WindFrequency = .7f;
         const float WindAcceleration = 2;
         const float HighWindTrimAcceleration = 2.8f;
