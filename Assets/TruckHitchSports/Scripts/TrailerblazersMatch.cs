@@ -46,7 +46,13 @@ namespace LWS.TruckHitchSports
         {
             if (slot < 0 || slot >= setup.count) { value = detail = null; return false; }
             value = Completed[slot] ? Scores[slot].ToString("F0") : peak[slot].ToString("F0") + "m";
-            detail = Completed[slot] ? (controlledLanding[slot] ? "CONTROLLED LANDING" : "FLIGHT ENDED") : "FUEL " + fuel[slot].ToString("F1") + "s · ROLL " + RollCaption(slot);
+            if (Completed[slot]) detail = controlledLanding[slot] ? "CONTROLLED LANDING" : "FLIGHT ENDED";
+            else if (precisionTouchdown[slot]) detail = "ON PAD · BRAKING";
+            else
+            {
+                detail = "FUEL " + fuel[slot].ToString("F1") + "s";
+                if (!IsAI(slot)) detail += " · ROLL " + RollCaption(slot);
+            }
             return true;
         }
         public string FlightDiagnostic(int slot) => "slot=" + slot + " elapsed=" + Elapsed.ToString("F2") + " peak=" + peak[slot].ToString("F2") + " air=" + airborneSeconds[slot].ToString("F2") + " fuelUsed=" + (fuelSeconds - fuel[slot]).ToString("F2") + " releases=" + stageReleases[slot] + " assemblyKg=" + assemblyMassObserved[slot].ToString("F0") + " stageUpAtPeak=" + peakStageUp[slot].ToString("F3") + " minPoweredUp=" + minimumPoweredUp[slot].ToString("F3") + " maxThrustMomentNm=" + maximumThrustMoment[slot].ToString("F0") + " unexpectedStageLoss=" + unexpectedStageLoss[slot] + " controlledLanding=" + controlledLanding[slot];
