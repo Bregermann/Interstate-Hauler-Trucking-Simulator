@@ -149,14 +149,22 @@ namespace LWS.TruckExtremeHauling.Editor
             // Lay the original solid trailer on level asphalt without drop energy.
             load.transform.rotation = Quaternion.Euler(0, 0, 90);
             float bottom = float.PositiveInfinity;
-            foreach (var box in load.GetComponentsInChildren<BoxCollider>(true))
+            foreach (var shape in load.GetComponentsInChildren<Collider>(true))
             {
-                if (!box.enabled || box.isTrigger || box.attachedRigidbody != load.Body) continue;
-                Vector3 half = box.size * .5f;
-                float verticalExtent = Mathf.Abs(box.transform.TransformVector(Vector3.right * half.x).y)
-                    + Mathf.Abs(box.transform.TransformVector(Vector3.up * half.y).y)
-                    + Mathf.Abs(box.transform.TransformVector(Vector3.forward * half.z).y);
-                bottom = Mathf.Min(bottom, box.transform.TransformPoint(box.center).y - verticalExtent);
+                if (!shape.enabled || shape.isTrigger || shape.GetComponentInParent<Rigidbody>(true) != load.Body) continue;
+                if (shape is MeshCollider mesh && mesh.sharedMesh != null)
+                {
+                    foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+                        bottom = Mathf.Min(bottom, mesh.transform.TransformPoint(vertex).y);
+                }
+                else if (shape is BoxCollider box)
+                {
+                    Vector3 half = box.size * .5f;
+                    float verticalExtent = Mathf.Abs(box.transform.TransformVector(Vector3.right * half.x).y)
+                        + Mathf.Abs(box.transform.TransformVector(Vector3.up * half.y).y)
+                        + Mathf.Abs(box.transform.TransformVector(Vector3.forward * half.z).y);
+                    bottom = Mathf.Min(bottom, box.transform.TransformPoint(box.center).y - verticalExtent);
+                }
             }
             if (float.IsInfinity(bottom))
                 throw new InvalidOperationException("The pileup requires the original native solid trailer body.");
