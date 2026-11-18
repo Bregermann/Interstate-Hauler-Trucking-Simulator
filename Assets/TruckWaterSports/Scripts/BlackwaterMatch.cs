@@ -125,13 +125,25 @@ public sealed class BlackwaterMatch:WaterMatch {
  }
  int NearestStranded(int rescuer){int found=-1;float nearest=float.MaxValue;for(int other=0;other<setup.count;other++)if(other!=rescuer&&Integrity[other]<=0){float distance=(vessels[other].body.position-vessels[rescuer].body.position).sqrMagnitude;if(distance<nearest){nearest=distance;found=other;}}return found;}
  bool LightShelter(Vector3 position){if(option==2)return false;if(Vector3.Distance(position,dock.position)<15)return true;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0&&Vector3.Distance(position,light.transform.position)<light.range)return true;return false;}
+ Vector3 RegroupBerth(int index){
+  // Keep the centre approach clear for a teammate still delivering a real
+  // attached crate. All four goals, including the existing 5m stopping buffer,
+  // remain within the unchanged 22m team extraction region.
+  Vector3 right=Vector3.ProjectOnPlane(dock.right,Vector3.up).normalized,forward=Vector3.ProjectOnPlane(dock.forward,Vector3.up).normalized;
+  return dock.position+right*(index%2==0?-11:11)+forward*(4+index/2*8);
+ }
  Vector2 Bot(int index,WaterVessel vessel){
+  bool regrouping=Cooperative&&BankedSupplies>=SharedSuppliesNeeded;
   int rescue=Cooperative?NearestStranded(index):-1;Vector3 goal;Rigidbody contact=null;
+  // Secured supplies switch the team's objective to rescue/extraction.
+  // Discretionary healing must not turn a living returning boat back towards
+  // an earlier buoy while the finite regroup countdown is running.
+  if(regrouping)healingAt[index]=null;
   if(rescue>=0){goal=vessels[rescue].body.position;contact=vessels[rescue].body;}
-  else if(Cooperative&&BankedSupplies>=SharedSuppliesNeeded||boatCargo[index]>=0){goal=dock.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;cargoTargets[index]=-1;}
+  else if(regrouping||boatCargo[index]>=0){goal=regrouping&&boatCargo[index]<0?RegroupBerth(index):dock.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;cargoTargets[index]=-1;}
   else if(option==1||Cooperative){int cargo=CargoTarget(index);goal=cargo>=0?supplies[cargo].position:dock.position;contact=cargo>=0?supplies[cargo]:null;}
   else goal=option==0?CrossingApproach(index):course.Point(Gates[index]);
-  if(healingAt[index]!=null&&(!healingAt[index].isActiveAndEnabled||Integrity[index]>=90))healingAt[index]=null;if(rescue<0&&option!=2&&Integrity[index]<65&&healingAt[index]==null){float nearest=float.MaxValue;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0){float distanceToLight=(light.transform.position-vessel.body.position).sqrMagnitude;if(distanceToLight<nearest){nearest=distanceToLight;healingAt[index]=light;}}}if(healingAt[index]!=null&&rescue<0){goal=healingAt[index].transform.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;}
+  if(healingAt[index]!=null&&(!healingAt[index].isActiveAndEnabled||Integrity[index]>=90))healingAt[index]=null;if(!regrouping&&rescue<0&&option!=2&&Integrity[index]<65&&healingAt[index]==null){float nearest=float.MaxValue;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0){float distanceToLight=(light.transform.position-vessel.body.position).sqrMagnitude;if(distanceToLight<nearest){nearest=distanceToLight;healingAt[index]=light;}}}if(healingAt[index]!=null&&rescue<0){goal=healingAt[index].transform.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;}
   float distance=Vector3.Distance(vessel.body.position,goal);
   bool approachingSupply=rescue<0&&boatCargo[index]<0&&cargoTargets[index]>=0&&contact==supplies[cargoTargets[index]];
   float requestedSpeed=approachingSupply?Mathf.Lerp(1.2f,maximumPoweredSpeed,Mathf.InverseLerp(6,20,distance)):maximumPoweredSpeed;
