@@ -4,6 +4,7 @@ namespace LWS.TruckHitchSports
     public sealed class UnhitchedMatch : HitchCompetitionSession
     {
         public Collider[] deckSurfaces;
+        public UnhitchedRecoveryShoulder[] recoveryShoulders = System.Array.Empty<UnhitchedRecoveryShoulder>();
         public float towImpulse = 10, minimumRideSeconds = 3;
         public float recoveryWindowSeconds = 12, groundRemountJumpVelocity = 8, maximumRecoveryDistance = 30;
         readonly bool[] recovering = new bool[4], rampRiderAboard = new bool[4];
@@ -39,7 +40,7 @@ namespace LWS.TruckHitchSports
             return true;
         }
         public override string OptionLabel => new[] { "TRAILER FREESTYLE", "LONGEST RIDE", "RAMP ATTACK", "TRAILER TRICK CHALLENGE" }[option % 4];
-        public override string Help => "Drive on a rolling physical flatbed; your truck's weight and wheel forces affect it. Movement controls steer/balance, ACTION hops when your actual wheels contact the deck, with a short recovery between hops. Freestyle banks clean airborne landings, rotations, balance and ride distance. Longest Ride scores only supported riding time plus airborne time that ends back on the deck. Ramp Attack scores the trailer's genuine ramp takeoffs and landings while you remain aboard, not ordinary truck hops. Trick Challenge banks landed quarter-turns of at least 90 degrees, with clean-landing combos. Longest Ride ends on a fall. Other modes give a brief physical recovery window: drive toward your original rolling deck and ACTION hop from grounded wheels to remount. A fall breaks the combo and banks no imaginary airtime; only a real stable wheel landing restores the ride. The trailer gets one starting impulse; slopes, collisions and your weight determine the rest. No invisible joint attaches the truck to the deck.";
+        public override string Help => "Drive on a rolling physical flatbed; your truck's weight and wheel forces affect it. Movement controls steer/balance, ACTION hops when your actual wheels contact the deck, with a short recovery between hops. Freestyle banks clean airborne landings, rotations, balance and ride distance. Longest Ride scores only supported riding time plus airborne time that ends back on the deck. Ramp Attack scores the trailer's genuine ramp takeoffs and landings while you remain aboard, not ordinary truck hops. Trick Challenge banks landed quarter-turns of at least 90 degrees, with clean-landing combos. Longest Ride ends on a fall. Other modes give a brief physical recovery window. The lower side recovery lane is a real supported route: drive onto it, match your original deck's forward speed, steer inward and ACTION hop from grounded wheels to remount. Braking on the moving deck holds the tyres against it; drive forward and steer gently onto the side lane to leave. A fall breaks the combo and banks no imaginary airtime; only a real stable wheel landing restores the ride. The trailer gets one starting impulse; slopes, collisions and your weight determine the rest. No invisible joint attaches the truck to the deck.";
         protected override void BeginCompetition()
         {
             for (int i = 0; i < 4; i++)
@@ -267,6 +268,21 @@ namespace LWS.TruckHitchSports
             var surface = deckSurfaces[slot];
             Vector3 point = RecoveryTopPoint(slot, out var top, out _) ? top : surface.bounds.center;
             return point + trailers[slot].Body.GetPointVelocity(point) * .7f;
+        }
+        public bool TryRecoveryLaunchVelocity(int slot, out Vector3 velocity)
+        {
+            velocity = Vector3.zero;
+            if (slot < 0 || slot >= setup.count || !recovering[slot] || !RecoveryTopPoint(slot, out var top, out _)) return false;
+            var truck = trucks[slot]; var deck = trailers[slot].Body;
+            float gravity = Mathf.Max(.1f, Physics.gravity.magnitude), height = top.y - truck.body.position.y;
+            float discriminant = groundRemountJumpVelocity * groundRemountJumpVelocity - 2 * gravity * height;
+            if (discriminant <= 0) return false;
+            float flight = (groundRemountJumpVelocity + Mathf.Sqrt(discriminant)) / gravity;
+            Vector3 target = top + deck.GetPointVelocity(top) * flight;
+            // This is an observation for ordinary steering/throttle decisions,
+            // never an assigned body velocity or automatic remount outcome.
+            velocity = Vector3.ProjectOnPlane(target - truck.body.worldCenterOfMass, Vector3.up) / Mathf.Max(.1f, flight);
+            return true;
         }
         public bool RecoveryHopPrediction(int slot)
         {

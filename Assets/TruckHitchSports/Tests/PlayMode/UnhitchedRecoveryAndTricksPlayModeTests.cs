@@ -37,6 +37,15 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
         if (action) state = state.WithButton(GamepadButton.South);
         InputSystem.QueueStateEvent(pad, state);
     }
+    static void DrivePadTowardVelocity(Gamepad pad, Component truck, Rigidbody body, Vector3 wanted, bool action = false)
+    {
+        Vector3 local = truck.transform.InverseTransformDirection(wanted);
+        float angle = Mathf.Atan2(local.x, Mathf.Max(.1f, local.z));
+        float steer = Mathf.Clamp(angle * 1.4f - body.angularVelocity.y * .35f, -.6f, .6f);
+        float requested = Mathf.Max(0, Vector3.Dot(wanted, truck.transform.forward));
+        float effort = Mathf.Clamp((requested - Vector3.Dot(body.linearVelocity, truck.transform.forward)) * .5f, -.8f, .8f);
+        Queue(pad, steer, effort, action);
+    }
     static string State(object match) => Call(match, "PlatformDiagnostic", 0) + " " + Call(match, "RecoveryDiagnostic", 0) + " " + Call(match, "TrickDiagnostic", 0);
 
     [UnityTest]
@@ -60,28 +69,42 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 Clear(match); Assert.That((bool)Property(match, "DevicesReady"), Is.True); Assert.That((bool)Call(match, "StartMatch"), Is.True); Time.timeScale = 2;
                 var truck = (Component)((Array)Read(match, "trucks")).GetValue(0); var body = (Rigidbody)Read(truck, "body");
                 var platform = ((Array)Read(match, "trailers")).GetValue(0); var deck = (Rigidbody)Read(platform, "Body"); int deckId = deck.GetInstanceID();
-                var surface = ((Collider[])Read(match, "deckSurfaces"))[0];
-                while (((float[])Read(match, "supportedRideSeconds"))[0] < 2.5f && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
-                Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(2.5f), State(match));
-                // Brake firmly while the native deck is still rolling on the
-                // flat run-up. Beyond the ramp it can stop directly under the truck.
-                while (!((bool[])Read(match, "recovering"))[0] && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad, 0, -.95f); yield return null; }
-                Assert.That(((bool[])Read(match, "recovering"))[0], Is.True, "A real unsupported fall must enter recovery rather than teleporting/resetting. " + State(match));
-                float nextPress = 0, pressUntil = 0, nextObservation = 0; string lastLive = State(match);
+                var shoulders = (Array)Read(match, "recoveryShoulders");
+                Assert.That(shoulders.Length, Is.EqualTo(4), "Run the explicit saved Unhitched recovery-shoulder authoring first; no test-time scenery generation.");
+                var shoulder = shoulders.GetValue(0); Assert.That(shoulder, Is.Not.Null);
+                while (((float[])Read(match, "supportedRideSeconds"))[0] < 2 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
+                Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(2), State(match));
+                // A forward, gently steered departure uses the actual lower
+                // road. It does not ask NWH to reverse at world-forward speed.
+                float nextObservation = 0; string lastLive = State(match); bool roadContactSeen = false;
+                while ((!((bool[])Read(match, "recovering"))[0] || !(bool)Call(shoulder, "HasNativeWheelContact", truck)) && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                {
+                    Vector3 point = (Vector3)Call(shoulder, "PointAtForwardPosition", body.position.z + 18, true);
+                    Vector3 direction = Vector3.ProjectOnPlane(point - body.position, Vector3.up).normalized;
+                    float pace = Mathf.Clamp(Vector3.Dot(deck.linearVelocity, Vector3.forward) + 1, 6, 12);
+                    DrivePadTowardVelocity(pad, truck, body, direction * pace);
+                    if (Time.time >= nextObservation) { nextObservation = Time.time + 2; lastLive = State(match); Debug.Log("HH10_UNHITCHED_SHOULDER_DEPARTURE " + lastLive); }
+                    yield return null;
+                }
+                roadContactSeen = (bool)Call(shoulder, "HasNativeWheelContact", truck);
+                Assert.That(((bool[])Read(match, "recovering"))[0], Is.True, "Only an actual unsupported fall opens recovery. " + State(match));
+                Assert.That(roadContactSeen, Is.True, "The native tyres must physically land on the authored recovery road. " + State(match));
+                float pressUntil = 0, nextPress = 0;
                 while (((int[])Read(match, "recoveries"))[0] == 0 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
                 {
                     if (Time.time >= nextObservation) { nextObservation = Time.time + 2; lastLive = State(match); Debug.Log("HH10_UNHITCHED_RECOVERY_LIVE " + lastLive); }
-                    bool grounded = (bool)Property(truck, "Grounded"); float steering = 0, effort = 0;
-                    if (grounded)
+                    bool grounded = (bool)Property(truck, "Grounded"), onDeck = (bool)Call(match, "OwnDeckWheelSupport", 0);
+                    if (onDeck) Queue(pad);
+                    else if (grounded)
                     {
-                        Vector3 target = (Vector3)Call(match, "RecoveryAimPoint", 0);
-                        Vector3 local = truck.transform.InverseTransformPoint(new Vector3(target.x, body.position.y, target.z));
-                        steering = Mathf.Clamp(Mathf.Atan2(local.x, local.z) * 1.8f, -1, 1);
-                        float desired = Mathf.Min(16, deck.linearVelocity.magnitude + 4);
-                        effort = Mathf.Clamp((desired - Vector3.Dot(body.linearVelocity, truck.transform.forward)) * .35f, -.7f, .8f);
+                        object[] prediction = { 0, Vector3.zero };
+                        bool valid = (bool)match.GetType().GetMethod("TryRecoveryLaunchVelocity").Invoke(match, prediction);
+                        Vector3 wanted = valid ? (Vector3)prediction[1] : Vector3.forward * Mathf.Max(0, deck.linearVelocity.z);
                         if (Time.time >= nextPress && (bool)Call(match, "RecoveryHopPrediction", 0)) { pressUntil = Time.realtimeSinceStartup + .18f; nextPress = Time.time + 1.5f; }
+                        DrivePadTowardVelocity(pad, truck, body, wanted, Time.realtimeSinceStartup < pressUntil);
                     }
-                    Queue(pad, steering, effort, Time.realtimeSinceStartup < pressUntil); yield return null;
+                    else Queue(pad, Mathf.Clamp(-body.angularVelocity.y * .5f, -.6f, .6f), 0, Time.realtimeSinceStartup < pressUntil);
+                    yield return null;
                 }
                 Queue(pad);
                 Assert.That(((int[])Read(match, "falls"))[0], Is.GreaterThan(0), State(match));
