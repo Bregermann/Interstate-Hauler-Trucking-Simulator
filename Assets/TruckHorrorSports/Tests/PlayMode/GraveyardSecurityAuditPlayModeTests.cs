@@ -25,9 +25,24 @@ public sealed class GraveyardSecurityAuditPlayModeTests
                 var objectives=(Array)Field(match,"objectives");Assert.That(objectives.Length,Is.EqualTo(6),"Keep the original six-job route intact.");var originalJobs=objectives.Cast<object>().ToArray();var monitor=Field(audit,"monitor");var camera=(Camera)Field(monitor,"securityCamera");int cameraId=camera.GetInstanceID();
                 var setup=Field(match,"setup");setup.GetType().GetField("count").SetValue(setup,4);match.GetType().GetField("option").SetValue(match,1);Call(match,"NormalizeSetup");Call(match,"AllBots");Assert.That((bool)Call(match,"StartMatch"),Is.True);Assert.That((int)Field(setup,"count"),Is.EqualTo(4));
                 Time.timeScale=3;float deadline=Time.realtimeSinceStartup+105,nextSample=45;int rows=0;
+                var feet=(Array)Field(match,"footAgents");var supply=Field(match,"supplyJob");var observedPosition=new Vector3[4];var stationarySince=new float[4];var obstructionLogged=new bool[4];
                 while(!(bool)Property(match,"Finished")&&!Enumerable.Range(0,4).Any(slot=>(bool)Call(audit,"Reported",slot))&&Time.realtimeSinceStartup<deadline)
                 {
                     if(rows<3&&(float)Property(match,"Age")>=nextSample){rows++;nextSample+=45;Debug.Log("HH10_GRAVEYARD_SECURITY_AUDIT_STATE "+State(match,audit));}
+                    float age=(float)Property(match,"Age");
+                    for(int slot=0;slot<4;slot++)
+                    {
+                        var worker=(Component)feet.GetValue(slot);int next=(int)Call(match,"NextObjective",slot);
+                        bool walking=((float[])Field(Field(match,"rules"),"health"))[slot]>0&&(bool)Property(worker,"Outside")&&next>0&&next<objectives.Length
+                            &&Vector3.Distance(worker.transform.position,((Component)objectives.GetValue(next)).transform.position)>2.2f;
+                        if(!walking||Vector3.ProjectOnPlane(worker.transform.position-observedPosition[slot],Vector3.up).sqrMagnitude>.04f)
+                        {observedPosition[slot]=worker.transform.position;stationarySince[slot]=age;}
+                        if(!obstructionLogged[slot]&&walking&&age-stationarySince[slot]>=5)
+                        {
+                            obstructionLogged[slot]=true;
+                            Debug.Log("HH10_GRAVEYARD_FOOT_OBSTRUCTION clock="+age+" P"+(slot+1)+" job="+next+" foot="+worker.transform.position+" "+Call(supply,"FootObstacleDiagnostic",slot));
+                        }
+                    }
                     yield return new WaitForFixedUpdate();
                 }
                 string state=State(match,audit);int reporter=Enumerable.Range(0,4).Where(slot=>(bool)Call(audit,"Reported",slot)).DefaultIfEmpty(-1).First();Assert.That(reporter,Is.GreaterThanOrEqualTo(0),"An actual participant must reach the original console, select its live view and inspect a truly disappeared original rig. No report is injected. "+state);
@@ -57,7 +72,7 @@ public sealed class GraveyardSecurityAuditPlayModeTests
     {
         var rules=Field(match,"rules");var feet=(Array)Field(match,"footAgents");var trucks=(Array)Field(match,"trucks");var outcomes=(Array)Field(rules,"outcome");var health=(float[])Field(rules,"health");var tasks=(int[])Field(rules,"tasks");var console=(Transform)Field(audit,"console");
         return "clock="+Property(match,"Age")+" "+string.Join(" | ",Enumerable.Range(0,4).Select(slot=>
-        {var foot=(Component)feet.GetValue(slot);var controller=(CharacterController)Field(foot,"controller");return "P"+(slot+1)+" jobs="+tasks[slot]+" next="+Call(match,"NextObjective",slot)+" outcome="+outcomes.GetValue(slot)+" health="+health[slot].ToString("F1")+" cab="+((Rigidbody)Field(trucks.GetValue(slot),"body")).position+" outside="+Property(foot,"Outside")+" foot="+foot.transform.position+" footVelocity="+controller.velocity+" consoleGap="+Vector3.Distance(foot.transform.position,console.position).ToString("F2")+" "+Call(audit,"Diagnostic",slot);}));
+        {var foot=(Component)feet.GetValue(slot);var controller=(CharacterController)Field(foot,"controller");return "P"+(slot+1)+" jobs="+tasks[slot]+" next="+Call(match,"NextObjective",slot)+" outcome="+outcomes.GetValue(slot)+" health="+health[slot].ToString("F1")+" cab="+((Rigidbody)Field(trucks.GetValue(slot),"body")).position+" outside="+Property(foot,"Outside")+" foot="+foot.transform.position+" footVelocity="+controller.velocity+" consoleGap="+Vector3.Distance(foot.transform.position,console.position).ToString("F2")+" "+Call(audit,"Diagnostic",slot)+" "+Call(Field(match,"supplyJob"),"FootObstacleDiagnostic",slot);}));
     }
 }
 #endif

@@ -19,6 +19,9 @@ namespace LWS.TruckHorrorSports
         Quaternion[] rotations;
         Vector3[] anchorVelocity;
         Collider[] parcelShapes;
+        readonly Collider[] footBlockers = new Collider[12];
+        readonly Vector3[] footRouteTargets = new Vector3[12], footSteeringTargets = new Vector3[12];
+        readonly bool[] footBypasses = new bool[12];
         const float ShelfReach = 1.8f;
         const float ShelfApproachSlack = .18f;
         public Vector3 TruckApproach(int slot) => truckApproach + Vector3.right * ((slot - 1.5f) * 4);
@@ -51,6 +54,8 @@ namespace LWS.TruckHorrorSports
         public Vector2 FootCommand(int slot,Vector3 navigationTarget,bool refineToSupply=true)
         {
             var foot=carriers[slot];Vector3 interaction=refineToSupply?Target(slot):navigationTarget;
+            footRouteTargets[slot] = footSteeringTargets[slot] = navigationTarget;
+            footBlockers[slot] = null; footBypasses[slot] = false;
             if (refineToSupply && Carrying(slot))
             {
                 // At the real hand-off distance, face the shelf and stop. Continuing
@@ -70,9 +75,20 @@ namespace LWS.TruckHorrorSports
             if (refineToSupply && Vector3.ProjectOnPlane(interaction - foot.transform.position, Vector3.up).sqrMagnitude < 16
                 && ClearFootPath(slot, foot, interaction, out _))
                 navigationTarget = interaction;
-            if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null
-                && blocker.transform.IsChildOf(match.trucks[slot].transform))
-                navigationTarget = CabBypass(slot, foot, blocker, navigationTarget);
+            footRouteTargets[slot] = navigationTarget;
+            if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null)
+            {
+                footBlockers[slot] = blocker;
+                int blockingParticipant = BlockingParticipant(blocker);
+                if (blockingParticipant >= 0)
+                {
+                    // All participant rigs are absent from the static navigation bake.
+                    // A caught or parked teammate remains a real obstacle just like our cab.
+                    navigationTarget = CabBypass(slot, blockingParticipant, foot, blocker, navigationTarget);
+                    footBypasses[slot] = true;
+                }
+            }
+            footSteeringTargets[slot] = navigationTarget;
             Vector3 delta = Vector3.ProjectOnPlane(navigationTarget - foot.transform.position, Vector3.up);
             Vector3 local = foot.transform.InverseTransformDirection(delta);
             float angle = Mathf.Atan2(local.x, local.z) * Mathf.Rad2Deg;
@@ -104,9 +120,19 @@ namespace LWS.TruckHorrorSports
             return blocker == null && count < approachHits.Length;
         }
 
-        Vector3 CabBypass(int slot, HorrorFootAgent foot, Collider blocker, Vector3 destination)
+        int BlockingParticipant(Collider blocker)
         {
-            var truck = match.trucks[slot];
+            if (blocker == null) return -1;
+            for (int other = 0; other < match.setup.count; other++)
+            {
+                var truck = match.trucks[other];
+                if (truck != null && blocker.transform.IsChildOf(truck.transform)) return other;
+            }
+            return -1;
+        }
+        Vector3 CabBypass(int slot, int blockingParticipant, HorrorFootAgent foot, Collider blocker, Vector3 destination)
+        {
+            var truck = match.trucks[blockingParticipant];
             Bounds box = truck.shape != null && truck.shape.enabled ? truck.shape.bounds : blocker.bounds;
             box.Encapsulate(blocker.bounds);
             Vector3 forward = Vector3.ProjectOnPlane(truck.transform.forward, Vector3.up).normalized;
@@ -128,9 +154,23 @@ namespace LWS.TruckHorrorSports
             return frontClear && (!rearClear || frontCost < rearCost) ? front : rear;
         }
 
+        public string FootObstacleDiagnostic(int slot)
+        {
+            if (slot < 0 || slot >= match.setup.count || slot >= carriers.Length) return "invalid foot participant";
+            var blocker = footBlockers[slot];
+            return "routeTarget=" + footRouteTargets[slot].ToString("F2")
+                + " actualBlocker=" + (blocker != null ? blocker.name + " root=" + blocker.transform.root.name + " bounds=" + blocker.bounds : "none")
+                + " blockerParticipant=" + BlockingParticipant(blocker) + " usedExistingCabBypass=" + footBypasses[slot]
+                + " steeringTarget=" + footSteeringTargets[slot].ToString("F2");
+        }
+
         public string Instruction(int slot) => delivered[slot] ? "SUPPLIES RESTOCKED" : depositing[slot] ? "LET THE PARCEL SETTLE ON THE SHELF" : Carrying(slot) ? "CARRY TO YOUR SHELF · HOLD ACTION TO PLACE" : "ON FOOT · HOLD ACTION BESIDE YOUR SUPPLY PARCEL";
         public void ResetJobs()
         {
+            System.Array.Clear(footBlockers, 0, footBlockers.Length);
+            System.Array.Clear(footRouteTargets, 0, footRouteTargets.Length);
+            System.Array.Clear(footSteeringTargets, 0, footSteeringTargets.Length);
+            System.Array.Clear(footBypasses, 0, footBypasses.Length);
             if(starts==null)
             {
                 starts=new Vector3[parcels.Length];rotations=new Quaternion[parcels.Length];grips=new SpringJoint[parcels.Length];anchorVelocity=new Vector3[parcels.Length];parcelShapes=new Collider[parcels.Length];
