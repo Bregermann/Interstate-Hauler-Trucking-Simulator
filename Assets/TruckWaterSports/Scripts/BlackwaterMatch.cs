@@ -11,6 +11,8 @@ public sealed class BlackwaterMatch:WaterMatch {
  [Min(.1f)]public float engineAcceleration=7.5f,maximumPoweredSpeed=5.5f;
  public float[] Integrity={100,100,100,100};public int[] Deliveries=new int[4],Rescues=new int[4];public float entitySpeed=9;public AudioSource warning;
  public int BankedSupplies{get;private set;}public bool CooperativeEscaped{get;private set;}
+ [Range(20,120)]public float minimumRegroupSeconds=90;float regroupUntil;
+ public override float RoundDeadline=>Cooperative?Mathf.Max(matchDuration,regroupUntil):matchDuration;
  public int SharedSuppliesNeeded=>Mathf.Max(1,(setup.count+1)/2);
  readonly FixedJoint[] cargoJoints=new FixedJoint[4];readonly int[] boatCargo={-1,-1,-1,-1},cargoOwner={-1,-1,-1,-1};
  readonly bool[] banked=new bool[4];readonly Vector3[] cargoStarts=new Vector3[4];
@@ -24,7 +26,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  public override string ResultUnit=>Cooperative?"DELIVERIES":"SEC";public override bool ResultHigherIsBetter=>option==2||Cooperative;
  public override double ResultScore(int slot)=>Cooperative?Deliveries[slot]:Stranded[slot]?StrandedAt[slot]:FinishTimes[slot]>=0?FinishTimes[slot]:Clock;
  public override bool ResultHasOutcome(int slot)=>slot>=0&&slot<setup.count&&(option==0?FinishTimes[slot]>=0&&Integrity[slot]>0:option==1?Deliveries[slot]>0:Cooperative?CooperativeEscaped||Deliveries[slot]>0||Rescues[slot]>0:Clock>=3);
- public override string Help=>"Drive and steer your physical barge; reverse thrust brakes. Hard normal collisions with sufficient impulse damage the hull; gentle docking and glancing scrapes are protected. Entity strikes remain a separate danger. ACTION rights a capsize. Crossing follows lit buoys to the far shore. Supply Run: touch a real unclaimed crate, then return it slowly inside the dock. Survival ranks actual time afloat; slowing quietly can shake pursuit, but lingering silence eventually draws it back. In crossing/delivery modes the green navigation lights repel direct strikes and slowly restore hull; wakes still move you. Cooperative Escape needs shared supplies, every boat upright and moving slowly back inside the dock, and no stranded teammates. Any boat can carry supplies. Hold ACTION while gently touching a stranded teammate for two seconds to repair them. AI can collect, brake, seek shelter and physically rescue. Cooperative success awards no individual winner point.";
+ public override string Help=>"Drive and steer your physical barge; reverse thrust brakes. Hard normal collisions with sufficient impulse damage the hull; gentle docking and glancing scrapes are protected. Entity strikes remain a separate danger. ACTION rights a capsize. Crossing follows lit buoys to the far shore. Supply Run: touch a real unclaimed crate, then return it slowly inside the dock. Survival ranks actual time afloat; slowing quietly can shake pursuit, but lingering silence eventually draws it back. In crossing/delivery modes the green navigation lights repel direct strikes and slowly restore hull; wakes still move you. Cooperative Escape starts a regroup countdown once shared supplies are secured. Every boat must be upright and moving slowly back inside the dock, and no stranded teammates. Any boat can carry supplies. Hold ACTION while gently touching a stranded teammate for two seconds to repair them. AI can collect, brake, seek shelter and physically rescue. Cooperative success awards no individual winner point.";
  public override string Status{
   get{
    if(Cooperative){if(BankedSupplies>=SharedSuppliesNeeded)return "SUPPLIES READY · RESCUE TEAMMATES · REGROUP AT DOCK";for(int i=0;i<setup.count;i++)if(Integrity[i]<=0)return "TEAMMATE STRANDED · GENTLE CONTACT + HOLD ACTION";return "SHARED SUPPLIES "+BankedSupplies+" / "+SharedSuppliesNeeded+" · GREEN LIGHTS OFFER SHELTER";}
@@ -74,7 +76,7 @@ public sealed class BlackwaterMatch:WaterMatch {
   entity.MovePosition(entity.position+step);entity.MoveRotation(rotation);
  }
  protected override void BeginWater(){
-  nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;entity.position=new Vector3(0,-5,90);
+  nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;regroupUntil=0;entity.position=new Vector3(0,-5,90);
   for(int i=0;i<4;i++){
    Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=quietAttemptUntil[i]=0;boatCargo[i]=cargoOwner[i]=cargoTargets[i]=-1;banked[i]=false;
    if(cargoJoints[i]!=null)Destroy(cargoJoints[i]);cargoJoints[i]=null;
@@ -186,6 +188,12 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(Vector3.Distance(vessel.body.position,dock.position)>=13||Vector3.Distance(supplies[carried].position,dock.position)>=15||vessel.body.linearVelocity.magnitude>=2.5f)return;
   Destroy(cargoJoints[index]);cargoJoints[index]=null;supplies[carried].linearVelocity=supplies[carried].angularVelocity=Vector3.zero;supplies[carried].isKinematic=true;
   banked[carried]=true;cargoOwner[carried]=-1;boatCargo[index]=-1;Deliveries[index]++;BankedSupplies++;
+  if(Cooperative&&BankedSupplies==SharedSuppliesNeeded){
+   // Banking the actual shipment starts a finite extraction stage. Keep the
+   // crew accountable for every living boat after supply collection.
+   regroupUntil=Clock+minimumRegroupSeconds;
+   SportsSessionTelemetry.GameplayEvent(Title,"cooperative_regroup",setup.players[index].participantId,"Actual shared supplies secured; regroup at dock",RoundDeadline-Clock);
+  }
   Scores[index]=Cooperative?Deliveries[index]*1000+Rescues[index]*200:10000-Clock;
   if(!Cooperative)FinishTimes[index]=Clock;
   ConfirmOutcome("supply:"+carried,index,1,"SUPPLY DELIVERED","DELIVERY");

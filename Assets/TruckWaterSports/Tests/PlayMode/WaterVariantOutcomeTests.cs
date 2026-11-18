@@ -111,7 +111,7 @@ namespace LWS.TruckWaterSports.Tests
                 float furthest=0,nextLog=sceneName=="Blackwater"?60:0,highestWave=0;int blackwaterRows=0;bool wet=false,physicalCargo=false,neededRescue=false;
                 float startingWave=(float)Field(Field(Vessel(match,0),"flotation"),"waveAmplitude");
                 Time.timeScale=4;float deadline=Time.realtimeSinceStartup+100;
-                while(!(bool)Property(match,"Finished")&&Time.realtimeSinceStartup<deadline&&Clock(match)<=duration+5)
+                while(!(bool)Property(match,"Finished")&&Time.realtimeSinceStartup<deadline&&Clock(match)<=(float)Property(match,"RoundDeadline")+5)
                 {
                     furthest=Mathf.Max(furthest,Vector3.Distance(Body(match,0).position,origin));
                     var flotation=Field(Vessel(match,0),"flotation");wet|=(uint)Property(flotation,"WetTriangles")>0;
