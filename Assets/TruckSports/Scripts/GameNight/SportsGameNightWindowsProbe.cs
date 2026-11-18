@@ -145,11 +145,14 @@ namespace LWS.TruckSports
                     if(expansionArg>=0 && session.presentationWeather!=null && session.presentationWeather.presets!=null && !(session is LWS.TruckWaterSports.BlackwaterMatch))
                     { session.presentationWeather.presets.Select("9aad5ff5dfa09ce468205f676714f891");SportsTimeOfDay.Select(SportsTimeChoice.Day); }
                     yield return new WaitForSecondsRealtime(.25f); yield return new WaitForEndOfFrame(); Capture("setup-" + scene + "-720p");
-                    yield return Press(host, GamepadButton.Start); yield return Press(second, GamepadButton.Start);
+                    // Opening a sport can retain an already-confirmed lobby ready state.
+                    // START toggles readiness: never turn ready participants OFF in the probe.
+                    if(!night.State.Seats[0].Ready)yield return Press(host,GamepadButton.Start);
+                    if(!night.State.Seats[1].Ready)yield return Press(second,GamepadButton.Start);
                     var start = session.menus.GetComponentsInChildren<SportsMenuAction>(true).FirstOrDefault(a => a.action == "start" && a.gameObject.activeInHierarchy);
                     Check(start != null, "A visible controller Start button is missing.");
                     EventSystem.current.SetSelectedGameObject(start.button.gameObject); yield return Press(host, GamepadButton.South);
-                    Check(session.Running, "Controller Confirm did not start the configured match.");
+                    Check(session.Running, "Controller Confirm did not start the configured match. phase="+night.State.Phase+" ready="+night.State.Seats[0].Ready+"/"+night.State.Seats[1].Ready+" selected="+(EventSystem.current.currentSelectedGameObject!=null?EventSystem.current.currentSelectedGameObject.name:"none"));
                     result.stage = "actual match " + scene;
                     if (scene == SportsNavigation.Whack)
                     {
