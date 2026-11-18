@@ -1,7 +1,7 @@
 # TRUCK SPORTS: PARTY!
 # ALPHA 0.10.0 — HITCHES, HORRORS & HIGH WATER
 
-**Development preview — expansion in progress.** Windows candidate 2 is available at `Builds/TruckSportsAlpha10Candidate2/TruckSports.exe` from commit `4b0a02fd`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and subsequent source improvements. Previous working installations are preserved.
+**Development preview — expansion in progress.** Windows candidate 3 is available at `Builds/TruckSportsAlpha10Candidate3/TruckSports.exe` from commit `5ca15da7`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and subsequent source improvements. Previous working installations are preserved.
 
 ## New Sports
 
@@ -46,7 +46,7 @@ All 22 sports have stable HH10 identities and use the existing catalog, setup an
 
 ## AI Competitors
 
-Earlier checkpoints passed twenty default outcomes. Changed gameplay requires its newer evidence; those earlier results do not certify the latest source. Hitch & Run rivals now physically couple, transport and complete repeated deliveries; Cursed Cargo completes its actual ward/delivery route and rematch. Slalom passed the latest natural water match/rematch checks; earlier boulder-contact delay evidence is retained. Native relay handoff and single/four-driver free-rolling trailer surfing now pass. The siege load releases, but useful downrange/castle impact remains under a targeted correction. Real synchronized-ice scoring and orbital recovery passed65; four-pilot original-load orbital relay passed67. Physical supply and fragile-ice rescue still have failures recorded for repair. Alternate-mode and physical-player acceptance is recorded separately.
+Candidate 3 includes native flooded cargo extraction, both tested siege outcomes, settled three-gate road-train delivery, actual Blackwater crate delivery, original-load Exorcism and the Domino Workshop placement controls. Those outcomes passed targeted Editor gameplay tests. Earlier evidence covers physical relay handoffs, synchronized trailer drift, orbital capture and transport, waterfall landings and basic one- and four-driver platform rides. Variant and physical-player acceptance is tracked separately.
 
 ## User Interface
 
@@ -72,4 +72,4 @@ NWH, Archimeds, shared weather and the existing Game Night services remain the f
 
 ## Known Issues
 
-Candidate 2 is a development preview. Follow-up source passed actual flooded cargo delivery, Cursed Cargo grounding, Canoe Chaos wet timber and tethers, Road Train's three connected-tail gates, a genuine ordinary siege flight, and standard Blackwater crossing. Those changes need a newer build. Castle masonry contact, Blackwater supply returns, full Graveyard services, Road Train multiplayer, Thin Ice shore recovery and several alternate scenarios remain open. The per-sport ledger also tracks unfinished courses, horror events, presentation and acceptance. Physical gamepads, listening and complete one-, two- and four-human operation remain unverified. Candidate 2 starts on Windows and reaches Paddle Pals through Game Night. The desktop validation run paused on loss of focus and did not complete a match. The ordinary Quit command reproduced the inherited native `0xC0000005` shutdown crash, which blocks promotion.
+Candidate 3 is a development preview. Full Graveyard services, Blackwater cooperative extraction, Thin Ice shore recovery, successful Hitch & Run theft recapture and several alternate scenarios remain open. The per-sport ledger also tracks unfinished courses, horror events, presentation and acceptance. Physical gamepads, listening and complete one-, two- and four-human operation remain unverified. Candidate 2 starts on Windows and reaches Paddle Pals through Game Night. The desktop validation run paused on loss of focus and did not complete a match. The ordinary Quit command reproduced the inherited native `0xC0000005` shutdown crash, which blocks promotion.
