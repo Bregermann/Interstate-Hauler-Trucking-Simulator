@@ -57,8 +57,8 @@ namespace LWS.TruckWaterSports.Editor
             WhitewaterSurvivalFork fork = null;
             try
             {
-                var inner = Rock(equipment, "Visible inner notch island", center + right * -6.8f, forward, new Vector3(2.8f,1.8f,10), contact);
-                var outer = Rock(equipment, "Visible bank-side notch boulder", center + right * -13.2f, forward, new Vector3(2,1.8f,8), contact);
+                var inner = Rock(equipment, "Visible inner notch island", center + right * -6.1f, forward, new Vector3(2,1.8f,10), contact);
+                var outer = Rock(equipment, "Visible bank-side notch boulder", center + right * -11.8f, forward, new Vector3(1.6f,1.8f,8), contact);
                 Vector2 inside = LateralExtents(inner, center, right), outside = LateralExtents(outer, center, right);
                 float gap = inside.x - outside.y;
                 // Match actual model vertices/colliders, not stale renderer AABBs.
@@ -112,13 +112,13 @@ namespace LWS.TruckWaterSports.Editor
 
         static void RequireSupportedPassage(WhitewaterWipeoutMatch match, Vector3 center, Vector3 forward, Vector3 right, float lateral, string label)
         {
-            Vector3 start = center + right * lateral - forward * 24, end = center + right * lateral + forward * 24;
+            Vector3 start = center + right * lateral - forward * 14, end = center + right * lateral + forward * 14;
             start.y = match.course.SurfacePointXZ(start).y - .05f; end.y = match.course.SurfacePointXZ(end).y - .05f;
             Vector3 delta = end - start; Quaternion rotation = Quaternion.LookRotation(forward, Vector3.up);
             // This stopped-scene query includes existing riverbanks/boulders as
             // well as the new visible rocks. It prevents saving a nominal gate
             // whose real hull-sized passage is already blocked by owned scenery.
-            Vector3 half = new Vector3(1.7f,.35f,1);
+            Vector3 half = new Vector3(1.7f,.35f,3.05f);
             foreach (var collider in Physics.OverlapBox(start, half, rotation, ~0, QueryTriggerInteraction.Ignore))
                 if (collider.GetComponentInParent<WaterVessel>(true) == null)
                     throw new InvalidOperationException("Preserve a supported " + label + "; entry hull overlaps actual collider: " + collider.name);
