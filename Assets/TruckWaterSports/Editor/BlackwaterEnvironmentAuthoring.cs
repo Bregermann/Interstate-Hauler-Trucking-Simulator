@@ -13,7 +13,7 @@ namespace LWS.TruckWaterSports.Editor
     /// <summary>
     /// Explicit, additive saved-scene dressing. Uses installed commercial dock-building
     /// modules/cargo/buildings and Fishing's boulders; never rebuilds water or gameplay.
-    /// No verified owned abandoned-boat model was found, so no placeholder boat is made.
+    /// Abandoned craft are installed separately through BlackwaterAbandonedCraftAuthoring using owned Fantastic Village rowboats.
     /// </summary>
     public static class BlackwaterEnvironmentAuthoring
     {
@@ -95,7 +95,7 @@ namespace LWS.TruckWaterSports.Editor
                 }
                 environment.SetActive(true); Undo.RegisterCreatedObjectUndo(environment, "Add owned Blackwater shoreline facilities");
                 EditorSceneManager.MarkSceneDirty(scene);
-                Debug.Log("BLACKWATER_ENVIRONMENT_ADDED: 2 modular supply platforms, 2 shoreline freight facilities, submerged textured shelves and owned rocks. Navigation/objectives/forces unchanged. Abandoned boats remain MISSING: no suitable installed production model identified. Caller must save scene/assets and inspect rendering.");
+                Debug.Log("BLACKWATER_ENVIRONMENT_ADDED: 2 modular supply platforms, 2 shoreline freight facilities, submerged textured shelves and owned rocks. Navigation/objectives/forces unchanged. Abandoned craft use the separate explicit owned-rowboat installer. Caller must save scene/assets and inspect rendering.");
                 return environment;
             }
             catch { UnityEngine.Object.DestroyImmediate(environment); throw; }
