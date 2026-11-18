@@ -56,12 +56,16 @@ namespace LWS.TruckExtremeHauling.Tests
                 var body = (Rigidbody)Read(trailer, "Body");
                 var origin = body.position;
                 var target = origin + new Vector3(14, 0, 21);
+                bool enteredBranch = false;
                 float deadline = Time.realtimeSinceStartup + 18;
                 while (Time.realtimeSinceStartup < deadline)
                 {
                     Vector3 distance = target - body.position;
                     if (Mathf.Abs(distance.x) < .18f && Mathf.Abs(distance.z) < .18f) break;
-                    float drive = Mathf.Clamp(distance.z, -1, 1);
+                    // Pull out of the tight original line sideways before
+                    // travelling toward the ramp between the standing trailers.
+                    enteredBranch |= Mathf.Abs(distance.x) < .25f;
+                    float drive = enteredBranch ? Mathf.Clamp(distance.z, -1, 1) : 0;
                     InputSystem.QueueStateEvent(pad, new GamepadState
                     {
                         leftStick = new Vector2(Mathf.Clamp(distance.x, -1, 1), 0),
