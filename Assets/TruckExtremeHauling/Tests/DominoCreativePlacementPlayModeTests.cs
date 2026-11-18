@@ -66,7 +66,8 @@ namespace LWS.TruckExtremeHauling.Tests
                 while (Time.realtimeSinceStartup < deadline)
                 {
                     Vector3 distance = target - body.position;
-                    if (Mathf.Abs(distance.x) < .18f && Mathf.Abs(distance.z) < .18f) break;
+                    if (Mathf.Abs(distance.x) < .30f && body.position.z - origin.z > 19 &&
+                        body.position.y - origin.y > .35f) break;
                     // Pull out of the tight original line sideways before
                     // travelling toward the ramp between the standing trailers.
                     enteredBranch |= Mathf.Abs(distance.x) < .25f;
