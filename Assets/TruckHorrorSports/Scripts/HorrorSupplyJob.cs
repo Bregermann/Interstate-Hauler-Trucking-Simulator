@@ -24,6 +24,7 @@ namespace LWS.TruckHorrorSports
         readonly bool[] footBypasses = new bool[12];
         const float ShelfReach = 1.8f;
         const float ShelfApproachSlack = .18f;
+        bool HasSecurityAudit => match != null && match.nightServices != null && match.nightServices.securityAudit != null;
         public Vector3 TruckApproach(int slot) => truckApproach + Vector3.right * ((slot - 1.5f) * 4);
         public bool Delivered(int slot) => slot >= 0 && slot < parcels.Length && delivered[slot];
         public bool Carrying(int slot) => grips != null && slot >= 0 && slot < grips.Length && grips[slot] != null;
@@ -54,8 +55,12 @@ namespace LWS.TruckHorrorSports
         public Vector2 FootCommand(int slot,Vector3 navigationTarget,bool refineToSupply=true)
         {
             var foot=carriers[slot];Vector3 interaction=refineToSupply?Target(slot):navigationTarget;
-            footRouteTargets[slot] = footSteeringTargets[slot] = navigationTarget;
-            footBlockers[slot] = null; footBypasses[slot] = false;
+            bool auditFlow = HasSecurityAudit;
+            if(auditFlow)
+            {
+                footRouteTargets[slot] = footSteeringTargets[slot] = navigationTarget;
+                footBlockers[slot] = null; footBypasses[slot] = false;
+            }
             if (refineToSupply && Carrying(slot))
             {
                 // At the real hand-off distance, face the shelf and stop. Continuing
@@ -75,20 +80,30 @@ namespace LWS.TruckHorrorSports
             if (refineToSupply && Vector3.ProjectOnPlane(interaction - foot.transform.position, Vector3.up).sqrMagnitude < 16
                 && ClearFootPath(slot, foot, interaction, out _))
                 navigationTarget = interaction;
-            footRouteTargets[slot] = navigationTarget;
-            if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null)
+            if(!auditFlow)
             {
-                footBlockers[slot] = blocker;
-                int blockingParticipant = BlockingParticipant(blocker);
-                if (blockingParticipant >= 0)
-                {
-                    // All participant rigs are absent from the static navigation bake.
-                    // A caught or parked teammate remains a real obstacle just like our cab.
-                    navigationTarget = CabBypass(slot, blockingParticipant, foot, blocker, navigationTarget);
-                    footBypasses[slot] = true;
-                }
+                // Preserve the ordinary venue's pre-audit navigation exactly.
+                if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null
+                    && blocker.transform.IsChildOf(match.trucks[slot].transform))
+                    navigationTarget = CabBypass(slot, slot, foot, blocker, navigationTarget);
             }
-            footSteeringTargets[slot] = navigationTarget;
+            else
+            {
+                footRouteTargets[slot] = navigationTarget;
+                if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null)
+                {
+                    footBlockers[slot] = blocker;
+                    int blockingParticipant = BlockingParticipant(blocker);
+                    if (blockingParticipant >= 0)
+                    {
+                        // All participant rigs are absent from the static navigation bake.
+                        // Keep this experimental extension isolated to the authored audit flow.
+                        navigationTarget = CabBypass(slot, blockingParticipant, foot, blocker, navigationTarget);
+                        footBypasses[slot] = true;
+                    }
+                }
+                footSteeringTargets[slot] = navigationTarget;
+            }
             Vector3 delta = Vector3.ProjectOnPlane(navigationTarget - foot.transform.position, Vector3.up);
             Vector3 local = foot.transform.InverseTransformDirection(delta);
             float angle = Mathf.Atan2(local.x, local.z) * Mathf.Rad2Deg;
@@ -156,6 +171,7 @@ namespace LWS.TruckHorrorSports
 
         public string FootObstacleDiagnostic(int slot)
         {
+            if(!HasSecurityAudit)return "optional security audit not authored; ordinary pre-audit cab navigation";
             if (slot < 0 || slot >= match.setup.count || slot >= carriers.Length) return "invalid foot participant";
             var blocker = footBlockers[slot];
             return "routeTarget=" + footRouteTargets[slot].ToString("F2")
