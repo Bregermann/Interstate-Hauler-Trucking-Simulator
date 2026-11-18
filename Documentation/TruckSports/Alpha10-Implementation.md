@@ -123,6 +123,12 @@ Run 97 passed the targeted Graveyard cab return and reset with a real attacker 6
 
 Run 98 passed Unhitched’s full software-controller recovery after widening the physical road from 4 m to 8 m along its outer edge. The native tractor hopped onto the lower supported road, took off from real road-wheel contact, regained four-tyre support on the original deck after that trailer travelled 60.40 m, and rematched. Separate Cargo Crisis openings at 720p and 1080p show the terrain perimeter now meets the apron and the new phase labels fit the 720p scorecards. The render-only fix preserves the flooded loading bays and native support. The cable status reads real joint force in kN when hooked.
 
+## Windows Candidate 6
+
+Full build from commit `1e63e4253202812c1deed7d8182293a5f62c1b84`. The executable identifies itself as version 0.10.0. It has 107 scenes, including all 22 expansion sports, 0 build errors, 225 build warnings and 4,143,012,108 bytes. Unity built it in 7m15.70s. It includes the tested precision pad, Convoy Rescue, moving-ring and Unhitched recovery changes, the nearby Graveyard retreat and updated venue previews.
+
+The actual Windows Game Night probe passed two complete matches in 349.40 s with two software gamepads, returning results, lobby, saved profiles, statistics and a session report with 139 telemetry lines. Trailerblazers Highest Altitude recorded two measured AI flights. Ice Road Delivery recorded an AI win with an actual scored delivery. Both rounds reached their match clocks. The report lists 0 gameplay errors, 2 warnings and 0 interruptions. No human winner points were earned in this run. The earlier Candidate 3 test confirmed positive awards and profile relaunch. The 720p gameplay captures and 1080p standings are under `Logs/TruckSports/Alpha10/WindowsCandidate6`. Native exit `0xC0000005` reproduced after the report saved. This remains an isolated development candidate and the working installation was preserved.
+
 ## Per-sport table
 
 All rows currently remain PARTIAL. Every row has an original PNG logo, actual saved scene, menu entry, AI control and existing SportsEventSession setup/results flow. A default natural outcome proves only the specific exercised default; it does not certify all four advertised variants, complete environments or physical human multiplayer.
@@ -166,7 +172,7 @@ Match setup uses existing participant IDs and sources. Results use existing Game
 
 Receipts remain in `Logs/TruckSports/Alpha10`. Failed receipts are retained. Physics01, HitchHorror02 and NonFootRegression03 contain focused physics/lifecycle checks; OutcomeRules30 passed 34 pure rules tests. Natural default evidence is listed individually above. MenuIntegration20 assigned all22 original PNGs and actual gameplay previews. Openings44 refreshed19 changed venues at720p/1080p with zero logged runtime errors; visual review separately caught the Unhitched four-driver spawn pileup, so an error-free capture is not gameplay acceptance. Earlier captures cover the three unchanged horror venues; those are short controlled Editor captures, not full matches or Windows evidence. CandidateContent27 added owned peripheral landscapes and corrected payload scale. Newer relevant tests supersede only their affected checks, not unchanged passing evidence. Focused43 passed all-four Hitch & Run deliveries and Cursed Cargo natural delivery/rematch, while retaining Trebuchet and technical Slalom failures. The ordered build was paused before compilation to fix the visually observed surf spawn defect; no prior accepted build was replaced.
 
-Latest Windows development candidate: `Builds/TruckSportsAlpha10Candidate5/TruckSports.exe` at source commit `91c46f65`. Candidate 4 Full, Candidate 3, Candidate 2 and candidate51 are also preserved. Newer source checkpoints remain separate from the executable. The accepted `Builds/TruckSports` and earlier `Builds/TruckSportsCamera` installations are preserved.
+Latest Windows development candidate: `Builds/TruckSportsAlpha10Candidate6/TruckSports.exe` at source commit `1e63e425`. Candidates 5, 4 Full, 3, 2 and 51 are also preserved. The latest follow-up venues are tracked separately from this frozen executable. The accepted `Builds/TruckSports` and earlier `Builds/TruckSportsCamera` installations are preserved.
 
 ## Remaining original work
 

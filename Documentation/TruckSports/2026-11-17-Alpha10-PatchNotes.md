@@ -1,7 +1,7 @@
 # TRUCK SPORTS: PARTY!
 # ALPHA 0.10.0 — HITCHES, HORRORS & HIGH WATER
 
-**Development preview, expansion in progress.** Windows Candidate 5 is available at `Builds/TruckSportsAlpha10Candidate5/TruckSports.exe` from commit `91c46f65`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and newer source. Previous working installations are preserved.
+**Development preview, expansion in progress.** Windows Candidate 6 is available at `Builds/TruckSportsAlpha10Candidate6/TruckSports.exe` from commit `1e63e425`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and newer source. Previous working installations are preserved.
 
 ## New Sports
 
@@ -72,6 +72,6 @@ NWH, Archimeds, shared weather and the existing Game Night services remain the f
 
 ## Known Issues
 
-Candidate 5 includes the shared canoe camera and repaired riverbed, cooperative Blackwater and Scarecrow extraction, the Dead End pursuer cue, physical Hitch & Run steals, the Highway Pileup recovery scenario and the Unhitched quarter-turn trick. Targeted play checks also passed Obstacle Relay, Skyhook Slalom and Skyhook High-Wind Hauling.
+Candidate 6 includes the shared canoe camera and textured banks, cooperative Blackwater and Scarecrow extraction, the Dead End pursuer cue, physical Hitch & Run steals, the Highway Pileup recovery scenario and the Unhitched quarter-turn trick. The latest build also includes the tested precision rocket landing, Thin Ice shore recovery, Moving Ring Challenge and Unhitched ground remount.
 
-The full Windows export completed Cargo Crisis and Paddle Pals in Game Night with two software controllers, returned to the lobby and saved standings, statistics and telemetry. A Candidate 3 relaunch previously confirmed profile persistence. The native exit crash (`0xC0000005`) still blocks promotion. Later source passed precision rocket landing, Thin Ice shore recovery, the moving ring, Unhitched ground remounts and a nearby Graveyard cab retreat. Full-night Graveyard survival, alternate routes and physical-controller, listening and human acceptance remain open. The permanent ledger records each outstanding item.
+Candidate 6 completed Trailerblazers and Ice Road Reckoning in Windows Game Night with two software controllers. It returned to the lobby and saved standings, statistics and telemetry. A Candidate 3 relaunch previously confirmed profile persistence. The native exit crash (`0xC0000005`) still blocks promotion. Full-night Graveyard survival, alternate routes, physical controllers, listening and human acceptance remain open. The permanent ledger records each outstanding item.
