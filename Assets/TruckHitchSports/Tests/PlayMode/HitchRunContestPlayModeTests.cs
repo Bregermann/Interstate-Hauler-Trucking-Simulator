@@ -51,6 +51,7 @@ public sealed class HitchRunContestPlayModeTests
             var originalOwners = Enumerable.Repeat(-1, trailers.Length).ToArray();
             var deliveredStolen = new bool[4];
             int samples = 0; float nextSample = 30; string lastLive = "not sampled"; bool contestObservedLogged = false;
+            bool counterTheftLogged = false;
             float firstContestAt = -1, firstRecaptureAt = -1, firstStolenDeliveryAt = -1;
             try
             {
@@ -61,6 +62,11 @@ public sealed class HitchRunContestPlayModeTests
                     for (int t = 0; t < trailers.Length; t++)
                     {
                         var load = trailers.GetValue(t); int owner = (int)Property(load, "Owner");
+                        if (!counterTheftLogged && observedPhysicalRecapture[t] && priorOwners[t] >= 0 && owner < 0)
+                        {
+                            counterTheftLogged = true;
+                            Debug.Log("HH10_HITCH_RUN_COUNTER_THEFT age=" + Property(match, "Elapsed") + " releasedOwner=" + priorOwners[t] + " " + Call(match, "ContestDiagnostic", priorOwners[t]));
+                        }
                         if (priorOwners[t] >= 0 && owner < 0) { observedContest[t] = true; originalOwners[t] = priorOwners[t]; }
                         if (observedContest[t] && owner >= 0 && owner != originalOwners[t] && ReferenceEquals(Property(couplers.GetValue(owner), "Attached"), load) && (bool)Property(couplers.GetValue(owner), "PhysicalConstraintPresent"))
                         {
@@ -100,6 +106,7 @@ public sealed class HitchRunContestPlayModeTests
                 Call(match, "SetupScreen"); Assert.That((bool)Call(match, "StartMatch"), Is.True);
                 Assert.That(((int[])Read(match, "contestsWon")).All(value => value == 0), Is.True);
                 Assert.That(((int[])Read(match, "successfulSteals")).All(value => value == 0), Is.True);
+                Assert.That(((Array)Read(match, "recoveryCargo")).Cast<object>().All(value => value == null), Is.True, "Rematch must forget every unfinished physical cargo recovery.");
                 Assert.That(((double[])Read(match, "Scores")).All(value => value == 0), Is.True);
             }
             finally { Time.timeScale = 1; if (match != null) Call(match, "SetupScreen"); }

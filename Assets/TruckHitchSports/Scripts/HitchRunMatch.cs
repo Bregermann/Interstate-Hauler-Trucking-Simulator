@@ -11,6 +11,7 @@ namespace LWS.TruckHitchSports
         readonly float[] aiReadyAt = new float[4];
         readonly TrailerBody[] contested = new TrailerBody[4];
         readonly TrailerBody[] aiTarget = new TrailerBody[4];
+        readonly TrailerBody[] recoveryCargo = new TrailerBody[4];
         readonly int[] approachStage = new int[4], approachSide = new int[4];
         readonly float[] clearKingpinUntil = new float[4];
         readonly Vector3[] clearKingpinTarget = new Vector3[4];
@@ -43,6 +44,7 @@ namespace LWS.TruckHitchSports
         {
             System.Array.Clear(contest, 0, 4); System.Array.Clear(deliveryQuiet, 0, 4); System.Array.Clear(successfulSteals, 0, 4); System.Array.Clear(contested, 0, 4);
             System.Array.Clear(aiTarget, 0, 4); System.Array.Clear(approachStage, 0, 4); System.Array.Clear(aiReadyAt, 0, 4);
+            System.Array.Clear(recoveryCargo, 0, recoveryCargo.Length);
             System.Array.Clear(clearKingpinUntil, 0, 4); System.Array.Clear(contestsWon, 0, 4);
             respawnAt = new float[trailers.Length]; contestedOwner = new int[trailers.Length]; cargoStealer = new int[trailers.Length];
             for (int slot = 0; slot < ambushRival.Length; slot++) { ambushRival[slot] = -1; ambushStage[slot] = upstreamStaging[slot] = 0; ambushGoal[slot] = Vector3.zero; }
@@ -69,8 +71,22 @@ namespace LWS.TruckHitchSports
             for (int i = 0; i < setup.count; i++)
             {
                 var owned = couplers[i].Attached; bool ai = IsAI(i);
+                // A counter-theft does not cancel the courier's unfinished
+                // delivery. Remember that exact physical load after clearing
+                // its kingpin, including if another rival recouples first.
+                var remembered = recoveryCargo[i];
+                bool recoveringDelivery = ai && owned == null && remembered != null
+                    && remembered.gameObject.activeSelf && remembered.Deliveries == 0
+                    && System.Array.IndexOf(trailers, remembered) >= 0;
+                if (!recoveringDelivery) recoveryCargo[i] = null;
+                else if (aiTarget[i] != remembered)
+                {
+                    aiTarget[i] = remembered; approachStage[i] = 0;
+                    approachSide[i] = Vector3.Dot(trucks[i].body.position - remembered.Body.position, remembered.transform.right) < 0 ? -1 : 1;
+                }
                 bool hardAmbush = i == bayAmbusher;
-                bool recoveringContestedCargo = aiTarget[i] != null && aiTarget[i].Owner < 0 && contestedOwner[System.Array.IndexOf(trailers, aiTarget[i])] >= 0;
+                int targetIndex = aiTarget[i] != null ? System.Array.IndexOf(trailers, aiTarget[i]) : -1;
+                bool recoveringContestedCargo = recoveringDelivery || targetIndex >= 0 && aiTarget[i].Owner < 0 && contestedOwner[targetIndex] >= 0;
                 hardAmbush &= !recoveringContestedCargo;
                 if (hardAmbush) EnsureAmbushRival(i);
                 // Close AI backing may choose R explicitly; every other path
@@ -102,7 +118,7 @@ namespace LWS.TruckHitchSports
                         float weighted = distance / value;
                         if (weighted < priority) { priority = weighted; nearest = distance; candidate = trailer; }
                     }
-                    bool seekTheft = option % 4 == 0 && Deliveries[i] >= 2 && candidate != null && candidate.Owner >= 0 && aiTarget[i] != null && aiTarget[i].Owner < 0 && approachStage[i] < 2;
+                    bool seekTheft = !recoveringDelivery && option % 4 == 0 && Deliveries[i] >= 2 && candidate != null && candidate.Owner >= 0 && aiTarget[i] != null && aiTarget[i].Owner < 0 && approachStage[i] < 2;
                     bool validLockedTarget = aiTarget[i] != null && aiTarget[i].gameObject.activeSelf && aiTarget[i].Deliveries == 0 && (!hardAmbush || aiTarget[i].Owner == ambushRival[i]);
                     if (ai && !seekTheft && validLockedTarget && (option % 4 != 2 || (aiTarget[i].Owner < 0 || aiTarget[i].Owner % 2 != i % 2) && !ReservedByCloserTeammate(i, aiTarget[i])))
                     { candidate = aiTarget[i]; nearest = (candidate.Kingpin.position - couplers[i].Anchor.position).sqrMagnitude; }
@@ -151,7 +167,8 @@ namespace LWS.TruckHitchSports
                                 {
                                     clearKingpinTarget[oldOwner] = trucks[oldOwner].body.position + trucks[oldOwner].transform.forward * 16 + trucks[oldOwner].transform.right * 8;
                                     clearKingpinUntil[oldOwner] = Elapsed + 8;
-                                    aiTarget[oldOwner] = null; approachStage[oldOwner] = 0;
+                                    recoveryCargo[oldOwner] = option % 4 == 0 ? candidate : null;
+                                    aiTarget[oldOwner] = recoveryCargo[oldOwner]; approachStage[oldOwner] = 0;
                                 }
                             }
                             contest[i] = 0;
@@ -350,14 +367,19 @@ namespace LWS.TruckHitchSports
         {
             if (slot < 0 || slot >= setup.count) return "invalid seat";
             var target = contested[slot];
-            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " ambushRival=" + ambushRival[slot] + " upstreamStage=" + upstreamStaging[slot] + " bayStage=" + ambushStage[slot] + " tractor=" + trucks[slot].body.position.ToString("F2") + " bayGoal=" + ambushGoal[slot].ToString("F2") + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
+            var owned = couplers[slot].Attached;
+            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " recoveryCargo=" + (recoveryCargo[slot] != null ? System.Array.IndexOf(trailers, recoveryCargo[slot]) : -1) + " ownedCargo=" + (owned != null ? System.Array.IndexOf(trailers, owned) : -1) + (owned != null ? " ownedCOM=" + owned.Body.worldCenterOfMass.ToString("F2") + " depotGap=" + Vector3.Distance(owned.Body.worldCenterOfMass, depots[option % 4 == 2 ? slot % 2 : slot].position).ToString("F2") : "") + " ambushRival=" + ambushRival[slot] + " upstreamStage=" + upstreamStaging[slot] + " bayStage=" + ambushStage[slot] + " tractor=" + trucks[slot].body.position.ToString("F2") + " bayGoal=" + ambushGoal[slot].ToString("F2") + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
         }
         void CoupledLoad(int slot, TrailerBody trailer)
         {
             int index = System.Array.IndexOf(trailers, trailer);
             if (contestedOwner[index] >= 0 && contestedOwner[index] != slot) { successfulSteals[slot]++; cargoStealer[index] = slot; }
-            else if (contestedOwner[index] == slot) cargoStealer[index] = -1;
+            // Recovering a load that THIS driver genuinely stole earlier does
+            // not erase its theft provenance. A failed rival contest granted
+            // nobody a new native hitch or a replacement delivery entitlement.
+            else if (contestedOwner[index] == slot && cargoStealer[index] != slot) cargoStealer[index] = -1;
             contestedOwner[index] = -1;
+            recoveryCargo[slot] = null;
             aiTarget[slot] = null; approachStage[slot] = 0;
         }
         bool ApproachCargoAI(int slot, TrailerBody trailer, float dt, bool contestOnly)
