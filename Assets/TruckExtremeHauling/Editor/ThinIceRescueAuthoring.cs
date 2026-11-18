@@ -55,10 +55,8 @@ namespace LWS.TruckExtremeHauling.Editor
             SportsEventAuthoring.Box("Supported northern rescue station apron", new Vector3(105,-.65f,335), new Vector3(350,2,90), ground, contact, equipment);
             // An actual shallow ramp prevents a buoyant trailer meeting an
             // impossible vertical ice edge. Native wheels/contacts do the lift.
-            Vector3 low = rescue.incidentIce.transform.position + new Vector3(0,-3,0);
-            Vector3 high = rescue.incidentIce.transform.position + new Vector3(0,.35f,22);
-            var ramp = SportsEventAuthoring.Box("Physical submerged extraction ramp", (low+high)*.5f, new Vector3(9,.35f,Vector3.Distance(low,high)), steel, contact, equipment);
-            ramp.transform.rotation = Quaternion.Euler(-Mathf.Atan2(high.y-low.y,high.z-low.z)*Mathf.Rad2Deg,0,0);
+            var ramp = SportsEventAuthoring.Box("Physical submerged extraction ramp", equipment.position, Vector3.one, steel, contact, equipment);
+            PositionExtractionRamp(rescue, ramp.transform);
             var waterPatch = GameObject.CreatePrimitive(PrimitiveType.Quad); waterPatch.name = "Actual lake water below fractured ice sheets";
             waterPatch.transform.SetParent(equipment, false); waterPatch.transform.position = new Vector3(rescue.waterBounds.center.x,-.55f,rescue.waterBounds.center.z);
             waterPatch.transform.rotation = Quaternion.Euler(90,0,0); waterPatch.transform.localScale = new Vector3(rescue.waterBounds.size.x,rescue.waterBounds.size.z,1);
@@ -74,6 +72,42 @@ namespace LWS.TruckExtremeHauling.Editor
             EditorUtility.SetDirty(match); EditorUtility.SetDirty(rescue); EditorSceneManager.MarkSceneDirty(scene);
             Debug.Log("Convoy Rescue authored: original NWH NPC trailer, actual load-stressed incident ice, Archimeds recovery buoyancy, extraction ramp and supported shore. Options0–2 geometry stays inactive. Save explicitly; runtime acceptance is pending.");
             return rescue;
+        }
+
+        [MenuItem("Truck Sports/Alpha 0.10/Align Thin Ice extraction ramp with ice edge")]
+        public static void RepairActiveExtractionRamp()
+        {
+            var scene = SceneManager.GetActiveScene();
+            const string scenePath = "Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity";
+            if (EditorApplication.isPlayingOrWillChangePlaymode || scene.path != scenePath)
+                throw new InvalidOperationException("Open the saved Ice Road Reckoning scene outside Play Mode.");
+
+            var match = UnityEngine.Object.FindAnyObjectByType<ThinIceMatch>();
+            var rescue = match != null ? match.rescue : null;
+            var ramp = rescue != null && rescue.equipment != null
+                ? rescue.equipment.Find("Physical submerged extraction ramp") : null;
+            if (ramp == null || !ramp.TryGetComponent<BoxCollider>(out _))
+                throw new InvalidOperationException("The original rescue ramp is required.");
+
+            Undo.RecordObject(ramp, "Align rescue ramp with ice edge");
+            PositionExtractionRamp(rescue, ramp);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
+
+        static void PositionExtractionRamp(ThinIceRescueObjectives rescue, Transform ramp)
+        {
+            // The next sheet starts at the northern edge of the incident tile.
+            // Meet its upper surface there, before the trailer reaches the
+            // slab face. Allow room for a buoyant load drifting off centre.
+            Bounds tile = rescue.incidentIce.surface.bounds;
+            const float deckThickness = .35f;
+            Vector3 low = new Vector3(tile.center.x, tile.center.y - 3, tile.center.z - 8);
+            Vector3 high = new Vector3(tile.center.x, tile.max.y - deckThickness * .5f, tile.max.z + .5f);
+            Vector3 slope = high - low;
+            ramp.SetPositionAndRotation((low + high) * .5f,
+                Quaternion.Euler(-Mathf.Atan2(slope.y, slope.z) * Mathf.Rad2Deg, 0, 0));
+            ramp.localScale = new Vector3(Mathf.Min(18, tile.size.x - 2), deckThickness, slope.magnitude);
         }
 
         static void OwnedProp(Transform parent, string source, Vector3 position, Vector3 size)

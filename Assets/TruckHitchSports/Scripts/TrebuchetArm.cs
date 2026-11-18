@@ -11,6 +11,10 @@ namespace LWS.TruckHitchSports
         [Tooltip("World-space mechanical travel, normally approach -forward6m and exit +forward6m.")]
         public Vector3[] LoadingBridgeRetractionOffsets = System.Array.Empty<Vector3>();
         public float BridgeRetractionMetres = 6, BridgeRetractionSpeed = 2;
+        [Min(0), Tooltip("Powered hinge load limit in simulation units at maximum assist.")]
+        public float fullAssistTorque = 160000000;
+        [Min(10), Tooltip("Maximum powered swing rate in degrees per second.")]
+        public float poweredSwingSpeed = 180;
         public bool PreparingToSwing { get; private set; }
         public bool LoadingBridgesReady { get; private set; }
         bool swingWhenBridgesClear;
@@ -130,7 +134,15 @@ namespace LWS.TruckHitchSports
             PreparingToSwing = false;
             Swinging = true; Pivot.useSpring = false;
             Arm.isKinematic = false; Arm.useGravity = true; Arm.WakeUp();
-            var motor = Pivot.motor; motor.force = Arm.mass * Mathf.Lerp(50, 120, Mathf.Clamp01(power)); motor.targetVelocity = -65; motor.freeSpin = true;
+            // The launch window ends as the payload comes level with the pivot.
+            // Size the hinge assist for this arena's measured loaded inertia
+            // and limit its angular speed. The payload gains momentum from
+            // the solved hinge and harness before the joint is released.
+            Arm.maxAngularVelocity = Mathf.Max(Arm.maxAngularVelocity, poweredSwingSpeed * Mathf.Deg2Rad);
+            var motor = Pivot.motor;
+            motor.force = fullAssistTorque * Mathf.Lerp(.35f, 1, Mathf.Clamp01(power));
+            motor.targetVelocity = -poweredSwingSpeed;
+            motor.freeSpin = true;
             Pivot.motor = motor; Pivot.useMotor = true;
         }
         public bool Release()

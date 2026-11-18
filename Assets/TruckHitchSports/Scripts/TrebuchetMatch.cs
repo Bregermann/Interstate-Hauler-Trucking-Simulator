@@ -114,12 +114,6 @@ namespace LWS.TruckHitchSports
                     if ((ai ? tractorClear : engine.LoadingBridgesReady) && (ai ? aimAge[i] > 1.5f : actions[i]))
                     {
                         engine.BeginSwing(assistPower[i]);
-                        // Physical winch assist, expressed as joint torque.
-                        // The normalized full-size counterweight/load inertia
-                        // needs siege-scale torque rather than a truck gearbox.
-                        var motor = engine.Pivot.motor;
-                        motor.force = engine.Arm.mass * Mathf.Lerp(50, 120, assistPower[i]);
-                        engine.Pivot.motor = motor;
                         beganSwing = true;
                     }
                     if (engine.PreparingToSwing) { Notice = "RETRACTING LOADING BRIDGES · STAND CLEAR"; continue; }

@@ -24,6 +24,8 @@ namespace LWS.TruckExtremeHauling
         readonly int[] recoveryAttempts = new int[4];
         readonly float[] stable = new float[4], stageTime = new float[4];
         readonly BoxCollider[] floodDryLane = new BoxCollider[4];
+        BoxCollider floodNorthernRoad;
+        readonly int[] floodTowHitchLosses = new int[4];
         readonly bool[] floodAlignBacking = new bool[4], floodHold = new bool[4];
         readonly LineRenderer[] cables = new LineRenderer[4];
         bool[] deliveredTargets;
@@ -32,7 +34,7 @@ namespace LWS.TruckExtremeHauling
         public string RecoveryPhase(int slot) => stage[slot].ToString();
         public bool CableConnected(int slot) => winches != null && winches[slot] != null && winches[slot].connectedBody != null;
         public bool CooperativeSuccess => Cooperative && deliveredTargets != null && SharedRescues == Mathf.Min(setup.count, deliveredTargets.Length);
-        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"cargo_recovery_attempts",recoveryAttempts[i]);RecordMetric(i,"cargo_shared_rescues",SharedRescues);var target=Target(i);if(target!=null)RecordMetric(i,"rescued_cargo_condition",target.CargoCondition);if(emergencySites!=null&&emergencySites.Active!=null){RecordMetric(i,"cargo_fire_exposure_seconds",emergencySites.HeatSeconds[i]);RecordMetric(i,"cargo_water_immersion_seconds",emergencySites.ImmersedSeconds[i]);RecordMetric(i,"cargo_physical_cable_tow_metres",emergencySites.CableTowMetres[i]);RecordMetric(i,"cargo_flood_extracted",emergencySites.Extracted[i]?1:0);} }
+        protected override void ReportFinalMeasurements(int i) {if(option==5)RecordMetric(i,"cargo_flood_actual_tow_hitch_losses",floodTowHitchLosses[i]); RecordMetric(i,"cargo_recovery_attempts",recoveryAttempts[i]);RecordMetric(i,"cargo_shared_rescues",SharedRescues);var target=Target(i);if(target!=null)RecordMetric(i,"rescued_cargo_condition",target.CargoCondition);if(emergencySites!=null&&emergencySites.Active!=null){RecordMetric(i,"cargo_fire_exposure_seconds",emergencySites.HeatSeconds[i]);RecordMetric(i,"cargo_water_immersion_seconds",emergencySites.ImmersedSeconds[i]);RecordMetric(i,"cargo_physical_cable_tow_metres",emergencySites.CableTowMetres[i]);RecordMetric(i,"cargo_flood_extracted",emergencySites.Extracted[i]?1:0);} }
         public override string Title => "CARGO CRISIS";
         public override int OptionCount => 6;
         protected override string[] Modes => new[] { "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS", "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE" };
@@ -77,6 +79,13 @@ namespace LWS.TruckExtremeHauling
                 EnsureCable(i); cables[i].enabled = false;
             }
             emergencySites?.BeginRound();
+            floodNorthernRoad = null;
+            if (emergencySites != null && emergencySites.FloodActive)
+            {
+                var road = emergencySites.Active.environment.transform.Find("Dry northern freight haul road");
+                if (road != null && Quaternion.Angle(road.rotation, Quaternion.identity) < .1f) floodNorthernRoad = road.GetComponent<BoxCollider>();
+            }
+            Array.Clear(floodTowHitchLosses, 0, floodTowHitchLosses.Length);
             for (int slot = 0; slot < floodDryLane.Length; slot++)
             {
                 floodDryLane[slot] = null; floodAlignBacking[slot] = floodHold[slot] = false;
@@ -127,6 +136,7 @@ namespace LWS.TruckExtremeHauling
         {
             floodHold[i] = false;
             var target=Target(i);if(target==null||stage[i]==RescueStage.Delivered)return Vector2.zero;
+            RecoverUnexpectedFloodTowDetach(i, target);
             if (emergencySites != null && emergencySites.FloodActive && emergencySites.Extracted[i] && hitches[i].Attached == null && (stage[i] == RescueStage.ClearSide || stage[i] == RescueStage.AlignLane || stage[i] == RescueStage.Straighten))
                 return FloodAlignmentCommand(i, target);
             var transmission=trucks[i].tractorMotor.vehicle.powertrain.transmission;
@@ -138,9 +148,11 @@ namespace LWS.TruckExtremeHauling
             if (hitches[i].Attached != null)
             {
                 Vector3 destination = base.Destination(i);
+                bool floodExit = TryFloodTowExit(i, hitches[i].Attached, out var exit);
+                if (floodExit) destination = exit;
                 float distance = Vector3.ProjectOnPlane(hitches[i].Attached.Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude;
                 if (distance < 6) return new Vector2(0, -Mathf.Clamp01(trucks[i].body.linearVelocity.magnitude));
-                return DriveToward(i, destination, 8, false);
+                return DriveToward(i, destination, floodExit ? 4 : 8, false);
             }
             if (stage[i] == RescueStage.ReverseHitch)
             {
@@ -160,12 +172,50 @@ namespace LWS.TruckExtremeHauling
             }
             return DriveToward(i, Destination(i), stage[i] == RescueStage.Approach ? 5 : 6, true);
         }
+        void RecoverUnexpectedFloodTowDetach(int slot, TrailerBody target)
+        {
+            if (emergencySites == null || !emergencySites.FloodActive || stage[slot] != RescueStage.Tow || hitches[slot].Attached != null || deliveredTargets[assigned[slot]]) return;
+            // Native OnDetach lowers the parking legs. A stale Tow phase with
+            // no hitch otherwise targets its own cab position forever.
+            floodTowHitchLosses[slot]++;
+            Debug.Log("CARGO_FLOOD_ACTUAL_TOW_HITCH_LOSS " + FloodTowDiagnostic(slot));
+            target.SetBrakes(1); SetStage(slot, RescueStage.ClearSide);
+        }
+        bool TryFloodTowExit(int slot, TrailerBody load, out Vector3 destination)
+        {
+            destination = default;
+            if (emergencySites == null || !emergencySites.FloodActive || floodNorthernRoad == null || floodDryLane[slot] == null) return false;
+            float roadStart = floodNorthernRoad.bounds.min.z;
+            if (load.Body.worldCenterOfMass.z >= roadStart + 4) return false;
+            // First haul up the clear inner bank corridor, to the left of the
+            // existing crate pile at bankX+15/z-22. Turning toward a far depot
+            // alone produced only a shallow avoidance angle at that corner.
+            // This is a cab-clearance waypoint, not a scoring position: steer
+            // the tractor itself through the open corridor. The articulated
+            // load follows physically; final depot targeting remains COM-based.
+            destination = new Vector3(emergencySites.Active.dryBankX[slot] + 7, objectives[slot].position.y, roadStart + 12);
+            return true;
+        }
+        public string FloodTowDiagnostic(int slot)
+        {
+            var target = Target(slot); var vehicle = trucks[slot].tractorMotor.vehicle;
+            return "slot=" + slot + " losses=" + floodTowHitchLosses[slot] + " phase=" + stage[slot] + " attached=" + (hitches[slot].Attached != null) + " physicalJoint=" + hitches[slot].PhysicalConstraintPresent + " nativeAttached=" + hitches[slot].Hitch.module.attached + " reason=" + hitches[slot].LastReason + " gear=" + vehicle.powertrain.transmission.Gear + " engine=" + vehicle.powertrain.engine.IsRunning + " swappedThrottle=" + vehicle.input.InputSwappedThrottle.ToString("F2") + " tractor=" + trucks[slot].body.position.ToString("F2") + " cargo=" + (target != null ? target.Body.position.ToString("F2") : "none");
+        }
         bool FloodLaneInterval(int slot, TrailerBody target, out Bounds safe, out float low, out float high)
         {
             safe = default; low = 0; high = float.PositiveInfinity;
             var plate = floodDryLane[slot];
             if (plate == null || !plate.enabled || !plate.gameObject.activeInHierarchy) return false;
             safe = plate.bounds;
+            // The bank joins the existing northern road edge-to-edge. Extend
+            // only Z within this bank's unchanged X strip; never use the whole
+            // northern road AABB across the neighboring flooded bays.
+            if (floodNorthernRoad != null && floodNorthernRoad.enabled && floodNorthernRoad.gameObject.activeInHierarchy)
+            {
+                Bounds road = floodNorthernRoad.bounds;
+                if (road.min.x <= safe.min.x && road.max.x >= safe.max.x && road.min.z <= safe.max.z + .02f && road.max.z > safe.max.z && Mathf.Abs(road.max.y - safe.max.y) < .02f)
+                    safe.SetMinMax(safe.min, new Vector3(safe.max.x, safe.max.y, road.max.z));
+            }
             float hullMargin = trucks[slot].shape != null ? Mathf.Max(4, trucks[slot].shape.bounds.extents.magnitude + 1) : 4;
             safe.Expand(new Vector3(-hullMargin * 2, 0, -hullMargin * 2));
             Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
@@ -269,6 +319,7 @@ namespace LWS.TruckExtremeHauling
                 if (!ai && actions[i]) ChooseTarget(i);
             }
             var target = Target(i); if (target == null) { if (ai) Park(i); return; }
+            RecoverUnexpectedFloodTowDetach(i, target);
             if (hitches[i].Attached != null && hitches[i].Attached != target)
             { assigned[i] = Array.IndexOf(trailers, hitches[i].Attached); target = Target(i); }
             if(emergencySites!=null&&emergencySites.Active!=null)

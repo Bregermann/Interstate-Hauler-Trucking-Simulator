@@ -7,6 +7,15 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsHitchesAuthoring
     {
+        public static void InstallSavedRescueRampAndCreativeWorkshop()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity");
+            LWS.TruckExtremeHauling.Editor.ThinIceRescueAuthoring.RepairActiveExtractionRamp();
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/DominoDerby.unity");
+            LWS.TruckExtremeHauling.Editor.DominoCreativeWorkshopAuthoring.InstallActiveWorkshop();
+            AssetDatabase.SaveAssets();
+        }
+
         public static void RestoreSavedSiegeReceivingField()
         {
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/TrailerTrebuchet.unity");

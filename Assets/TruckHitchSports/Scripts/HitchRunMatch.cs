@@ -30,7 +30,7 @@ namespace LWS.TruckHitchSports
             for (int i = 0; i < setup.count; i++) if (i % 2 == slot % 2 && Deliveries[i] > 0) return true;
             return false;
         }
-        public override string Help => "Back the fifth wheel under a kingpin and hold ACTION to physically couple. Press ACTION to unhitch your own load. Deliver attached cargo to your marked depot and stop both real bodies for two uncontested seconds. To contest an occupied load, park within five meters of its kingpin and hold ACTION for three seconds while both rigs are slow; then physically recouple. Contact never transfers ownership. Trailer Thief pays a large bonus only when you actually steal and deliver another driver's cargo. Delivery Rush scores completed delivery count. Team Smuggling uses seats 1+3 against 2+4 with shared depots and shared cargo points; AI fills unused human seats. High-Value Cargo Hunt adds real mass and value to three load tiers, shown in your panel while hitched and reduced by damage. After its first delivery, Hard Trailer Thief AI may stake out a rival's depot instead of collecting more unclaimed cargo; it still must win the physical stopped contest, recouple and deliver to its own depot. AI difficulty changes target aggression, reaction delay, approach pace, backing precision and delivery pace; every difficulty uses the same real coupling and delivery rules. Dispatched loads return at their original yard positions after a delay, only when the spawn is clear.";
+        public override string Help => "Back the fifth wheel under a kingpin and hold ACTION to physically couple. Press ACTION to unhitch your own load. Deliver attached cargo to your marked depot and stop both real bodies for two uncontested seconds. To contest an occupied load, park within five meters of its kingpin and hold ACTION for three seconds while both rigs are slow; then physically recouple. Contact never transfers ownership. Trailer Thief pays a large bonus only when you actually steal and deliver another driver's cargo. Delivery Rush scores completed delivery count. Team Smuggling uses seats 1+3 against 2+4 with shared depots and shared cargo points; AI fills unused human seats. High-Value Cargo Hunt adds real mass and value to three load tiers, shown in your panel while hitched and reduced by damage. One Hard Trailer Thief AI can stake out a rival's first receiving run while other drivers haul; it still must win the physical stopped contest, recouple and deliver to its own depot. AI difficulty changes target aggression, reaction delay, approach pace, backing precision and delivery pace; every difficulty uses the same real coupling and delivery rules. Dispatched loads return at their original yard positions after a delay, only when the spawn is clear.";
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
         {
             value = option % 4 == 1 ? Deliveries[slot] + " LOADS" : Scores[slot].ToString("F0");
@@ -57,10 +57,18 @@ namespace LWS.TruckHitchSports
         {
             UpdateDispatchedLoads();
             Notice = "ALIGN KINGPIN · HOLD ACTION TO COUPLE / CONTEST · STOP AT YOUR DEPOT";
+            int bayAmbusher = -1;
+            if (option % 4 == 0 && setup.count > 1)
+                for (int slot = 0; slot < setup.count; slot++)
+                    if (IsAI(slot) && setup.players[slot].difficulty == BowlingDifficulty.Hard)
+                    {
+                        bayAmbusher = slot;
+                        break;
+                    }
             for (int i = 0; i < setup.count; i++)
             {
                 var owned = couplers[i].Attached; bool ai = IsAI(i);
-                bool hardAmbush = ai && option % 4 == 0 && setup.count > 1 && setup.players[i].difficulty == BowlingDifficulty.Hard && Deliveries[i] >= 1;
+                bool hardAmbush = i == bayAmbusher;
                 bool recoveringContestedCargo = aiTarget[i] != null && aiTarget[i].Owner < 0 && contestedOwner[System.Array.IndexOf(trailers, aiTarget[i])] >= 0;
                 hardAmbush &= !recoveringContestedCargo;
                 if (hardAmbush) EnsureAmbushRival(i);
@@ -80,7 +88,7 @@ namespace LWS.TruckHitchSports
                         if (!trailer.gameObject.activeSelf || trailer.Deliveries > 0 || trailer.Owner == i || option % 4 == 2 && trailer.Owner >= 0 && trailer.Owner % 2 == i % 2) continue;
                         if (ai && option % 4 == 2 && ReservedByCloserTeammate(i, trailer)) continue;
                         // Hard Trailer Thief deliberately trades routine loads
-                        // for an ambush after its first real delivery. It waits
+                        // for an early receiving-bay ambush. It waits
                         // for an actual courier, never claims imaginary cargo.
                         if (hardAmbush && (trailer.Owner < 0 || trailer.Owner != ambushRival[i])) continue;
                         float distance = (trailer.Kingpin.position - couplers[i].Anchor.position).sqrMagnitude;

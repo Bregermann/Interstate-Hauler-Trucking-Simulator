@@ -12,7 +12,9 @@ namespace LWS.TruckExtremeHauling
         public override string Header => ReplayControls ? Title + " · RECORDED COLLAPSE HIGHLIGHTS" : base.Header;
         public override string Status => ReplayControls ? "ACTUAL CONTACTS · LANES ALIGNED TO FIRST PUSH · " + collapseReplay.Speed.ToString("0.##") + "×" : base.Status;
         public override void ExtraAction(string key) { if (!ReplayControls) return; collapseReplay.Action(key); ConsumeActions(); }
-        public float setupSeconds = 35;
+        [Min(5)] public float setupSeconds = 35;
+        public GameObject creativeWorkshop;
+        public Vector2 creativeLaneExtent = new Vector2(24, 18);
         readonly bool[] triggered = new bool[4];
         readonly int[] selected = new int[4], fallen = new int[4], longest = new int[4];
         readonly float[] triggerTime = new float[4], finishTime = new float[4];
@@ -29,11 +31,12 @@ namespace LWS.TruckExtremeHauling
         public override string Title => "DOMINO DERBY";
         protected override string[] Modes => new[] { "LONGEST CHAIN", "PRECISION DOMINO COURSE", "FASTEST COMPLETE COLLAPSE", "CREATIVE CHAIN CHALLENGE" };
         protected override string ActionHint => age < setupSeconds ? "TAP NEUTRAL: NEXT · HOLD + STEER: ROTATE" : "TOPPLE FIRST TRAILER ONCE";
-        public override string Help => "Arrange real upright trailers during setup. Steering slides the selected piece sideways, throttle changes its spacing; tap ACTION with centered controls to select the next piece, or hold ACTION and steer to rotate it. Invalid overlapping placements are refused. After the horn, ACTION gives only the first trailer one physical push; collisions must carry the chain. Longest Chain ranks genuine connected chain depth. Precision rewards propagated topples close to the authored course line. Fastest Complete Collapse scores only a complete chain and ranks actual collapse time. Creative Chain is a cooperative workshop: real branches and direction changes add team craft points, without individual winner points. A trailer that falls without contact from the triggered chain does not score.";
+        public override string Help => "Arrange real upright trailers during setup. Steering slides the selected piece sideways, throttle changes its spacing; tap ACTION with centered controls to select the next piece, or hold ACTION and steer to rotate it. Invalid overlapping placements are refused. After the horn, ACTION gives only the first trailer one physical push; collisions must carry the chain. Longest Chain ranks genuine connected chain depth. Precision rewards propagated topples close to the authored course line. Fastest Complete Collapse scores only a complete chain and ranks actual collapse time. Creative Chain opens the whole construction lane. Lay out forks and place pieces on gently sloped rehearsal ramps. Real branches and direction changes add team craft points without individual winner points. A trailer that falls without contact from the triggered chain does not score.";
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
         { if (slot < 0 || slot >= setup.count) { value = detail = null; return false; } value = option == 2 && finishTime[slot] > 0 ? finishTime[slot].ToString("F2") + "s" : scores[slot].ToString("F0"); detail = fallen[slot] + "/" + piecesPerPlayer + " TOPPLED · DEPTH " + longest[slot]; return true; }
         protected override void BeginMechanic()
         {
+            if (creativeWorkshop != null) creativeWorkshop.SetActive(option == 3);
             collapseReplay?.ResetCapture(setup.count); replayStarted=false;
             counted = new bool[trailers.Length]; activated = new bool[trailers.Length]; depth = new int[trailers.Length]; parent = new int[trailers.Length]; children = new int[trailers.Length];
             envelopes = new Bounds[trailers.Length]; layoutStart = new Vector3[trailers.Length]; layoutRotation = new Quaternion[trailers.Length];
@@ -79,8 +82,19 @@ namespace LWS.TruckExtremeHauling
                 }
                 else if (ActionHeld(i)) rotation = Quaternion.AngleAxis(drive.x * dt * 45, Vector3.up) * body.rotation;
                 else proposed += new Vector3(drive.x, 0, drive.y) * (3 * dt);
-                proposed.x = Mathf.Clamp(proposed.x, layoutStart[index].x - 6, layoutStart[index].x + 6);
-                proposed.z = Mathf.Clamp(proposed.z, layoutStart[index].z - 2, layoutStart[index].z + 2);
+                if (option == 3)
+                {
+                    float laneX = layoutStart[first].x;
+                    proposed.x = Mathf.Clamp(proposed.x, laneX - creativeLaneExtent.x, laneX + creativeLaneExtent.x);
+                    proposed.z = Mathf.Clamp(proposed.z, layoutStart[first].z - 6,
+                        layoutStart[first + piecesPerPlayer - 1].z + creativeLaneExtent.y);
+                    if (!TrySeatOnWorkshopSurface(index, ref proposed, ref rotation)) return;
+                }
+                else
+                {
+                    proposed.x = Mathf.Clamp(proposed.x, layoutStart[index].x - 6, layoutStart[index].x + 6);
+                    proposed.z = Mathf.Clamp(proposed.z, layoutStart[index].z - 2, layoutStart[index].z + 2);
+                }
                 if (PlacementClear(index, proposed, rotation)) { body.MovePosition(proposed); body.MoveRotation(rotation); }
                 return;
             }
@@ -153,12 +167,64 @@ namespace LWS.TruckExtremeHauling
                 if (Vector3.Angle(incoming, outgoing) > 20) Award(slot, 75, "physical_chain_direction_change");
             }
         }
+        bool TrySeatOnWorkshopSurface(int index, ref Vector3 position, ref Quaternion rotation)
+        {
+            // Use the footprint at the actual standing end of the trailer.
+            // Four surface samples keep the piece stable at ramp edges. A gentle
+            // incline is allowed. A ledge, wall or missing corner refuses it.
+            var box = envelopes[index];
+            Vector3 longAxis = layoutRotation[index] * Vector3.forward;
+            bool onNose = Vector3.Dot(longAxis, Vector3.up) > 0;
+            float baseZ = onNose ? box.min.z : box.max.z;
+            Vector3 flatUp = Vector3.ProjectOnPlane(rotation * Vector3.up, Vector3.up).normalized;
+            if (flatUp.sqrMagnitude < .9f) return false;
+            Quaternion upright = Quaternion.LookRotation(onNose ? Vector3.up : Vector3.down, flatUp);
+            Vector3 sole = new Vector3(box.center.x, box.center.y, baseZ);
+            Vector3 center = position + rotation * sole;
+            if (!ReadWorkshopFloor(center, out var floor)) return false;
+            Quaternion seated = Quaternion.FromToRotation(Vector3.up, floor.normal) * upright;
+            position = new Vector3(center.x, floor.point.y + .035f, center.z) - seated * sole;
+            for (int corner = 0; corner < 4; corner++)
+            {
+                Vector3 local = new Vector3(
+                    box.center.x + box.extents.x * ((corner & 1) == 0 ? -.7f : .7f),
+                    box.center.y + box.extents.y * ((corner & 2) == 0 ? -.7f : .7f), baseZ);
+                Vector3 point = position + seated * local;
+                if (!ReadWorkshopFloor(point, out var sample) || Mathf.Abs(point.y - sample.point.y) > .13f)
+                    return false;
+            }
+            rotation = seated;
+            return true;
+        }
+
+        bool ReadWorkshopFloor(Vector3 point, out RaycastHit floor)
+        {
+            floor = default;
+            float nearest = float.PositiveInfinity;
+            int count = Physics.RaycastNonAlloc(point + Vector3.up * 2, Vector3.down, floorHits,
+                4, ~0, QueryTriggerInteraction.Ignore);
+            if (count == floorHits.Length) return false;
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit hit = floorHits[i];
+                if (hit.rigidbody != null || hit.normal.y < .98f || hit.distance >= nearest) continue;
+                nearest = hit.distance;
+                floor = hit;
+            }
+            return floor.collider != null;
+        }
+
         bool PlacementClear(int index, Vector3 position, Quaternion rotation)
         {
             Bounds box = envelopes[index]; int count = Physics.OverlapBoxNonAlloc(position + rotation * box.center, box.extents * .97f, placementHits, rotation, ~0, QueryTriggerInteraction.Ignore);
             if (count == placementHits.Length) return false;
             for (int i = 0; i < count; i++)
-            { var body = placementHits[i].attachedRigidbody; if (body != null && body != trailers[index].Body) return false; }
+            {
+                var hit = placementHits[i];
+                var body = hit.attachedRigidbody;
+                if (body != null && body != trailers[index].Body) return false;
+                if (option == 3 && body == null && hit.bounds.max.y > position.y + .4f) return false;
+            }
             return true;
         }
         static Bounds LocalEnvelope(TrailerBody trailer)
