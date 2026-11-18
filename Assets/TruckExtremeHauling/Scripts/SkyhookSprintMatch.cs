@@ -18,6 +18,7 @@ namespace LWS.TruckExtremeHauling
         readonly Vector3[] previous = new Vector3[4];
         Collider[][] loadShapes;
         string reportedMatch;
+        readonly string[] lastSlalomContact = new string[4];
         protected override Vector3 CameraFocus(int slot) => cableCars[CameraParticipant(slot)].load.position;
         public override string Title => "SKYHOOK SPRINT";
         public override string Status => option==1&&transferRoutes!=null&&transferRoutes.Length>0?"HOOK · HOIST · TRANSFER THE SAME LOAD · RECAPTURE":option==0?base.Status:option==2?"CLEAR EVERY OPENING · RELEASE AFTER FINAL GATE":option==1?"BRAKE THE SWING · CENTER THE LANDING":"HAUL THROUGH GUSTS · PRESERVE CARGO";
@@ -52,7 +53,7 @@ namespace LWS.TruckExtremeHauling
             for(int i=0;i<setup.count;i++){trucks[i].Power(false);foreach(var body in trucks[i].GetComponentsInChildren<Rigidbody>(true))body.isKinematic=true;}
             foreach (var car in cableCars) { car.trolley.isKinematic = false; car.ResetCable(); }
             System.Array.Clear(passed, 0, 4); System.Array.Clear(missed, 0, 4); System.Array.Clear(nextGate, 0, 4); System.Array.Clear(gateQuality, 0, 4); System.Array.Clear(quiet, 0, 4); System.Array.Clear(impactSeverity, 0, 4); System.Array.Clear(maximumImpact, 0, 4); System.Array.Clear(swingIntegral, 0, 4); System.Array.Clear(windMetres, 0, 4); System.Array.Clear(landingError, 0, 4); System.Array.Clear(entering, 0, 4); System.Array.Clear(blocked, 0, 4); System.Array.Clear(crossed, 0, 4); System.Array.Clear(delivered, 0, 4);
-            reportedMatch = null; loadShapes = new Collider[cableCars.Length][];
+            reportedMatch = null; System.Array.Clear(lastSlalomContact, 0, lastSlalomContact.Length); loadShapes = new Collider[cableCars.Length][];
             if (slalomMarkers != null) for (int i = 0; i < slalomMarkers.Length; i++) if (slalomMarkers[i] != null) slalomMarkers[i].SetActive(option == 2 && i < setup.count);
             for (int i = 0; i < cableCars.Length; i++)
             {
@@ -229,11 +230,26 @@ namespace LWS.TruckExtremeHauling
             else missed[slot]++;
             nextGate[slot]++; entering[slot] = blocked[slot] = crossed[slot] = false;
         }
+        public string SlalomDiagnostic(int slot)
+        {
+            var car = cableCars[slot]; var gate = NextGate(slot); var bounds = LoadBounds(slot);
+            string state = "gates=" + passed[slot] + "/" + slalomGatesPerLane + " missed=" + missed[slot] + " next=" + nextGate[slot] + " entering=" + entering[slot] + " blocked=" + blocked[slot] + " crossed=" + crossed[slot]
+                + " load=" + car.load.worldCenterOfMass.ToString("F2") + " loadV=" + car.load.linearVelocity.ToString("F2") + " loadExtent=" + bounds.extents.ToString("F2") + " trolley=" + car.trolley.position.ToString("F2") + " trolleyV=" + car.trolley.linearVelocity.ToString("F2") + " released=" + car.Released + " nativeWheelSupport=" + trailers[slot].WheelContact;
+            if (car.cable != null) state += " cableAttached=" + (car.cable.connectedBody == car.trolley) + " tension=" + car.cable.currentForce.magnitude.ToString("F0") + "N";
+            if (gate != null)
+            {
+                Vector3 local = gate.InverseTransformPoint(bounds.center);
+                state += " gate=" + gate.position.ToString("F2") + " local=" + local.ToString("F2") + " clearanceXY=" + new Vector2(slalomHalfOpening.x - Mathf.Abs(local.x) - Extent(gate.right, bounds.extents), slalomHalfOpening.y - Mathf.Abs(local.y) - Extent(gate.up, bounds.extents)).ToString("F2");
+            }
+            return state + " lastContact=" + (lastSlalomContact[slot] ?? "none") + " landingError=" + landingError[slot].ToString("F2");
+        }
         public void RegisterImpact(int slot, Collision collision)
         {
             if (option == 0 || !Live || slot < 0 || slot >= setup.count || retired[slot]) return;
             if(option==1&&transferRoutes!=null&&slot<transferRoutes.Length&&transferRoutes[slot]!=null)transferRoutes[slot].RegisterImpact(collision);
             float speed = collision.relativeVelocity.magnitude;
+            if (option == 2)
+                lastSlalomContact[slot] = collision.collider.name + " speed=" + speed.ToString("F2") + (collision.contactCount > 0 ? " at=" + collision.GetContact(0).point.ToString("F2") : "");
             maximumImpact[slot] = Mathf.Max(maximumImpact[slot], speed);
             impactSeverity[slot] += Mathf.Max(0, speed - 1.5f);
         }
