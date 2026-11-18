@@ -179,9 +179,29 @@ namespace LWS.TruckSports
                         success = true; yield break;
                     }
                     float actualStart=Time.time;bool pushed=false;
+                    bool resumeAttempted=false;
                     while (!session.Finished)
                     {
                         Check(Time.realtimeSinceStartupAsDouble < deadline, "Sport did not reach its normal result: " + scene);
+                        if(expansionArg>=0&&session.Paused)
+                        {
+                            // Let the actual pause screen retain control while
+                            // unfocused. Once back, release the two pads before
+                            // attempting the normal host Resume input.
+                            InputSystem.QueueStateEvent(host,new GamepadState());
+                            InputSystem.QueueStateEvent(second,new GamepadState());
+                            if(Application.isFocused&&!resumeAttempted&&session.Ready(0)&&session.Ready(1))
+                            {
+                                resumeAttempted=true;
+                                yield return null;
+                                yield return null;
+                                if(Application.isFocused)yield return Press(host,GamepadButton.Start);
+                                else resumeAttempted=false;
+                            }
+                            yield return null;
+                            continue;
+                        }
+                        resumeAttempted=false;
                         // Optional expansion checks drive the same assigned software pads through real rules.
                         // They never change scores, gates, body poses, match clocks or completion state.
                         if(expansionArg>=0 && session is LWS.TruckWaterSports.PaddlePalsMatch water)
