@@ -86,8 +86,8 @@ namespace LWS.TruckExtremeHauling
             foreach (var tray in landingTrays) tray.ResetContacts();
             for (int i = 0; i < setup.count; i++)
             {
-                var body = trailers[i].Body.gameObject;
-                var contacts = body.GetComponent<PlinkoPegContact>() ?? body.AddComponent<PlinkoPegContact>();
+                var trailerRoot = trailers[i].Body.gameObject;
+                var contacts = trailerRoot.GetComponent<PlinkoPegContact>() ?? trailerRoot.AddComponent<PlinkoPegContact>();
                 contacts.match = this;
                 contacts.slot = i;
                 originalRotation[i] = Quaternion.Inverse(boardOrigins[i].rotation) * trailers[i].StartRotation;
