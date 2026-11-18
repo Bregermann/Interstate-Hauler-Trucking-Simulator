@@ -14,7 +14,8 @@ public sealed class BlackwaterMatch:WaterMatch {
  readonly FixedJoint[] cargoJoints=new FixedJoint[4];readonly int[] boatCargo={-1,-1,-1,-1},cargoOwner={-1,-1,-1,-1};
  readonly bool[] banked=new bool[4];readonly Vector3[] cargoStarts=new Vector3[4];
  readonly Light[] healingAt=new Light[4];readonly float[] rescueProgress=new float[4],quietSeconds=new float[4];Light[] shelterLights=System.Array.Empty<Light>();bool capturedCargoStarts;float nextStrike,targetSwitch;int hunted;
- readonly float[] propulsionInput=new float[4],escapeUntil=new float[4];
+ readonly float[] propulsionInput=new float[4],escapeUntil=new float[4],quietAttemptUntil=new float[4];
+ readonly int[] cargoTargets={-1,-1,-1,-1};
  readonly Collider[][] vesselHulls=new Collider[4][];float creatureCrown,creatureTurnRadius;BoxCollider creatureHull;
  readonly RaycastHit[] creatureSweepHits=new RaycastHit[24];
  protected override bool Canoe=>false;public override string Title=>"BLACKWATER: SOMETHING BELOW";public override bool Cooperative=>option==3;
@@ -74,7 +75,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  protected override void BeginWater(){
   nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;entity.position=new Vector3(0,-5,90);
   for(int i=0;i<4;i++){
-   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=0;boatCargo[i]=cargoOwner[i]=-1;banked[i]=false;
+   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=quietAttemptUntil[i]=0;boatCargo[i]=cargoOwner[i]=cargoTargets[i]=-1;banked[i]=false;
    if(cargoJoints[i]!=null)Destroy(cargoJoints[i]);cargoJoints[i]=null;
    if(!capturedCargoStarts)cargoStarts[i]=supplies[i].position;
    supplies[i].gameObject.SetActive(i<setup.count);supplies[i].isKinematic=false;supplies[i].position=cargoStarts[i];supplies[i].rotation=Quaternion.identity;supplies[i].linearVelocity=supplies[i].angularVelocity=Vector3.zero;
@@ -100,25 +101,46 @@ public sealed class BlackwaterMatch:WaterMatch {
  }
  protected override void OnDestroy(){if(vessels!=null)foreach(var vessel in vessels)if(vessel!=null)vessel.HullImpact-=ContactImpact;base.OnDestroy();}
  int NearestFreeCargo(Vector3 position){int found=-1;float nearest=float.MaxValue;for(int cargo=0;cargo<setup.count;cargo++)if(!banked[cargo]&&cargoOwner[cargo]<0){float distance=(supplies[cargo].position-position).sqrMagnitude;if(distance<nearest){nearest=distance;found=cargo;}}return found;}
+ bool AvailableCargoTarget(int index,int cargo){
+  if(cargo<0||cargo>=setup.count||banked[cargo]||cargoOwner[cargo]>=0||!supplies[cargo].gameObject.activeInHierarchy)return false;
+  for(int other=0;other<setup.count;other++)if(other!=index&&Integrity[other]>0&&!Stranded[other]&&FinishTimes[other]<0&&setup.players[other].source==BowlingSource.AI&&cargoTargets[other]==cargo)return false;
+  return true;
+ }
+ int CargoTarget(int index){
+  // This is only an AI navigation intention. Ownership still requires the
+  // original physical crate contact and real native FixedJoint below.
+  if(AvailableCargoTarget(index,cargoTargets[index]))return cargoTargets[index];
+  cargoTargets[index]=-1;float nearest=float.MaxValue;
+  for(int cargo=0;cargo<setup.count;cargo++)if(AvailableCargoTarget(index,cargo)){float distance=(supplies[cargo].position-vessels[index].body.position).sqrMagnitude;if(distance<nearest){nearest=distance;cargoTargets[index]=cargo;}}
+  return cargoTargets[index];
+ }
+ Vector3 CrossingApproach(int index){
+  int gate=Gates[index];Vector3 incoming=Vector3.ProjectOnPlane(course.Point(gate)-course.Point(gate-1),Vector3.up).normalized;
+  // The existing 18m gate remains unchanged. Seven-metre lanes give each
+  // 5.5m hull/outboard paddle assembly room to pass the same physical buoy pair.
+  return course.Point(gate)+Vector3.Cross(Vector3.up,incoming)*(index-(setup.count-1)*.5f)*7;
+ }
  int NearestStranded(int rescuer){int found=-1;float nearest=float.MaxValue;for(int other=0;other<setup.count;other++)if(other!=rescuer&&Integrity[other]<=0){float distance=(vessels[other].body.position-vessels[rescuer].body.position).sqrMagnitude;if(distance<nearest){nearest=distance;found=other;}}return found;}
  bool LightShelter(Vector3 position){if(option==2)return false;if(Vector3.Distance(position,dock.position)<15)return true;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0&&Vector3.Distance(position,light.transform.position)<light.range)return true;return false;}
  Vector2 Bot(int index,WaterVessel vessel){
   int rescue=Cooperative?NearestStranded(index):-1;Vector3 goal;Rigidbody contact=null;
   if(rescue>=0){goal=vessels[rescue].body.position;contact=vessels[rescue].body;}
-  else if(Cooperative&&BankedSupplies>=SharedSuppliesNeeded||boatCargo[index]>=0)goal=dock.position;
-  else if(option==1||Cooperative){int cargo=NearestFreeCargo(vessel.body.position);goal=cargo>=0?supplies[cargo].position:dock.position;contact=cargo>=0?supplies[cargo]:null;}
-  else goal=course.Point(Gates[index]);
+  else if(Cooperative&&BankedSupplies>=SharedSuppliesNeeded||boatCargo[index]>=0){goal=dock.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;cargoTargets[index]=-1;}
+  else if(option==1||Cooperative){int cargo=CargoTarget(index);goal=cargo>=0?supplies[cargo].position:dock.position;contact=cargo>=0?supplies[cargo]:null;}
+  else goal=option==0?CrossingApproach(index):course.Point(Gates[index]);
   if(healingAt[index]!=null&&(!healingAt[index].isActiveAndEnabled||Integrity[index]>=90))healingAt[index]=null;if(rescue<0&&option!=2&&Integrity[index]<65&&healingAt[index]==null){float nearest=float.MaxValue;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0){float distanceToLight=(light.transform.position-vessel.body.position).sqrMagnitude;if(distanceToLight<nearest){nearest=distanceToLight;healingAt[index]=light;}}}if(healingAt[index]!=null&&rescue<0){goal=healingAt[index].transform.position;contact=null;}var drive=NavigateWatercraft(index,vessel,goal,5.5f,contact);float distance=Vector3.Distance(vessel.body.position,goal);
   if(rescue>=0&&distance<9){float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((.45f-speed)*.8f,-.8f,.4f);}
   else if((healingAt[index]!=null||boatCargo[index]>=0||Cooperative&&BankedSupplies>=SharedSuppliesNeeded)&&distance<22){float desired=Mathf.Clamp((distance-5)*.28f,0,3);float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((desired-speed)*.8f,-.9f,.8f);}
   float reaction=8+(int)setup.players[index].difficulty*5;
   if(Clock>=25&&Clock>=escapeUntil[index]&&Vector3.Distance(vessel.body.position,entity.position)<reaction&&!LightShelter(vessel.body.position)){
-   // Quiet is a finite deliberate tactic, followed by real navigation. Without
-   // this commitment the first throttle frame resets quietSeconds and makes
-   // the AI brake again forever while the creature remains nearby.
-   if(quietSeconds[index]>=aiQuietHoldSeconds)escapeUntil[index]=Clock+aiCommittedEscapeSeconds;
+   // A quiet ATTEMPT has a deadline independent of noise success. Real wakes
+   // or braking pulses may interrupt quiet protection, but cannot make the AI
+   // wait forever for five perfectly silent seconds before navigating again.
+   if(quietAttemptUntil[index]<=0)quietAttemptUntil[index]=Clock+aiQuietHoldSeconds;
+   if(Clock>=quietAttemptUntil[index]){escapeUntil[index]=Clock+aiCommittedEscapeSeconds;quietAttemptUntil[index]=0;}
    else{var planarForward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;float signed=Vector3.Dot(vessel.body.linearVelocity,planarForward);drive.y=Mathf.Abs(signed)>.35f?-Mathf.Sign(signed)*.65f:0;}
   }
+  else quietAttemptUntil[index]=0;
   return drive;
  }
  protected override void TickBoat(WaterVessel vessel,int index,float dt){
@@ -140,7 +162,7 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(boatCargo[index]<0)for(int cargo=0;cargo<setup.count;cargo++){
    if(banked[cargo]||cargoOwner[cargo]>=0||!supplies[cargo].GetComponent<BlackwaterSupply>().Touching(vessel))continue;
    var joint=supplies[cargo].gameObject.AddComponent<FixedJoint>();joint.connectedBody=vessel.body;joint.breakForce=30000;joint.enableCollision=false;
-   cargoJoints[index]=joint;boatCargo[index]=cargo;cargoOwner[cargo]=index;
+   cargoJoints[index]=joint;boatCargo[index]=cargo;cargoOwner[cargo]=index;cargoTargets[index]=-1;
    SportsSessionTelemetry.GameplayEvent(Title,"supply-coupled",setup.players[index].participantId,"native crate contact",cargo);break;
   }
   int carried=boatCargo[index];if(carried<0)return;

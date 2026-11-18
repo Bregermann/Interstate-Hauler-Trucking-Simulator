@@ -314,7 +314,12 @@ namespace LWS.TruckHorrorSports
                 var foot = footAgents != null && i < footAgents.Length ? footAgents[i] : null;
                 int wanted = NextObjective(i);
                 if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i,wanted)) < 8 && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
-                { foot.LeaveCab(trucks[i].body.position + trucks[i].transform.right * 2.2f + Vector3.up * .5f, trucks[i].transform.rotation); }
+                {
+                    var truck = trucks[i];
+                    Vector3 exitPoint = truck.body.position + truck.transform.right * 2.2f + Vector3.up * .5f;
+                    if (supplyJob == null || supplyJob.TryCabExit(i, TaskPosition(i, wanted), out exitPoint))
+                        foot.LeaveCab(exitPoint, truck.transform.rotation);
+                }
                 else if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4 && (ai ? wanted < 0 || !objectives[wanted].requiresFoot : actions[i])) foot.EnterCab();
                 if (foot != null && foot.Outside)
                 {
@@ -330,7 +335,7 @@ namespace LWS.TruckHorrorSports
                                 if(cornerDistance>(supply ? .45f : 1.2f)){target=pathCorners[i][c];break;}
                             }
                         Vector3 local=foot.transform.InverseTransformPoint(target);
-                        drive=supply?supplyJob.FootCommand(i,target):new Vector2(Mathf.Clamp(Mathf.Atan2(local.x,local.z)*Mathf.Rad2Deg/45,-1,1),local.magnitude>1.4f?1:0);
+                        drive=supplyJob!=null?supplyJob.FootCommand(i,target,supply):new Vector2(Mathf.Clamp(Mathf.Atan2(local.x,local.z)*Mathf.Rad2Deg/45,-1,1),local.magnitude>1.4f?1:0);
                     }
                     foot.Move(drive,dt);
                 }

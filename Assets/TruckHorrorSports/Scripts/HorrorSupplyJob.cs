@@ -29,19 +29,36 @@ namespace LWS.TruckHorrorSports
             var receiver=receivers[slot];Vector3 point=receiver.bounds.center-receiver.transform.forward*(receiver.size.z*.5f+.65f);
             point.y=carriers[slot].transform.position.y;return point;
         }
-        public Vector2 FootCommand(int slot,Vector3 navigationTarget)
+        public bool TryCabExit(int slot,Vector3 taskTarget,out Vector3 exitPosition)
         {
-            var foot=carriers[slot];Vector3 interaction=Target(slot);
+            var truck=match.trucks[slot];var controller=carriers[slot].controller;
+            float toward=Vector3.Dot(Vector3.ProjectOnPlane(taskTarget-truck.body.position,Vector3.up),truck.transform.right)>=0?1:-1;
+            var scale=controller.transform.lossyScale;float radius=controller.radius*Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.z));float half=Mathf.Max(radius,controller.height*Mathf.Abs(scale.y)*.5f);
+            Quaternion rotation=truck.transform.rotation;Vector3 axis=rotation*Vector3.up;
+            for(int side=0;side<2;side++)
+            {
+                // This is the existing cab transition, choosing a real clear door on
+                // the task's side instead of routing a character through the cab.
+                Vector3 candidate=truck.body.position+truck.transform.right*(toward*(side==0?1:-1)*2.2f)+Vector3.up*.5f;
+                Vector3 center=candidate+rotation*controller.center;
+                if(!Physics.CheckCapsule(center+axis*(half-radius),center-axis*(half-radius),radius,~0,QueryTriggerInteraction.Ignore))
+                {exitPosition=candidate;return true;}
+            }
+            exitPosition=Vector3.zero;return false;
+        }
+        public Vector2 FootCommand(int slot,Vector3 navigationTarget,bool refineToSupply=true)
+        {
+            var foot=carriers[slot];Vector3 interaction=refineToSupply?Target(slot):navigationTarget;
             // A truck-sized baked navigation clearance may stop short of a hand task.
             // Refine only the final four metres, using the real character capsule sweep.
             Vector3 approach=Vector3.ProjectOnPlane(interaction-foot.transform.position,Vector3.up);
-            if(approach.magnitude<4 && approach.sqrMagnitude>.001f)
+            if(refineToSupply && approach.magnitude<4 && approach.sqrMagnitude>.001f)
             {
                 Bounds capsule=foot.controller.bounds;float radius=foot.controller.radius*.95f;
                 float shaft=Mathf.Max(0,capsule.extents.y-radius);bool clear=true;
-                int count=Physics.CapsuleCastNonAlloc(capsule.center+Vector3.up*shaft,capsule.center-Vector3.up*shaft,radius,approach.normalized,approachHits,approach.magnitude,1,QueryTriggerInteraction.Ignore);
+                int count=Physics.CapsuleCastNonAlloc(capsule.center+Vector3.up*shaft,capsule.center-Vector3.up*shaft,radius,approach.normalized,approachHits,approach.magnitude,~0,QueryTriggerInteraction.Ignore);
                 if(count==approachHits.Length)clear=false;
-                for(int hit=0;hit<count;hit++)if(approachHits[hit].rigidbody!=parcels[slot] && approachHits[hit].normal.y<.7f)clear=false;
+                for(int hit=0;hit<count;hit++)if(approachHits[hit].rigidbody!=parcels[slot] && !approachHits[hit].collider.transform.IsChildOf(foot.transform) && approachHits[hit].normal.y<.7f)clear=false;
                 if(clear)navigationTarget=interaction;
             }
             Vector3 delta=Vector3.ProjectOnPlane(navigationTarget-foot.transform.position,Vector3.up);
