@@ -18,6 +18,7 @@ namespace LWS.TruckExtremeHauling
         public bool FreeFlight { get; private set; }
         public float RejectedSupportedDegrees { get; private set; }
         public Vector3 CurrentNetDegrees => netDegrees;
+        public Vector3 FlightRollAxis => rollAxis;
         public int CompletedTurns => bankedTurns + (airborne && phaseSeconds >= .15f ? PhaseTurns() : 0);
         public float FreeFlightSeconds => bankedSeconds + (airborne ? phaseSeconds : 0);
         public float TrickFlightSeconds => bankedTrickSeconds + (airborne && phaseSeconds >= .15f && PhaseTurns() > 0 ? phaseSeconds : 0);
