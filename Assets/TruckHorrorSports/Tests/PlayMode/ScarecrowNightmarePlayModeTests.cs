@@ -61,7 +61,28 @@ public sealed class ScarecrowNightmarePlayModeTests
     static string State(object match)
     {
         var rules=Field(match,"rules");var trucks=(Array)Field(match,"trucks");var outcomes=(Array)Field(rules,"outcome");var health=(float[])Field(rules,"health");var rescues=(int[])Field(rules,"rescues");
-        return "clock="+Property(match,"Age")+" sharedTasks="+Property(rules,"TotalTasks")+" "+string.Join(" | ",Enumerable.Range(0,4).Select(slot=>"P"+(slot+1)+" outcome="+outcomes.GetValue(slot)+" health="+health[slot].ToString("F1")+" rescues="+rescues[slot]+" pos="+((Rigidbody)Field(trucks.GetValue(slot),"body")).position+" next="+Call(match,"NextObjective",slot)));
+        var corners=(Vector3[][])Field(match,"pathCorners");var paths=(Array)Field(match,"paths");var stuck=(float[])Field(match,"stuck");var parked=(bool[])Field(match,"aiParking");
+        var exitMethod=match.GetType().GetMethod("ExitPosition",BindingFlags.Instance|BindingFlags.NonPublic);
+        return "clock="+Property(match,"Age")+" sharedTasks="+Property(rules,"TotalTasks")+" "+string.Join(" | ",Enumerable.Range(0,4).Select(slot=>
+        {
+            var truck=trucks.GetValue(slot);var body=(Rigidbody)Field(truck,"body");var transform=((Component)truck).transform;var motor=Field(truck,"tractorMotor");
+            var wheels=(Array)Field(truck,"wheels");var front=wheels!=null&&wheels.Length>0?wheels.GetValue(0):null;
+            object transmission=Optional(Optional(Optional(motor,"vehicle"),"powertrain"),"transmission");
+            string gear=motor==null?"NWH-wheel-adapter/no-powertrain":Convert.ToString(Optional(transmission,"Gear")??"unavailable");
+            Vector3 exit=(Vector3)exitMethod.Invoke(match,new object[]{slot});
+            return "P"+(slot+1)+" outcome="+outcomes.GetValue(slot)+" health="+health[slot].ToString("F1")+" rescues="+rescues[slot]+" pos="+body.position.ToString("F2")+" next="+Call(match,"NextObjective",slot)
+                +" heading="+transform.eulerAngles.y.ToString("F1")+" velocity="+body.linearVelocity.ToString("F2")+" forwardSpeed="+Vector3.Dot(body.linearVelocity,transform.forward).ToString("F2")+" command="+((Vector2)Field(truck,"command")).ToString("F2")
+                +" frontSteer="+Convert.ToString(Optional(front,"SteerAngle")??"unavailable")+" frontMotor="+Convert.ToString(Optional(front,"MotorTorque")??"unavailable")+" frontBrake="+Convert.ToString(Optional(front,"BrakeTorque")??"unavailable")
+                +" opposite="+Convert.ToString(Optional(truck,"opposite")??"unavailable")+" gear="+gear+" powered="+Property(truck,"Powered")+" grounded="+Property(truck,"Grounded")+" parked="+parked[slot]+" stuckSeconds="+stuck[slot].ToString("F2")
+                +" actualExit="+exit.ToString("F2")+" exitGap="+Vector3.Distance(body.position,exit).ToString("F2")+" path="+Convert.ToString(Optional(paths.GetValue(slot),"status")??"none")+" corners="+(corners[slot]==null?"none":string.Join("/",corners[slot].Take(6).Select(point=>point.ToString("F2"))));
+        }));
+    }
+    // Diagnostics only: optional native powertrain/wheel implementations differ
+    // between saved venues. Never invent a gear for the wheel-only adapter.
+    static object Optional(object value,string name)
+    {
+        if(value==null)return null;var type=value.GetType();const BindingFlags flags=BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;
+        var field=type.GetField(name,flags);if(field!=null)return field.GetValue(value);var property=type.GetProperty(name,flags);return property!=null?property.GetValue(value):null;
     }
 }
 #endif

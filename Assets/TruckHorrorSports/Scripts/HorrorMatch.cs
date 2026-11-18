@@ -664,9 +664,18 @@ namespace LWS.TruckHorrorSports
                 destination = objectives[routeIndex[slot] % objectives.Length].transform.position;
             }
             int rescue = RescueTarget(slot); if (rescue >= 0) destination = trucks[rescue].body.position;
+            bool nightmareExtraction = sport == HorrorSport.ScarecrowSeason && option == 3 && id < 0 && rescue < 0;
+            if (nightmareExtraction && Vector3.ProjectOnPlane(destination - truck.body.position, Vector3.up).sqrMagnitude < 5.76f)
+            {
+                // Keep a truck in its own farm apron bay until the rest of
+                // the crew arrives. Active rescue still takes priority.
+                aiParking[slot] = true;
+                stuck[slot] = 0;
+                return Vector2.zero;
+            }
             // Separate approach points remain inside the real interaction zone. The objective itself
             // and its eligibility checks stay authoritative; this only gives drivers room to stop.
-            if (carefulDriver && rescue < 0 && !ScarecrowSurvival)
+            if (carefulDriver && rescue < 0 && !ScarecrowSurvival && !nightmareExtraction)
             {
                 Vector3 offset = new Vector3(slot % 2 == 0 ? -2 : 2, 0, slot < 2 ? -1.5f : 1.5f);
                 if (NavMesh.SamplePosition(destination + offset, out var approach, 2, NavMesh.AllAreas)
