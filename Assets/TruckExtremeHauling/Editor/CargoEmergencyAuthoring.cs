@@ -51,7 +51,22 @@ namespace LWS.TruckExtremeHauling.Editor
             var match=UnityEngine.Object.FindAnyObjectByType<CargoCrisisMatch>();var sites=match!=null?match.emergencySites:null;
             if(sites==null||sites.defaultSupport==null||match.trucks.Length!=4||match.objectives.Length!=4)
                 throw new InvalidOperationException("Preserve the existing four-slot Cargo Crisis authority and authored emergency adapter.");
-            if(sites.highwayPileup?.environment!=null)return sites.highwayPileup;
+            if (sites.highwayPileup?.environment != null)
+            {
+                var existing = sites.highwayPileup;
+                for (int lane = 0; lane < existing.loads.Length; lane++)
+                {
+                    var load = existing.loads[lane];
+                    RestPileupLoadOnItsSide(load);
+                    var parkedWreck = existing.wrecks[lane * 2];
+                    float spacing = load.transform.position.x - 4.6f - parkedWreck.body.transform.position.x;
+                    parkedWreck.body.transform.position += Vector3.right * spacing;
+                    foreach (var pose in parkedWreck.resetPoses)
+                        pose.position += Vector3.right * spacing;
+                    RequireNoInitialCargoOverlap(load, parkedWreck);
+                }
+                return existing;
+            }
             Need<GameObject>(WreckVehicle);Need<GameObject>(Barrier);Need<GameObject>(RoadSign);
             var contact=Need<PhysicsMaterial>("Assets/TruckExtremeHauling/Materials/Freight concrete.asset");
             var paint=Need<Material>("Assets/TruckExtremeHauling/Materials/Freight safety orange.mat");
@@ -64,13 +79,14 @@ namespace LWS.TruckExtremeHauling.Editor
                     float x=lane*80;
                     var start=new GameObject("Pileup recovery staging "+lane).transform;start.SetParent(root,false);start.position=new Vector3(x,1,-85);site.truckStarts[lane]=start;
                     var depot=new GameObject("Pileup cargo supported delivery "+lane).transform;depot.SetParent(root,false);depot.position=new Vector3(x,1,match.objectives[lane].position.z);site.depots[lane]=depot;
-                    var load=HitchAuthoring.CreateTrailer(new Vector3(x,3,-45),Quaternion.Euler(0,0,65),"Pileup original native cargo "+lane);load.transform.SetParent(root,true);site.loads[lane]=load;
+                    var load=HitchAuthoring.CreateTrailer(new Vector3(x,1,-45),Quaternion.Euler(0,0,90),"Pileup original native cargo "+lane);load.transform.SetParent(root,true);site.loads[lane]=load;
                     var stand=load.Module.module.trailerStand;if(stand==null)throw new InvalidOperationException("Original native parking stand required.");
                     Vector3 leg=stand.transform.localPosition;leg.y=.544f-CargoLandingGearAuthoring.RecoveryStandExtensionMetres;stand.transform.localPosition=leg;
+                    RestPileupLoadOnItsSide(load);
                     // The first real wreck catches/obstructs the tipped load's
                     // left-rear footprint. The second interrupts the haul lane;
                     // shoulders remain open for careful real steering/recovery.
-                    var recoveryWreck=PileupVehicle(root,lane,new Vector3(x-2.8f,0,-51),Quaternion.Euler(0,30,155),"Recovery-side overturned vehicle");
+                    var recoveryWreck=PileupVehicle(root,lane,new Vector3(x-4.6f,0,-51),Quaternion.Euler(0,30,155),"Recovery-side overturned vehicle");
                     RequireNoInitialCargoOverlap(load,recoveryWreck);wrecks.Add(recoveryWreck);
                     wrecks.Add(PileupVehicle(root,lane,new Vector3(x+3.8f,0,65),Quaternion.Euler(0,70,105),"Cross-lane rolled vehicle"));
                     foreach(int side in new[]{-1,1}){
@@ -128,6 +144,25 @@ namespace LWS.TruckExtremeHauling.Editor
             if(source.renderQueue>=3000){material.SetFloat("_Surface",1);material.SetFloat("_SrcBlend",5);material.SetFloat("_DstBlend",10);material.SetFloat("_ZWrite",0);material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");material.renderQueue=3000;}
             AssetDatabase.CreateAsset(material,path);return material;
         }
+        static void RestPileupLoadOnItsSide(TrailerBody load)
+        {
+            // Lay the original solid trailer on level asphalt without drop energy.
+            load.transform.rotation = Quaternion.Euler(0, 0, 90);
+            float bottom = float.PositiveInfinity;
+            foreach (var box in load.GetComponentsInChildren<BoxCollider>(true))
+            {
+                if (!box.enabled || box.isTrigger || box.attachedRigidbody != load.Body) continue;
+                Vector3 half = box.size * .5f;
+                float verticalExtent = Mathf.Abs(box.transform.TransformVector(Vector3.right * half.x).y)
+                    + Mathf.Abs(box.transform.TransformVector(Vector3.up * half.y).y)
+                    + Mathf.Abs(box.transform.TransformVector(Vector3.forward * half.z).y);
+                bottom = Mathf.Min(bottom, box.transform.TransformPoint(box.center).y - verticalExtent);
+            }
+            if (float.IsInfinity(bottom))
+                throw new InvalidOperationException("The pileup requires the original native solid trailer body.");
+            load.transform.position += Vector3.up * (.025f - bottom);
+        }
+
         static void RequireNoInitialCargoOverlap(TrailerBody load,CargoPileupWreck wreck)
         {
             foreach(var cargo in load.GetComponentsInChildren<Collider>(true))if(cargo.enabled&&!cargo.isTrigger)

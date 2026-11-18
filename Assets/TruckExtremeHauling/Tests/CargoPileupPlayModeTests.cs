@@ -34,6 +34,12 @@ namespace LWS.TruckExtremeHauling.Tests
                 float duration=(float)Field(match,"matchSeconds");Assert.That((bool)Call(match,"StartMatch"),Is.True);string first=(string)Property(match,"MatchId");
                 Assert.That((bool)Property(sites,"PileupActive"),Is.True);Assert.That((bool)Property(sites,"FloodActive"),Is.False);
                 var load=((Array)Field(pileup,"loads")).GetValue(0);var cargo=(Rigidbody)Field(load,"Body");var spawn=cargo.position;
+                Assert.That(Vector3.Dot(cargo.rotation * Vector3.up, Vector3.up), Is.LessThan(.2f), "The authored load begins on its side, with no free-fall righting assist.");
+                float startingBottom=float.PositiveInfinity;
+                foreach(var shape in cargo.GetComponentsInChildren<BoxCollider>())
+                    if(shape.enabled&&!shape.isTrigger&&shape.attachedRigidbody==cargo)
+                        startingBottom=Mathf.Min(startingBottom,shape.bounds.min.y);
+                Assert.That(startingBottom, Is.InRange(-.1f,.15f), "The real native hull starts just above the asphalt.");
                 var wrecks=(Array)Field(pileup,"wrecks");Assert.That(wrecks.Length,Is.EqualTo(8));
                 var saved=new Vector3[wrecks.Length];int active=0;
                 for(int i=0;i<wrecks.Length;i++){
