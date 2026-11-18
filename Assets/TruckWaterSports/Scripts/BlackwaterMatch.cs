@@ -8,6 +8,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  [Range(0,50)]public float maximumContactDamage=20;
  public readonly int[] HullImpactHits=new int[4];public readonly float[] ContactDamageTaken=new float[4];readonly float[] nextContactDamage=new float[4];
  [Min(.5f)]public float aiQuietHoldSeconds=5,aiCommittedEscapeSeconds=12;
+ [Min(.1f)]public float engineAcceleration=7.5f,maximumPoweredSpeed=5.5f;
  public float[] Integrity={100,100,100,100};public int[] Deliveries=new int[4],Rescues=new int[4];public float entitySpeed=9;public AudioSource warning;
  public int BankedSupplies{get;private set;}public bool CooperativeEscaped{get;private set;}
  public int SharedSuppliesNeeded=>Mathf.Max(1,(setup.count+1)/2);
@@ -128,7 +129,11 @@ public sealed class BlackwaterMatch:WaterMatch {
   else if(Cooperative&&BankedSupplies>=SharedSuppliesNeeded||boatCargo[index]>=0){goal=dock.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;cargoTargets[index]=-1;}
   else if(option==1||Cooperative){int cargo=CargoTarget(index);goal=cargo>=0?supplies[cargo].position:dock.position;contact=cargo>=0?supplies[cargo]:null;}
   else goal=option==0?CrossingApproach(index):course.Point(Gates[index]);
-  if(healingAt[index]!=null&&(!healingAt[index].isActiveAndEnabled||Integrity[index]>=90))healingAt[index]=null;if(rescue<0&&option!=2&&Integrity[index]<65&&healingAt[index]==null){float nearest=float.MaxValue;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0){float distanceToLight=(light.transform.position-vessel.body.position).sqrMagnitude;if(distanceToLight<nearest){nearest=distanceToLight;healingAt[index]=light;}}}if(healingAt[index]!=null&&rescue<0){goal=healingAt[index].transform.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;}var drive=NavigateWatercraft(index,vessel,goal,5.5f,contact);float distance=Vector3.Distance(vessel.body.position,goal);
+  if(healingAt[index]!=null&&(!healingAt[index].isActiveAndEnabled||Integrity[index]>=90))healingAt[index]=null;if(rescue<0&&option!=2&&Integrity[index]<65&&healingAt[index]==null){float nearest=float.MaxValue;foreach(var light in shelterLights)if(light!=null&&light.isActiveAndEnabled&&light.intensity>0){float distanceToLight=(light.transform.position-vessel.body.position).sqrMagnitude;if(distanceToLight<nearest){nearest=distanceToLight;healingAt[index]=light;}}}if(healingAt[index]!=null&&rescue<0){goal=healingAt[index].transform.position;contact=boatCargo[index]>=0?supplies[boatCargo[index]]:null;}
+  float distance=Vector3.Distance(vessel.body.position,goal);
+  bool approachingSupply=rescue<0&&boatCargo[index]<0&&cargoTargets[index]>=0&&contact==supplies[cargoTargets[index]];
+  float requestedSpeed=approachingSupply?Mathf.Lerp(1.2f,maximumPoweredSpeed,Mathf.InverseLerp(6,20,distance)):maximumPoweredSpeed;
+  var drive=NavigateWatercraft(index,vessel,goal,requestedSpeed,contact);
   if(rescue>=0&&distance<9){float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((.45f-speed)*.8f,-.8f,.4f);}
   else if((healingAt[index]!=null||boatCargo[index]>=0||Cooperative&&BankedSupplies>=SharedSuppliesNeeded)&&distance<22){float desired=Mathf.Clamp((distance-5)*.28f,0,3);float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((desired-speed)*.8f,-.9f,.8f);}
   float reaction=8+(int)setup.players[index].difficulty*5;
@@ -149,7 +154,14 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(Integrity[index]<=0){DropCargo(index);if(!Cooperative){FinishTimes[index]=Clock;Scores[index]=option==2?Clock:-1000;vessel.Freeze();}return;}
   bool ai=setup.players[index].source==BowlingSource.AI;var drive=ai?Bot(index,vessel):commands[index];propulsionInput[index]=drive.y;
   var forward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;
-  if(vessel.WaterSupported&&vessel.body.position.y<vessel.flotation.waterHeight+1.5f)vessel.body.AddForce(forward*drive.y*3,ForceMode.Acceleration);
+  if(vessel.WaterSupported&&vessel.body.position.y<vessel.flotation.waterHeight+1.5f){
+   // Heavy barges need enough thrust against native water drag to cross
+   // the actual lake. Ease applied propulsion near top speed and preserve
+   // full braking thrust in the opposite direction.
+   float speed=Vector3.Dot(vessel.body.linearVelocity,forward);
+   float taper=Mathf.Clamp01((maximumPoweredSpeed-speed*Mathf.Sign(drive.y))/1.5f);
+   vessel.body.AddForce(forward*(drive.y*engineAcceleration*taper),ForceMode.Acceleration);
+  }
   vessel.SteerWatercraft(drive.x);
   if(Action(index)||vessel.Capsized&&ai)vessel.Recover();
   if(option==1||Cooperative)Cargo(index,vessel);
