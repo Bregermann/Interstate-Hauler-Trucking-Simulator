@@ -17,6 +17,57 @@ namespace LWS.TruckExtremeHauling.Tests
         static object Property(object value, string name) => value.GetType().GetProperty(name).GetValue(value);
         static object Call(object value, string name, params object[] args) => value.GetType().GetMethod(name).Invoke(value, args);
         [UnityTest]
+        public IEnumerator NaturalHighWindHaulingRespondsToGustsDeliversSupportedCargoAndRematches()
+        {
+            var prefs=Type.GetType("LWS.TruckSports.SportsPrefs, Assembly-CSharp",true);
+            using((IDisposable)prefs.GetMethod("IsolateValidation").Invoke(null,new object[]{"Alpha10SkyhookHighWind"}))
+            {
+                EditorSceneManager.LoadSceneInPlayMode("Assets/TruckExtremeHauling/Scenes/SkyhookSprint.unity",new LoadSceneParameters(LoadSceneMode.Single));yield return null;yield return null;
+                var match=UnityEngine.Object.FindObjectsByType(Runtime,FindObjectsSortMode.None).Single();
+                match.GetType().GetField("option").SetValue(match,3);var setup=Field(match,"setup");setup.GetType().GetField("count").SetValue(setup,1);Call(match,"NormalizeSetup");Call(match,"AllBots");
+                // Clear shared weather isolates this mode's actual additional
+                // gust force, rather than relying on random weather selection.
+                var weather=Field(match,"presentationWeather");if(weather!=null&&Field(weather,"presets")!=null)Call(Field(weather,"presets"),"Select","9aad5ff5dfa09ce468205f676714f891");
+                var car=((Array)Field(match,"cableCars")).GetValue(0);var cargo=(Rigidbody)Field(car,"load");var trolley=(Rigidbody)Field(car,"trolley");var cable=(SpringJoint)Field(car,"cable");
+                var trailer=((Array)Field(match,"trailers")).GetValue(0);var goal=((Transform[])Field(match,"objectives"))[0];int originalBody=cargo.GetInstanceID();
+                Assert.That((bool)Call(match,"StartMatch"),Is.True);
+                foreach(var marker in (GameObject[])Field(match,"slalomMarkers"))Assert.That(marker.activeInHierarchy,Is.False,"High-Wind uses its existing open cable route, not inactive slalom frame collisions.");
+                float minX=cargo.worldCenterOfMass.x,maxX=minX,positiveTension=0,negativeTension=0;bool supportedLanding=false,releaseSeen=false;
+                string State()=>"load="+cargo.worldCenterOfMass.ToString("F2")+" velocity="+cargo.linearVelocity.ToString("F2")+" trolley="+trolley.position.ToString("F2")+" cableForce="+cable.currentForce.ToString("F1")+" windMetres="+Call(match,"WindWeightedMetres",0)+" lateralSpan="+(maxX-minX).ToString("F2")+" signedTension=["+negativeTension.ToString("F0")+","+positiveTension.ToString("F0")+"] released="+Property(car,"Released")+" supportedLanding="+supportedLanding;
+                try
+                {
+                    Time.timeScale=3;float deadline=Time.realtimeSinceStartup+75,nextObservation=Time.realtimeSinceStartup;
+                    while(!(bool)Property(match,"Finished")&&Time.realtimeSinceStartup<deadline)
+                    {
+                        if(cable.connectedBody==trolley&&!(bool)Property(car,"Released"))
+                        {
+                            minX=Mathf.Min(minX,cargo.worldCenterOfMass.x);maxX=Mathf.Max(maxX,cargo.worldCenterOfMass.x);
+                            positiveTension=Mathf.Max(positiveTension,cable.currentForce.x);negativeTension=Mathf.Min(negativeTension,cable.currentForce.x);
+                        }
+                        if((bool)Property(car,"Released"))
+                        {
+                            releaseSeen=true;
+                            supportedLanding|=(bool)Property(trailer,"WheelContact")&&Vector3.Distance(cargo.worldCenterOfMass,goal.position)<12&&cargo.linearVelocity.magnitude<1&&Vector3.Dot(cargo.rotation*Vector3.up,Vector3.up)>.7f;
+                        }
+                        if(Time.realtimeSinceStartup>=nextObservation){nextObservation=Time.realtimeSinceStartup+6;Debug.Log("HH10_SKYHOOK_HIGH_WIND_ACTUAL "+State());}
+                        yield return null;
+                    }
+                    string state=State();Assert.That((bool)Property(match,"Finished"),Is.True,state);
+                    Assert.That(positiveTension,Is.GreaterThan(100),"The actual suspended load/cable must develop real rightward force under the gust-and-correction cycle. "+state);
+                    Assert.That(negativeTension,Is.LessThan(-100),"The actual cable response must also reverse, not remain a decorative static swing. "+state);
+                    Assert.That(maxX-minX,Is.GreaterThan(.5f),"The real suspended body must move laterally under the mode's gusts and AI corrections. "+state);
+                    Assert.That((float)Call(match,"WindWeightedMetres",0),Is.GreaterThan(5),"Wind-risk measurements require actual forward cargo transport under nonzero gusts. "+state);
+                    Assert.That(releaseSeen&&supportedLanding,Is.True,"Release must end in an observed real upright native-wheel landing at the destination. "+state);
+                    Assert.That((int)Call(match,"ObjectivesCompleted",0),Is.EqualTo(1),"Only one supported final delivery may score. "+state);
+                    Assert.That((double)Call(match,"ResultScore",0),Is.GreaterThan(0),state);Assert.That((bool)Call(match,"ResultWinner",0),Is.True,state);Assert.That(cargo.GetInstanceID(),Is.EqualTo(originalBody));
+                    Call(match,"SetupScreen");yield return null;Assert.That((bool)Call(match,"StartMatch"),Is.True);
+                    Assert.That((float)Call(match,"WindWeightedMetres",0),Is.Zero);Assert.That((int)Call(match,"ObjectivesCompleted",0),Is.Zero);Assert.That((bool)Property(car,"Released"),Is.False);Assert.That((float)Call(match,"LandingErrorMetres",0),Is.Zero);
+                    Assert.That(cable.connectedBody,Is.SameAs(trolley));yield return new WaitForSeconds(3.5f);Assert.That((bool)Property(match,"Running"),Is.True);Call(match,"SetupScreen");
+                }
+                finally{Time.timeScale=1;}
+            }
+        }
+        [UnityTest]
         public IEnumerator NaturalSuspendedSlalomClearsFourWholeLoadGatesAndPhysicallyLandsSameCargoThenRematches()
         {
             var prefs = Type.GetType("LWS.TruckSports.SportsPrefs, Assembly-CSharp", true);
