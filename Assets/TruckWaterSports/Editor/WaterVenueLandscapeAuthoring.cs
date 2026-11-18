@@ -73,6 +73,105 @@ namespace LWS.TruckWaterSports.Editor
             Debug.Log("PADDLE_PALS_VISIBLE_RIVER_BED_SAVED " + path);
         }
 
+        [MenuItem("Truck Sports/Alpha 0.10/Repair saved Paddle Pals visible shoreline materials")]
+        public static void AuthorSavedPaddlePalsBankLook()
+        {
+            if(Application.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Stop Play Mode before repairing the saved shoreline.");
+            var scene=EditorSceneManager.OpenScene(WaterSportsAuthoring.PaddleScene,OpenSceneMode.Single);
+            int count=UpgradeActivePaddlePalsBankLook();
+            if(!EditorSceneManager.SaveScene(scene))throw new InvalidOperationException("Could not save the Paddle Pals shoreline presentation.");
+            AssetDatabase.SaveAssets();
+            Debug.Log("PADDLE_PALS_SHORELINE_LOOK_SAVED "+scene.path+" banks="+count+"; exact original outlines and colliders; owned grass/pebble render materials and metre UVs only.");
+        }
+
+        public static int UpgradeActivePaddlePalsBankLook()
+        {
+            var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if(Application.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode||scene.path!=WaterSportsAuthoring.PaddleScene)
+                throw new InvalidOperationException("Open the saved Paddle Pals scene outside Play Mode.");
+            // Audit every target and dependency before creating assets or changing
+            // assignments. Never make a previously visible collision surface vanish.
+            var grass=Required<TerrainLayer>("Assets/TruckFishing/Materials/Grass bank.terrainlayer");
+            var pebble=Required<TerrainLayer>("Assets/TruckFishing/Materials/Shallow pebbled riverbed.terrainlayer");
+            var template=Required<Material>("Assets/TruckWaterSports/Materials/Riverbed earth.mat");
+            if(grass.diffuseTexture==null||grass.normalMapTexture==null||pebble.diffuseTexture==null||pebble.normalMapTexture==null||
+                grass.tileSize.x<=0||grass.tileSize.y<=0||pebble.tileSize.x<=0||pebble.tileSize.y<=0||!template.HasProperty("_BaseMap"))
+                throw new InvalidOperationException("The installed Fishing grass/pebble layers and current URP bank material must be intact.");
+            var filters=new List<MeshFilter>();var renderers=new List<MeshRenderer>();WaterMatch match=null;
+            Mesh source=null;Vector3 dimensions=Vector3.zero;Vector3[] originalVertices=null;
+            foreach(var root in scene.GetRootGameObjects())
+            {
+                var candidate=root.GetComponentInChildren<PaddlePalsMatch>(true);if(candidate!=null)match=candidate;
+                foreach(var filter in root.GetComponentsInChildren<MeshFilter>(true))
+                {
+                    if(filter.name!="Textured riverbank")continue;
+                    var box=filter.GetComponent<BoxCollider>();var renderer=filter.GetComponent<MeshRenderer>();
+                    Mesh mesh=filter.sharedMesh;Vector3 scale=filter.transform.lossyScale;
+                    if(box==null||!box.enabled||box.isTrigger||renderer==null||!renderer.enabled||mesh==null||mesh.vertexCount!=24||
+                        mesh.normals.Length!=mesh.vertexCount||Vector3.Distance(mesh.bounds.center,box.center)>.0001f||
+                        Vector3.Distance(mesh.bounds.size,box.size)>.0001f||scale.x<=0||scale.y<=0||scale.z<=0)
+                        throw new InvalidOperationException("Every original riverbank must retain its visible exact box surface and enabled solid collider: "+filter.name);
+                    if(source==null){source=mesh;dimensions=scale;originalVertices=mesh.vertices;}
+                    else if(Vector3.Distance(dimensions,scale)>.0001f||Vector3.Distance(mesh.bounds.size,source.bounds.size)>.0001f)
+                        throw new InvalidOperationException("Preserve independently edited bank dimensions; this repair supports only the original matching bank surfaces.");
+                    var candidateVertices=mesh.vertices;
+                    for(int vertex=0;vertex<originalVertices.Length;vertex++)if(Vector3.Distance(candidateVertices[vertex],originalVertices[vertex])>.0001f)
+                        throw new InvalidOperationException("A bank has independently edited visible geometry; preserve it for an explicit designer review.");
+                    filters.Add(filter);renderers.Add(renderer);
+                }
+            }
+            if(match==null||match.course==null||match.course.stations==null||filters.Count!=match.course.stations.Length*2)
+                throw new InvalidOperationException("All original paired bank surfaces and Paddle Pals stations are required.");
+            string folder=Folder+"/PaddlePals";EnsureFolder(folder+"/Materials");EnsureFolder(folder+"/Meshes");
+            Material top=ShorelineMaterial(folder+"/Materials/Visible grass shoreline.mat",template,grass);
+            Material side=ShorelineMaterial(folder+"/Materials/Visible pebbled shoreline.mat",template,pebble);
+            string meshPath=folder+"/Meshes/Exact original shoreline render surface.asset";
+            Mesh surface=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
+            if(surface==null)
+            {
+                surface=UnityEngine.Object.Instantiate(source);surface.name="Exact original shoreline with grass top and pebble sides";
+                var vertices=surface.vertices;var normals=surface.normals;var uv=new Vector2[vertices.Length];
+                for(int i=0;i<vertices.Length;i++)
+                {
+                    Vector3 metres=Vector3.Scale(vertices[i],dimensions);
+                    if(normals[i].y>.5f)uv[i]=new Vector2(metres.x/grass.tileSize.x,metres.z/grass.tileSize.y);
+                    else if(Mathf.Abs(normals[i].x)>.5f)uv[i]=new Vector2(metres.z/pebble.tileSize.x,metres.y/pebble.tileSize.y);
+                    else uv[i]=new Vector2(metres.x/pebble.tileSize.x,metres.y/pebble.tileSize.y);
+                }
+                var triangles=surface.triangles;var tops=new List<int>();var sides=new List<int>();
+                for(int i=0;i<triangles.Length;i+=3)
+                {
+                    var destination=normals[triangles[i]].y>.5f&&normals[triangles[i+1]].y>.5f&&normals[triangles[i+2]].y>.5f?tops:sides;
+                    destination.Add(triangles[i]);destination.Add(triangles[i+1]);destination.Add(triangles[i+2]);
+                }
+                if(tops.Count!=6||sides.Count!=30)throw new InvalidOperationException("The original six visible box faces must be preserved.");
+                surface.uv=uv;surface.subMeshCount=2;surface.SetTriangles(tops,0);surface.SetTriangles(sides,1);surface.RecalculateTangents();
+                AssetDatabase.CreateAsset(surface,meshPath);
+            }
+            if(surface.vertexCount!=source.vertexCount||surface.subMeshCount!=2||Vector3.Distance(surface.bounds.size,source.bounds.size)>.0001f)
+                throw new InvalidOperationException("The existing owned shoreline render asset must preserve the original box dimensions.");
+            for(int i=0;i<filters.Count;i++)
+            {
+                filters[i].sharedMesh=surface;renderers[i].sharedMaterials=new[]{top,side};
+                EditorUtility.SetDirty(filters[i]);EditorUtility.SetDirty(renderers[i]);
+            }
+            EditorSceneManager.MarkSceneDirty(scene);return filters.Count;
+        }
+
+        static Material ShorelineMaterial(string path,Material template,TerrainLayer layer)
+        {
+            var material=AssetDatabase.LoadAssetAtPath<Material>(path);if(material!=null)return material;
+            material=new Material(template){name=System.IO.Path.GetFileNameWithoutExtension(path)};
+            // The original dark albedo multiplier is the cause of the nearly
+            // black blocks. Use the same actual textures as the surrounding land.
+            material.SetColor("_BaseColor",Color.white);if(material.HasProperty("_Color"))material.SetColor("_Color",Color.white);
+            material.SetTexture("_BaseMap",layer.diffuseTexture);material.SetTextureScale("_BaseMap",Vector2.one);material.SetTextureOffset("_BaseMap",Vector2.zero);
+            material.SetTexture("_BumpMap",layer.normalMapTexture);material.SetFloat("_BumpScale",layer.normalScale);material.EnableKeyword("_NORMALMAP");
+            material.SetFloat("_Metallic",0);material.SetFloat("_Smoothness",layer.smoothness);material.enableInstancing=true;
+            AssetDatabase.CreateAsset(material,path);return material;
+        }
+
         /// <summary>Leaves saving to the caller. Repeated invocation preserves the authored upgrade.</summary>
         public static GameObject InstallActiveVenue()
         {
