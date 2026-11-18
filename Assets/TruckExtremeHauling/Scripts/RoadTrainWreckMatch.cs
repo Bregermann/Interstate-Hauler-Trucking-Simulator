@@ -10,6 +10,8 @@ namespace LWS.TruckExtremeHauling
         [Min(1)] public int trailersPerDriver = 3;
         [Min(1)] public int maximumChallengeTrailers = 6;
         public ConfigurableJoint[] additionalHitches;
+        public RoadTrainObstacleCourse obstacleCourse;
+        bool ObstacleRouteActive => option == 1 && obstacleCourse != null;
         public Link[] authoredLinkDefinitions = System.Array.Empty<Link>();
         public override int TrailerCapacityPerDriver => Mathf.Max(1, Mathf.Min(authoredTrailersPerDriver, trailers != null && trucks != null && trucks.Length > 0 ? trailers.Length / trucks.Length : authoredTrailersPerDriver));
         public override int TrailersPerDriver => Mathf.Clamp(option == 2 ? maximumChallengeTrailers : trailersPerDriver, 1, TrailerCapacityPerDriver);
@@ -33,16 +35,16 @@ namespace LWS.TruckExtremeHauling
                 links[i] = new Link { owner = joint.GetComponent<Rigidbody>(), next = joint.connectedBody, anchor = joint.anchor, connectedAnchor = joint.connectedAnchor, low = joint.lowAngularXLimit.limit, high = joint.highAngularXLimit.limit, roll = joint.angularZLimit.limit, force = joint.breakForce, torque = joint.breakTorque };
             }
         }
-        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"road_train_safe_metres",safeDistance[i]);RecordMetric(i,"road_train_moving_survival_seconds",survival[i]);RecordMetric(i,"road_train_connected_trailers",CountConnected(i)); RecordMetric(i,"road_train_authored_capacity",TrailerCapacityPerDriver);RecordMetric(i,"road_train_selected_trailers",TrailersPerDriver);RecordMetric(i,"road_train_delivered_trailers",deliveredCount[i]);RecordMetric(i,"road_train_longest_connected",longestConnected[i]);RecordMetric(i,"road_train_stable_moving_seconds",stableMovingSeconds[i]);RecordMetric(i,"road_train_starting_trailer_mass_kg",startingMass[i]);RecordMetric(i,"road_train_starting_hitch_span_metres",startingLength[i]); }
+        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"road_train_safe_metres",safeDistance[i]);RecordMetric(i,"road_train_moving_survival_seconds",survival[i]);RecordMetric(i,"road_train_connected_trailers",CountConnected(i)); RecordMetric(i,"road_train_authored_capacity",TrailerCapacityPerDriver);RecordMetric(i,"road_train_selected_trailers",TrailersPerDriver);RecordMetric(i,"road_train_delivered_trailers",deliveredCount[i]);RecordMetric(i,"road_train_longest_connected",longestConnected[i]);RecordMetric(i,"road_train_stable_moving_seconds",stableMovingSeconds[i]);RecordMetric(i,"road_train_starting_trailer_mass_kg",startingMass[i]);RecordMetric(i,"road_train_starting_hitch_span_metres",startingLength[i]); if (ObstacleRouteActive) { RecordMetric(i,"road_train_obstacle_tail_gates",obstacleCourse.GatesPassed(i)); RecordMetric(i,"road_train_obstacle_missed_gates",obstacleCourse.GatesMissed(i)); } }
         public override string Title => "ROAD TRAIN WRECK";
         protected override string[] Modes => new[] { "LONGEST SAFE CONVOY", "ROAD TRAIN OBSTACLE RACE", "MAXIMUM TRAILER CHALLENGE", "ROAD TRAIN SURVIVAL" };
         protected override string ActionHint => "INDEPENDENT TRAILER BRAKES";
-        public override string Help => "Drive a genuine configurable articulated road train (three trailers by default) with native axle contact and physical articulated hitches. Hold ACTION to brake every trailer independently of the tractor. Longest Safe Convoy banks controlled travel with the entire selected train attached. Obstacle Race rewards a stopped delivery at your marked depot, with speed and actual cargo condition deciding the result. Maximum Trailer Challenge requires delivering the full configured length goal; losing a link fails that goal. Its actual length is bounded by this venue's authored native-trailer capacity. Successful delivered count dominates ranking, followed by cargo preservation and time. The Inspector selects normal train length and the Maximum Challenge length independently. Survival banks actual moving, supported survival time and ends when any link is lost. Detached trailers never count. A delivery requires the last connected trailer stopped at your depot and the whole connected train settled.";
+        public override string Help => "Drive a genuine configurable articulated road train (three trailers by default) with native axle contact and physical articulated hitches. Hold ACTION to brake every trailer independently of the tractor. Longest Safe Convoy banks controlled travel with the entire selected train attached. Obstacle Race requires your last trailer to pass the three numbered alternating freight gates, then stop the whole train at your marked depot. Orange roadblocks are real movable obstacles: clipping them can damage cargo or break a link. Gate shortcuts never qualify for delivery; speed and actual cargo condition decide the result. Maximum Trailer Challenge requires delivering the full configured length goal; losing a link fails that goal. Its actual length is bounded by this venue's authored native-trailer capacity. Successful delivered count dominates ranking, followed by cargo preservation and time. The Inspector selects normal train length and the Maximum Challenge length independently. Survival banks actual moving, supported survival time and ends when any link is lost. Detached trailers never count. A delivery requires the last connected trailer stopped at your depot and the whole connected train settled.";
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
         {
             if (slot < 0 || slot >= setup.count) { value = detail = null; return false; }
             value = scores[slot].ToString("F0");
-            detail = connected[slot] + "/" + TrailersPerDriver + " LINKED · " + (option == 3 ? survival[slot].ToString("F1") + "s MOVING" : safeDistance[slot].ToString("F0") + "m SAFE") + (retired[slot] ? " · COMPLETE" : "");
+            detail = connected[slot] + "/" + TrailersPerDriver + " LINKED · " + (option == 3 ? survival[slot].ToString("F1") + "s MOVING" : safeDistance[slot].ToString("F0") + "m SAFE") + (ObstacleRouteActive ? " · GATES " + obstacleCourse.GatesPassed(slot) + "/" + obstacleCourse.GateCount(slot) : "") + (retired[slot] ? " · COMPLETE" : "");
             return true;
         }
         public override string Results
@@ -54,6 +56,7 @@ namespace LWS.TruckExtremeHauling
                 {
                     text.Append(setup.players[i].name).Append(" · ").Append(scores[i].ToString("F0")).Append(" PTS · ").Append(CountConnected(i)).Append('/').Append(TrailersPerDriver).Append(" LINKED · ").Append(safeDistance[i].ToString("F0")).Append("m SAFE");
                     if (option == 1 || option == 2) text.Append(" · ").Append(deliveredCount[i]).Append(" DELIVERED");
+                    if (ObstacleRouteActive) text.Append(" · TAIL GATES ").Append(obstacleCourse.GatesPassed(i)).Append('/').Append(obstacleCourse.GateCount(i)).Append(" · MISSED ").Append(obstacleCourse.GatesMissed(i));
                     if (option == 2 && deliveredCount[i] < TrailersPerDriver) text.Append(" · LENGTH GOAL FAILED");
                     text.AppendLine();
                 }
@@ -64,7 +67,8 @@ namespace LWS.TruckExtremeHauling
         {
             if (option == 0 || option == 3) return RoutePoint(i);
             int count = Mathf.Max(1, CountConnected(i));
-            return objectives[i].position + trucks[i].body.position - trailers[FirstTrailerIndex(i) + count - 1].Body.worldCenterOfMass;
+            Vector3 destination = ObstacleRouteActive && !obstacleCourse.Complete(i) ? obstacleCourse.NextGate(i) : objectives[i].position;
+            return destination + trucks[i].body.position - trailers[FirstTrailerIndex(i) + count - 1].Body.worldCenterOfMass;
         }
         Vector3 RoutePoint(int i)
         {
@@ -79,6 +83,7 @@ namespace LWS.TruckExtremeHauling
         }
         protected override void BeginMechanic()
         {
+            if (obstacleCourse != null) obstacleCourse.BeginRound(option == 1);
             for (int slot = 0; slot < trucks.Length; slot++)
             for (int link = 0; link < TrailerCapacityPerDriver - 1; link++)
             {
@@ -144,7 +149,7 @@ namespace LWS.TruckExtremeHauling
             if (TrailersPerDriver > 3) requested *= Mathf.Sqrt(3f / TrailersPerDriver);
             requested *= Mathf.Lerp(1, .35f, Mathf.Clamp01(Mathf.Abs(angle) / 1.2f));
             if (articulation > 55) requested = Mathf.Min(requested, 3);
-            if (option == 1 || option == 2) requested = Mathf.Min(requested, Mathf.Max(0, distance - 7) * .35f);
+            if ((option == 1 && (!ObstacleRouteActive || obstacleCourse.Complete(i))) || option == 2) requested = Mathf.Min(requested, Mathf.Max(0, distance - 7) * .35f);
             return new Vector2(Mathf.Clamp(angle * 1.1f, -1, 1), Mathf.Clamp((requested - speed) * .3f, -.8f, .85f));
         }
         protected override void StepMechanic(int i, Vector2 drive, bool ai, float dt)
@@ -159,7 +164,15 @@ namespace LWS.TruckExtremeHauling
                 if (initialLock[i] || lostHitch[i] > 2) FinishAttempt(i, "road_train_lost_native_hitch");
                 return;
             }
-            bool parking = ai && (option == 1 || option == 2) && Vector3.ProjectOnPlane(trailers[FirstTrailerIndex(i) + connected[i] - 1].Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude < 12;
+            bool courseComplete = !ObstacleRouteActive || obstacleCourse.Complete(i);
+            if (ObstacleRouteActive)
+            {
+                var courseTail = trailers[FirstTrailerIndex(i) + connected[i] - 1];
+                if (obstacleCourse.ObserveTail(i, courseTail.Body, connected[i] == TrailersPerDriver, courseTail.WheelContact, dt))
+                    SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "road_train_physical_tail_gate", setup.players[i].participantId, "Actual connected tail crosses numbered gate", obstacleCourse.GatesPassed(i));
+                courseComplete = obstacleCourse.Complete(i);
+            }
+            bool parking = ai && courseComplete && (option == 1 || option == 2) && Vector3.ProjectOnPlane(trailers[FirstTrailerIndex(i) + connected[i] - 1].Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude < 12;
             if (parking)
             {
                 trucks[i].TickDrive(Vector2.zero); var input = trucks[i].tractorMotor.vehicle.input;
@@ -200,7 +213,7 @@ namespace LWS.TruckExtremeHauling
             if (option == 2 && connected[i] < TrailersPerDriver) { FinishAttempt(i, "road_train_length_goal_lost"); return; }
             if (option != 1 && option != 2) return;
             var tail = trailers[FirstTrailerIndex(i) + connected[i] - 1];
-            bool atDepot = AtRestIn(i, tail.Body, objectives[i], 16) && atRest && supported && stable;
+            bool atDepot = courseComplete && AtRestIn(i, tail.Body, objectives[i], 16) && atRest && supported && stable;
             settled[i] = atDepot ? settled[i] + dt : 0;
             if (settled[i] < 1.5f) return;
             // Trailer count dominates Maximum Challenge; fast empty tractors
@@ -210,9 +223,11 @@ namespace LWS.TruckExtremeHauling
             Award(i, award, option == 2 ? "connected_trailers_delivered" : "road_train_timed_delivery");
             retired[i] = true;
         }
+        public int ObstacleGatesPassed(int slot) => obstacleCourse != null ? obstacleCourse.GatesPassed(slot) : 0;
+        public int ObstacleGateCount(int slot) => obstacleCourse != null ? obstacleCourse.GateCount(slot) : 0;
         public int ConnectedTrailerCount(int slot) => CountConnected(slot);
         public int DeliveredTrailerCount(int slot) => deliveredCount[slot];
-        public string TrainDiagnostic(int slot) => "capacity=" + TrailerCapacityPerDriver + " selected=" + TrailersPerDriver + " connected=" + CountConnected(slot) + " delivered=" + deliveredCount[slot] + " stableMoving=" + stableMovingSeconds[slot].ToString("F1") + " tail=" + trailers[FirstTrailerIndex(slot) + Mathf.Max(1,CountConnected(slot)) - 1].Body.position.ToString("F1");
+        public string TrainDiagnostic(int slot) => "capacity=" + TrailerCapacityPerDriver + " selected=" + TrailersPerDriver + " connected=" + CountConnected(slot) + " delivered=" + deliveredCount[slot] + " stableMoving=" + stableMovingSeconds[slot].ToString("F1") + (ObstacleRouteActive ? " " + obstacleCourse.Diagnostic(slot) : "") + " tail=" + trailers[FirstTrailerIndex(slot) + Mathf.Max(1,CountConnected(slot)) - 1].Body.position.ToString("F1");
         void FinishAttempt(int i, string reason)
         {
             if (retired[i]) return;

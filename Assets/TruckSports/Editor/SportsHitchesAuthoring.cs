@@ -25,6 +25,10 @@ namespace LWS.TruckSports.Editor
                 LWS.TruckHorrorSports.Editor.HorrorAuthoring.Scene(LWS.TruckHorrorSports.HorrorSport.DeadEnd));
             LWS.TruckHorrorSports.Editor.DeadEndPursuitAudioAuthoring.UpgradeActiveVenue();
             UnityEditor.SceneManagement.EditorSceneManager.SaveScene(road);
+            var train = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                "Assets/TruckExtremeHauling/Scenes/RoadTrainWreck.unity");
+            LWS.TruckExtremeHauling.Editor.RoadTrainObstacleAuthoring.UpgradeActiveRoadTrainObstacleRace();
+            SaveCurrentHelp(train);
             AssetDatabase.SaveAssets();
         }
 
