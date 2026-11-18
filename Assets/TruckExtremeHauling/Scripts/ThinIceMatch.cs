@@ -9,10 +9,11 @@ namespace LWS.TruckExtremeHauling
     {
         public LoadSensitiveIce[] ice;
         public ThinIceRescueObjectives rescue;
-        [Min(1)] public float rescueMatchSeconds = 180;
+        [Tooltip("Convoy Rescue only: time for physical winching, suspended transport, native coupling, the full shore haul and a settled recovery. Other modes retain matchSeconds.")]
+        [Min(1)] public float rescueMatchSeconds = 210;
         float standardMatchSeconds;
         bool rescueTimerApplied;
-        float ConfiguredRescueSeconds => float.IsNaN(rescueMatchSeconds) || float.IsInfinity(rescueMatchSeconds) ? 180 : Mathf.Max(1,rescueMatchSeconds);
+        float ConfiguredRescueSeconds => float.IsNaN(rescueMatchSeconds) || float.IsInfinity(rescueMatchSeconds) ? 210 : Mathf.Max(1,rescueMatchSeconds);
         readonly int[] rescueReceipts = new int[4];
         public float RescueClock => age;
         public bool CooperativeSuccess => option == 3 && rescue != null && rescue.CooperativeSuccess;
