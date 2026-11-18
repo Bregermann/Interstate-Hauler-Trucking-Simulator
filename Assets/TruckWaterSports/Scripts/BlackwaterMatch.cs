@@ -137,15 +137,20 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(rescue>=0&&distance<9){float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((.45f-speed)*.8f,-.8f,.4f);}
   else if((healingAt[index]!=null||boatCargo[index]>=0||Cooperative&&BankedSupplies>=SharedSuppliesNeeded)&&distance<22){float desired=Mathf.Clamp((distance-5)*.28f,0,3);float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((desired-speed)*.8f,-.9f,.8f);}
   float reaction=8+(int)setup.players[index].difficulty*5;
-  if(Clock>=25&&Clock>=escapeUntil[index]&&Vector3.Distance(vessel.body.position,entity.position)<reaction&&!LightShelter(vessel.body.position)){
-   // A quiet ATTEMPT has a deadline independent of noise success. Real wakes
-   // or braking pulses may interrupt quiet protection, but cannot make the AI
-   // wait forever for five perfectly silent seconds before navigating again.
-   if(quietAttemptUntil[index]<=0)quietAttemptUntil[index]=Clock+aiQuietHoldSeconds;
-   if(Clock>=quietAttemptUntil[index]){escapeUntil[index]=Clock+aiCommittedEscapeSeconds;quietAttemptUntil[index]=0;}
-   else{var planarForward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;float signed=Vector3.Dot(vessel.body.linearVelocity,planarForward);drive.y=Mathf.Abs(signed)>.35f?-Mathf.Sign(signed)*.65f:0;}
+  bool threatNearby=index==hunted&&Vector3.Distance(vessel.body.position,entity.position)<reaction&&!LightShelter(vessel.body.position);
+  if(quietAttemptUntil[index]>0&&(!threatNearby||Clock>=quietAttemptUntil[index])){
+   // A successful evasion is a commitment to escape as much as a timed-out
+   // attempt. Releasing the throttle again the instant the creature returns
+   // to the edge of its hearing radius traps both actors in a stop/start loop.
+   quietAttemptUntil[index]=0;
+   escapeUntil[index]=Clock+aiCommittedEscapeSeconds;
   }
-  else quietAttemptUntil[index]=0;
+  if(Clock>=25&&Clock>=escapeUntil[index]&&threatNearby){
+   if(quietAttemptUntil[index]<=0)quietAttemptUntil[index]=Clock+aiQuietHoldSeconds;
+   var planarForward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;
+   float signed=Vector3.Dot(vessel.body.linearVelocity,planarForward);
+   drive.y=Mathf.Abs(signed)>.35f?-Mathf.Sign(signed)*.65f:0;
+  }
   return drive;
  }
  protected override void TickBoat(WaterVessel vessel,int index,float dt){
