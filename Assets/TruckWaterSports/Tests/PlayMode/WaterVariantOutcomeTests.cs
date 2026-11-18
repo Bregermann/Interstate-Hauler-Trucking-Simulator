@@ -238,6 +238,86 @@ namespace LWS.TruckWaterSports.Tests
                 InputSystem.settings.backgroundBehavior=background;Time.timeScale=scale;lease.Dispose();
             }
         }
+
+        [UnityTest]
+        public IEnumerator FourAssignedSoftwareControllersKeepIndependentPaddlesThroughRematch()
+        {
+            using var lease = (IDisposable)Runtime("LWS.TruckSports.SportsPrefs").GetMethod("IsolateValidation")
+                .Invoke(null, new object[] { "PaddleFourHumanAgency" });
+            var background = InputSystem.settings.backgroundBehavior;
+            InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+            float timeScale = Time.timeScale;
+            var pads = new Gamepad[4];
+            Component match = null;
+            try
+            {
+                Time.timeScale = 1;
+                ClearWeather();
+                EditorSceneManager.LoadSceneInPlayMode("Assets/TruckWaterSports/Scenes/PaddlePals.unity",
+                    new LoadSceneParameters(LoadSceneMode.Single));
+                yield return null;
+                yield return null;
+                match = (Component)UnityEngine.Object.FindObjectsByType(Runtime("LWS.TruckWaterSports.PaddlePalsMatch"), FindObjectsSortMode.None).Single();
+                var setup = Field(match, "setup");
+                setup.GetType().GetField("count").SetValue(setup, pads.Length);
+                var players = (Array)Field(setup, "players");
+                for (int slot = 0; slot < pads.Length; slot++)
+                {
+                    pads[slot] = InputSystem.AddDevice<Gamepad>("Canoe participant " + (slot + 1));
+                    var player = players.GetValue(slot);
+                    var source = player.GetType().GetField("source");
+                    source.SetValue(player, Enum.Parse(source.FieldType, "WholeController"));
+                }
+                match.GetType().GetField("option").SetValue(match, 3);
+                Call(match, "NormalizeSetup");
+                for (int slot = 0; slot < pads.Length; slot++)
+                    Assert.That((bool)Call(match, "Assign", slot, pads[slot]), Is.True);
+                var owners = Enumerable.Range(0, pads.Length).Select(slot => Vessel(match, slot)).ToArray();
+                Assert.That(owners[0], Is.SameAs(owners[1]));
+                Assert.That(owners[2], Is.SameAs(owners[3]));
+                Assert.That(owners[0], Is.Not.SameAs(owners[2]));
+
+                for (int round = 0; round < 2; round++)
+                {
+                    Assert.That((bool)Call(match, "StartMatch"), Is.True);
+                    yield return null;
+                    var cameras = ((Array)Field(match, "participantCameras")).Cast<object>()
+                        .Select(camera => (Camera)Field(camera, "view")).Where(camera => camera.enabled).ToArray();
+                    Assert.That(cameras.Length, Is.EqualTo(2), "One viewport belongs to each occupied canoe.");
+                    Assert.That(((Camera)Field(Field(match, "broadcast"), "view")).enabled, Is.False);
+                    Assert.That(Enumerable.Range(0, pads.Length).Select(slot => (int)Call(owners[slot], "StrokesAtStation", slot % 2)), Is.All.EqualTo(0));
+
+                    for (int active = 0; active < pads.Length; active++)
+                    {
+                        var before = Enumerable.Range(0, pads.Length)
+                            .Select(slot => (int)Call(owners[slot], "StrokesAtStation", slot % 2)).ToArray();
+                        for (int slot = 0; slot < pads.Length; slot++)
+                            InputSystem.QueueStateEvent(pads[slot], new GamepadState { rightTrigger = slot == active ? 1 : 0 });
+                        yield return null;
+                        yield return new WaitForFixedUpdate();
+                        yield return new WaitForSeconds(1.1f);
+                        for (int slot = 0; slot < pads.Length; slot++)
+                        {
+                            int strokes = (int)Call(owners[slot], "StrokesAtStation", slot % 2);
+                            if (slot == active) Assert.That(strokes, Is.GreaterThan(before[slot]), "Own active paddle " + slot);
+                            else Assert.That(strokes, Is.EqualTo(before[slot]), "Idle paddle belongs to participant " + slot);
+                        }
+                    }
+                    foreach (Gamepad pad in pads) InputSystem.QueueStateEvent(pad, new GamepadState());
+                    yield return null;
+                    Call(match, "SetupScreen");
+                    yield return null;
+                }
+                TestContext.WriteLine("PADDLE_FOUR_STATION_AGENCY four software devices, two original canoes, two viewports, exclusive paddle pulses and unchanged rematch assignments.");
+            }
+            finally
+            {
+                if (match != null) Call(match, "SetupScreen");
+                foreach (Gamepad pad in pads) if (pad != null) InputSystem.RemoveDevice(pad);
+                InputSystem.settings.backgroundBehavior = background;
+                Time.timeScale = timeScale;
+            }
+        }
     }
 }
 #endif
