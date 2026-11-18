@@ -75,7 +75,7 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                     bool grounded = (bool)Property(truck, "Grounded"); float steering = 0, effort = 0;
                     if (grounded)
                     {
-                        Vector3 target = surface.bounds.center + deck.GetPointVelocity(surface.bounds.center) * .7f;
+                        Vector3 target = (Vector3)Call(match, "RecoveryAimPoint", 0);
                         Vector3 local = truck.transform.InverseTransformPoint(new Vector3(target.x, body.position.y, target.z));
                         steering = Mathf.Clamp(Mathf.Atan2(local.x, local.z) * 1.8f, -1, 1);
                         float desired = Mathf.Min(16, deck.linearVelocity.magnitude + 4);
@@ -88,6 +88,7 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 Assert.That(((int[])Read(match, "falls"))[0], Is.GreaterThan(0), State(match));
                 Assert.That(((int[])Read(match, "recoveryHops"))[0], Is.GreaterThan(0), "Only an actual grounded ACTION impulse can certify the remount-hop input. " + State(match) + " lastLive=[" + lastLive + "]");
                 Assert.That(((int[])Read(match, "recoveries"))[0], Is.GreaterThan(0), "Actual stable supported wheel contact on the same native deck is required. " + State(match) + " lastLive=[" + lastLive + "]");
+                Assert.That((bool)Call(match, "OwnDeckWheelSupport", 0), Is.True, "Remount requires a native wheel contact on the designated load-bearing deck top, not trailer chassis or arena contact. " + State(match));
                 Assert.That(deck.GetInstanceID(), Is.EqualTo(deckId));
                 Assert.That(Property(((Array)Read(match, "couplers")).GetValue(0), "Attached"), Is.Null, "Recovery must not create a hidden hitch.");
                 string recovered = State(match);

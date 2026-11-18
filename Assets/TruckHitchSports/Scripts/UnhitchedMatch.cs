@@ -25,7 +25,6 @@ namespace LWS.TruckHitchSports
         readonly int[] rampLandings = new int[4], quarterTurns = new int[4], cleanLandings = new int[4], bestCombo = new int[4];
         readonly float[] rampLandingUntil = new float[4], rampDistance = new float[4];
         readonly Vector3[] trailerStart = new Vector3[4];
-        readonly RaycastHit[] deckHits = new RaycastHit[24];
         readonly NWH.WheelController3D.WheelController[][] platformWheels = new NWH.WheelController3D.WheelController[4][];
         protected override bool StartsCoupled => false;
         public override bool ResultEligible(int slot) => slot >= 0 && slot < setup.count && Scores[slot] > 0 && supportedRideSeconds[slot] >= minimumRideSeconds && (Completed[slot] || Elapsed >= matchSeconds);
@@ -134,7 +133,7 @@ namespace LWS.TruckHitchSports
                 offDeckGround[i] = !supported && physicallySupported ? offDeckGround[i] + dt : 0;
                 if (supported) supportedDistance[i] += Vector3.ProjectOnPlane(deck.position - previousDeckPosition[i], Vector3.up).magnitude;
                 previousDeckPosition[i] = deck.position;
-                bool jump = IsAI(i) ? recovering[i] ? RecoveryHopPrediction(i) : option % 4 != 2 && !airborne[i] && riding[i] > 4 && ((int)riding[i] % 8 == 0) : actions[i];
+                bool jump = IsAI(i) ? recovering[i] ? RecoveryHopPrediction(i) : option % 4 == 3 ? FlatTrickTakeoff(i, supported) : option % 4 != 2 && !airborne[i] && riding[i] > 4 && ((int)riding[i] % 8 == 0) : actions[i];
                 if (jump && recovering[i] && !supported && trucks[i].Grounded && Vector3.ProjectOnPlane(body.position - deck.position, Vector3.up).magnitude < maximumRecoveryDistance && riding[i] - lastJump[i] >= 1.25f)
                 {
                     // A genuine ground takeoff. Only vertical impulses are
@@ -229,31 +228,63 @@ namespace LWS.TruckHitchSports
             if (physicalSupport[slot] != null) foreach (var contact in physicalSupport[slot]) if (contact != null && contact.Supported) return true;
             return false;
         }
-        Vector3 RecoveryAimPoint(int slot)
+        bool FlatTrickTakeoff(int slot, bool supported)
+        {
+            var deck = trailers[slot].Body;
+            // Run83 showed a genuine flat stretch at ride1–3s/Z23–43,
+            // followed by rising/tilting support and only0.96s of late flight.
+            // Select the earlier actual supported stretch; the launch impulse,
+            // air torque and90-degree landing requirement are unchanged.
+            if (!supported || airborne[slot] || supportedRideSeconds[slot] < 1.5f || riding[slot] < 2 || riding[slot] - lastJump[slot] < 6) return false;
+            if (Vector3.Dot(deck.rotation * Vector3.up, Vector3.up) < .985f || Mathf.Abs(deck.linearVelocity.y) > .3f || deck.angularVelocity.magnitude > .25f) return false;
+            float projectedLandingZ = deck.position.z + Mathf.Max(0, deck.linearVelocity.z) * (12 / Mathf.Max(.1f, Physics.gravity.magnitude));
+            return projectedLandingZ < 52; // The original physical first ramp begins nearZ53.
+        }
+        bool RecoveryTopPoint(int slot, out Vector3 point, out Vector3 insetHalf)
+        {
+            point = Vector3.zero; insetHalf = Vector3.zero;
+            if (!(deckSurfaces[slot] is BoxCollider box)) return false;
+            var truck = trucks[slot];
+            Vector3 half = box.size * .5f, rider = Vector3.zero;
+            if (truck.shape != null)
+            {
+                // Project the original native tractor bounds into this exact
+                // oriented deck frame, rather than using its world AABB height.
+                Matrix4x4 frame = box.transform.worldToLocalMatrix * truck.shape.transform.localToWorldMatrix;
+                Vector3 size = truck.shape.size * .5f;
+                rider.x = Mathf.Abs(frame.m00) * size.x + Mathf.Abs(frame.m01) * size.y + Mathf.Abs(frame.m02) * size.z;
+                rider.z = Mathf.Abs(frame.m20) * size.x + Mathf.Abs(frame.m21) * size.y + Mathf.Abs(frame.m22) * size.z;
+            }
+            insetHalf = new Vector3(half.x - rider.x, half.y, half.z - rider.z);
+            if (insetHalf.x <= 0 || insetHalf.z <= 0) return false;
+            Vector3 local = box.transform.InverseTransformPoint(truck.body.worldCenterOfMass) - box.center;
+            point = box.transform.TransformPoint(box.center + new Vector3(Mathf.Clamp(local.x, -insetHalf.x, insetHalf.x), half.y, Mathf.Clamp(local.z, -insetHalf.z, insetHalf.z)));
+            return true;
+        }
+        public Vector3 RecoveryAimPoint(int slot)
         {
             var surface = deckSurfaces[slot];
-            return surface.bounds.center + trailers[slot].Body.GetPointVelocity(surface.bounds.center) * .7f;
+            Vector3 point = RecoveryTopPoint(slot, out var top, out _) ? top : surface.bounds.center;
+            return point + trailers[slot].Body.GetPointVelocity(point) * .7f;
         }
         public bool RecoveryHopPrediction(int slot)
         {
             if (slot < 0 || slot >= setup.count || !recovering[slot] || !trucks[slot].Grounded || TryDeckSupport(slot, out _)) return false;
             var truck = trucks[slot]; var deck = trailers[slot].Body; var surface = deckSurfaces[slot];
+            if (!RecoveryTopPoint(slot, out var top, out var insetHalf)) return false;
             float gravity = Mathf.Max(.1f, Physics.gravity.magnitude);
-            float height = surface.bounds.max.y - truck.body.position.y;
+            float height = top.y - truck.body.position.y;
             float discriminant = groundRemountJumpVelocity * groundRemountJumpVelocity - 2 * gravity * height;
             if (discriminant <= 0) return false;
             float flight = (groundRemountJumpVelocity + Mathf.Sqrt(discriminant)) / gravity;
-            Vector3 target = surface.bounds.center + deck.GetPointVelocity(surface.bounds.center) * flight;
+            Vector3 target = top + deck.GetPointVelocity(top) * flight;
             Vector3 predicted = truck.body.worldCenterOfMass + truck.body.linearVelocity * flight;
-            Vector3 local = trailers[slot].transform.InverseTransformDirection(Vector3.ProjectOnPlane(predicted - target, Vector3.up));
-            Vector3 half = surface is BoxCollider box ? Vector3.Scale(box.size, box.transform.lossyScale) * .5f : surface.bounds.extents;
-            // Use the actual native tractor collider dimensions as the landing
-            // allowance; projection only decides when AI presses the hop, never
-            // determines whether a recovery or score actually succeeded.
-            Vector3 riderHalf = truck.shape != null ? Vector3.Scale(truck.shape.size, truck.shape.transform.lossyScale) * .5f : Vector3.one;
-            return Mathf.Abs(local.x) < Mathf.Max(.25f, half.x - riderHalf.x) && Mathf.Abs(local.z) < Mathf.Max(.5f, half.z - riderHalf.z) && Vector3.Dot(truck.transform.up, Vector3.up) > .8f;
+            Vector3 local = surface.transform.InverseTransformVector(Vector3.ProjectOnPlane(predicted - target, Vector3.up));
+            // Prediction chooses a real input time. Only actual native wheel
+            // contact with the top deck can certify the eventual remount.
+            return Mathf.Abs(local.x) < insetHalf.x && Mathf.Abs(local.z) < insetHalf.z && Vector3.Dot(truck.transform.up, Vector3.up) > .8f;
         }
-        public string RecoveryDiagnostic(int slot) => "recovering=" + recovering[slot] + " remaining=" + Mathf.Max(0, recoveryUntil[slot] - riding[slot]).ToString("F2") + " falls=" + falls[slot] + " actualRemounts=" + recoveries[slot] + " wheelsGrounded=" + trucks[slot].Grounded + " bodySupported=" + HasPhysicalSupport(slot) + " hopPrediction=" + RecoveryHopPrediction(slot) + " body=" + trucks[slot].body.position.ToString("F2") + " velocity=" + trucks[slot].body.linearVelocity.ToString("F2") + " up=" + Vector3.Dot(trucks[slot].body.rotation * Vector3.up,Vector3.up).ToString("F2") + " deckTop=" + deckSurfaces[slot].bounds.max.y.ToString("F2") + " maxGroundRise=" + (groundRemountJumpVelocity * groundRemountJumpVelocity / (2 * Mathf.Max(.1f,Physics.gravity.magnitude))).ToString("F2");
+        public string RecoveryDiagnostic(int slot) => "recovering=" + recovering[slot] + " remaining=" + Mathf.Max(0, recoveryUntil[slot] - riding[slot]).ToString("F2") + " falls=" + falls[slot] + " actualRemounts=" + recoveries[slot] + " wheelsGrounded=" + trucks[slot].Grounded + " bodySupported=" + HasPhysicalSupport(slot) + " hopPrediction=" + RecoveryHopPrediction(slot) + " body=" + trucks[slot].body.position.ToString("F2") + " velocity=" + trucks[slot].body.linearVelocity.ToString("F2") + " up=" + Vector3.Dot(trucks[slot].body.rotation * Vector3.up,Vector3.up).ToString("F2") + " deckTop=" + deckSurfaces[slot].bounds.max.y.ToString("F2") + " recoveryAim=" + RecoveryAimPoint(slot).ToString("F2") + " nativeSupport=[" + WheelSupportDiagnostic(slot) + "]" + " maxGroundRise=" + (groundRemountJumpVelocity * groundRemountJumpVelocity / (2 * Mathf.Max(.1f,Physics.gravity.magnitude))).ToString("F2");
         void FinishRide(int slot)
         {
             if (Completed[slot]) return;
@@ -263,16 +294,25 @@ namespace LWS.TruckHitchSports
         }
         bool TryDeckSupport(int slot, out RaycastHit support)
         {
-            support = default; float nearest = float.PositiveInfinity;
-            int count = Physics.RaycastNonAlloc(trucks[slot].body.worldCenterOfMass + Vector3.up, Vector3.down, deckHits, 4, ~0, QueryTriggerInteraction.Ignore);
-            if (count == deckHits.Length) return false;
-            for (int i = 0; i < count; i++)
-            {
-                var hit = deckHits[i];
-                if (hit.collider.transform.IsChildOf(trucks[slot].transform) || hit.distance >= nearest) continue;
-                nearest = hit.distance; support = hit;
-            }
-            return nearest < float.PositiveInfinity && support.rigidbody == trailers[slot].Body;
+            support = default;
+            var surface = deckSurfaces != null && slot < deckSurfaces.Length ? deckSurfaces[slot] : null;
+            if (surface == null || !surface.enabled || !surface.gameObject.activeInHierarchy) return false;
+            // The COM support ray alone can see a trailer axle/chassis while
+            // native tyres actually rest on the arena underneath. Require both
+            // the designated load-bearing top face and its real wheel identity.
+            if (!surface.Raycast(new Ray(trucks[slot].body.worldCenterOfMass + Vector3.up, Vector3.down), out support, 4)
+                || Vector3.Dot(support.normal, surface.transform.up) < .8f) return false;
+            foreach (var wheel in trucks[slot].wheels)
+                if (wheel != null && wheel.enabled && wheel.IsGrounded && wheel.HitCollider == surface && Vector3.Dot(wheel.HitNormal, surface.transform.up) > .8f) return true;
+            return false;
+        }
+        public bool OwnDeckWheelSupport(int slot) => TryDeckSupport(slot, out _);
+        string WheelSupportDiagnostic(int slot)
+        {
+            var text = new System.Text.StringBuilder();
+            foreach (var wheel in trucks[slot].wheels) if (wheel != null && wheel.IsGrounded)
+                text.Append(wheel.name).Append("->").Append(wheel.HitCollider != null ? wheel.HitCollider.name : "none").Append('@').Append(wheel.HitPoint.ToString("F1")).Append(" n=").Append(wheel.HitNormal.ToString("F1")).Append(';');
+            return text.ToString();
         }
         void BankSupportedRide(int slot)
         {
