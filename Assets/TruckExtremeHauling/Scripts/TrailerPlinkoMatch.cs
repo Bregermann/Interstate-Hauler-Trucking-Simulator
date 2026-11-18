@@ -162,7 +162,11 @@ namespace LWS.TruckExtremeHauling
                 float points = option == 1 ? Mathf.Max(25, 1500 - Mathf.Abs(bin - TargetBin(i)) * 500) : binPoints[bin] * (option == 3 && bin == 2 ? 3 : 1);
                 FinishDrop(i, bin, points, "BIN " + (bin + 1) + " / +" + points.ToString("F0"));
             }
-            else if (Mathf.Abs(at.x) > 32 * boardScale || Mathf.Abs(at.z) > 10 * boardScale || at.y < -65 * boardScale) FinishDrop(i, -1, 0, "MISS / OUT OF BOARD");
+            else if (Mathf.Abs(at.x) > 32 * boardScale || Mathf.Abs(at.z) > 10 * boardScale || at.y < -65 * boardScale)
+            {
+                Debug.Log($"HH10_PLINKO_LEFT_BOARD participant={i + 1} drop={completedDrops[i] + 1} local={at:F2} velocity={body.linearVelocity:F2} contacts={pegContacts[i, completedDrops[i]]}");
+                FinishDrop(i, -1, 0, "MISS / OUT OF BOARD");
+            }
             else if (age - releasedAt[i] >= dropTimeoutSeconds) FinishDrop(i, -1, 0, "MISS / DID NOT SETTLE");
         }
         void ReleaseDrop(int slot)

@@ -123,9 +123,9 @@ namespace LWS.TruckExtremeHauling.Editor
             {
                 var origin=new GameObject("Physical Plinko board "+i).transform;origin.position=new Vector3(i*180,160,0);match.boardOrigins[i]=origin;
                 match.trailers[i].transform.SetPositionAndRotation(origin.position,Quaternion.Euler(90,0,0));
-                SportsEventAuthoring.Box("Board back",origin.position+new Vector3(0,-26,5)*scale,new Vector3(52,62,1)*scale,steel,contact,origin);
-                match.landingTrays[i]=SportsEventAuthoring.Box("Catch tray",origin.position+new Vector3(0,-55,0)*scale,new Vector3(52,2,12)*scale,steel,contact,origin).AddComponent<PlinkoLandingTray>();
-                for(int side=-1;side<=1;side+=2)SportsEventAuthoring.Box("Board sidewall",origin.position+new Vector3(side*26,-26,0)*scale,new Vector3(1,62,12)*scale,accent,bounce,origin);
+                SportsEventAuthoring.Box("Board back",new Vector3(0,-26,5)*scale,new Vector3(52,62,1)*scale,steel,contact,origin);
+                match.landingTrays[i]=SportsEventAuthoring.Box("Catch tray",new Vector3(0,-55,0)*scale,new Vector3(52,2,12)*scale,steel,contact,origin).AddComponent<PlinkoLandingTray>();
+                for(int side=-1;side<=1;side+=2)SportsEventAuthoring.Box("Board sidewall",new Vector3(side*26,-26,0)*scale,new Vector3(1,62,12)*scale,accent,bounce,origin);
                 for(int row=0;row<6;row++)for(int peg=0;peg<5;peg++)
                 {
                     var ball=GameObject.CreatePrimitive(PrimitiveType.Sphere);ball.name="Physical rebound peg";ball.transform.SetParent(origin,false);
@@ -133,8 +133,9 @@ namespace LWS.TruckExtremeHauling.Editor
                     ball.GetComponent<Renderer>().sharedMaterial=accent;UnityEngine.Object.DestroyImmediate(ball.GetComponent<SphereCollider>());
                     var pin=ball.AddComponent<CapsuleCollider>();pin.direction=2;pin.radius=.5f;pin.height=1;pin.sharedMaterial=bounce;
                 }
-                for(int bin=0;bin<6;bin++)SportsEventAuthoring.Box("Bin separator",origin.position+new Vector3(-25+bin*10,-51,0)*scale,new Vector3(.6f,7,12)*scale,accent,contact,origin);
+                for(int bin=0;bin<6;bin++)SportsEventAuthoring.Box("Bin separator",new Vector3(-25+bin*10,-51,0)*scale,new Vector3(.6f,7,12)*scale,accent,contact,origin);
             }
+            HaulingVenuePresentation.AddPlinkoContainment(match);
             new GameObject("Full-size trailer Plinko spacing v2");
             var support=GameObject.Find("Continuous venue support");support.transform.position=new Vector3(270,-1,80);support.transform.localScale=new Vector3(850,2,500);
         }

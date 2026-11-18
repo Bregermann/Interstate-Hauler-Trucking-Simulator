@@ -13,7 +13,7 @@ namespace LWS.TruckExtremeHauling.Editor
     {
         public static void Upgrade()
         {
-            Orbital(); CableGantry(); TossRamps(); RepairRingFrames(); RepairCableAnchors(); UpgradeFullSizePlinko(); RepairPlinkoPegContacts(); AssetDatabase.SaveAssets();
+            Orbital(); CableGantry(); TossRamps(); RepairRingFrames(); RepairCableAnchors(); UpgradeFullSizePlinko(); RepairPlinkoPegContacts(); AddSavedPlinkoContainment(); AssetDatabase.SaveAssets();
         }
         static Material Owned(string name)
         { var asset=AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckMoonMadness/Materials/"+name+".mat");if(asset==null)throw new InvalidOperationException("Existing owned space visual missing: "+name);return asset; }
@@ -139,6 +139,52 @@ namespace LWS.TruckExtremeHauling.Editor
                 }
             EditorSceneManager.SaveScene(scene);Debug.Log("HH10_PLINKO_PEG_CONTACTS_REPAIRED "+repaired+" visible rounded pins; supported bins labelled.");
         }
+        public static void AddSavedPlinkoContainment()
+        {
+            var scene = EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/TrailerPlinko.unity");
+            var match = UnityEngine.Object.FindAnyObjectByType<TrailerPlinkoMatch>();
+            AddPlinkoContainment(match);
+            if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
+                throw new InvalidOperationException("Could not save the Plinko containment screens.");
+            AssetDatabase.SaveAssets();
+        }
+
+        internal static void AddPlinkoContainment(TrailerPlinkoMatch match)
+        {
+            if (match == null || match.boardOrigins.Length != 4 || match.boardOrigins.Any(board => board == null))
+                throw new InvalidOperationException("All four physical Plinko boards are required.");
+            const string folder = "TruckExtremeHauling";
+            const string screenName = "Clear physical rebound screen";
+            if (match.boardOrigins.All(board => board.Find(screenName) != null)) return;
+            var glass = SportsEventAuthoring.Mat(folder, "Plinko clear blue rebound screen", new Color(.25f, .65f, .9f, .1f), .78f);
+            glass.SetFloat("_Surface", 1);
+            glass.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            glass.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            glass.SetFloat("_ZWrite", 0);
+            glass.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            glass.SetOverrideTag("RenderType", "Transparent");
+            glass.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            EditorUtility.SetDirty(glass);
+            var steel = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckExtremeHauling/Materials/Freight tower gunmetal.mat");
+            if (steel == null) throw new InvalidOperationException("The authored board frame material is missing.");
+            var screenContact = SportsEventAuthoring.Contact(folder, "Plinko rebound screen contact", .06f, .12f);
+            float scale = match.boardScale;
+            foreach (Transform board in match.boardOrigins)
+            {
+                if (board.Find(screenName) != null) continue;
+                var screen = SportsEventAuthoring.Box(screenName, new Vector3(0, -26, -5.4f) * scale,
+                    new Vector3(52, 62, .35f) * scale, glass, screenContact, board);
+                screen.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                foreach (float edge in new[] { -25.8f, 25.8f })
+                    SportsEventAuthoring.Box("Rebound screen frame upright", new Vector3(edge, -26, -5.65f) * scale,
+                        new Vector3(.5f, 62, .45f) * scale, steel, null, board);
+                foreach (float edge in new[] { -57f, 5f })
+                    SportsEventAuthoring.Box("Rebound screen frame rail", new Vector3(0, edge, -5.65f) * scale,
+                        new Vector3(52, .5f, .45f) * scale, steel, null, board);
+            }
+            Debug.Log("HH10_PLINKO_CONTAINMENT_SAVED four physical clear screens retain side rebounds without changing pegs or trays.");
+        }
+
         static void RepairRingFrames()
         {
             var scene=EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/HitchRingToss.unity");
