@@ -33,6 +33,7 @@ namespace LWS.TruckHorrorSports
         public SportsChaosWeather atmosphere;
         public SportsWeatherPresets presets;
         public float matchSeconds = 240, interactionRadius = 5, interactionSeconds = 2;
+        [Min(8)] public float utilityCabApproachRadius = 14;
         public readonly HorrorObjectives rules = new HorrorObjectives();
         public float Age { get; private set; }
         public int Escalation { get; private set; }
@@ -189,7 +190,7 @@ namespace LWS.TruckHorrorSports
             if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[slot].body.position) < 4) return "ACTION · ENTER CAB";
             int next = NextObjective(slot);
             if(supplyJob!=null && next==supplyJob.objectiveIndex && foot!=null && foot.Outside)return supplyJob.Instruction(slot);
-            if (foot != null && !foot.Outside && next >= 0 && objectives[next].requiresFoot && Vector3.Distance(trucks[slot].body.position, TaskTruckApproach(slot,next)) < 8)
+            if (foot != null && !foot.Outside && next >= 0 && objectives[next].requiresFoot && Vector3.Distance(trucks[slot].body.position, TaskTruckApproach(slot,next)) < FootParkingRadius(next))
                 return trucks[slot].body.linearVelocity.magnitude < 1.4f ? "ACTION · EXIT CAB" : "STOP TO EXIT CAB";
             return FreightSurvival && stationarySeconds[slot] > 6 ? "KEEP MOVING · THE LOAD IS WAKING" : null;
         }
@@ -320,7 +321,7 @@ namespace LWS.TruckHorrorSports
                 if (sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && !cargo[i].Ready) drive = Vector2.zero;
                 var foot = footAgents != null && i < footAgents.Length ? footAgents[i] : null;
                 int wanted = NextObjective(i);
-                if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i,wanted)) < 8 && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
+                if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i,wanted)) < FootParkingRadius(wanted) && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
                 {
                     var truck = trucks[i];
                     Vector3 exitPoint = truck.body.position + truck.transform.right * 2.2f + Vector3.up * .5f;
@@ -496,6 +497,9 @@ namespace LWS.TruckHorrorSports
         }
         Vector3 TaskPosition(int slot, int task) => convoyRoad!=null&&convoyRoad.Active?convoyRoad.WardPosition(slot,task):junctionPuzzle!=null&&junctionPuzzle.Active?RoadGatePosition(task):supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.Target(slot) : ConvoyMode ? ConvoyLane(objectives[task].transform.position, slot) : objectives[task].transform.position;
         Vector3 TaskTruckApproach(int slot,int task) => supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.TruckApproach(slot) : objectives[task].truckApproach;
+        float FootParkingRadius(int task) => sport == HorrorSport.GraveyardShift &&
+            supplyJob != null && task != supplyJob.objectiveIndex ? utilityCabApproachRadius : 8;
+
         Vector3 ConvoyLane(Vector3 center, int slot) => center + Vector3.right * (center.x < 0 ? 8 * slot : -8 * slot);
         Vector3 ExitPosition(int slot) => convoyRoad!=null&&convoyRoad.Active?convoyRoad.ExitPosition(slot):junctionPuzzle!=null&&junctionPuzzle.Active?junctionPuzzle.ExitPosition(slot):ConvoyMode ? ConvoyLane(exit.position, slot) : sport == HorrorSport.ScarecrowSeason && option == 3 ? exit.position + new Vector3((slot - (setup.count - 1) * .5f) * 4, 0, 7) : exit.position;
         bool CargoAtTask(int slot, int task) => sport != HorrorSport.CursedCargo || cargo != null && slot < cargo.Length && cargo[slot] != null && cargo[slot].Ready && cargo[slot].Condition > 0 && Vector3.Distance(cargo[slot].Body.position, TaskPosition(slot, task)) < interactionRadius + 8 && cargo[slot].Body.linearVelocity.magnitude < 1.5f;
@@ -633,6 +637,16 @@ namespace LWS.TruckHorrorSports
             bool carefulDriver = sport == HorrorSport.ScarecrowSeason || sport == HorrorSport.CursedCargo;
             bool outside = footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside;
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
+            if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
+                supplyJob != null && id != supplyJob.objectiveIndex &&
+                Vector3.Distance(truck.body.position, destination) < FootParkingRadius(id) &&
+                supplyJob.TryCabExit(slot, TaskPosition(slot, id), out _))
+            {
+                // Stop in a usable service apron rather than insisting on the
+                // center of a parking marker. The driver still walks to the task.
+                aiParking[slot] = true;
+                return Vector2.zero;
+            }
             if (sport == HorrorSport.ScarecrowSeason && option == 1 && carryingRelic[slot] >= 0 && ritualAltar != null) destination = ritualAltar.position;
             if (ScarecrowSurvival && objectives.Length > 0)
             {
