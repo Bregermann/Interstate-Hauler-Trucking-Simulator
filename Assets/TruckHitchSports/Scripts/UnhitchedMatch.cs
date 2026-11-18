@@ -22,6 +22,7 @@ namespace LWS.TruckHitchSports
         readonly float[] lastJump = new float[4], rampAir = new float[4], rampPeak = new float[4];
         readonly Vector3[] rampStart = new Vector3[4];
         readonly bool[] rampFlying = new bool[4];
+        const float TrickHopSpeed = 7.6f;
         readonly int[] rampLandings = new int[4], quarterTurns = new int[4], cleanLandings = new int[4], bestCombo = new int[4];
         readonly float[] rampLandingUntil = new float[4], rampDistance = new float[4];
         readonly Vector3[] trailerStart = new Vector3[4];
@@ -152,8 +153,8 @@ namespace LWS.TruckHitchSports
                         // chassis through its joint and consumes the intended hop.
                         float launchedMass = 0;
                         foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true)) if (!part.isKinematic)
-                        { part.AddForce(Vector3.up * 6, ForceMode.VelocityChange); launchedMass += part.mass; }
-                        deck.AddForceAtPosition(Vector3.down * launchedMass * 6, hit.point, ForceMode.Impulse);
+                        { part.AddForce(Vector3.up * TrickHopSpeed, ForceMode.VelocityChange); launchedMass += part.mass; }
+                        deck.AddForceAtPosition(Vector3.down * launchedMass * TrickHopSpeed, hit.point, ForceMode.Impulse);
                     }
                     else { body.AddForce(Vector3.up * 6, ForceMode.VelocityChange); deck.AddForceAtPosition(Vector3.down * body.mass * 6, hit.point, ForceMode.Impulse); }
                     airborne[i] = true; supported = false; lastJump[i] = riding[i];
@@ -237,7 +238,7 @@ namespace LWS.TruckHitchSports
             // air torque and90-degree landing requirement are unchanged.
             if (!supported || airborne[slot] || supportedRideSeconds[slot] < 1.5f || riding[slot] < 2 || riding[slot] - lastJump[slot] < 6) return false;
             if (Vector3.Dot(deck.rotation * Vector3.up, Vector3.up) < .985f || Mathf.Abs(deck.linearVelocity.y) > .3f || deck.angularVelocity.magnitude > .25f) return false;
-            float projectedLandingZ = deck.position.z + Mathf.Max(0, deck.linearVelocity.z) * (12 / Mathf.Max(.1f, Physics.gravity.magnitude));
+            float projectedLandingZ = deck.position.z + Mathf.Max(0, deck.linearVelocity.z) * (2 * TrickHopSpeed / Mathf.Max(.1f, Physics.gravity.magnitude));
             return projectedLandingZ < 52; // The original physical first ramp begins nearZ53.
         }
         bool RecoveryTopPoint(int slot, out Vector3 point, out Vector3 insetHalf)
