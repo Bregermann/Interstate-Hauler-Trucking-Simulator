@@ -37,7 +37,8 @@ namespace LWS.TruckExtremeHauling
         static readonly string[] ScenarioNames =
         {
             "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS",
-            "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE", "HIGHWAY PILEUP RECOVERY"
+            "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE",
+            "HIGHWAY PILEUP RECOVERY", "MOUNTAIN PASS RECOVERY"
         };
         protected override void ReportFinalMeasurements(int slot)
         {
@@ -52,13 +53,20 @@ namespace LWS.TruckExtremeHauling
                 RecordMetric(slot, "cargo_pileup_wreck_motion_metres", emergencySites.PileupWreckMetres[slot]);
                 return;
             }
+            if (emergencySites.MountainActive)
+            {
+                RecordMetric(slot, "cargo_mountain_winch_metres", emergencySites.CableTowMetres[slot]);
+                RecordMetric(slot, "cargo_mountain_terrace_recovered", emergencySites.MountainRecovered[slot] ? 1 : 0);
+                return;
+            }
             RecordMetric(slot, "cargo_fire_exposure_seconds", emergencySites.HeatSeconds[slot]);
             RecordMetric(slot, "cargo_water_immersion_seconds", emergencySites.ImmersedSeconds[slot]);
             RecordMetric(slot, "cargo_physical_cable_tow_metres", emergencySites.CableTowMetres[slot]);
             RecordMetric(slot, "cargo_flood_extracted", emergencySites.Extracted[slot] ? 1 : 0);
         }
         public override string Title => "CARGO CRISIS";
-        public override int OptionCount => emergencySites?.highwayPileup?.environment != null ? ScenarioNames.Length : ScenarioNames.Length - 1;
+        public override int OptionCount => emergencySites?.highwayPileup?.environment == null ? 6 :
+            emergencySites.mountainRecovery?.environment == null ? 7 : ScenarioNames.Length;
         protected override string[] Modes => ScenarioNames;
         public override bool Cooperative => option == 2;
         protected override string ActionHint => "HOOK / RELEASE CABLE · HOLD REEL / ALIGN HITCH";

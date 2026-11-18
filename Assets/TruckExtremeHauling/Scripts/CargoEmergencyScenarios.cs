@@ -29,7 +29,7 @@ namespace LWS.TruckExtremeHauling
     }
 
     /// <summary>
-    /// Optional authored incidents, selected only by Cargo Crisis options4–6.
+    /// Optional authored incidents, selected only by Cargo Crisis options4–7.
     /// NWH owns all rig/contact/coupling forces; Archimeds owns displacement;
     /// Cargo Crisis owns the existing winch. This adapter owns incident rules.
     /// </summary>
@@ -39,10 +39,13 @@ namespace LWS.TruckExtremeHauling
         public CargoCrisisMatch match;
         public GameObject defaultSupport;
         public GameObject[] floodedSiteReplacedRoadblocks = Array.Empty<GameObject>();
-        public CargoEmergencySite industrialFire, floodedLoading, highwayPileup;
+        public CargoEmergencySite industrialFire, floodedLoading, highwayPileup, mountainRecovery;
         public CargoEmergencySite Active { get; private set; }
         public bool FloodActive => Active != null && Active == floodedLoading;
         public bool PileupActive => Active != null && Active == highwayPileup;
+        public bool MountainActive => Active != null && Active == mountainRecovery;
+        public readonly bool[] MountainRecovered = new bool[4];
+        readonly bool[] mountainInitiallyTipped = new bool[4];
         public readonly float[] PileupWreckMetres = new float[4];
         Vector3[] lastWreckPositions = Array.Empty<Vector3>();
         public readonly float[] HeatSeconds = new float[4], ImmersedSeconds = new float[4], CableTowMetres = new float[4];
@@ -58,10 +61,10 @@ namespace LWS.TruckExtremeHauling
         bool originalSupportActive, capturedSupport;
         bool[] originalRoadblockActive;
 
-        public string Status => PileupActive?"HIGHWAY PILEUP · REAL MOVABLE WRECKS · RIGHT, HITCH AND DELIVER THE STRANDED LOAD":FloodActive
+        public string Status => MountainActive ? "MOUNTAIN PASS · WINCH ON THE HIGH TERRACE · HITCH, BRAKE AND HAUL DOWN THE REAL MOUNTAIN ROAD" : PileupActive?"HIGHWAY PILEUP · REAL MOVABLE WRECKS · RIGHT, HITCH AND DELIVER THE STRANDED LOAD":FloodActive
             ? "FLOODED LOADING · STAY ON DRY RIGHT BANK · REEL LOAD UP SLOPE BEFORE HITCHING"
             : "INDUSTRIAL FIRE · BURNING FREIGHT DAMAGES CARGO · EXTRACT, HITCH AND DELIVER";
-        public string PlayerStatus(int slot) => PileupActive?"PILEUP · WRECK MOVEMENT "+PileupWreckMetres[slot].ToString("0.0")+"m":FloodActive
+        public string PlayerStatus(int slot) => MountainActive ? (MountainRecovered[slot] ? "TERRACE RECOVERED · CONTROL THE DESCENT" : "WINCH RIGHTING " + CableTowMetres[slot].ToString("0.0") + "m") : PileupActive?"PILEUP · WRECK MOVEMENT "+PileupWreckMetres[slot].ToString("0.0")+"m":FloodActive
             ? (Extracted[slot] ? "DRY BANK RECOVERED" : (frontTow[slot]?"FRONT TOW · ":"RIGHTING · ")+"WET " + ImmersedSeconds[slot].ToString("0") + "s · WINCH " + CableTowMetres[slot].ToString("0") + "m")
             : "HEAT " + HeatSeconds[slot].ToString("0") + "s";
 
@@ -78,9 +81,10 @@ namespace LWS.TruckExtremeHauling
             if (industrialFire?.environment != null) industrialFire.environment.SetActive(false);
             if (floodedLoading?.environment != null) floodedLoading.environment.SetActive(false);
             if (highwayPileup?.environment != null) highwayPileup.environment.SetActive(false);
+            if (mountainRecovery?.environment != null) mountainRecovery.environment.SetActive(false);
             if (defaultSupport != null) defaultSupport.SetActive(originalSupportActive);
             for(int i=0;i<originalRoadblockActive.Length;i++)if(floodedSiteReplacedRoadblocks[i]!=null)floodedSiteReplacedRoadblocks[i].SetActive(originalRoadblockActive[i]);
-            Active = option == 4 ? industrialFire : option == 5 ? floodedLoading : option==6?highwayPileup:null;
+            Active = option == 4 ? industrialFire : option == 5 ? floodedLoading : option==6?highwayPileup:option==7?mountainRecovery:null;
             if (option < 4) return;
             if (Active?.environment == null || Active.loads == null || Active.loads.Length != 4 || Active.truckStarts == null || Active.truckStarts.Length != 4 || Active.depots == null || Active.depots.Length != 4)
                 throw new InvalidOperationException("The selected Cargo Crisis emergency must have four saved native loads, staging positions and depots.");
@@ -99,6 +103,7 @@ namespace LWS.TruckExtremeHauling
             Array.Clear(HeatSeconds, 0, 4); Array.Clear(ImmersedSeconds, 0, 4); Array.Clear(CableTowMetres, 0, 4);
             Array.Clear(Extracted, 0, 4); Array.Clear(hadWater, 0, 4);
             Array.Clear(frontTow,0,4);
+            Array.Clear(MountainRecovered,0,4);Array.Clear(mountainInitiallyTipped,0,4);
             Array.Clear(PileupWreckMetres,0,4);
             if (Active == null) return;
             if(PileupActive){
@@ -126,6 +131,7 @@ namespace LWS.TruckExtremeHauling
                     stand.SetActive(originalLandingGear[i]);
                 }
                 lastPosition[i] = Active.loads[i].Body.position;
+                if(MountainActive)mountainInitiallyTipped[i]=Vector3.Dot(Active.loads[i].transform.up,Vector3.up)<.6f;
                 if (Active.flotation != null && i < Active.flotation.Length && Active.flotation[i] != null)
                 { Active.flotation[i].enabled = false; Active.flotation[i].Clock = 0; observedFloatSteps[i] = Active.flotation[i].Steps; }
             }
@@ -142,6 +148,18 @@ namespace LWS.TruckExtremeHauling
             if (cable != null && cable.connectedBody == load.Body && cable.currentForce.sqrMagnitude > 10000)
                 CableTowMetres[slot] += Vector3.Distance(current, lastPosition[slot]);
             lastPosition[slot] = current;
+            if(MountainActive)
+            {
+                // An authored elevated rescue, not a new winch or AI authority.
+                // Righting must actually move the loaded native cable and finish
+                // on real tyres above the lower valley before hitching is legal.
+                if(!MountainRecovered[slot]&&mountainInitiallyTipped[slot]&&CableTowMetres[slot]>.5f&&load.WheelContact&&Vector3.Dot(load.transform.up,Vector3.up)>.97f&&current.y>25)
+                {
+                    MountainRecovered[slot]=true;
+                    SportsSessionTelemetry.GameplayEvent(match.gameObject.scene.name,"cargo_mountain_actual_righting",match.setup.players[slot].participantId,"loaded cable movement and native elevated tyre support",CableTowMetres[slot]);
+                }
+                return;
+            }
             if(PileupActive){
                 for(int wreck=0;wreck<Active.wrecks.Length;wreck++)if(Active.wrecks[wreck].lane==slot){
                     Vector3 position=Active.wrecks[wreck].body.position;
@@ -185,7 +203,7 @@ namespace LWS.TruckExtremeHauling
                 if (source != null) heat = Mathf.Max(heat, Mathf.Clamp01(1 - Vector3.Distance(source.position, point) / Active.heatRadius));
             return heat;
         }
-        public bool HitchReady(int slot, TrailerBody load) => !FloodActive || Extracted[slot] && load.WheelContact;
+        public bool HitchReady(int slot, TrailerBody load) => MountainActive ? MountainRecovered[slot] && load.WheelContact : !FloodActive || Extracted[slot] && load.WheelContact;
         public Vector3 FrontTowDestination(int slot)=>new Vector3(Active.dryBankX[slot]+35,0,Active.floodedVolumes[slot].max.z-10);
         public void SetFloodTowPhase(int slot,TrailerBody load,bool front)
         {
@@ -203,7 +221,7 @@ namespace LWS.TruckExtremeHauling
             // slope rises toward +X, and the service lane begins at dryBankX.
             return new Vector3(Active.dryBankX[slot] + 3, 0, Mathf.Clamp(load.Body.position.z - 2, bay.min.z + 7, bay.max.z - 7));
         }
-        public bool DeliveryReady(int slot, TrailerBody load) => load.CargoCondition > 0 && (!FloodActive || Extracted[slot] && load.WheelContact);
+        public bool DeliveryReady(int slot, TrailerBody load) => load.CargoCondition > 0 && (MountainActive ? MountainRecovered[slot] && load.WheelContact : !FloodActive || Extracted[slot] && load.WheelContact);
         public string DiagnosticState(int slot)
         {
             if(Active==null)return "ordinary site";
