@@ -223,6 +223,7 @@ namespace LWS.TruckHorrorSports
                     // The grip still has to lift the real collider; the tray decides delivery.
                     Vector3 level = Vector3.Cross(parcel.transform.up, Vector3.up) * 18;
                     parcel.AddTorque(level - parcel.angularVelocity * 7, ForceMode.Acceleration);
+                    parcel.AddForce(-Vector3.ProjectOnPlane(parcel.linearVelocity, Vector3.up) * 12, ForceMode.Acceleration);
                     Bounds tray = receiver.bounds;
                     Bounds crate = parcelShapes[slot].bounds;
                     Vector3 slide = tray.center;
@@ -247,7 +248,8 @@ namespace LWS.TruckHorrorSports
                     && Mathf.Abs(center.z - receiverBounds.center.z) < receiverBounds.extents.z - .12f;
                 bool clearsTop = parcelShapes[slot].bounds.min.y >= receiverBounds.max.y - .025f;
                 bool restingOnTop = center.y >= receiverBounds.max.y && SupportedByReceiver(parcel, receiver, center);
-                if (centered && (clearsTop || restingOnTop))
+                bool underControl = Vector3.ProjectOnPlane(parcel.linearVelocity, Vector3.up).sqrMagnitude < .64f;
+                if (centered && underControl && (clearsTop || restingOnTop))
                 {
                     // Release is a physical drop. The independent supported-rest
                     // check above decides whether the crate actually stays put.
