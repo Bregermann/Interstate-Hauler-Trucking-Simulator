@@ -21,6 +21,7 @@ namespace LWS.TruckExtremeHauling
         public bool NativeCoupled { get; private set; }
         public enum RecoveryPhase { Idle, AlignHook, Lift, AlignTractor, Translate, ReverseHitch, Hauling }
         public RecoveryPhase Phase { get; private set; }
+        const float PresentedAiReverseLaneHalfWidth = 2;
         Dnr[] originalDnr;
         float initialPinHeight;
         Vector3 capturedLoadPosition;
@@ -157,7 +158,14 @@ namespace LWS.TruckExtremeHauling
             {
                 var truck = rescue.match.trucks[slot]; Vector3 aligned = CouplingPosition(slot);
                 float lateral = Mathf.Abs(Vector3.Dot(truck.body.position - aligned, Cargo.transform.right));
-                if (Vector3.Angle(truck.transform.forward, Cargo.transform.forward) < 5 && lateral < .45f && Vector3.Dot(truck.body.position - aligned, Cargo.transform.forward) > (RailPresented ? 5 : 18))
+                // Once the actual load is presented over level ice, the existing
+                // reverse steering can correct a modest cross-track offset. Run94
+                // instead kept driving forward for a .45m staging line, then
+                // spent the round backing that unnecessary extra distance.
+                // This is only AI manoeuvre admission: native capture still
+                // independently checks 25mm, velocity and full relative angle.
+                float reverseLane = ai && RailPresented ? PresentedAiReverseLaneHalfWidth : .45f;
+                if (Vector3.Angle(truck.transform.forward, Cargo.transform.forward) < 5 && lateral < reverseLane && Vector3.Dot(truck.body.position - aligned, Cargo.transform.forward) > (RailPresented ? 5 : 18))
                 {
                     // Clear the native tractor ahead BEFORE carrying the suspended
                     // load north. The fixed legacy gantry keeps its original path.
