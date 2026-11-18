@@ -227,7 +227,10 @@ namespace LWS.TruckHitchSports
             if (ambushStage[slot] < 2)
             {
                 target = goal + right * side * 12 + forward * (ambushStage[slot] == 0 ? -20 : 18);
-                truck.TickDrive(DriveTo(slot, target, 5));
+                // This is an empty tractor moving along the open aisle.
+                // Use the ordinary road pace here and retain the slow alignment
+                // controller once it reaches the receiving bay.
+                truck.TickDrive(DriveTo(slot, target, 8));
                 if (Vector3.ProjectOnPlane(truck.body.position - target, Vector3.up).magnitude < 4) ambushStage[slot]++;
                 return;
             }
