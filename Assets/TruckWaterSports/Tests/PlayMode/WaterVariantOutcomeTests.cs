@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
@@ -196,6 +197,11 @@ namespace LWS.TruckWaterSports.Tests
                 InputSystem.QueueStateEvent(first,new GamepadState());InputSystem.QueueStateEvent(second,new GamepadState());
                 yield return null;yield return new WaitForFixedUpdate();yield return null;
                 var canoe=Vessel(match,0);Assert.That(Vessel(match,1),Is.SameAs(canoe));
+                var broadcast=(Camera)Field(Field(match,"broadcast"),"view");
+                var cameras=((Array)Field(match,"participantCameras")).Cast<object>()
+                    .Select(sportCamera=>(Camera)Field(sportCamera,"view")).ToArray();
+                Assert.That(broadcast.enabled,Is.True,"One occupied canoe gets a full-screen view.");
+                Assert.That(cameras.All(camera=>!camera.enabled),Is.True,"Two paddlers on the same hull must not see duplicate views.");
                 InputSystem.QueueStateEvent(first,new GamepadState{rightTrigger=1});
                 yield return null;yield return new WaitForFixedUpdate();yield return new WaitForSeconds(1.1f);
                 int left=(int)Call(canoe,"StrokesAtStation",0);Assert.That(left,Is.GreaterThan(0));Assert.That((int)Call(canoe,"StrokesAtStation",1),Is.Zero);
@@ -208,7 +214,23 @@ namespace LWS.TruckWaterSports.Tests
                 InputSystem.QueueStateEvent(first,new GamepadState{rightTrigger=1});InputSystem.QueueStateEvent(second,new GamepadState{rightTrigger=1});
                 yield return null;yield return new WaitForFixedUpdate();yield return new WaitForSeconds(1);
                 Assert.That((int)Property(canoe,"Synchronizations"),Is.GreaterThan(0));
-                TestContext.WriteLine("PADDLE_TWO_STATION_AGENCY software_devices=true independently_assigned=true native_strokes_and_float_physics=true physical_gamepads=unverified");
+                Call(match,"SetupScreen");
+                yield return null;
+                setup.GetType().GetField("count").SetValue(setup,3);
+                var sourceField=players.GetValue(1).GetType().GetField("source");
+                sourceField.SetValue(players.GetValue(1),Enum.Parse(sourceField.FieldType,"AI"));
+                sourceField.SetValue(players.GetValue(2),Enum.Parse(sourceField.FieldType,"WholeController"));
+                Call(match,"NormalizeSetup");
+                Assert.That((bool)Call(match,"Assign",0,first),Is.True);
+                Assert.That((bool)Call(match,"Assign",2,second),Is.True);
+                Assert.That((bool)Call(match,"StartMatch"),Is.True);
+                yield return null;
+                Assert.That(Vessel(match,0),Is.Not.SameAs(Vessel(match,2)));
+                Assert.That(broadcast.enabled,Is.False);
+                Assert.That(cameras.Count(camera=>camera.enabled),Is.EqualTo(2),"Different occupied canoes get independent views.");
+                Assert.That(cameras[0].rect,Is.EqualTo(new Rect(0,0,.5f,1)));
+                Assert.That(cameras[1].rect,Is.EqualTo(new Rect(.5f,0,.5f,1)));
+                TestContext.WriteLine("PADDLE_TWO_STATION_AGENCY software_devices=true independently_assigned=true native_strokes_and_float_physics=true shared_and_split_viewports=true physical_gamepads=unverified");
             }
             finally
             {

@@ -18,7 +18,7 @@ public abstract class WaterMatch:SportsEventSession {
  public bool ResultWinner(int slot)=>!Cooperative&&ResultHasOutcome(slot)&&ResultPlace(slot)==1;
  public override bool TryReadScoreCard(int slot,out string score,out string detail){score=Scores[slot].ToString("F0");var v=Vessel(slot);detail=Stranded[slot]?"STRANDED · LEFT THE WATER":"GATE "+Gates[slot]+" · "+v.Capsizes+" CAPSIZES";return slot<setup.count;}
  public WaterVessel Vessel(int slot)=>vessels[Canoe?slot/2:slot];
- protected override void BeginGame(){Clock=0;finalMetricsRecorded=false;metricsMatchId=MatchId;humanViews=0;for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)viewOwners[humanViews++]=i;ConfigureViews();for(int i=0;i<4;i++){Gates[i]=1;MissedGates[i]=0;GateAccuracyPoints[i]=0;Scores[i]=0;FinishTimes[i]=-1;Stranded[i]=false;StrandedAt[i]=-1;outsideWater[i]=0;soundedStrokes[i]=0;nextSplash[i]=0;}Bounds footprint=default;if(!Canoe&&course.lake){foreach(var surface in UnityEngine.Object.FindObjectsByType<BlackwaterWake>(FindObjectsSortMode.None))if(surface.gameObject.scene==gameObject.scene){footprint=surface.GetComponent<Renderer>().bounds;break;}if(footprint.size.x<1||footprint.size.z<1)throw new System.InvalidOperationException("Blackwater requires its authored water-surface footprint.");}for(int i=0;i<vessels.Length;i++){bool active=Canoe?i*2<setup.count:i<setup.count;vessels[i].gameObject.SetActive(active);if(active){int first=Canoe?i*2:i;int second=Mathf.Min(first+1,setup.count-1);vessels[i].SetColors(setup.players[first].color,setup.players[second].color);vessels[i].ResetVessel();if(!Canoe)vessels[i].BoundWaterSupport(footprint);}}BeginWater();}
+ protected override void BeginGame(){Clock=0;finalMetricsRecorded=false;metricsMatchId=MatchId;ConfigureViews();for(int i=0;i<4;i++){Gates[i]=1;MissedGates[i]=0;GateAccuracyPoints[i]=0;Scores[i]=0;FinishTimes[i]=-1;Stranded[i]=false;StrandedAt[i]=-1;outsideWater[i]=0;soundedStrokes[i]=0;nextSplash[i]=0;}Bounds footprint=default;if(!Canoe&&course.lake){foreach(var surface in UnityEngine.Object.FindObjectsByType<BlackwaterWake>(FindObjectsSortMode.None))if(surface.gameObject.scene==gameObject.scene){footprint=surface.GetComponent<Renderer>().bounds;break;}if(footprint.size.x<1||footprint.size.z<1)throw new System.InvalidOperationException("Blackwater requires its authored water-surface footprint.");}for(int i=0;i<vessels.Length;i++){bool active=Canoe?i*2<setup.count:i<setup.count;vessels[i].gameObject.SetActive(active);if(active){int first=Canoe?i*2:i;int second=Mathf.Min(first+1,setup.count-1);vessels[i].SetColors(setup.players[first].color,setup.players[second].color);vessels[i].ResetVessel();if(!Canoe)vessels[i].BoundWaterSupport(footprint);}}BeginWater();}
  protected virtual void BeginWater(){}
  protected override void Simulate(float dt){Clock+=dt;for(int i=0;i<vessels.Length;i++){var v=vessels[i];if(!v.gameObject.activeSelf)continue;v.Tick(dt,Clock);if(!Canoe&&FinishTimes[i]<0&&!Stranded[i]){outsideWater[i]=v.WaterSupported?0:outsideWater[i]+dt;if(outsideWater[i]>8||v.body.position.y<course.SurfacePoint(v.body.position).y-12){Stranded[i]=true;StrandedAt[i]=Clock;Scores[i]=-1000;ConfirmOutcome("water-stranded:"+i,i,0,"STRANDED OUTSIDE THE WATER","DNF");}}if(presentationWeather!=null&&!v.body.isKinematic)v.body.AddForce(presentationWeather.Flow*.06f,ForceMode.Acceleration);TickBoat(v,i,dt);if(v.Strokes!=soundedStrokes[i]&&Clock>=nextSplash[i]){soundedStrokes[i]=v.Strokes;nextSplash[i]=Clock+.7f;var waterAudio=GetComponent<WaterAudio>();feedback.PlayAt(waterAudio!=null?waterAudio.PaddleCueIndex:0,v.body.position,3);}}AfterBoats(dt);bool all=true;for(int i=0;i<setup.count;i++)all&=FinishTimes[i]>=0||Stranded[i];if(all||Clock>=RoundDeadline){for(int i=0;i<setup.count;i++)ConfirmFinalScore(i);EndMatch();}}
  // Scores include legitimate penalties and can be negative. The existing
@@ -59,7 +59,26 @@ public abstract class WaterMatch:SportsEventSession {
  }
  protected bool Action(int slot)=>slot>=setup.count||setup.players[slot].source==BowlingSource.AI?false:actions[slot];
  protected void CheckGate(int slot,WaterVessel v,float radius=13){if(FinishTimes[slot]>=0)return;int gate=Gates[slot];var delta=v.body.position-course.Point(gate);bool hit=delta.magnitude<radius;var forward=(course.Point(gate)-course.Point(gate-1)).normalized;var downstream=option==1?Vector3.ProjectOnPlane(forward,Vector3.up).normalized:forward;bool missed=!hit&&Vector3.Dot(delta,downstream)>radius*1.5f;if(!hit&&!missed)return;if(missed)MissedGates[slot]++;else GateAccuracyPoints[slot]+=Mathf.RoundToInt((1-Vector3.ProjectOnPlane(delta,forward).magnitude/radius)*100);Gates[slot]++;Scores[slot]=Gates[slot]*100-v.Capsizes*20-MissedGates[slot]*50;if(Gates[slot]>=course.stations.Length){Gates[slot]=course.stations.Length-1;FinishTimes[slot]=Clock+MissedGates[slot]*5;Scores[slot]+=10000-FinishTimes[slot];ConfirmOutcome("finish:"+slot,slot,FinishTimes[slot],"RIVER FINISH","SEC");}SportsSessionTelemetry.GameplayEvent(Title,missed?"water-gate-missed":"water-gate",setup.players[slot].participantId,missed?"five-second penalty":"checkpoint",gate);}
- void ConfigureViews(){if(participantCameras==null)return;broadcast.view.enabled=humanViews<=1;for(int i=0;i<participantCameras.Length;i++){var c=participantCameras[i].view;c.enabled=humanViews>1&&i<humanViews;c.rect=humanViews==2?new Rect(i*.5f,0,.5f,1):new Rect(i%2*.5f,1-(i/2+1)*.5f,.5f,.5f);}}
+ void ConfigureViews()
+ {
+  humanViews=0;
+  for(int slot=0;slot<setup.count;slot++)
+  {
+   if(setup.players[slot].source==BowlingSource.AI) continue;
+   // Both canoe stations control one hull. A second camera on that same hull
+   // shows the same shot twice while cutting each player's viewport in half.
+   if(Canoe && humanViews>0 && Vessel(viewOwners[humanViews-1])==Vessel(slot)) continue;
+   viewOwners[humanViews++]=slot;
+  }
+  if(participantCameras==null) return;
+  broadcast.view.enabled=humanViews<=1;
+  for(int i=0;i<participantCameras.Length;i++)
+  {
+   var camera=participantCameras[i].view;
+   camera.enabled=humanViews>1&&i<humanViews;
+   camera.rect=humanViews==2?new Rect(i*.5f,0,.5f,1):new Rect(i%2*.5f,1-(i/2+1)*.5f,.5f,.5f);
+  }
+ }
  protected override void Present(float dt){if(vessels==null||vessels.Length==0||broadcast==null)return;WaterVessel focus=vessels[0];for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI){focus=Vessel(i);break;}broadcast.Pose(focus.body.position+focus.transform.forward*8,new Vector3(32,27,-36),62);if(Live&&humanViews>1&&participantCameras!=null)for(int i=0;i<humanViews;i++){var v=Vessel(viewOwners[i]);participantCameras[i].Pose(v.body.position+v.transform.forward*5,v.transform.rotation*new Vector3(12,13,-21),65);}}
  // The existing telemetry queue owns persistence/buffering. Emit one bounded
  // final observation per participant/metric, including interrupted attempts.
