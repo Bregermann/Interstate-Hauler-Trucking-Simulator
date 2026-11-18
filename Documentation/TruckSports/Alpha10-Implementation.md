@@ -41,6 +41,19 @@ AffectedGameplay70:16tests,6PASS/10FAIL in656.68s. New passes are full physical 
 
 Author71 compiled and saved original River Modeler whirlpool currents/foam and the existing Scarecrow actor headlight-lure strategy. The optional Highwire leaf-binding step failed on inactive PhysX attachedRigidbody lookup; hierarchy ownership resolves that editor-only lookup. Runtime fallback caches real leaves and remains separately tested. Source-only rescue routing now evaluates actual assembly load across the whole driven ice corridor, preserving the existing ice stress/failure rules. New additions and corrections are not in candidate51.
 
+### Candidate 2 source checkpoint
+
+The candidate source is commit `4b0a02fdce8bef51eefd16cb89b020a5952424ed`, pushed to the Alpha 0.10 development branch. The full Windows build uses a separate output directory. The original attempt passed the output as an absolute host path and the isolated SportsBuilder correctly rejected it. The retry uses its project-relative path.
+
+| Focused run | Result | Gameplay evidence |
+|---|---|---|
+| PhysicalCorrections72 | 8 passed, 4 failed | Highwire physically completes the reverse course and rematches. The assigned software controller loads, drives clear, aims, releases and resets the siege trailer. The Scarecrow lure and ordinary escape both pass. Four whirlpool field checks pass. Flood delivery, native theft recoupling and both siege range cases fail. |
+| BoundedGameplay74 | 1 passed, 7 failed | Kayak Survival passes with the new whirlpool fields. The reverse siege field obstructs Castle loading and still fails useful range. Graveyard completes two jobs and one truck arrival before the pursuing antagonist kills the driver. Thin Ice hooks and tows 17.77 m but stalls on the extraction ramp. Blackwater boats remain within the lake but crossing and supply variants fail. |
+| FinalCandidateMechanics76 | 0 passed, 4 failed | Flood recovery reaches native coupling and tow, then loses the hitch and stalls before delivery. Four Blackwater boats remain on the lake and reach the second crossing gate without finishing. Supply and cooperative runs do not attach a crate. |
+
+The safe siege field was restored after run 74. No physical controller, human multiplayer, visual evaluation or listening check was performed in these runs.
+
+
 ## Per-sport table
 
 All rows currently remain PARTIAL. Every row has an original PNG logo, actual saved scene, menu entry, AI control and existing SportsEventSession setup/results flow. A default natural outcome proves only the specific exercised default; it does not certify all four advertised variants, complete environments or physical human multiplayer.
@@ -68,7 +81,7 @@ All rows currently remain PARTIAL. Every row has an original PNG logo, actual sa
 | HH10-19 | HITCH RING TOSS | `Assets/TruckExtremeHauling/Scenes/HitchRingToss.unity` | Hitch swing/release momentum, whole-body target-aperture crossing and measured actual travel. | Precision Ring Toss; Long-Distance Toss; Moving Ring Challenge; Trick Shot Championship | Physical AI; 1–4 human positions; AI fills supported seats. Hardware unverified. | PARTIAL | PASS three real target passages, measured centering and cumulative results/rematch: MechanicsGameplay56. Other variants/human acceptance remain open. |
 | HH10-20 | ZERO-G HITCH-UP | `Assets/TruckExtremeHauling/Scenes/ZeroGHitchUp.unity` | Isolated six-axis thrusters/inertia, velocity-matched native capture and physical space-dock transport. | Zero-G Docking; Space Freight Relay; Orbital Precision Challenge; Asteroid Cargo Recovery | Physical AI; 1–4 human positions; AI fills supported seats. Hardware unverified. | PARTIAL | PASS natural default: FocusedDeliveries22; variant/human acceptance remains open. |
 | HH10-21 | SKYHOOK SPRINT | `Assets/TruckExtremeHauling/Scenes/SkyhookSprint.unity` | Real suspended cable constraints, wind/swing/braking, timed release and receiving-platform landings. | Skyhook Sprint; Precision Cable Delivery; Suspended Slalom; High-Wind Hauling | Physical AI; 1–4 human positions; AI fills supported seats. Hardware unverified. | PARTIAL | PASS same original load through two physical cable captures, transfer, final supported delivery and rematch: FocusedCorrections58. Other variants/human acceptance remain open. |
-| HH10-22 | ICE ROAD RECKONING: THIN ICE | `Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity` | Supported axle/cargo load stresses real ice panels; cracks, collider breakthrough and actual cargo arrival. | Ice Road Delivery; Thin Ice Survival; Heavy Haul Championship; Convoy Rescue | Physical AI; 1–4 human positions; AI fills supported seats. Hardware unverified. | PARTIAL | PRIOR default PASS21; new key/gate/ritual props require current natural acceptance. Ritual checks were interrupted by the corrected prior-scene/parking exceptions. |
+| HH10-22 | ICE ROAD RECKONING: THIN ICE | `Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity` | Supported axle/cargo load stresses real ice panels; cracks, collider breakthrough and actual cargo arrival. | Ice Road Delivery; Thin Ice Survival; Heavy Haul Championship; Convoy Rescue | Physical AI; 1–4 human positions; AI fills supported seats. Hardware unverified. | PARTIAL | Default loaded crossing PASS21. Rescue74 established native cable recovery for 17.77 m but stalled on the extraction ramp. Shore recovery remains open. |
 
 ## Game modes
 
