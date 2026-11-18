@@ -158,7 +158,7 @@ namespace LWS.TruckHitchSports
                         { part.AddForce(Vector3.up * TrickHopSpeed, ForceMode.VelocityChange); launchedMass += part.mass; }
                         deck.AddForceAtPosition(Vector3.down * launchedMass * TrickHopSpeed, hit.point, ForceMode.Impulse);
                     }
-                    else if (TryShoulderHopDelta(i, drive.x, out var shoulderDelta))
+                    else if (TryShoulderHopDelta(i, drive.x, hit.point.y, out var shoulderDelta))
                     {
                         float launchedMass = 0;
                         foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true)) if (!part.isKinematic)
@@ -339,13 +339,13 @@ namespace LWS.TruckHitchSports
         }
         public bool OwnDeckWheelSupport(int slot) => TryDeckSupport(slot, out _);
         public int ShoulderHopCount(int slot) => shoulderHops[slot];
-        bool TryShoulderHopDelta(int slot, float steer, out Vector3 delta)
+        bool TryShoulderHopDelta(int slot, float steer, float deckHeight, out Vector3 delta)
         {
             delta = Vector3.zero;
             if (option % 4 != 0 || IsAI(slot) || Mathf.Abs(steer) < .65f || recoveryShoulders == null || slot >= recoveryShoulders.Length) return false;
             var lane = recoveryShoulders[slot]; var truck = trucks[slot]; var deck = trailers[slot].Body;
             if (lane == null || !lane.isActiveAndEnabled || lane.DrivingSurfaces == null || Vector3.Dot(deck.transform.up, Vector3.up) < .97f || Vector3.Dot(truck.transform.up, Vector3.up) < .8f) return false;
-            Vector3 destination = lane.PointAtForwardPosition(truck.body.position.z + Mathf.Max(0, truck.body.linearVelocity.z) * 1.35f, true);
+            Vector3 destination = lane.PointAtForwardPosition(truck.body.position.z + Mathf.Max(0, truck.body.linearVelocity.z) * 1.35f);
             bool hasRoad = false;
             foreach (var surface in lane.DrivingSurfaces)
                 if (surface != null && surface.enabled && surface.gameObject.activeInHierarchy && !surface.isTrigger && surface.Raycast(new Ray(destination + Vector3.up * 6, Vector3.down), out var roadHit, 12) && Vector3.Dot(roadHit.normal, Vector3.up) > .8f)
@@ -355,11 +355,18 @@ namespace LWS.TruckHitchSports
             if (side.magnitude < 2 || side.magnitude > 8 || Vector3.Dot(truck.transform.right * Mathf.Sign(steer), side.normalized) < .75f) return false;
             // A real nearby lower road is required, not an arbitrary midair
             // side boost. The original true deck support gate remains outside.
-            float drop = deckSurfaces[slot].bounds.max.y - destination.y;
+            float drop = deckHeight - destination.y;
             if (drop < 0 || drop > 2.5f) return false;
+            // The road is stationary. Aim for its center using the fall to the
+            // actual lower surface; a fixed lateral impulse can overshoot it.
+            const float riseVelocity = 6;
+            float upwardSpeed = truck.body.linearVelocity.y + riseVelocity;
+            float gravity = Mathf.Max(.1f, Physics.gravity.magnitude);
+            float flightTime = (upwardSpeed + Mathf.Sqrt(upwardSpeed * upwardSpeed + 2 * gravity * drop)) / gravity;
+            float sideSpeed = side.magnitude / Mathf.Max(.1f, flightTime);
             side.Normalize();
-            float relativeSideSpeed = Vector3.Dot(truck.body.linearVelocity - deck.GetPointVelocity(truck.body.worldCenterOfMass), side);
-            delta = Vector3.up * 6 + side * Mathf.Clamp(4 - relativeSideSpeed, -4, 4);
+            float currentSideSpeed = Vector3.Dot(truck.body.linearVelocity, side);
+            delta = Vector3.up * riseVelocity + side * Mathf.Clamp(sideSpeed - currentSideSpeed, -4, 4);
             return true;
         }
         string WheelSupportDiagnostic(int slot)
