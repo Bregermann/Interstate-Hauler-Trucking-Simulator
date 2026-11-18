@@ -24,9 +24,10 @@ namespace LWS.TruckExtremeHauling
         readonly int[] recoveryAttempts = new int[4];
         readonly float[] stable = new float[4], stageTime = new float[4];
         readonly BoxCollider[] floodDryLane = new BoxCollider[4];
+        readonly Collider[][] mountainTerrace = new Collider[4][];
         BoxCollider floodNorthernRoad;
         readonly int[] floodTowHitchLosses = new int[4];
-        readonly bool[] floodAlignBacking = new bool[4], floodHold = new bool[4];
+        readonly bool[] alignmentBacking = new bool[4], holdForAlignment = new bool[4];
         readonly LineRenderer[] cables = new LineRenderer[4];
         bool[] deliveredTargets;
         Material ownedCableMaterial;
@@ -134,7 +135,13 @@ namespace LWS.TruckExtremeHauling
             Array.Clear(floodTowHitchLosses, 0, floodTowHitchLosses.Length);
             for (int slot = 0; slot < floodDryLane.Length; slot++)
             {
-                floodDryLane[slot] = null; floodAlignBacking[slot] = floodHold[slot] = false;
+                mountainTerrace[slot] = null;
+                if (emergencySites != null && emergencySites.MountainActive)
+                {
+                    var terrace = emergencySites.Active.environment.transform.Find("Mountain recovery terrace " + slot + " · EasyRoads generated course");
+                    if (terrace != null) mountainTerrace[slot] = terrace.GetComponentsInChildren<Collider>(true);
+                }
+                floodDryLane[slot] = null; alignmentBacking[slot] = holdForAlignment[slot] = false;
                 if (emergencySites == null || !emergencySites.FloodActive) continue;
                 var plate = emergencySites.Active.environment.transform.Find("Dry right-bank recovery service lane " + slot);
                 if (plate != null && Quaternion.Angle(plate.rotation, Quaternion.identity) < .1f) floodDryLane[slot] = plate.GetComponent<BoxCollider>();
@@ -183,24 +190,33 @@ namespace LWS.TruckExtremeHauling
             switch (stage[i])
             {
                 case RescueStage.Approach: return emergencySites!=null&&emergencySites.FloodActive?emergencySites.DryBankApproach(i,target):target.Body.position + RecoverySide(target) * (recoveryAttempts[i] == 0 ? 12 : 17) - forward * 2;
-                case RescueStage.ClearSide: return aligned + (emergencySites!=null&&emergencySites.FloodActive?Vector3.right:RecoverySide(target)) * 18 + forward * 12;
-                case RescueStage.AlignLane: return aligned + forward * 22;
-                case RescueStage.Straighten: return emergencySites != null && emergencySites.FloodActive ? FloodAlignmentTarget(i, target) : aligned + forward * 50;
+                case RescueStage.ClearSide: return MountainSupportedDestination(i, aligned + (emergencySites!=null&&emergencySites.FloodActive?Vector3.right:RecoverySide(target)) * 18 + forward * 12);
+                case RescueStage.AlignLane: return MountainSupportedDestination(i, aligned + forward * 22);
+                case RescueStage.Straighten: return emergencySites != null && (emergencySites.FloodActive || emergencySites.MountainActive) ? SupportedAlignmentTarget(i, target) : aligned + forward * 50;
                 case RescueStage.ReverseHitch: return aligned;
                 default: return trucks[i].body.position;
             }
         }
         protected override Vector2 AICommand(int i, float dt)
         {
-            floodHold[i] = false;
+            holdForAlignment[i] = false;
             var target=Target(i);if(target==null||stage[i]==RescueStage.Delivered)return Vector2.zero;
             RecoverUnexpectedFloodTowDetach(i, target);
             if (emergencySites != null && emergencySites.FloodActive && emergencySites.Extracted[i] && hitches[i].Attached == null && (stage[i] == RescueStage.ClearSide || stage[i] == RescueStage.AlignLane || stage[i] == RescueStage.Straighten))
-                return FloodAlignmentCommand(i, target);
+                return DriveInSupportedAlignmentLane(i, target);
+            if (emergencySites != null && emergencySites.MountainActive && emergencySites.MountainRecovered[i] && hitches[i].Attached == null && stage[i] == RescueStage.Straighten)
+                return DriveInSupportedAlignmentLane(i, target);
             var transmission=trucks[i].tractorMotor.vehicle.powertrain.transmission;
             transmission.automaticTransmissionDNRShiftType=stage[i]==RescueStage.ReverseHitch
                 ? NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput
                 : NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
+            if (emergencySites != null && emergencySites.MountainActive && (stage[i] == RescueStage.ClearSide || stage[i] == RescueStage.AlignLane))
+            {
+                if (!TryMountainTerraceBounds(i, out _)) { holdForAlignment[i] = true; return Vector2.zero; }
+                // Slow the turning stages on the finite elevated apron, then
+                // use the already established bounded2m/s alignment controller.
+                return DriveToward(i, Destination(i), 3, true);
+            }
             if(stage[i]==RescueStage.Winching)return emergencySites!=null&&emergencySites.FrontRecoveryTow(i)&&!emergencySites.Extracted[i]
                 ?DriveToward(i,emergencySites.FrontTowDestination(i),4,true):Vector2.zero;
             if (hitches[i].Attached != null)
@@ -259,26 +275,62 @@ namespace LWS.TruckExtremeHauling
             var target = Target(slot); var vehicle = trucks[slot].tractorMotor.vehicle;
             return "slot=" + slot + " losses=" + floodTowHitchLosses[slot] + " phase=" + stage[slot] + " attached=" + (hitches[slot].Attached != null) + " physicalJoint=" + hitches[slot].PhysicalConstraintPresent + " nativeAttached=" + hitches[slot].Hitch.module.attached + " reason=" + hitches[slot].LastReason + " gear=" + vehicle.powertrain.transmission.Gear + " engine=" + vehicle.powertrain.engine.IsRunning + " swappedThrottle=" + vehicle.input.InputSwappedThrottle.ToString("F2") + " tractor=" + trucks[slot].body.position.ToString("F2") + " cargo=" + (target != null ? target.Body.position.ToString("F2") : "none");
         }
-        bool FloodLaneInterval(int slot, TrailerBody target, out Bounds safe, out float low, out float high)
+        bool SupportedAlignmentLane(int slot, TrailerBody target, out Bounds safe, out float low, out float high)
         {
             safe = default; low = 0; high = float.PositiveInfinity;
-            var plate = floodDryLane[slot];
-            if (plate == null || !plate.enabled || !plate.gameObject.activeInHierarchy) return false;
-            safe = plate.bounds;
+            bool mountain = emergencySites != null && emergencySites.MountainActive;
+            if (mountain)
+            {
+                if (!TryMountainTerraceBounds(slot, out safe)) return false;
+            }
+            else
+            {
+                var plate = floodDryLane[slot];
+                if (plate == null || !plate.enabled || !plate.gameObject.activeInHierarchy) return false;
+                safe = plate.bounds;
+            }
             // The bank joins the existing northern road edge-to-edge. Extend
             // only Z within this bank's unchanged X strip; never use the whole
             // northern road AABB across the neighboring flooded bays.
-            if (floodNorthernRoad != null && floodNorthernRoad.enabled && floodNorthernRoad.gameObject.activeInHierarchy)
+            if (!mountain && floodNorthernRoad != null && floodNorthernRoad.enabled && floodNorthernRoad.gameObject.activeInHierarchy)
             {
                 Bounds road = floodNorthernRoad.bounds;
                 if (road.min.x <= safe.min.x && road.max.x >= safe.max.x && road.min.z <= safe.max.z + .02f && road.max.z > safe.max.z && Mathf.Abs(road.max.y - safe.max.y) < .02f)
                     safe.SetMinMax(safe.min, new Vector3(safe.max.x, safe.max.y, road.max.z));
             }
-            float hullMargin = trucks[slot].shape != null ? Mathf.Max(4, trucks[slot].shape.bounds.extents.magnitude + 1) : 4;
+            float hullMargin = AlignmentHullMargin(slot);
             safe.Expand(new Vector3(-hullMargin * 2, 0, -hullMargin * 2));
             Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
             if (!IntersectLaneAxis(root.x, forward.x, safe.min.x, safe.max.x, ref low, ref high) || !IntersectLaneAxis(root.z, forward.z, safe.min.z, safe.max.z, ref low, ref high)) return false;
             return high > Mathf.Max(low, 20) && high - low > 10;
+        }
+        float AlignmentHullMargin(int slot) => trucks[slot].shape != null ? Mathf.Max(4, trucks[slot].shape.bounds.extents.magnitude + 1) : 4;
+        bool TryMountainTerraceBounds(int slot, out Bounds bounds)
+        {
+            bounds = default; bool found = false;
+            if (emergencySites == null || !emergencySites.MountainActive || mountainTerrace[slot] == null) return false;
+            foreach (var shape in mountainTerrace[slot])
+                if (shape != null && shape.enabled && !shape.isTrigger && shape.gameObject.activeInHierarchy)
+                {
+                    if (!found) { bounds = shape.bounds; found = true; } else bounds.Encapsulate(shape.bounds);
+                }
+            return found;
+        }
+        Vector3 MountainSupportedDestination(int slot, Vector3 destination)
+        {
+            if (!TryMountainTerraceBounds(slot, out var safe)) return destination;
+            float margin = AlignmentHullMargin(slot);
+            safe.Expand(new Vector3(-margin * 2, 0, -margin * 2));
+            destination.x = Mathf.Clamp(destination.x, safe.min.x, safe.max.x);
+            destination.z = Mathf.Clamp(destination.z, safe.min.z, safe.max.z);
+            return destination;
+        }
+        public string MountainAlignmentDiagnostic(int slot)
+        {
+            var target = Target(slot);
+            if (target == null || !SupportedAlignmentLane(slot, target, out var safe, out float low, out float high)) return "no supported native alignment interval";
+            Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
+            return "terrace=" + safe + " line=" + low.ToString("F2") + ".." + high.ToString("F2") + " ahead=" + Vector3.Dot(trucks[slot].body.position - root, forward).ToString("F2") + " lateral=" + Vector3.Dot(trucks[slot].body.position - root, Vector3.Cross(Vector3.up, forward)).ToString("F2") + " heading=" + Vector3.Angle(trucks[slot].transform.forward, target.transform.forward).ToString("F2") + " backing=" + alignmentBacking[slot] + " aim=" + SupportedAlignmentTarget(slot, target).ToString("F2");
         }
         static bool IntersectLaneAxis(float origin, float direction, float min, float max, ref float low, ref float high)
         {
@@ -287,21 +339,21 @@ namespace LWS.TruckExtremeHauling
             low = Mathf.Max(low, Mathf.Min(a, b)); high = Mathf.Min(high, Mathf.Max(a, b));
             return high > low;
         }
-        Vector3 FloodAlignmentTarget(int slot, TrailerBody target)
+        Vector3 SupportedAlignmentTarget(int slot, TrailerBody target)
         {
-            if (!FloodLaneInterval(slot, target, out _, out float low, out float high)) return trucks[slot].body.position;
+            if (!SupportedAlignmentLane(slot, target, out _, out float low, out float high)) return trucks[slot].body.position;
             Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
             float ahead = Vector3.Dot(trucks[slot].body.position - root, forward);
             float minimum = Mathf.Max(8, low + 2), maximum = high - 2;
-            return root + forward * (floodAlignBacking[slot] ? minimum : Mathf.Min(maximum, ahead + 8));
+            return root + forward * (alignmentBacking[slot] ? minimum : Mathf.Min(maximum, ahead + 8));
         }
-        Vector2 FloodAlignmentCommand(int slot, TrailerBody target)
+        Vector2 DriveInSupportedAlignmentLane(int slot, TrailerBody target)
         {
-            // The recovered load is already on real dry wheels. Its71degree
-            // yaw leaves only~31m of usable ahead lane before the neighboring
-            // flooded bay; the generic50m target sent the cab off its road.
-            if (!FloodLaneInterval(slot, target, out var safe, out float low, out float high))
-            { floodHold[slot] = true; return Vector2.zero; }
+            // The recovered load is already on real support. Actual selected
+            // flood-bank or mountain-terrace bounds clip the available lane;
+            // a fixed50m target can be off-road at the observed trailer yaw.
+            if (!SupportedAlignmentLane(slot, target, out var safe, out float low, out float high))
+            { holdForAlignment[slot] = true; return Vector2.zero; }
             var truck = trucks[slot]; var vehicle = truck.tractorMotor.vehicle;
             Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, forward), offset = truck.body.position - root;
@@ -312,18 +364,18 @@ namespace LWS.TruckExtremeHauling
                 // Front towing already leaves the cab ahead of the kingpin.
                 // Replace the outward U-turn with a genuine supported S-align.
                 SetStage(slot, RescueStage.Straighten);
-                floodAlignBacking[slot] = ahead > maximum - 4;
+                alignmentBacking[slot] = ahead > maximum - 4;
             }
-            if (ahead > maximum - 1) floodAlignBacking[slot] = true;
-            if (ahead < minimum + 1) floodAlignBacking[slot] = false;
-            bool reverse = floodAlignBacking[slot];
+            if (ahead > maximum - 1) alignmentBacking[slot] = true;
+            if (ahead < minimum + 1) alignmentBacking[slot] = false;
+            bool reverse = alignmentBacking[slot];
             var transmission = vehicle.powertrain.transmission;
             transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
             float speed = Vector3.Dot(truck.body.linearVelocity, truck.transform.forward);
             if (reverse ? transmission.Gear >= 0 : transmission.Gear <= 0)
             {
                 if (Mathf.Abs(speed) < .3f) transmission.ShiftInto(reverse ? -1 : 1);
-                floodHold[slot] = true; return Vector2.zero;
+                holdForAlignment[slot] = true; return Vector2.zero;
             }
             float steer;
             if (reverse)
@@ -350,9 +402,9 @@ namespace LWS.TruckExtremeHauling
         public string FloodAlignmentDiagnostic(int slot)
         {
             var target = Target(slot);
-            if (target == null || !FloodLaneInterval(slot, target, out var safe, out float low, out float high)) return "no recognized supported flood alignment lane";
+            if (target == null || !SupportedAlignmentLane(slot, target, out var safe, out float low, out float high)) return "no recognized supported flood alignment lane";
             Vector3 root = AlignedRoot(slot, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
-            return "safeBank=" + safe + " laneInterval=" + low.ToString("F2") + ".." + high.ToString("F2") + " ahead=" + Vector3.Dot(trucks[slot].body.position - root, forward).ToString("F2") + " lateral=" + Vector3.Dot(trucks[slot].body.position - root, Vector3.Cross(Vector3.up, forward)).ToString("F2") + " backing=" + floodAlignBacking[slot] + " target=" + FloodAlignmentTarget(slot, target).ToString("F2");
+            return "safeBank=" + safe + " laneInterval=" + low.ToString("F2") + ".." + high.ToString("F2") + " ahead=" + Vector3.Dot(trucks[slot].body.position - root, forward).ToString("F2") + " lateral=" + Vector3.Dot(trucks[slot].body.position - root, Vector3.Cross(Vector3.up, forward)).ToString("F2") + " backing=" + alignmentBacking[slot] + " target=" + SupportedAlignmentTarget(slot, target).ToString("F2");
         }
         Vector2 DriveToward(int i, Vector3 destination, float speedLimit, bool slowArrival)
         {
@@ -383,7 +435,16 @@ namespace LWS.TruckExtremeHauling
             if(emergencySites!=null&&emergencySites.Active!=null)
             {
                 emergencySites.Step(i,target,winches[i],dt);
-                if(target.CargoCondition<=0){DetachCable(i);hitches[i].Release();SetStage(i,RescueStage.Failed);retired[i]=true;return;}
+                bool fellBelowMountainRoad = emergencySites.MountainActive &&
+                    (trucks[i].body.position.y < 10 || target.Body.position.y < 10);
+                if (target.CargoCondition <= 0 || fellBelowMountainRoad)
+                {
+                    DetachCable(i);
+                    hitches[i].Release();
+                    SetStage(i, RescueStage.Failed);
+                    retired[i] = true;
+                    return;
+                }
             }
             float eyeDistance = Vector3.Distance(trucks[i].transform.TransformPoint(winches[i].anchor), Eye(target));
             bool tipped = !Upright(target);
@@ -452,7 +513,7 @@ namespace LWS.TruckExtremeHauling
                 }
             }
             UpdateCable(i, target);
-            if (ai && floodHold[i]) Park(i);
+            if (ai && holdForAlignment[i]) Park(i);
         }
         bool Near(int i, Vector3 target, float radius) => Vector3.ProjectOnPlane(trucks[i].body.position - target, Vector3.up).magnitude < radius;
         void Park(int i)
