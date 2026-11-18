@@ -25,6 +25,7 @@ namespace LWS.TruckExtremeHauling
         Quaternion[] layoutRotation;
         readonly Collider[] placementHits = new Collider[96];
         readonly RaycastHit[] floorHits = new RaycastHit[64];
+        readonly Collider[] workshopSupports = new Collider[5];
         public override bool Cooperative => option == 3;
         protected override Vector3 CameraFocus(int slot) => trailers[slot * piecesPerPlayer + Mathf.Clamp(selected[slot], 0, piecesPerPlayer - 1)].Body.worldCenterOfMass;
         protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"domino_contact_topples",fallen[i]);RecordMetric(i,"domino_longest_connected_chain",longest[i]);RecordMetric(i,"domino_triggered",triggered[i]?1:0);if(finishTime[i]>0)RecordMetric(i,"domino_complete_collapse_seconds",finishTime[i]); }
@@ -182,6 +183,7 @@ namespace LWS.TruckExtremeHauling
             Vector3 sole = new Vector3(box.center.x, box.center.y, baseZ);
             Vector3 center = position + rotation * sole;
             if (!ReadWorkshopFloor(center, out var floor)) return false;
+            workshopSupports[0] = floor.collider;
             Quaternion seated = Quaternion.FromToRotation(Vector3.up, floor.normal) * upright;
             position = new Vector3(center.x, floor.point.y + .035f, center.z) - seated * sole;
             for (int corner = 0; corner < 4; corner++)
@@ -192,6 +194,7 @@ namespace LWS.TruckExtremeHauling
                 Vector3 point = position + seated * local;
                 if (!ReadWorkshopFloor(point, out var sample) || Mathf.Abs(point.y - sample.point.y) > .13f)
                     return false;
+                workshopSupports[corner + 1] = sample.collider;
             }
             rotation = seated;
             return true;
@@ -221,9 +224,9 @@ namespace LWS.TruckExtremeHauling
             for (int i = 0; i < count; i++)
             {
                 var hit = placementHits[i];
-                var body = hit.attachedRigidbody;
-                if (body != null && body != trailers[index].Body) return false;
-                if (option == 3 && body == null && hit.bounds.max.y > position.y + .4f) return false;
+                if (hit.transform.IsChildOf(trailers[index].transform)) continue;
+                if (hit.attachedRigidbody != null) return false;
+                if (option == 3 && System.Array.IndexOf(workshopSupports, hit) < 0) return false;
             }
             return true;
         }

@@ -16,6 +16,7 @@ namespace LWS.TruckHorrorSports
         public HorrorPursuitState State { get; private set; }
         HorrorMatch match;
         ScarecrowHeadlightLure deception;
+        DeadEndPursuitAudio pursuitAudio;
         Vector3 initial;
         Quaternion rotation;
         NavMeshPath route;
@@ -35,14 +36,20 @@ namespace LWS.TruckHorrorSports
             SetActive(true);
             deception = GetComponent<ScarecrowHeadlightLure>();
             deception?.ResetDeception(owner);
+            pursuitAudio = GetComponent<DeadEndPursuitAudio>();
+            pursuitAudio?.ResetWarnings();
         }
         public void SetActive(bool enabled)
-        { if (!enabled) deception?.Freeze(); if (semi != null) semi.Power(enabled); if (signature != null) foreach (var light in signature) if (light != null) light.enabled = enabled; }
+        { if (!enabled) { deception?.Freeze(); pursuitAudio?.Freeze(); } if (semi != null) semi.Power(enabled); if (signature != null) foreach (var light in signature) if (light != null) light.enabled = enabled; }
+        public string PursuitCueFor(int slot) => pursuitAudio?.CaptionFor(slot);
+        public void SilencePursuitCues() => pursuitAudio?.Silence();
+        public void ReportPursuitCues() => pursuitAudio?.ReportFinal();
         public void Repel(float seconds) { if (match != null) repelledUntil = match.Age + seconds; }
         public void TickActor(float dt)
         {
             if (match == null || !match.Live) return;
             deception?.TickDeception(dt);
+            pursuitAudio?.TickWarnings(dt);
             if (match.Age < 15 || match.Age < repelledUntil) { State = match.Age < repelledUntil ? HorrorPursuitState.Repelled : HorrorPursuitState.Watching; if (semi != null) semi.TickDrive(Vector2.zero); return; }
             if (match.Age >= nextPlan)
             {

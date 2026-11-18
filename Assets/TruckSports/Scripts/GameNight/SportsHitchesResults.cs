@@ -33,8 +33,8 @@ namespace LWS.TruckSports
                     Math.Max(0, lake.Integrity[slot]).ToString("0") + "% HULL";
             if (water is LWS.TruckWaterSports.WhitewaterWipeoutMatch kayak && kayak.option == 2)
                 return kayak.QualifiedFreestyleLandings(slot) + " CONTROLLED LANDINGS · " + vessel.Capsizes + " CAPSIZES";
-            if (water is LWS.TruckWaterSports.PaddlePalsMatch && water.option == 3)
-                return vessel.Synchronizations + " PAIRED STROKES · " + vessel.Capsizes + " CAPSIZES";
+            if (water is LWS.TruckWaterSports.PaddlePalsMatch canoe && water.option == 3)
+                return canoe.MovingSynchronizedPairs(slot) + " MOVING PAIRS · " + vessel.Capsizes + " CAPSIZES";
             return water.MissedGates[slot] + " MISSED GATES · " + vessel.Capsizes + " CAPSIZES";
         }
 

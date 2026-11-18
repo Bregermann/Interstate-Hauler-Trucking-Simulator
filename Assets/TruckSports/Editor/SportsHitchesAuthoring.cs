@@ -21,6 +21,10 @@ namespace LWS.TruckSports.Editor
                 LWS.TruckWaterSports.Editor.WaterSportsAuthoring.PaddleScene);
             LWS.TruckWaterSports.Editor.PaddleChaosHazardsAuthoring.UpgradeActiveScene();
             SaveCurrentHelp(canoe);
+            var road = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                LWS.TruckHorrorSports.Editor.HorrorAuthoring.Scene(LWS.TruckHorrorSports.HorrorSport.DeadEnd));
+            LWS.TruckHorrorSports.Editor.DeadEndPursuitAudioAuthoring.UpgradeActiveVenue();
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(road);
             AssetDatabase.SaveAssets();
         }
 

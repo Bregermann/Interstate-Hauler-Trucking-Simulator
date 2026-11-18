@@ -29,7 +29,7 @@ namespace LWS.TruckWaterSports
             flotation = new SportsFloatingBody[logs.Length];
             for (int i = 0; i < logs.Length; i++)
             {
-                starts[i] = logs[i].position; rotations[i] = logs[i].rotation;
+                starts[i] = logs[i].transform.position; rotations[i] = logs[i].transform.rotation;
                 flotation[i] = logs[i].GetComponent<SportsFloatingBody>();
             }
             if (match != null) foreach (var vessel in match.vessels) if (vessel != null) vessel.HullImpact += ObserveImpact;

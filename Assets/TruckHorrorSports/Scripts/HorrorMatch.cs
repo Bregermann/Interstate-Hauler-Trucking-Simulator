@@ -176,6 +176,8 @@ namespace LWS.TruckHorrorSports
         {
             if (!TryViewportOwner(view, out int slot) || rules.outcome[slot] != HorrorOutcome.Active) return null;
             if(nightServices!=null&&nightServices.CanAnswerSecondCall(slot))return nightServices.InteractionFor(slot);
+            string pursuitCue = antagonist != null ? antagonist.PursuitCueFor(slot) : null;
+            if (!string.IsNullOrEmpty(pursuitCue)) return pursuitCue;
             int rescue = NearbyRescue(slot);
             if (rescue >= 0) return "HOLD ACTION · RESCUE\n" + setup.players[rescue].name;
             int task = NearestTask(slot);
@@ -843,6 +845,7 @@ namespace LWS.TruckHorrorSports
             nightServices?.ReportFinal();
             convoyRoad?.ReportFinal();
             groundingRitual?.ReportFinal();
+            if (antagonist != null) antagonist.ReportPursuitCues();
             string context = "match=" + MatchId + ";mode=" + option + ";cooperative=" + (Cooperative ? "true" : "false");
             SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_match_seconds", null, context + ";unit=SEC", Age);
             for (int i = 0; i < setup.count; i++)
@@ -887,7 +890,7 @@ namespace LWS.TruckHorrorSports
             }
         }
         protected override void StopGame() { groundingRitual?.Freeze(); convoyRoad?.Freeze(); nightServices?.Freeze(); supplyJob?.FreezeJobs(); if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
-        protected override void StopSounds() { groundingRitual?.Silence(); if (antagonist != null) antagonist.GetComponent<ScarecrowHeadlightLure>()?.Silence(); convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
+        protected override void StopSounds() { groundingRitual?.Silence(); if (antagonist != null) antagonist.SilencePursuitCues(); if (antagonist != null) antagonist.GetComponent<ScarecrowHeadlightLure>()?.Silence(); convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
         protected override void SetPaused(bool paused) { if (ambience != null) { if (paused) ambience.Pause(); else ambience.UnPause(); } if (encounterAudio != null) { if (paused) encounterAudio.Pause(); else encounterAudio.UnPause(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (paused) a.spatialSound.Pause(); else a.spatialSound.UnPause(); } if (atmosphere != null) atmosphere.Pause(paused); }
     }
 }
