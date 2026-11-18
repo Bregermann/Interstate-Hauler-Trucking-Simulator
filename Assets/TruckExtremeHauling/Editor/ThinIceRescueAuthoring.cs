@@ -95,6 +95,93 @@ namespace LWS.TruckExtremeHauling.Editor
             EditorSceneManager.SaveScene(scene);
         }
 
+        [MenuItem("Truck Sports/Alpha 0.10/Install active Thin Ice physical recovery gantry")]
+        public static void InstallActiveFrontLift() => UpgradeActiveRecoveryHoist();
+
+        // Isolated batch entry: opens/saves exactly this existing venue. It does
+        // not invoke expansion/global authoring or rebuild any original scene.
+        public static void AuthorSavedRecoveryHoist()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before isolated recovery authoring.");
+            const string path="Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity";
+            if(!File.Exists(path))throw new FileNotFoundException("Preserve the original saved Ice Road venue.",path);
+            var priorMaterials=new HashSet<string>(AssetDatabase.FindAssets("t:Material",new[]{"Assets/TruckExtremeHauling/Materials"}).Select(id=>AssetDatabase.GUIDToAssetPath(id)));
+            var scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Single);
+            var hoist=UpgradeActiveRecoveryHoist();EditorUtility.SetDirty(hoist);EditorSceneManager.MarkSceneDirty(scene);
+            if(!EditorSceneManager.SaveScene(scene))throw new InvalidOperationException("Could not save the isolated Thin Ice recovery venue.");
+            AssetDatabase.SaveAssets();
+            Debug.Log("THIN_ICE_RECOVERY_AUTHOR_SAVED scene="+path+"; actual fixture references wired; gameplay acceptance remains unverified.");
+            foreach(string guid in AssetDatabase.FindAssets("t:Material",new[]{"Assets/TruckExtremeHauling/Materials"})){
+                string material=AssetDatabase.GUIDToAssetPath(guid);if(!priorMaterials.Contains(material))Debug.Log("THIN_ICE_RECOVERY_NEW_OWNED_MATERIAL "+material);
+            }
+        }
+
+        // Explicit additive upgrade; the lake/ramp/load/spawns/thresholds are
+        // unchanged and no runtime code generates or relocates this equipment.
+        public static ThinIceRecoveryHoist UpgradeActiveRecoveryHoist()
+        {
+            var scene=SceneManager.GetActiveScene();
+            if(EditorApplication.isPlayingOrWillChangePlaymode||scene.path!="Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity")
+                throw new InvalidOperationException("Open the saved Thin Ice rescue venue outside Play Mode.");
+            var match=UnityEngine.Object.FindAnyObjectByType<ThinIceMatch>();var rescue=match!=null?match.rescue:null;
+            if(rescue==null||rescue.strandedCargo==null||rescue.cargoFloat==null||rescue.equipment==null||rescue.incidentIce==null)
+                throw new InvalidOperationException("Preserve the existing original NPC rescue load, exact displacement and ramp.");
+            if(rescue.frontLift!=null)return rescue.frontLift;
+            const string reelPath="Assets/ConstructionPropsBundle/URP/Prefabs/SM_CableReel01 Variant.prefab";
+            const string floorPath="Assets/LeartesStudios/Garage Warehouse Environment/Art/Prefabs/SM_Floor_4x6m_01.prefab";
+            var crane=Required<Mesh>("Assets/TruckBungeeDemolition/Models/Lattice Crane.asset");
+            var hookMesh=Required<Mesh>("Assets/TruckExtremeHauling/Models/Physical freight hook.asset");
+            var eyeMesh=Required<Mesh>("Assets/TruckExtremeHauling/Models/Physical freight lifting eye.asset");
+            Required<GameObject>(reelPath);Required<GameObject>(floorPath);
+            var steel=Required<Material>("Assets/TruckExtremeHauling/Materials/Freight tower gunmetal.mat");
+            var paint=Required<Material>("Assets/TruckExtremeHauling/Materials/Freight safety orange.mat");
+            var contact=Required<PhysicsMaterial>("Assets/TruckExtremeHauling/Materials/Freight concrete.asset");
+            foreach(var truck in match.trucks)if(truck.GetComponent<LWS.TruckHitchSports.HitchCoupler>()?.Anchor==null)
+                throw new InvalidOperationException("Every participating native tractor must retain its original fifth wheel.");
+            var root=new GameObject("Convoy Rescue · real roof-sling front-support gantry").transform;root.SetParent(rescue.equipment,false);
+            ThinIceRecoveryHoist owner=null;Transform eye=null;
+            try{
+                float x=rescue.incidentIce.transform.position.x,z=rescue.incidentIce.transform.position.z+5;
+                foreach(int side in new[]{-1,1}){
+                    var footing=HoistChild(root,"Owned fixed recovery gantry footing "+side,new Vector3(x+side*18,-.15f,z));
+                    LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(footing,floorPath,new Vector3(8,1,8),-.5f,true,Folder);
+                    var footCollider=footing.gameObject.AddComponent<BoxCollider>();footCollider.size=new Vector3(8,1,8);footCollider.sharedMaterial=contact;
+                    var craneRoot=HoistChild(root,"Existing demolition lattice recovery support "+side,new Vector3(x+side*18,.35f,z));
+                    var art=HoistChild(craneRoot,"Owned lattice crane mesh",craneRoot.position);
+                    art.gameObject.AddComponent<MeshFilter>().sharedMesh=crane;art.gameObject.AddComponent<MeshRenderer>().sharedMaterial=steel;
+                    float scale=8/Mathf.Max(.1f,crane.bounds.size.y);art.localScale=Vector3.one*scale;
+                    art.localPosition=-new Vector3(crane.bounds.center.x,crane.bounds.min.y,crane.bounds.center.z)*scale;
+                    foreach(var vertex in crane.vertices){Vector3 world=art.TransformPoint(vertex);if(world.y<6&&Mathf.Abs(world.x-x)<8&&world.z>50&&world.z<125)
+                        throw new InvalidOperationException("The owned crane's low geometry intrudes into the real recovery driving corridor.");}
+                    art.gameObject.AddComponent<MeshCollider>().sharedMesh=crane;
+                }
+                var beam=HoistChild(root,"Owned overhead recovery gantry crossmember",new Vector3(x,8.45f,z));
+                LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(beam,floorPath,new Vector3(36,.6f,3),-.3f,true,Folder);
+                var beamCollider=beam.gameObject.AddComponent<BoxCollider>();beamCollider.size=new Vector3(36,.6f,3);beamCollider.sharedMaterial=contact;
+                var cart=HoistChild(root,"Fixed physical recovery winch anchor",new Vector3(x,8,z));
+                var body=cart.gameObject.AddComponent<Rigidbody>();body.mass=1000;body.useGravity=false;body.isKinematic=true;body.solverIterations=20;body.solverVelocityIterations=8;
+                var carrier=cart.gameObject.AddComponent<PhysicalCableCar>();carrier.trolley=body;carrier.load=rescue.strandedCargo.Body;carrier.routeEnd=cart.position+Vector3.forward*20;
+                var hookRoot=HoistChild(root,"Physical original-load recovery hook",new Vector3(x,1.6f,z));hookRoot.gameObject.layer=2;
+                var hookBody=hookRoot.gameObject.AddComponent<Rigidbody>();hookBody.mass=400;hookBody.isKinematic=true;hookBody.interpolation=RigidbodyInterpolation.Interpolate;
+                hookBody.collisionDetectionMode=CollisionDetectionMode.ContinuousDynamic;hookBody.solverIterations=20;hookBody.solverVelocityIterations=8;
+                hookRoot.gameObject.AddComponent<SphereCollider>().radius=.25f;hookRoot.gameObject.AddComponent<MeshFilter>().sharedMesh=hookMesh;hookRoot.gameObject.AddComponent<MeshRenderer>().sharedMaterial=paint;
+                var rope=hookRoot.gameObject.AddComponent<SpringJoint>();rope.autoConfigureConnectedAnchor=false;rope.connectedBody=body;rope.connectedAnchor=Vector3.zero;
+                rope.spring=160000;rope.damper=35000;rope.maxDistance=6.4f;rope.enableCollision=false;
+                var hook=hookRoot.gameObject.AddComponent<SuspendedFreightHook>();hook.body=hookBody;hook.rope=rope;hook.carrier=carrier;hook.initialLength=6.4f;hook.minimumLength=2.5f;hook.maximumLength=12;
+                hook.resetPose=HoistChild(root,"Saved recovery hook pose",hookRoot.position);
+                hook.line=hookRoot.gameObject.AddComponent<LineRenderer>();hook.line.sharedMaterial=steel;hook.line.widthMultiplier=.08f;carrier.cable=rope;
+                var reel=HoistChild(root,"Owned physical recovery winch",cart.position);LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(reel,reelPath,new Vector3(2.6f,1.5f,2.6f),-1.5f,false,Folder);hook.winchVisual=reel;
+                eye=HoistChild(rescue.strandedCargo.transform,"Actual recovery bridle lifting eye",rescue.strandedCargo.transform.position);
+                eye.localPosition=new Vector3(rescue.cargoFloat.proxy.bounds.center.x,rescue.cargoFloat.proxy.bounds.max.y+.25f,rescue.cargoFloat.proxy.bounds.center.z);
+                eye.gameObject.AddComponent<MeshFilter>().sharedMesh=eyeMesh;eye.gameObject.AddComponent<MeshRenderer>().sharedMaterial=paint;
+                owner=root.gameObject.AddComponent<ThinIceRecoveryHoist>();owner.rescue=rescue;owner.carrier=carrier;owner.hook=hook;owner.liftingEye=eye;owner.roofHeight=rescue.cargoFloat.proxy.bounds.max.y+.25f;
+                rescue.frontLift=owner;EditorUtility.SetDirty(rescue);EditorSceneManager.MarkSceneDirty(scene);
+                Debug.Log("THIN_ICE_FRONT_SUPPORT_AUTHORED: same native cargo; physical roof-eye hook/hoist -> strict native fifth wheel -> unchanged shore haul. Existing public Skyhook constraints/art reused; Convoy Rescue only. Save explicitly; natural runtime acceptance pending.");return owner;
+            }catch{if(eye!=null)UnityEngine.Object.DestroyImmediate(eye.gameObject);if(owner!=null)UnityEngine.Object.DestroyImmediate(owner);UnityEngine.Object.DestroyImmediate(root.gameObject);throw;}
+        }
+        static Transform HoistChild(Transform parent,string name,Vector3 position){var root=new GameObject(name).transform;root.SetParent(parent,false);root.position=position;return root;}
+        static T Required<T>(string path)where T:UnityEngine.Object{var asset=AssetDatabase.LoadAssetAtPath<T>(path);if(asset==null)throw new InvalidOperationException("Existing recovery asset required: "+path);return asset;}
+
         static void PositionExtractionRamp(ThinIceRescueObjectives rescue, Transform ramp)
         {
             // The next sheet starts at the northern edge of the incident tile.

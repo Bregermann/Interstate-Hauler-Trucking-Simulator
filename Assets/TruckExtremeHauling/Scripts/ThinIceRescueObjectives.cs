@@ -16,6 +16,7 @@ namespace LWS.TruckExtremeHauling
         public SportsFloatingBody cargoFloat;
         public SportsFloatingBody[] playerFloats;
         public SportsFloatingBody[] auxiliaryFloats = Array.Empty<SportsFloatingBody>();
+        public ThinIceRecoveryHoist frontLift;
         public Material cableMaterial;
         public Bounds waterBounds;
         bool[] trailerWasActive;
@@ -42,7 +43,7 @@ namespace LWS.TruckExtremeHauling
             incidentIce != null && !incidentIce.Broken ? "STRANDED CONVOY · LOADED ICE IS FAILING" :
             "RECOVER THE STRANDED LOAD · ACTION HOOK/RELEASE · HOLD TO REEL";
         public string PlayerStatus(int slot) => lost[slot] ? "RESCUE WINDOW EXPIRED" : ingress[slot] > 0 ? "SINKING · " + Mathf.CeilToInt(recoverySeconds - ingress[slot]) + "s TO RECOVER" :
-            targets[slot] != null ? "WINCH CONNECTED · TOW TO SHORE" : Status;
+            frontLift!=null&&frontLift.Owns(slot)?"GANTRY "+frontLift.Phase+" · HOLD ACTION TO LIFT / HITCH · PRESS TO RELEASE":targets[slot] != null ? "WINCH CONNECTED · TOW TO SHORE" : Status;
         public bool PlayerLost(int slot) => lost[slot];
 
         void Awake()
@@ -79,13 +80,16 @@ namespace LWS.TruckExtremeHauling
             for (int i = 0; i < match.trailers.Length; i++) { trailerWasActive[i] = match.trailers[i].gameObject.activeSelf; match.trailers[i].SetBrakes(1); match.trailers[i].Body.isKinematic = true; match.trailers[i].gameObject.SetActive(false); }
             foreach (var floating in playerFloats) if (floating != null) floating.enabled = true;
             foreach (var floating in auxiliaryFloats) if (floating != null) floating.enabled = true;
+            frontLift?.BeginRound();
         }
 
         public void StopRound()
         {
             if (!active) return;
             active = false;
+            frontLift?.StopRound();
             for (int i = 0; i < 4; i++) Detach(i);
+            foreach(var truck in match.trucks){var hitch=truck.GetComponent<HitchCoupler>();if(hitch!=null&&hitch.Attached==strandedCargo)hitch.Release();}
             if (incidentIce != null) incidentIce.thickness = originalThickness;
             if (cargoFloat != null) cargoFloat.enabled = false;
             if (strandedCargo != null) { strandedCargo.SetBrakes(1); if(strandedCargo.Body != null)strandedCargo.Body.isKinematic = true;if(strandedCargo.Module.module.trailerStand!=null)strandedCargo.Module.module.trailerStand.SetActive(cargoStandWasActive); }
@@ -108,6 +112,7 @@ namespace LWS.TruckExtremeHauling
             if (best != null) return best;
             if (!CargoRecovered)
             {
+                if(frontLift!=null&&(frontLift.HoldsForLift||frontLift.Owner>=0&&frontLift.AttachedTo(frontLift.Owner)))return null;
                 if (!allowAssistance) for (int i = 0; i < match.setup.count; i++) if (i != slot && targets[i] == strandedCargo.Body) return null;
                 return strandedCargo.Body;
             }
@@ -117,6 +122,7 @@ namespace LWS.TruckExtremeHauling
         public Vector3 Destination(int slot)
         {
             var truck = match.trucks[slot];
+            if(frontLift!=null){if(frontLift.AttachedTo(slot))return shore.position+truck.body.position-strandedCargo.Body.worldCenterOfMass;if(frontLift.Owns(slot))return frontLift.TractorDestination(slot);}
             if (targets[slot] != null)
                 return shore.position + truck.body.position - targets[slot].worldCenterOfMass;
             var target = ChooseTarget(slot, false);
@@ -125,7 +131,7 @@ namespace LWS.TruckExtremeHauling
             return target.worldCenterOfMass + towardShore * 28 + Vector3.right * (slot - 1.5f) * 2;
         }
 
-        public float TowedMass(int slot) => targets[slot] != null ? targets[slot].mass : 0;
+        public float TowedMass(int slot) => frontLift!=null&&frontLift.AttachedTo(slot)?strandedCargo.Body.mass:targets[slot] != null ? targets[slot].mass : 0;
         public float SupportedRecoveryMass(int slot)
         {
             float mass = TowedMass(slot);
@@ -154,6 +160,7 @@ namespace LWS.TruckExtremeHauling
         public Vector2 DriveAI(int slot, Vector3 routeWaypoint)
         {
             observedRoute[slot]=routeWaypoint;
+            if(frontLift!=null&&frontLift.Owns(slot)&&!frontLift.AttachedTo(slot)){parkAI[slot]=frontLift.ParkOperator;return frontLift.DriveAI(slot);}
             Vector3 final = Destination(slot), local = match.trucks[slot].transform.InverseTransformPoint(routeWaypoint);
             float distance = Vector3.ProjectOnPlane(final - match.trucks[slot].body.position, Vector3.up).magnitude;
             float angle = Mathf.Atan2(local.x, local.z), speed = Vector3.Dot(match.trucks[slot].body.linearVelocity, match.trucks[slot].transform.forward);
@@ -175,6 +182,7 @@ namespace LWS.TruckExtremeHauling
                 +" truckEuler="+truck.rotation.eulerAngles.ToString("F1")+" cargoEuler="+cargo.rotation.eulerAngles.ToString("F1")+" cargoUp="+strandedCargo.transform.up.ToString("F2")+" cargoWheel="+strandedCargo.WheelContact+" jackDeployed="+(strandedCargo.Module.module.trailerStand!=null&&strandedCargo.Module.module.trailerStand.activeSelf);
             if(cable!=null)state+=" cableMax="+cable.maxDistance.ToString("F2")+" cableForce="+cable.currentForce.ToString("F1")+" anchor="+truck.transform.TransformPoint(cable.anchor).ToString("F2")+" eye="+(cable.connectedBody==cargo?cargo.transform.TransformPoint(cable.connectedAnchor):Eye(cargo)).ToString("F2");
             state+=" supportToWaypoint="+SupportDiagnostic(truck.position,observedRoute[slot])+" supportToGoal="+SupportDiagnostic(truck.position,Destination(slot));
+            if(frontLift!=null)state+=" "+frontLift.DiagnosticState();
             return state;
         }
         static string SupportDiagnostic(Vector3 start,Vector3 end)
@@ -218,6 +226,9 @@ namespace LWS.TruckExtremeHauling
                 RecoveredPlayers++; wasSinking[slot] = false; ingress[slot] = 0;
                 SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "convoy_player_physically_recovered", match.setup.players[slot].participantId, "Real wheel support restored", RecoveredPlayers);
             }
+            if(frontLift!=null&&frontLift.Owns(slot)){
+                frontLift.Step(slot,pressed,held,ai,dt);if(ai&&frontLift.Owns(slot)&&frontLift.ParkOperator)Park(slot);DrawCable(slot);return;
+            }
             var joint = cables[slot];
             if (joint == null)
             {
@@ -251,6 +262,10 @@ namespace LWS.TruckExtremeHauling
             // ploughing into the extraction ramp as soon as the rear wheels engage.
             if(targets[slot]==strandedCargo.Body&&joint.connectedBody==strandedCargo.Body&&joint.currentForce.sqrMagnitude>10000&&strandedCargo.Module.module.trailerStand!=null)
                 strandedCargo.Module.module.trailerStand.SetActive(false);
+            if(frontLift!=null&&(ai||held&&!pressed)&&targets[slot]==strandedCargo.Body&&joint.connectedBody==strandedCargo.Body&&joint.currentForce.magnitude>100&&TowedMetres[slot]>6){
+                bool uncontested=true;for(int other=0;other<match.setup.count;other++)if(other!=slot&&targets[other]==strandedCargo.Body)uncontested=false;
+                if(uncontested&&frontLift.TryClaim(slot)&&ai)Park(slot);
+            }
             if(ai&&parkAI[slot])Park(slot);
             DrawCable(slot);
         }
@@ -274,7 +289,7 @@ namespace LWS.TruckExtremeHauling
             float moved = Vector3.Distance(lastCargo, strandedCargo.Body.position); lastCargo = strandedCargo.Body.position;
             bool actualTow = false;
             if (moved < 3)
-                for (int i = 0; i < match.setup.count; i++) if (targets[i] == strandedCargo.Body && cables[i] != null && cables[i].connectedBody == strandedCargo.Body && cables[i].currentForce.magnitude > 100)
+                for (int i = 0; i < match.setup.count; i++) if (frontLift!=null&&frontLift.AttachedTo(i)||targets[i] == strandedCargo.Body && cables[i] != null && cables[i].connectedBody == strandedCargo.Body && cables[i].currentForce.magnitude > 100)
                 { TowedMetres[i] += moved; actualTow = true; if(lastTowOwner < 0 || TowedMetres[i] > TowedMetres[lastTowOwner])lastTowOwner = i; }
             if (actualTow) cargoTowDistance += moved;
             bool settled = cargoTowDistance > 20 && strandedCargo.CargoCondition > .1f &&
@@ -310,6 +325,7 @@ namespace LWS.TruckExtremeHauling
             if (cables[slot] != null) { cables[slot].spring = cables[slot].damper = 0; cables[slot].connectedBody = null; cables[slot].autoConfigureConnectedAnchor = false; if(match != null && match.trucks[slot] != null)cables[slot].connectedAnchor = match.trucks[slot].transform.TransformPoint(cables[slot].anchor); }
             targets[slot] = null; if (lines[slot] != null) lines[slot].enabled = false;
         }
+        public void ReleaseRecoveryCable(int slot){if(slot>=0&&slot<match.setup.count)Detach(slot);}
         void OnDisable() { if (active) StopRound(); }
     }
 }
