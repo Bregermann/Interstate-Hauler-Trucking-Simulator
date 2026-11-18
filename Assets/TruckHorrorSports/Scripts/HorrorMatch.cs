@@ -348,7 +348,8 @@ namespace LWS.TruckHorrorSports
                     {
                         bool supply=supplyJob!=null&&wanted==supplyJob.objectiveIndex;
                         Vector3 target=wanted<0?trucks[i].body.position:objectives[wanted].requiresFoot?TaskPosition(i,wanted):trucks[i].body.position;
-                        if(wanted>=0&&objectives[wanted].requiresFoot&&paths[i]!=null&&paths[i].status==NavMeshPathStatus.PathComplete)
+                        bool returningToGraveyardCab = sport == HorrorSport.GraveyardShift && (wanted < 0 || !objectives[wanted].requiresFoot);
+                        if ((returningToGraveyardCab || wanted >= 0 && objectives[wanted].requiresFoot) && paths[i] != null && paths[i].status == NavMeshPathStatus.PathComplete)
                             for(int c=1;c<pathCorners[i].Length;c++)
                             {
                                 float cornerDistance=supply?Vector3.ProjectOnPlane(foot.transform.position-pathCorners[i][c],Vector3.up).magnitude:Vector3.Distance(foot.transform.position,pathCorners[i][c]);
@@ -639,6 +640,8 @@ namespace LWS.TruckHorrorSports
             bool graveyardServiceDrive = sport == HorrorSport.GraveyardShift && nightServices != null && !outside &&
                 (id < 0 || supplyJob == null || id != supplyJob.objectiveIndex);
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
+            if (sport == HorrorSport.GraveyardShift && outside && (id < 0 || !objectives[id].requiresFoot))
+                destination = truck.body.position;
             if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
                 supplyJob != null && id != supplyJob.objectiveIndex &&
                 Vector3.Distance(truck.body.position, destination) < FootParkingRadius(id) &&
