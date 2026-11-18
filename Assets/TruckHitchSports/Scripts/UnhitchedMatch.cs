@@ -10,7 +10,7 @@ namespace LWS.TruckHitchSports
         readonly bool[] recovering = new bool[4], rampRiderAboard = new bool[4];
         readonly float[] recoveryUntil = new float[4], remountQuiet = new float[4], offDeckGround = new float[4], signedAirYaw = new float[4], supportedDistance = new float[4], rampLandingQuiet = new float[4];
         readonly Vector3[] previousDeckPosition = new Vector3[4];
-        readonly int[] falls = new int[4], recoveries = new int[4], recoveryHops = new int[4], rampCombo = new int[4], bestRampCombo = new int[4];
+        readonly int[] falls = new int[4], recoveries = new int[4], recoveryHops = new int[4], shoulderHops = new int[4], rampCombo = new int[4], bestRampCombo = new int[4];
         readonly UnhitchedSurfaceContact[][] physicalSupport = new UnhitchedSurfaceContact[4][];
         readonly float[] riding = new float[4], airtime = new float[4], combo = new float[4];
         readonly float[] rotation = new float[4], lastHeading = new float[4];
@@ -40,12 +40,12 @@ namespace LWS.TruckHitchSports
             return true;
         }
         public override string OptionLabel => new[] { "TRAILER FREESTYLE", "LONGEST RIDE", "RAMP ATTACK", "TRAILER TRICK CHALLENGE" }[option % 4];
-        public override string Help => "Drive on a rolling physical flatbed; your truck's weight and wheel forces affect it. Movement controls steer/balance, ACTION hops when your actual wheels contact the deck, with a short recovery between hops. Freestyle banks clean airborne landings, rotations, balance and ride distance. Longest Ride scores only supported riding time plus airborne time that ends back on the deck. Ramp Attack scores the trailer's genuine ramp takeoffs and landings while you remain aboard, not ordinary truck hops. Trick Challenge banks landed quarter-turns of at least 90 degrees, with clean-landing combos. Longest Ride ends on a fall. Other modes give a brief physical recovery window. The lower side recovery lane is a real supported route: drive onto it, match your original deck's forward speed, steer inward and ACTION hop from grounded wheels to remount. Braking on the moving deck holds the tyres against it; drive forward and steer gently onto the side lane to leave. A fall breaks the combo and banks no imaginary airtime; only a real stable wheel landing restores the ride. The trailer gets one starting impulse; slopes, collisions and your weight determine the rest. No invisible joint attaches the truck to the deck.";
+        public override string Help => "Drive on a rolling physical flatbed; your truck's weight and wheel forces affect it. Movement controls steer/balance, ACTION hops when your actual wheels contact the deck, with a short recovery between hops. Freestyle banks clean airborne landings, rotations, balance and ride distance. Freestyle: on the flat deck beside a recovery lane, ACTION + strong steering toward that lane performs a physical sideways hop. Release steering in the air to avoid spinning. Without that modifier, ACTION is the ordinary vertical hop. Longest Ride scores only supported riding time plus airborne time that ends back on the deck. Ramp Attack scores the trailer's genuine ramp takeoffs and landings while you remain aboard, not ordinary truck hops. Trick Challenge banks landed quarter-turns of at least 90 degrees, with clean-landing combos. Longest Ride ends on a fall. Other modes give a brief physical recovery window. The lower side recovery lane is a real supported route: match your original deck's forward speed, steer inward and ACTION hop from grounded wheels to remount. Braking on the moving deck holds the tyres against it; it does not reliably steer you sideways off it. A fall breaks the combo and banks no imaginary airtime; only a real stable wheel landing restores the ride. The trailer gets one starting impulse; slopes, collisions and your weight determine the rest. No invisible joint attaches the truck to the deck.";
         protected override void BeginCompetition()
         {
             for (int i = 0; i < 4; i++)
             {
-                recovering[i] = rampRiderAboard[i] = false; recoveryUntil[i] = remountQuiet[i] = offDeckGround[i] = signedAirYaw[i] = supportedDistance[i] = rampLandingQuiet[i] = 0; falls[i] = recoveries[i] = recoveryHops[i] = rampCombo[i] = bestRampCombo[i] = 0;
+                recovering[i] = rampRiderAboard[i] = false; recoveryUntil[i] = remountQuiet[i] = offDeckGround[i] = signedAirYaw[i] = supportedDistance[i] = rampLandingQuiet[i] = 0; falls[i] = recoveries[i] = recoveryHops[i] = shoulderHops[i] = rampCombo[i] = bestRampCombo[i] = 0;
                 previousDeckPosition[i] = trailers[i].Body.position;
                 lastFlightSeconds[i] = lastFlightSignedYaw[i] = lastFlightUp[i] = 0; lastFlightEnd[i] = "none";
                 var contacts = new System.Collections.Generic.List<UnhitchedSurfaceContact>();
@@ -93,12 +93,13 @@ namespace LWS.TruckHitchSports
             RecordMetric(slot, "unhitched_actual_falls", falls[slot]);
             RecordMetric(slot, "unhitched_physical_remounts", recoveries[slot]);
             RecordMetric(slot, "unhitched_ground_recovery_hops", recoveryHops[slot]);
+            RecordMetric(slot, "unhitched_directional_shoulder_hops", shoulderHops[slot]);
             RecordMetric(slot, "unhitched_supported_platform_metres", supportedDistance[slot]);
             RecordMetric(slot, "unhitched_best_ramp_combo", bestRampCombo[slot]);
         }
         protected override void TickCompetition(float dt)
         {
-            Notice = "BALANCE ON THE REAL DECK · ACTION HOP · LAND CLEANLY TO BANK TRICKS";
+            Notice = option % 4 == 0 ? "ACTION HOP · ACTION + STRONG STEER TOWARD SIDE LANE: SIDE HOP" : "BALANCE ON THE REAL DECK · ACTION HOP · LAND CLEANLY TO BANK TRICKS";
             for (int i = 0; i < setup.count; i++)
             {
                 if (Completed[i]) continue; var body = trucks[i].body; var deck = trailers[i].Body;
@@ -156,6 +157,14 @@ namespace LWS.TruckHitchSports
                         foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true)) if (!part.isKinematic)
                         { part.AddForce(Vector3.up * TrickHopSpeed, ForceMode.VelocityChange); launchedMass += part.mass; }
                         deck.AddForceAtPosition(Vector3.down * launchedMass * TrickHopSpeed, hit.point, ForceMode.Impulse);
+                    }
+                    else if (TryShoulderHopDelta(i, drive.x, out var shoulderDelta))
+                    {
+                        float launchedMass = 0;
+                        foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true)) if (!part.isKinematic)
+                        { part.AddForce(shoulderDelta, ForceMode.VelocityChange); launchedMass += part.mass; }
+                        deck.AddForceAtPosition(-shoulderDelta * launchedMass, hit.point, ForceMode.Impulse);
+                        shoulderHops[i]++;
                     }
                     else { body.AddForce(Vector3.up * 6, ForceMode.VelocityChange); deck.AddForceAtPosition(Vector3.down * body.mass * 6, hit.point, ForceMode.Impulse); }
                     airborne[i] = true; supported = false; lastJump[i] = riding[i];
@@ -329,6 +338,30 @@ namespace LWS.TruckHitchSports
             return false;
         }
         public bool OwnDeckWheelSupport(int slot) => TryDeckSupport(slot, out _);
+        public int ShoulderHopCount(int slot) => shoulderHops[slot];
+        bool TryShoulderHopDelta(int slot, float steer, out Vector3 delta)
+        {
+            delta = Vector3.zero;
+            if (option % 4 != 0 || IsAI(slot) || Mathf.Abs(steer) < .65f || recoveryShoulders == null || slot >= recoveryShoulders.Length) return false;
+            var lane = recoveryShoulders[slot]; var truck = trucks[slot]; var deck = trailers[slot].Body;
+            if (lane == null || !lane.isActiveAndEnabled || lane.DrivingSurfaces == null || Vector3.Dot(deck.transform.up, Vector3.up) < .97f || Vector3.Dot(truck.transform.up, Vector3.up) < .8f) return false;
+            Vector3 destination = lane.PointAtForwardPosition(truck.body.position.z + Mathf.Max(0, truck.body.linearVelocity.z) * 1.35f, true);
+            bool hasRoad = false;
+            foreach (var surface in lane.DrivingSurfaces)
+                if (surface != null && surface.enabled && surface.gameObject.activeInHierarchy && !surface.isTrigger && surface.Raycast(new Ray(destination + Vector3.up * 6, Vector3.down), out var roadHit, 12) && Vector3.Dot(roadHit.normal, Vector3.up) > .8f)
+                { destination = roadHit.point; hasRoad = true; break; }
+            if (!hasRoad) return false;
+            Vector3 side = Vector3.ProjectOnPlane(Vector3.ProjectOnPlane(destination - truck.body.worldCenterOfMass, deck.transform.forward), Vector3.up);
+            if (side.magnitude < 2 || side.magnitude > 8 || Vector3.Dot(truck.transform.right * Mathf.Sign(steer), side.normalized) < .75f) return false;
+            // A real nearby lower road is required, not an arbitrary midair
+            // side boost. The original true deck support gate remains outside.
+            float drop = deckSurfaces[slot].bounds.max.y - destination.y;
+            if (drop < 0 || drop > 2.5f) return false;
+            side.Normalize();
+            float relativeSideSpeed = Vector3.Dot(truck.body.linearVelocity - deck.GetPointVelocity(truck.body.worldCenterOfMass), side);
+            delta = Vector3.up * 6 + side * Mathf.Clamp(4 - relativeSideSpeed, -4, 4);
+            return true;
+        }
         string WheelSupportDiagnostic(int slot)
         {
             var text = new System.Text.StringBuilder();

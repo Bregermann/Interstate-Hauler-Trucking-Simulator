@@ -53,6 +53,7 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
     static string State(object match) => Call(match, "PlatformDiagnostic", 0) + " " + Call(match, "RecoveryDiagnostic", 0) + " " + Call(match, "TrickDiagnostic", 0);
     static string InputState(object match, object player, Gamepad pad, Component truck)
         => "pad=" + pad.deviceId + " assigned=" + ((Gamepad)Read(player, "pad"))?.deviceId + " source=" + Read(player, "source") + " released=" + Read(player, "released") + " processedStick=" + pad.leftStick.ReadValue().ToString("F3") + " readDrive=" + Call(match, "ReadDrive", 0) + " actualCommand=" + Read(truck, "command") + " Live=" + Property(match, "Live") + " paused=" + Property(match, "Paused") + " screen=" + Property(Read(match, "menus"), "Screen");
+    static bool HullSupported(object match) => ((Array)((Array)Read(match, "physicalSupport")).GetValue(0)).Cast<object>().Any(contact => (bool)Property(contact, "Supported"));
 
     [UnityTest]
     public IEnumerator HumanActuallyFallsGroundHopsAndRemountsSameMovingNativeDeck()
@@ -83,13 +84,12 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 while (((float[])Read(match, "supportedRideSeconds"))[0] < 2 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
                 Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(2), State(match));
                 Assert.That((bool)Read(player, "released"), Is.True, "Neutral input must release the normal game-start gate before driving. " + InputState(match, player, pad, truck));
-                // A finite rightward departure gets onto the lower road while
-                // the deck is still flat. Validate actual command/wheel response
-                // first, rather than blaming the recovery physics for no input.
-                float departureUntil = Time.time + 1.4f, startX = body.position.x;
+                // First prove that the ordinary assigned stick reaches native
+                // steering, then press the actual Freestyle side-hop modifier.
+                float departureUntil = Time.realtimeSinceStartup + .15f, startX = body.position.x;
                 bool commandSeen = false, nativeSteeringSeen = false;
                 var frontWheels = ((Array)Read(truck, "wheels")).Cast<object>().Take(2).ToArray();
-                while (Time.time < departureUntil && body.position.x < startX + 3.8f && Mathf.Abs(Mathf.DeltaAngle(0, body.rotation.eulerAngles.y)) < 28 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                while (Time.realtimeSinceStartup < departureUntil && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
                 {
                     Queue(pad, .85f, .55f); yield return null;
                     var actual = (Vector2)Read(truck, "command");
@@ -100,19 +100,42 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 Debug.Log("HH10_UNHITCHED_RECOVERY_INPUT " + departureInput);
                 Assert.That(commandSeen, Is.True, "A real queued steering/throttle press must reach this participant's truck command before evaluating the road. " + departureInput);
                 Assert.That(nativeSteeringSeen, Is.True, "Native front wheels must actually steer from the assigned pad. " + departureInput);
+                bool lateralMotionSeen = false, wholeRigRisingSeen = false, realUnsupportedFlightSeen = false;
+                var nativeBodies = truck.GetComponentsInChildren<Rigidbody>(true).Where(part => !part.isKinematic).ToArray();
+                float sidePressUntil = Time.realtimeSinceStartup + .18f;
+                while (Time.realtimeSinceStartup < sidePressUntil && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                {
+                    // Release steering as soon as the real impulse happens;
+                    // holding a turn throughout flight would command a spin.
+                    bool fired = (int)Call(match, "ShoulderHopCount", 0) > 0;
+                    Queue(pad, fired ? 0 : .85f, 0, true); yield return null;
+                    lateralMotionSeen |= body.linearVelocity.x > 2.5f;
+                    wholeRigRisingSeen |= nativeBodies.All(part => part.linearVelocity.y > 2);
+                    realUnsupportedFlightSeen |= !(bool)Property(truck, "Grounded") && !HullSupported(match);
+                }
+                Queue(pad);
+                Assert.That((int)Call(match, "ShoulderHopCount", 0), Is.EqualTo(1), "Only the normal ACTION + assigned strong steering can trigger the physical shoulder hop. " + InputState(match, player, pad, truck) + " " + State(match));
+                Assert.That(lateralMotionSeen, Is.True, "The real chassis must gain outward motion toward the physical road. " + State(match));
+                Assert.That(wholeRigRisingSeen, Is.True, "The cab and chassis must both rise from the actual hop. " + State(match));
                 // The remaining path still drives the actual truck using only
                 // queued human inputs, with no pose, force or result writes.
                 float nextObservation = 0; string lastLive = State(match); bool roadContactSeen = false;
                 while ((!((bool[])Read(match, "recovering"))[0] || !(bool)Call(shoulder, "HasNativeWheelContact", truck)) && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
                 {
-                    Vector3 point = (Vector3)Call(shoulder, "PointAtForwardPosition", body.position.z + 8, true);
-                    Vector3 direction = Vector3.ProjectOnPlane(point - body.position, Vector3.up).normalized;
-                    float pace = Mathf.Clamp(Vector3.Dot(deck.linearVelocity, Vector3.forward) + 1, 6, 12);
-                    DrivePadTowardVelocity(pad, truck, body, direction * pace);
+                    realUnsupportedFlightSeen |= !(bool)Property(truck, "Grounded") && !HullSupported(match);
+                    if (!(bool)Property(truck, "Grounded")) Queue(pad, Mathf.Clamp(-body.angularVelocity.y * .5f, -.6f, .6f));
+                    else
+                    {
+                        Vector3 point = (Vector3)Call(shoulder, "PointAtForwardPosition", body.position.z + 8, true);
+                        Vector3 direction = Vector3.ProjectOnPlane(point - body.position, Vector3.up).normalized;
+                        float pace = Mathf.Clamp(Vector3.Dot(deck.linearVelocity, Vector3.forward) + 1, 6, 12);
+                        DrivePadTowardVelocity(pad, truck, body, direction * pace);
+                    }
                     if (Time.time >= nextObservation) { nextObservation = Time.time + 2; lastLive = State(match); Debug.Log("HH10_UNHITCHED_SHOULDER_DEPARTURE " + lastLive + " " + InputState(match, player, pad, truck)); }
                     yield return null;
                 }
                 roadContactSeen = (bool)Call(shoulder, "HasNativeWheelContact", truck);
+                Assert.That(realUnsupportedFlightSeen, Is.True, "The side transfer must include real loss of native wheel and hull support. " + State(match));
                 Assert.That(((bool[])Read(match, "recovering"))[0], Is.True, "Only an actual unsupported fall opens recovery. " + State(match));
                 Assert.That(roadContactSeen, Is.True, "The native tyres must physically land on the authored recovery road. " + State(match));
                 float pressUntil = 0, nextPress = 0;
@@ -145,6 +168,7 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 Assert.That(((bool[])Read(match, "recovering")).Any(value => value), Is.False);
                 Assert.That(((int[])Read(match, "recoveries")).Any(value => value > 0), Is.False);
                 Assert.That(((int[])Read(match, "recoveryHops")).Any(value => value > 0), Is.False);
+                Assert.That((int)Call(match, "ShoulderHopCount", 0), Is.Zero);
                 Debug.Log("HH10_UNHITCHED_ACTUAL_RECOVERY " + recovered + " rematch=fresh");
             }
             finally
