@@ -181,7 +181,7 @@ namespace LWS.TruckHorrorSports
                 if(a&&b){var path=new UnityEngine.AI.NavMeshPath();UnityEngine.AI.NavMesh.CalculatePath(origin.position,goal.position,UnityEngine.AI.NavMesh.AllAreas,path);route=path.status+" projectedGoal="+goal.position.ToString("F2")+" corners="+string.Join(" / ",System.Array.ConvertAll(path.corners,c=>c.ToString("F2")));}
                 else route="sample origin="+a+" goal="+b;
             }
-            return "supply P"+(slot+1)+" outside="+(foot!=null&&foot.Outside)+" active="+(foot!=null&&foot.gameObject.activeInHierarchy)+" controller="+(foot!=null&&foot.controller.enabled)+" grounded="+(foot!=null&&foot.controller.isGrounded)+" foot="+(foot!=null?foot.transform.position.ToString("F2"):"none")+" forward="+(foot!=null?foot.transform.forward.ToString("F2"):"none")+" pickupDistance="+(foot!=null?Vector3.Distance(foot.transform.position,body.position).ToString("F2"):"none")+" target="+destination.ToString("F2")+" parcel="+body.position.ToString("F2")+" carrying="+Carrying(slot)+" depositing="+depositing[slot]+" rest="+rest[slot].ToString("F2")+" delivered="+delivered[slot]+" nav="+route;
+            return "supply P"+(slot+1)+" outside="+(foot!=null&&foot.Outside)+" active="+(foot!=null&&foot.gameObject.activeInHierarchy)+" controller="+(foot!=null&&foot.controller.enabled)+" grounded="+(foot!=null&&foot.controller.isGrounded)+" foot="+(foot!=null?foot.transform.position.ToString("F2"):"none")+" forward="+(foot!=null?foot.transform.forward.ToString("F2"):"none")+" pickupDistance="+(foot!=null?Vector3.Distance(foot.transform.position,body.position).ToString("F2"):"none")+" target="+destination.ToString("F2")+" parcel="+body.position.ToString("F2")+" speed="+body.linearVelocity.magnitude.ToString("F2")+" shapeBottom="+parcelShapes[slot].bounds.min.y.ToString("F2")+" trayTop="+receivers[slot].bounds.max.y.ToString("F2")+" gripPoint="+carryingAnchors[slot].position.ToString("F2")+" carrying="+Carrying(slot)+" depositing="+depositing[slot]+" rest="+rest[slot].ToString("F2")+" delivered="+delivered[slot]+" nav="+route;
         }
         public void FreezeJobs()
         {
@@ -240,9 +240,22 @@ namespace LWS.TruckHorrorSports
                 Vector3 requested=Vector3.ClampMagnitude((hand-carryingAnchors[slot].position)*4,5);
                 anchorVelocity[slot]=Vector3.MoveTowards(anchorVelocity[slot],requested,dt*6);
                 carryingAnchors[slot].MovePosition(carryingAnchors[slot].position+anchorVelocity[slot]*dt);
-                if(placing&&Vector3.ProjectOnPlane(parcel.worldCenterOfMass-receiver.bounds.center,Vector3.up).magnitude<.8f
-                    &&parcelShapes[slot].bounds.min.y>=receiver.bounds.max.y-.025f&&parcel.linearVelocity.magnitude<.6f)
-                {Destroy(grips[slot]);grips[slot]=null;depositing[slot]=true;depositAge[slot]=rest[slot]=0;}
+                if (!placing) return;
+                Vector3 center = parcel.worldCenterOfMass;
+                Bounds receiverBounds = receiver.bounds;
+                bool centered = Mathf.Abs(center.x - receiverBounds.center.x) < receiverBounds.extents.x - .12f
+                    && Mathf.Abs(center.z - receiverBounds.center.z) < receiverBounds.extents.z - .12f;
+                bool clearsTop = parcelShapes[slot].bounds.min.y >= receiverBounds.max.y - .025f;
+                bool restingOnTop = center.y >= receiverBounds.max.y && SupportedByReceiver(parcel, receiver, center);
+                if (centered && (clearsTop || restingOnTop))
+                {
+                    // Release is a physical drop. The independent supported-rest
+                    // check above decides whether the crate actually stays put.
+                    Destroy(grips[slot]);
+                    grips[slot] = null;
+                    depositing[slot] = true;
+                    depositAge[slot] = rest[slot] = 0;
+                }
             }
             else if(held&&foot.Outside&&Vector3.Distance(foot.transform.position,parcel.position)<1.9f&&match.NextObjective(slot)==objectiveIndex)
             {
