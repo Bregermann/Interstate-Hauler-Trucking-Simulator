@@ -62,24 +62,67 @@ namespace LWS.TruckHorrorSports
                     return new Vector2(Mathf.Clamp(turn / 45, -1, 1), 0);
                 }
             }
-            // A truck-sized baked navigation clearance may stop short of a hand task.
-            // Refine only the final four metres, using the real character capsule sweep.
-            Vector3 approach=Vector3.ProjectOnPlane(interaction-foot.transform.position,Vector3.up);
-            if(refineToSupply && approach.magnitude<4 && approach.sqrMagnitude>.001f)
-            {
-                Bounds capsule=foot.controller.bounds;float radius=foot.controller.radius*.95f;
-                float shaft=Mathf.Max(0,capsule.extents.y-radius);bool clear=true;
-                int count=Physics.CapsuleCastNonAlloc(capsule.center+Vector3.up*shaft,capsule.center-Vector3.up*shaft,radius,approach.normalized,approachHits,approach.magnitude,~0,QueryTriggerInteraction.Ignore);
-                if(count==approachHits.Length)clear=false;
-                for(int hit=0;hit<count;hit++)if(approachHits[hit].rigidbody!=parcels[slot] && !approachHits[hit].collider.transform.IsChildOf(foot.transform) && approachHits[hit].normal.y<.7f)clear=false;
-                if(clear)navigationTarget=interaction;
-            }
+            // Refine the last few metres around real parcels and shelving.
+            // The baked route excludes moving rigs, so it may also lead through
+            // a parked cab after a driver exits its opposite door.
+            if (refineToSupply && Vector3.ProjectOnPlane(interaction - foot.transform.position, Vector3.up).sqrMagnitude < 16
+                && ClearFootPath(slot, foot, interaction, out _))
+                navigationTarget = interaction;
+            if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null
+                && blocker.transform.IsChildOf(match.trucks[slot].transform))
+                navigationTarget = CabBypass(slot, foot, blocker, navigationTarget);
             Vector3 delta=Vector3.ProjectOnPlane(navigationTarget-foot.transform.position,Vector3.up);
             Vector3 local=foot.transform.InverseTransformDirection(delta);float angle=Mathf.Atan2(local.x,local.z)*Mathf.Rad2Deg;
             // The existing CharacterController turns in place before stepping; it must
             // not run into/through shelving while turning toward a dropped parcel.
             return new Vector2(Mathf.Clamp(angle/45,-1,1),delta.magnitude>.4f?Mathf.Clamp01((delta.magnitude-.25f)/.8f)*Mathf.Clamp01(1-Mathf.Abs(angle)/60):0);
         }
+        bool ClearFootPath(int slot, HorrorFootAgent foot, Vector3 destination, out Collider blocker)
+        {
+            blocker = null;
+            Vector3 step = Vector3.ProjectOnPlane(destination - foot.transform.position, Vector3.up);
+            if (step.sqrMagnitude < .001f) return true;
+            Bounds capsule = foot.controller.bounds;
+            float radius = foot.controller.radius * .95f;
+            float shaft = Mathf.Max(0, capsule.extents.y - radius);
+            int count = Physics.CapsuleCastNonAlloc(capsule.center + Vector3.up * shaft, capsule.center - Vector3.up * shaft,
+                radius, step.normalized, approachHits, Mathf.Min(step.magnitude, 5), ~0, QueryTriggerInteraction.Ignore);
+            float first = float.PositiveInfinity;
+            for (int index = 0; index < count; index++)
+            {
+                var hit = approachHits[index];
+                if (hit.rigidbody == parcels[slot] || hit.collider.transform.IsChildOf(foot.transform) || hit.normal.y >= .7f || hit.distance >= first)
+                    continue;
+                blocker = hit.collider;
+                first = hit.distance;
+            }
+            return blocker == null && count < approachHits.Length;
+        }
+
+        Vector3 CabBypass(int slot, HorrorFootAgent foot, Collider blocker, Vector3 destination)
+        {
+            var truck = match.trucks[slot];
+            Bounds box = truck.shape != null && truck.shape.enabled ? truck.shape.bounds : blocker.bounds;
+            box.Encapsulate(blocker.bounds);
+            Vector3 forward = Vector3.ProjectOnPlane(truck.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.Cross(Vector3.up, forward);
+            Vector3 relative = foot.transform.position - box.center;
+            float side = Mathf.Sign(Vector3.Dot(relative, right));
+            float halfWidth = Mathf.Abs(right.x) * box.extents.x + Mathf.Abs(right.z) * box.extents.z;
+            float halfLength = Mathf.Abs(forward.x) * box.extents.x + Mathf.Abs(forward.z) * box.extents.z;
+            Vector3 outside = box.center + right * (side * (halfWidth + .8f));
+            outside.y = foot.transform.position.y;
+            Vector3 front = outside + forward * (halfLength + 1.25f);
+            Vector3 rear = outside - forward * (halfLength + 1.25f);
+            bool frontClear = ClearFootPath(slot, foot, front, out _);
+            bool rearClear = ClearFootPath(slot, foot, rear, out _);
+            if (!frontClear && !rearClear)
+                return outside + forward * Vector3.Dot(relative, forward);
+            float frontCost = Vector3.Distance(foot.transform.position, front) + Vector3.Distance(destination, front);
+            float rearCost = Vector3.Distance(foot.transform.position, rear) + Vector3.Distance(destination, rear);
+            return frontClear && (!rearClear || frontCost < rearCost) ? front : rear;
+        }
+
         public string Instruction(int slot) => delivered[slot] ? "SUPPLIES RESTOCKED" : depositing[slot] ? "LET THE PARCEL SETTLE ON THE SHELF" : Carrying(slot) ? "CARRY TO YOUR SHELF · HOLD ACTION TO PLACE" : "ON FOOT · HOLD ACTION BESIDE YOUR SUPPLY PARCEL";
         public void ResetJobs()
         {
