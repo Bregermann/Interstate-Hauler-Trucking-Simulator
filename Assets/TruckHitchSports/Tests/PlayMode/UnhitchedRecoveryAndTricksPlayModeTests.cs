@@ -61,12 +61,11 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 var truck = (Component)((Array)Read(match, "trucks")).GetValue(0); var body = (Rigidbody)Read(truck, "body");
                 var platform = ((Array)Read(match, "trailers")).GetValue(0); var deck = (Rigidbody)Read(platform, "Body"); int deckId = deck.GetInstanceID();
                 var surface = ((Collider[])Read(match, "deckSurfaces"))[0];
-                while (((float[])Read(match, "supportedRideSeconds"))[0] < 4 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
-                Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(4), State(match));
-                // A controlled straight rear departure exercises remounting
-                // with an upright truck. Real pad braking and platform motion
-                // must still produce the actual unsupported fall.
-                while (!((bool[])Read(match, "recovering"))[0] && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad, 0, -.35f); yield return null; }
+                while (((float[])Read(match, "supportedRideSeconds"))[0] < 2.5f && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
+                Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(2.5f), State(match));
+                // Brake firmly while the native deck is still rolling on the
+                // flat run-up. Beyond the ramp it can stop directly under the truck.
+                while (!((bool[])Read(match, "recovering"))[0] && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad, 0, -.95f); yield return null; }
                 Assert.That(((bool[])Read(match, "recovering"))[0], Is.True, "A real unsupported fall must enter recovery rather than teleporting/resetting. " + State(match));
                 float nextPress = 0, pressUntil = 0, nextObservation = 0; string lastLive = State(match);
                 while (((int[])Read(match, "recoveries"))[0] == 0 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
