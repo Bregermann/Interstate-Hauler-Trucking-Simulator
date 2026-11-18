@@ -32,6 +32,28 @@ public sealed class TrebuchetHumanControlsPlayModeTests
         if (action) state = state.WithButton(GamepadButton.South);
         InputSystem.QueueStateEvent(pad, state);
     }
+    static IEnumerator PressActionThroughNormalFrames(Gamepad pad, object match, string stage, float deadline, Action<string> remember, bool neutralBefore = true)
+    {
+        // A human press spans multiple normal Update/FixedUpdate opportunities,
+        // independently of renderer frame rate. No manual InputSystem.Update.
+        float until = Time.realtimeSinceStartup + (neutralBefore ? .18f : 0);
+        while (Time.realtimeSinceStartup < until && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
+        bool rawSeen = false, heldSeen = false; int heldFrames = 0; string snapshot = "not sampled";
+        until = Time.realtimeSinceStartup + .18f;
+        while (Time.realtimeSinceStartup < until && Time.realtimeSinceStartup < deadline)
+        {
+            Queue(pad, action: true); yield return null;
+            heldFrames++; rawSeen |= pad.buttonSouth.isPressed; heldSeen |= (bool)Call(match, "ActionHeld", 0);
+            var player = ((Array)Read(Read(match, "setup"), "players")).GetValue(0);
+            snapshot = "stage=" + stage + " rawSouth=" + pad.buttonSouth.ReadValue().ToString("F2") + " ActionHeld=" + Call(match, "ActionHeld", 0) + " sourceReleased=" + Read(player, "released") + " screen=" + Property(Read(match, "menus"), "Screen") + " Live=" + Property(match, "Live") + " Paused=" + Property(match, "Paused");
+        }
+        snapshot += " heldFrames=" + heldFrames + " rawSeen=" + rawSeen + " actionSeen=" + heldSeen;
+        remember(snapshot);
+        Debug.Log("HH10_TREBUCHET_HUMAN_ACTION " + snapshot);
+        until = Time.realtimeSinceStartup + .18f;
+        while (Time.realtimeSinceStartup < until && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
+        Queue(pad);
+    }
     static void DriveToThroughPad(Gamepad pad, Rigidbody tractor, Transform transform, Vector3 target, float desiredSpeed)
     {
         Vector3 local = transform.InverseTransformPoint(new Vector3(target.x, tractor.position.y, target.z));
@@ -49,7 +71,7 @@ public sealed class TrebuchetHumanControlsPlayModeTests
             var previousBackground = InputSystem.settings.backgroundBehavior;
             InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
             var pad = InputSystem.AddDevice<Gamepad>(); object match = null;
-            float deadline = Time.realtimeSinceStartup + 95;
+            float deadline = Time.realtimeSinceStartup + 95; string lastAction = "not sampled";
             try
             {
                 EditorSceneManager.LoadSceneInPlayMode("Assets/TruckHitchSports/Scenes/TrailerTrebuchet.unity", new LoadSceneParameters(LoadSceneMode.Single));
@@ -86,10 +108,8 @@ public sealed class TrebuchetHumanControlsPlayModeTests
                 }
                 Assert.That((bool)Call(engine, "CanLoad", cargo), Is.True, State(match, engine, tractor, load));
                 while (tractor.linearVelocity.magnitude > .25f && Time.realtimeSinceStartup < deadline) { Queue(pad, 0, -1); yield return null; }
-                Queue(pad); yield return null; yield return null;
-                Queue(pad, action: true); yield return null; yield return null;
-                Queue(pad); yield return null; yield return null;
-                Assert.That(Property(engine, "Load"), Is.SameAs(cargo), "Only actual ACTION in the physically loaded cradle may lock the sling. " + State(match, engine, tractor, load));
+                yield return PressActionThroughNormalFrames(pad, match, "lock", deadline, state => lastAction = state);
+                Assert.That(Property(engine, "Load"), Is.SameAs(cargo), "Only actual ACTION in the physically loaded cradle may lock the sling. " + State(match, engine, tractor, load) + " input=[" + lastAction + "]");
                 Assert.That((bool)Property(engine, "SlingIntact"), Is.True);
 
                 Vector3 lockedTractorPosition = tractor.position; Quaternion lockedArmRotation = arm.rotation;
@@ -119,15 +139,15 @@ public sealed class TrebuchetHumanControlsPlayModeTests
                 Assert.That(((float[])Read(match, "assistPower"))[0], Is.GreaterThan(originalAssist + .05f));
                 Assert.That(Quaternion.Angle(arm.rotation, lockedArmRotation), Is.GreaterThan(1));
                 Assert.That((bool)Property(engine, "Swinging"), Is.False);
-                Queue(pad, action: true); yield return null; yield return null;
-                Queue(pad); yield return null; yield return null;
-                Assert.That((bool)Property(engine, "Swinging"), Is.True, "A fresh assigned ACTION must unlock the real hinge. " + State(match, engine, tractor, load));
+                yield return PressActionThroughNormalFrames(pad, match, "swing", deadline, state => lastAction = state);
+                Assert.That((bool)Property(engine, "Swinging"), Is.True, "A fresh assigned ACTION must unlock the real hinge. " + State(match, engine, tractor, load) + " input=[" + lastAction + "]");
                 Assert.That(arm.isKinematic, Is.False);
                 while (!(load.linearVelocity.y > 1 && Vector3.Dot(load.linearVelocity, Vector3.forward) > .1f) && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
                 Assert.That(load.linearVelocity.y, Is.GreaterThan(1), "Release must be observed during real rising motion. " + State(match, engine, tractor, load));
-                Queue(pad, action: true); yield return null; yield return null;
-                Queue(pad); yield return null; yield return null;
-                Assert.That((bool)Property(engine, "Released"), Is.True, "Only the assigned release ACTION may drop the physical sling. " + State(match, engine, tractor, load));
+                // The swing pulse already ended with a real neutral interval;
+                // preserve the observed rising window rather than delaying it.
+                yield return PressActionThroughNormalFrames(pad, match, "release", deadline, state => lastAction = state, false);
+                Assert.That((bool)Property(engine, "Released"), Is.True, "Only the assigned release ACTION may drop the physical sling. " + State(match, engine, tractor, load) + " input=[" + lastAction + "]");
                 Assert.That(((Vector3)Property(engine, "ReleaseWorldVelocity")).y, Is.GreaterThan(0));
                 Assert.That(load.GetInstanceID(), Is.EqualTo(cargoId));
                 Assert.That(load.isKinematic, Is.False);

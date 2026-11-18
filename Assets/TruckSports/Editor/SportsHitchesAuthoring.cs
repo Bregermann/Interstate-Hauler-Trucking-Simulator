@@ -7,6 +7,33 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsHitchesAuthoring
     {
+        public static void RestoreSavedSiegeReceivingField()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/TrailerTrebuchet.unity");
+            LWS.TruckHitchSports.Editor.TrebuchetTargetsAuthoring.SetActiveTrebuchetTargetDistance(50);
+            AssetDatabase.SaveAssets();
+        }
+        public static void FinishSavedGateLeafBinding()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/JackknifeHighwire.unity");
+            LWS.TruckHitchSports.Editor.HighwireVariantsAuthoring.BindActiveHighwireGateLeaves();
+            AssetDatabase.SaveAssets();
+        }
+        public static void InstallSavedCurrentsAndCounterplay()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) throw new InvalidOperationException("Stop Play Mode before explicit saved additions.");
+            var water = UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckWaterSports/Scenes/WhitewaterWipeout.unity");
+            LWS.TruckWaterSports.Editor.RiverWhirlpoolCurrentAuthoring.UpgradeActiveScene();
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(water);
+            var horror = UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHorrorSports/ScarecrowSeason/Scenes/ScarecrowSeason.unity");
+            LWS.TruckHorrorSports.Editor.ScarecrowLureAuthoring.UpgradeActiveVenue();
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(horror);
+            var highwire = UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckHitchSports/Scenes/JackknifeHighwire.unity");
+            LWS.TruckHitchSports.Editor.HighwireVariantsAuthoring.BindActiveHighwireGateLeaves();
+            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(highwire);
+            AssetDatabase.SaveAssets();
+            UnityEngine.Debug.Log("HH10_CURRENTS_COUNTERPLAY_SAVED bounded current adapter, existing physical stalker and real crossing leaves; runtime acceptance separate.");
+        }
         // Explicit authoring only. Normal play/build never regenerates venues.
         [MenuItem("Truck Sports/Alpha 0.10/Create missing expansion scenes")]
         public static void CreateMissingScenes()

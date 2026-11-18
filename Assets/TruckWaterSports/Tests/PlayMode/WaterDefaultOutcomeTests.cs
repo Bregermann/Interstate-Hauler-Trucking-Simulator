@@ -94,7 +94,7 @@ namespace LWS.TruckWaterSports.Tests
                 Assert.That((bool)Property(match, "Live"), Is.True);
                 string firstMatch = (string)Property(match, "MatchId");
                 bool wetPhysics = false, entityWaveUnderWetHull = false;
-                float furthestMotion = 0, entityMotion = 0;
+                float furthestMotion = 0, entityMotion = 0;int blackwaterRows=0;
                 Time.timeScale = PlaybackSpeed;
                 float wallDeadline = Time.realtimeSinceStartup + WallSeconds;
                 while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < wallDeadline && Clock(match) < authoredDuration + 5)
@@ -112,6 +112,7 @@ namespace LWS.TruckWaterSports.Tests
                         }
                     }
                     if (entity != null) entityMotion = Mathf.Max(entityMotion, Vector3.Distance(entity.position, entitySpawn));
+                    if(blackwater&&blackwaterRows<3&&Clock(match)>=60*(blackwaterRows+1)){blackwaterRows++;WaterVariantOutcomeTests.ObserveBlackwaterNavigation(match,4,0);}
                     yield return null;
                 }
                 Time.timeScale = 1;

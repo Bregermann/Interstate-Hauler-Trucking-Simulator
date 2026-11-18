@@ -15,6 +15,7 @@ namespace LWS.TruckHorrorSports
         public Animator animator;
         public HorrorPursuitState State { get; private set; }
         HorrorMatch match;
+        ScarecrowHeadlightLure deception;
         Vector3 initial;
         Quaternion rotation;
         NavMeshPath route;
@@ -32,13 +33,16 @@ namespace LWS.TruckHorrorSports
             body.isKinematic = false; body.position = initial; body.rotation = rotation; body.linearVelocity = body.angularVelocity = Vector3.zero;
             if (semi != null) { semi.Prepare(initial, rotation); semi.maxSpeed = owner.sport == HorrorSport.DeadEnd ? speed + 4 : 15; }
             SetActive(true);
+            deception = GetComponent<ScarecrowHeadlightLure>();
+            deception?.ResetDeception(owner);
         }
         public void SetActive(bool enabled)
-        { if (semi != null) semi.Power(enabled); if (signature != null) foreach (var light in signature) if (light != null) light.enabled = enabled; }
+        { if (!enabled) deception?.Freeze(); if (semi != null) semi.Power(enabled); if (signature != null) foreach (var light in signature) if (light != null) light.enabled = enabled; }
         public void Repel(float seconds) { if (match != null) repelledUntil = match.Age + seconds; }
         public void TickActor(float dt)
         {
             if (match == null || !match.Live) return;
+            deception?.TickDeception(dt);
             if (match.Age < 15 || match.Age < repelledUntil) { State = match.Age < repelledUntil ? HorrorPursuitState.Repelled : HorrorPursuitState.Watching; if (semi != null) semi.TickDrive(Vector2.zero); return; }
             if (match.Age >= nextPlan)
             {
@@ -48,17 +52,17 @@ namespace LWS.TruckHorrorSports
                     if (match.rules.outcome[i] != HorrorOutcome.Active) continue;
                     float distance = Vector3.Distance(body.position, match.PlayerPosition(i));
                     // Noise and recent exposure alter target priority; all players remain eligible.
-                    float attention = distance - match.trucks[i].body.linearVelocity.magnitude * .6f;
+                    float attention = distance - match.trucks[i].body.linearVelocity.magnitude * .6f + (deception?.AttentionAdjustment(i) ?? 0);
                     if (attention < best) { best = attention; target = i; }
                 }
-                if (target >= 0 && NavMesh.SamplePosition(body.position, out var start, 10, NavMesh.AllAreas) && NavMesh.SamplePosition(match.PlayerPosition(target), out var end, 10, NavMesh.AllAreas)) { NavMesh.CalculatePath(start.position, end.position, NavMesh.AllAreas, route); corners = route.corners; }
+                if (target >= 0 && NavMesh.SamplePosition(body.position, out var start, 10, NavMesh.AllAreas) && NavMesh.SamplePosition(deception != null ? deception.DestinationFor(target, match.PlayerPosition(target)) : match.PlayerPosition(target), out var end, 10, NavMesh.AllAreas)) { NavMesh.CalculatePath(start.position, end.position, NavMesh.AllAreas, route); corners = route.corners; }
             }
             if (target < 0) return;
-            Vector3 destination = match.PlayerPosition(target);
+            Vector3 destination = deception != null ? deception.DestinationFor(target, match.PlayerPosition(target)) : match.PlayerPosition(target);
             float targetDistance = Vector3.Distance(body.position, destination);
             bool lit = scarecrow && match.IsIlluminated(body.position);
             State = lit ? HorrorPursuitState.Watching : targetDistance > 45 ? HorrorPursuitState.Flanking : targetDistance > 18 ? HorrorPursuitState.Stalking : HorrorPursuitState.Pursuing;
-            if (State == HorrorPursuitState.Flanking && scarecrow) destination += Vector3.Cross((destination - body.position).normalized, Vector3.up) * 12;
+            if (State == HorrorPursuitState.Flanking && scarecrow && (deception == null || !deception.Luring)) destination += Vector3.Cross((destination - body.position).normalized, Vector3.up) * 12;
             if (route != null && route.status == NavMeshPathStatus.PathComplete)
             { for (int c = 1; c < corners.Length; c++) if (Vector3.Distance(body.position, corners[c]) > 2.5f) { destination = corners[c]; break; } }
             if (match.sport == HorrorSport.DeadEnd && match.roadRoute != null && match.roadRoute.Length > 0)

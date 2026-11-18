@@ -12,6 +12,14 @@ public sealed class GraveyardServicesPlayModeTests
     static object Field(object target,string name)=>target.GetType().GetField(name).GetValue(target);
     static object Property(object target,string name)=>target.GetType().GetProperty(name).GetValue(target);
     static object Call(object target,string name,params object[] args)=>target.GetType().GetMethod(name).Invoke(target,args);
+    static string NightState(object match)
+    {
+        var rules=Field(match,"rules");var truck=((Array)Field(match,"trucks")).GetValue(0);var body=(Rigidbody)Field(truck,"body");
+        var foot=(Component)((Array)Field(match,"footAgents")).GetValue(0);var actor=Field(match,"antagonist");var enemy=(Rigidbody)Field(actor,"body");
+        var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+        float damage=((float[])match.GetType().GetField("lastDamage",flags).GetValue(match))[0];var corners=(Vector3[][])match.GetType().GetField("pathCorners",flags).GetValue(match);
+        return "clock="+Property(match,"Age")+" ending="+Property(match,"Ending")+" success="+Property(match,"Successful")+" health="+((float[])Field(rules,"health"))[0]+" outcome="+((Array)Field(rules,"outcome")).GetValue(0)+" lastDamage="+damage+" nextObjective="+Call(match,"NextObjective",0)+" player="+body.position.ToString("F2")+" playerV="+body.linearVelocity.ToString("F2")+" command="+Field(truck,"command")+" outside="+Property(foot,"Outside")+" foot="+foot.transform.position.ToString("F2")+" enemy="+enemy.position.ToString("F2")+" enemyV="+enemy.linearVelocity.ToString("F2")+" enemyState="+Property(actor,"State")+" enemyTarget="+Property(actor,"Target")+" footEnemyDistance="+Vector3.Distance(foot.transform.position,enemy.position).ToString("F2")+" cachedCorners="+(corners[0]==null?"none":string.Join(" / ",corners[0].Take(5).Select(c=>c.ToString("F2"))));
+    }
     [UnityTest,Timeout(160000)]
     public IEnumerator NaturalShiftJobsPowerTheEquipmentAndTheSameNativeVisitorReturnsThenResets()
     {
@@ -25,15 +33,16 @@ public sealed class GraveyardServicesPlayModeTests
                 match=UnityEngine.Object.FindObjectsByType(type,FindObjectsSortMode.None).Single();var services=Field(match,"nightServices");Assert.That(services,Is.Not.Null,"Apply the explicit contextual-service scene upgrade.");
                 var setup=Field(match,"setup");setup.GetType().GetField("count").SetValue(setup,1);match.GetType().GetField("option").SetValue(match,1);Call(match,"NormalizeSetup");Call(match,"AllBots");
                 var visitor=Field(services,"visitor");var truck=Field(visitor,"truck");var body=(Rigidbody)Field(truck,"body");bool sawNativeWheelDrive=false;int captions=0;string lastCaption=null;
-                Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;float deadline=Time.realtimeSinceStartup+115;
+                Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;float deadline=Time.realtimeSinceStartup+115;float nextObservation=15;int observations=0;
                 while(!(bool)Property(match,"Finished")&&Time.realtimeSinceStartup<deadline)
                 {
+                    if(observations<3&&(float)Property(match,"Age")>=nextObservation){observations++;nextObservation+=15;Debug.Log("GRAVEYARD_NIGHT_STATE "+NightState(match));}
                     sawNativeWheelDrive|=(bool)Property(truck,"Powered")&&(bool)Property(truck,"Grounded")&&body.linearVelocity.magnitude>1;
                     string caption=(string)Call(services,"CaptionFor",0);if(!string.IsNullOrEmpty(caption)&&caption!=lastCaption){captions++;lastCaption=caption;Assert.That(caption,Does.StartWith((string)Field(((Array)Field(setup,"players")).GetValue(0),"name")));}
                     if((int)Call(match,"Objectives",0)==0){Assert.That((bool)Property(services,"GeneratorRunning"),Is.False);Assert.That((bool)Property(services,"PowerRestored"),Is.False);}
                     yield return new WaitForFixedUpdate();
                 }
-                string state="clock="+Property(match,"Age")+" jobs="+Call(match,"Objectives",0)+" arrivals="+Property(visitor,"Arrivals")+" distance="+Property(visitor,"DistanceDriven")+" native="+body.position+" responses="+Property(services,"Responses");
+                string state="clock="+Property(match,"Age")+" jobs="+Call(match,"Objectives",0)+" arrivals="+Property(visitor,"Arrivals")+" distance="+Property(visitor,"DistanceDriven")+" native="+body.position+" responses="+Property(services,"Responses")+" · "+NightState(match);
                 Assert.That((bool)Property(match,"Finished"),Is.True,state);Assert.That((int)Call(match,"Objectives",0),Is.GreaterThanOrEqualTo(6),"The original jobs must genuinely complete. "+state);
                 Assert.That((bool)Property(services,"PumpChecked"),Is.True,state);Assert.That((bool)Property(services,"PowerRestored"),Is.True,state);Assert.That((bool)Property(services,"GeneratorRunning"),Is.True,state);
                 for(int task=0;task<6;task++)Assert.That((bool)Call(services,"Observed",0,task),Is.True,state);

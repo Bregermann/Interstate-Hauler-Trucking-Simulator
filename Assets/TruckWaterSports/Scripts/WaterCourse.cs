@@ -9,6 +9,7 @@ public sealed class WaterCurrentSection {
  [Min(0)]public float edgeBlendMetres=6;
 }
 public sealed class WaterCourse : MonoBehaviour {
+ public RiverWhirlpoolCurrentField whirlpoolField;
  public WaterCurrentSection[] currentSections=System.Array.Empty<WaterCurrentSection>();
  public Vector2 CurrentMultipliers(Vector3 point)=>lake?Vector2.one:SectionFactors(point,Nearest(point));
  Vector2 SectionFactors(Vector3 point,int segment){
@@ -46,6 +47,6 @@ public sealed class WaterCourse : MonoBehaviour {
   }
   return result;
  }
- public Vector3 Current(Vector3 p,float clock){if(lake)return new Vector3(Mathf.Sin(clock*.18f),0,.35f)*.3f;int i=Nearest(p);var direction=(stations[i+1]-stations[i]).normalized;var section=SectionFactors(p,i);float sway=Mathf.Sin(p.z*.07f+clock)*turbulence*section.y;var flow=direction*(currentSpeed*section.x)+new Vector3(sway,0,-sway*.2f);foreach(var center in eddies){var radial=Vector3.ProjectOnPlane(p-center,Vector3.up);float falloff=Mathf.Clamp01(1-radial.magnitude/14);if(radial.sqrMagnitude>.1f)flow+=(Vector3.Cross(Vector3.up,radial.normalized)-radial.normalized*.35f)*eddyStrength*falloff*section.y;}return flow;}
+ public Vector3 Current(Vector3 p,float clock){if(lake)return new Vector3(Mathf.Sin(clock*.18f),0,.35f)*.3f;int i=Nearest(p);var direction=(stations[i+1]-stations[i]).normalized;var section=SectionFactors(p,i);float sway=Mathf.Sin(p.z*.07f+clock)*turbulence*section.y;var flow=direction*(currentSpeed*section.x)+new Vector3(sway,0,-sway*.2f);foreach(var center in eddies){var radial=Vector3.ProjectOnPlane(p-center,Vector3.up);float falloff=Mathf.Clamp01(1-radial.magnitude/14);if(radial.sqrMagnitude>.1f)flow+=(Vector3.Cross(Vector3.up,radial.normalized)-radial.normalized*.35f)*eddyStrength*falloff*section.y;}if(whirlpoolField!=null)flow+=whirlpoolField.SampleCurrent(p,clock);return flow;}
 }
 }

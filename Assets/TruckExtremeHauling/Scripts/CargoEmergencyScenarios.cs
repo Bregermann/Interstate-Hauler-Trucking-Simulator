@@ -130,7 +130,10 @@ namespace LWS.TruckExtremeHauling
             observedFloatSteps[slot] = floating.Steps;
             bool allWheelsDry=floodWheels[slot].Length>0;
             foreach(var wheel in floodWheels[slot])allWheelsDry&=wheel.IsGrounded&&wheel.transform.position.x>=Active.dryBankX[slot];
-            if (!Extracted[slot] && hadWater[slot] && CableTowMetres[slot] >= 5 && allWheelsDry && current.x >= Active.dryBankX[slot] && current.y > -.2f && Vector3.Dot(load.transform.up, Vector3.up) > .9f)
+            // Native trailer origins are below the tyre contact plane. A load
+            // standing on every real dry-bank wheel must not be rejected merely
+            // because its authored root pivot is below world zero.
+            if (!Extracted[slot] && hadWater[slot] && CableTowMetres[slot] >= 5 && allWheelsDry && current.x >= Active.dryBankX[slot] && Vector3.Dot(load.transform.up, Vector3.up) > .9f)
             {
                 Extracted[slot] = true; floating.enabled = false;
                 SportsSessionTelemetry.GameplayEvent(match.gameObject.scene.name, "cargo_flood_extracted", match.setup.players[slot].participantId,

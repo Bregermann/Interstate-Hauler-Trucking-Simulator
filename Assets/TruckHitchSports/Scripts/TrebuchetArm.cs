@@ -36,7 +36,7 @@ namespace LWS.TruckHitchSports
         public float SlingAnchorGapMetres => SlingIntact ? Vector3.Distance(Arm.transform.TransformPoint(sling.anchor), Load.Body.transform.TransformPoint(sling.connectedAnchor)) : -1;
         public Vector3 SlingConstraintForce => SlingIntact ? sling.currentForce : Vector3.zero;
         public Vector3 SlingConstraintTorque => SlingIntact ? sling.currentTorque : Vector3.zero;
-        public string SlingDiagnostic() => SlingIntact ? "sling=point constraint gap=" + SlingAnchorGapMetres.ToString("F4") + "m force=" + sling.currentForce.ToString("F1") + "N torque=" + sling.currentTorque.ToString("F1") + "Nm armAnchor=" + Arm.transform.TransformPoint(sling.anchor).ToString("F2") + " loadAnchor=" + Load.Body.transform.TransformPoint(sling.connectedAnchor).ToString("F2") + " angular=free" : "sling=absent released=" + Released + " " + ReleaseDiagnostic();
+        public string SlingDiagnostic() => SlingIntact ? "sling=cradle harness gap=" + SlingAnchorGapMetres.ToString("F4") + "m force=" + sling.currentForce.ToString("F1") + "N torque=" + sling.currentTorque.ToString("F1") + "Nm armAnchor=" + Arm.transform.TransformPoint(sling.anchor).ToString("F2") + " loadAnchor=" + Load.Body.transform.TransformPoint(sling.connectedAnchor).ToString("F2") + " angular=" + sling.angularXMotion + "/" + sling.angularYMotion + "/" + sling.angularZMotion : "sling=absent released=" + Released + " " + ReleaseDiagnostic();
         Vector3 start;
         Quaternion rotation;
         void Awake()
@@ -83,15 +83,16 @@ namespace LWS.TruckHitchSports
             // lowered by OnDetach must not spear that same physical platform.
             if(trailer.Module.module.trailerStand!=null)trailer.Module.module.trailerStand.SetActive(false);
             Load = trailer; sling = Arm.gameObject.AddComponent<ConfigurableJoint>();
-            // A physical point sling retains translation at the actual load,
-            // while allowing the trailer to rotate independently as its axles
-            // leave the ramp. A six-axis weld also tried to rotate the grounded
-            // trailer with the arm and could mechanically lock the launch.
+            // The cradle harness retains the physically loaded relative pose.
+            // The real loading bridges retract before this assembly rotates;
+            // an unconstrained pitch would rotate its solid deck through an
+            // upright trailer. Destroying this joint releases genuine solver
+            // momentum and permits free trailer tumbling.
             var point=trailer.Body.worldCenterOfMass;sling.autoConfigureConnectedAnchor=false;
             sling.anchor=Arm.transform.InverseTransformPoint(point);sling.connectedBody=trailer.Body;
             sling.connectedAnchor=trailer.Body.transform.InverseTransformPoint(point);
             sling.xMotion = sling.yMotion = sling.zMotion = ConfigurableJointMotion.Locked;
-            sling.angularXMotion = sling.angularYMotion = sling.angularZMotion = ConfigurableJointMotion.Free;
+            sling.angularXMotion = sling.angularYMotion = sling.angularZMotion = ConfigurableJointMotion.Locked;
             // Let the actual solver carry the load; no corrective projection
             // or motor on the sling may manufacture its trajectory.
             sling.projectionMode = JointProjectionMode.None;

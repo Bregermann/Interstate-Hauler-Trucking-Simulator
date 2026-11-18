@@ -40,6 +40,56 @@ namespace LWS.TruckWaterSports.Tests
             if(match.GetType().Name=="BlackwaterMatch")text.Append(" banked=").Append(Property(match,"BankedSupplies")).Append(" creatureEuler=").Append(((Rigidbody)Field(match,"entity")).rotation.eulerAngles.ToString("F1"));
             return text.ToString();
         }
+        // Three read-only snapshots per natural run. Do not invoke Bot: it owns
+        // healing reservations. The nav estimate below repeats only its pure
+        // sensor calculation and is labelled separately from actual velocities.
+        public static void ObserveBlackwaterNavigation(object match,int count,int option)
+        {
+            var text=new StringBuilder("BLACKWATER_NAV_OBSERVATION option=").Append(option).Append(" clock=").Append(Clock(match));
+            var entity=(Rigidbody)Field(match,"entity");var creatureHull=entity.GetComponent<BoxCollider>();
+            text.Append(" entity=").Append(entity.position.ToString("F2")).Append(" entityVelocity=").Append(entity.linearVelocity.ToString("F2"));
+            if(creatureHull!=null)text.Append(" crown=").Append(creatureHull.bounds.max.y.ToString("F2"));
+            var integrity=(float[])Field(match,"Integrity");var cargoOwner=(int[])Field(match,"cargoOwner");var boatCargo=(int[])Field(match,"boatCargo");
+            var banked=(bool[])Field(match,"banked");var healing=(Light[])Field(match,"healingAt");var quiet=(float[])Field(match,"quietSeconds");
+            var crates=(Rigidbody[])Field(match,"supplies");var dock=(Transform)Field(match,"dock");var course=Field(match,"course");var gates=(int[])Field(match,"Gates");
+            for(int i=0;i<count;i++)
+            {
+                var body=Body(match,i);Vector3 goal=(Vector3)Call(course,"Point",gates[i]);Rigidbody contact=null;string objective="gate";
+                int rescue=-1;float nearest=float.MaxValue;
+                if(option==3)for(int other=0;other<count;other++)if(other!=i&&integrity[other]<=0){float d=(Body(match,other).position-body.position).sqrMagnitude;if(d<nearest){nearest=d;rescue=other;}}
+                if(rescue>=0){contact=Body(match,rescue);goal=contact.position;objective="rescue "+rescue;}
+                else if(boatCargo[i]>=0||option==3&&(int)Property(match,"BankedSupplies")>=(int)Property(match,"SharedSuppliesNeeded")){goal=dock.position;objective="dock";}
+                else if(option==1||option==3)
+                {
+                    int cargo=-1;nearest=float.MaxValue;for(int c=0;c<count;c++)if(!banked[c]&&cargoOwner[c]<0){float d=(crates[c].position-body.position).sqrMagnitude;if(d<nearest){nearest=d;cargo=c;}}
+                    goal=cargo>=0?crates[cargo].position:dock.position;contact=cargo>=0?crates[cargo]:null;objective=cargo>=0?"crate "+cargo:"dock";
+                }
+                if(healing[i]!=null&&rescue<0){goal=healing[i].transform.position;contact=null;objective="healing "+healing[i].name;}
+                Vector3 delta=Vector3.ProjectOnPlane(goal-body.position,Vector3.up),best=delta.normalized;
+                float reach=Mathf.Clamp(body.linearVelocity.magnitude*1.2f+7,9,20),bestScore=float.NegativeInfinity;string blocker="none";
+                for(int sample=-3;sample<=3;sample++)
+                {
+                    Vector3 direction=Quaternion.AngleAxis(sample*25,Vector3.up)*delta.normalized;float clear=reach;string hitName="none";
+                    foreach(var hit in Physics.SphereCastAll(body.position+Vector3.up*.45f,2.1f,direction,reach,~0,QueryTriggerInteraction.Ignore))if(hit.rigidbody!=body&&(contact==null||hit.rigidbody!=contact)&&hit.distance<clear){clear=hit.distance;hitName=hit.collider.name;}
+                    float score=Vector3.Dot(direction,delta.normalized)*3+clear/reach*4;
+                    if(score>bestScore){bestScore=score;best=direction;blocker=hitName+" @"+clear.ToString("F2");}
+                }
+                float yaw=Vector3.SignedAngle(Vector3.ProjectOnPlane(body.rotation*Vector3.forward,Vector3.up),best,Vector3.up);
+                float speed=Vector3.Dot(body.linearVelocity,Vector3.ProjectOnPlane(body.rotation*Vector3.forward,Vector3.up).normalized);
+                float predictedThrottle=Mathf.Clamp((5.5f*Mathf.Max(0,Mathf.Cos(yaw*Mathf.Deg2Rad))-speed)*.6f,-1,1);
+                text.Append(" | slot=").Append(i).Append(" position=").Append(body.position.ToString("F2")).Append(" euler=").Append(body.rotation.eulerAngles.ToString("F1"))
+                    .Append(" velocity=").Append(body.linearVelocity.ToString("F2")).Append(" angular=").Append(body.angularVelocity.ToString("F2"))
+                    .Append(" hull=").Append(integrity[i].ToString("F1")).Append(" goal=").Append(objective).Append(goal.ToString("F2"))
+                    .Append(" navYaw=").Append(yaw.ToString("F1")).Append(" navThrottleEstimate=").Append(predictedThrottle.ToString("F2"))
+                    .Append(" bestProbeBlocker=").Append(blocker).Append(" quietSeconds=").Append(quiet[i].ToString("F1"))
+                    .Append(" sheltered=").Append(match.GetType().GetMethod("LightShelter",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(match,new object[]{body.position}));
+                var ownHull=body.GetComponent<BoxCollider>();if(ownHull!=null)for(int other=0;other<count;other++)if(other!=i)
+                {
+                    var otherHull=Body(match,other).GetComponent<BoxCollider>();if(otherHull!=null&&Physics.ComputePenetration(ownHull,body.position,body.rotation,otherHull,Body(match,other).position,Body(match,other).rotation,out _,out float depth))text.Append(" overlappingHull=").Append(other).Append(" depth=").Append(depth.ToString("F3"));
+                }
+            }
+            Debug.Log(text.ToString());
+        }
         [UnityTest]public IEnumerator NaturalTeamPaddleChallengeAwardsMovingSynchronizationAndSharedResults()=>Run("PaddlePals","PaddlePalsMatch",3,4);
         [UnityTest]public IEnumerator NaturalWaterfallFreestyleBanksOnlyActualControlledLandings()=>Run("WhitewaterWipeout","WhitewaterWipeoutMatch",2,1);
         [UnityTest]public IEnumerator NaturalKayakSurvivalResolvesRealTimeCapsizesAndRematch()=>Run("WhitewaterWipeout","WhitewaterWipeoutMatch",3,1);
@@ -58,7 +108,7 @@ namespace LWS.TruckWaterSports.Tests
                 match.GetType().GetField("option").SetValue(match,option);var setup=Field(match,"setup");setup.GetType().GetField("count").SetValue(setup,count);Call(match,"NormalizeSetup");Call(match,"AllBots");
                 float duration=(float)Field(match,"matchDuration");var origin=Body(match,0).position;
                 Assert.That((bool)Call(match,"StartMatch"),Is.True);string first=(string)Property(match,"MatchId");
-                float furthest=0,nextLog=0,highestWave=0;bool wet=false,physicalCargo=false,neededRescue=false;
+                float furthest=0,nextLog=sceneName=="Blackwater"?60:0,highestWave=0;int blackwaterRows=0;bool wet=false,physicalCargo=false,neededRescue=false;
                 float startingWave=(float)Field(Field(Vessel(match,0),"flotation"),"waveAmplitude");
                 Time.timeScale=4;float deadline=Time.realtimeSinceStartup+100;
                 while(!(bool)Property(match,"Finished")&&Time.realtimeSinceStartup<deadline&&Clock(match)<=duration+5)
@@ -73,7 +123,7 @@ namespace LWS.TruckWaterSports.Tests
                     }
                     if(sceneName=="WhitewaterWipeout"&&option==2&& (int)Property(Vessel(match,0),"Landings")==0)
                         Assert.That((float)Call(match,"QualifiedFreestylePoints",0),Is.Zero,"Flat-water rolls and unlanded aerial attempts must not bank freestyle points.");
-                    if(Clock(match)>=nextLog){nextLog=Clock(match)+30;Debug.Log("WATER_VARIANT_ACTUAL scene="+sceneName+" option="+option+" "+Observed(match,count));}
+                    if(Clock(match)>=nextLog){if(sceneName=="Blackwater"){if(blackwaterRows<3){blackwaterRows++;nextLog=60*(blackwaterRows+1);ObserveBlackwaterNavigation(match,count,option);}}else{nextLog=Clock(match)+30;Debug.Log("WATER_VARIANT_ACTUAL scene="+sceneName+" option="+option+" "+Observed(match,count));}}
                     yield return null;
                 }
                 Time.timeScale=1;string observed=Observed(match,count);

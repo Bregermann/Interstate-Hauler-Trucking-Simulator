@@ -876,7 +876,7 @@ namespace LWS.TruckHorrorSports
             }
         }
         protected override void StopGame() { convoyRoad?.Freeze(); nightServices?.Freeze(); supplyJob?.FreezeJobs(); if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
-        protected override void StopSounds() { convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
+        protected override void StopSounds() { if (antagonist != null) antagonist.GetComponent<ScarecrowHeadlightLure>()?.Silence(); convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
         protected override void SetPaused(bool paused) { if (ambience != null) { if (paused) ambience.Pause(); else ambience.UnPause(); } if (encounterAudio != null) { if (paused) encounterAudio.Pause(); else encounterAudio.UnPause(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (paused) a.spatialSound.Pause(); else a.spatialSound.UnPause(); } if (atmosphere != null) atmosphere.Pause(paused); }
     }
 }

@@ -50,7 +50,7 @@ public sealed class HitchRunContestPlayModeTests
             var observedContest = new bool[trailers.Length]; var observedPhysicalRecapture = new bool[trailers.Length];
             var originalOwners = Enumerable.Repeat(-1, trailers.Length).ToArray();
             var deliveredStolen = new bool[4];
-            int samples = 0; float nextSample = 30; string lastLive = "not sampled";
+            int samples = 0; float nextSample = 30; string lastLive = "not sampled"; bool contestObservedLogged = false;
             try
             {
                 Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 75;
@@ -63,6 +63,11 @@ public sealed class HitchRunContestPlayModeTests
                         if (priorOwners[t] >= 0 && owner < 0) { observedContest[t] = true; originalOwners[t] = priorOwners[t]; }
                         if (observedContest[t] && owner >= 0 && owner != originalOwners[t] && ReferenceEquals(Property(couplers.GetValue(owner), "Attached"), load) && (bool)Property(couplers.GetValue(owner), "PhysicalConstraintPresent")) observedPhysicalRecapture[t] = true;
                         if (observedPhysicalRecapture[t] && stealers[t] >= 0 && (int)Property(load, "Deliveries") > 0) deliveredStolen[stealers[t]] = true;
+                    }
+                    if (!contestObservedLogged && observedContest.Any(value => value))
+                    {
+                        contestObservedLogged = true;
+                        Debug.Log("HH10_HITCH_RUN_FIRST_PHYSICAL_CONTEST age=" + Property(match, "Elapsed") + " " + Call(match, "ContestDiagnostic", 0));
                     }
                     if ((float)Property(match, "Elapsed") >= nextSample && samples < 6)
                     {

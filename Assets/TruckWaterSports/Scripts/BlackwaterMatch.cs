@@ -7,13 +7,16 @@ public sealed class BlackwaterMatch:WaterMatch {
  [Min(0)]public float safeContactSpeed=3.5f,minimumContactImpulsePerMass=.75f,contactDamageCooldown=1.2f;
  [Range(0,50)]public float maximumContactDamage=20;
  public readonly int[] HullImpactHits=new int[4];public readonly float[] ContactDamageTaken=new float[4];readonly float[] nextContactDamage=new float[4];
+ [Min(.5f)]public float aiQuietHoldSeconds=5,aiCommittedEscapeSeconds=12;
  public float[] Integrity={100,100,100,100};public int[] Deliveries=new int[4],Rescues=new int[4];public float entitySpeed=9;public AudioSource warning;
  public int BankedSupplies{get;private set;}public bool CooperativeEscaped{get;private set;}
  public int SharedSuppliesNeeded=>Mathf.Max(1,(setup.count+1)/2);
  readonly FixedJoint[] cargoJoints=new FixedJoint[4];readonly int[] boatCargo={-1,-1,-1,-1},cargoOwner={-1,-1,-1,-1};
  readonly bool[] banked=new bool[4];readonly Vector3[] cargoStarts=new Vector3[4];
  readonly Light[] healingAt=new Light[4];readonly float[] rescueProgress=new float[4],quietSeconds=new float[4];Light[] shelterLights=System.Array.Empty<Light>();bool capturedCargoStarts;float nextStrike,targetSwitch;int hunted;
- readonly Collider[][] vesselHulls=new Collider[4][];float creatureCrown;
+ readonly float[] propulsionInput=new float[4],escapeUntil=new float[4];
+ readonly Collider[][] vesselHulls=new Collider[4][];float creatureCrown,creatureTurnRadius;BoxCollider creatureHull;
+ readonly RaycastHit[] creatureSweepHits=new RaycastHit[24];
  protected override bool Canoe=>false;public override string Title=>"BLACKWATER: SOMETHING BELOW";public override bool Cooperative=>option==3;
  public override string OptionLabel=>new[]{"MIDNIGHT CROSSING","SUPPLY RUN","SURVIVAL","COOPERATIVE BLACKWATER ESCAPE"}[option];
  public override string ResultUnit=>Cooperative?"DELIVERIES":"SEC";public override bool ResultHigherIsBetter=>option==2||Cooperative;
@@ -31,8 +34,8 @@ public sealed class BlackwaterMatch:WaterMatch {
  // crates falling while their match-gated flotation is inactive.
  protected override void Awake(){base.Awake();CachePhysicalHulls();if(vessels!=null)foreach(var vessel in vessels)if(vessel!=null)vessel.HullImpact+=ContactImpact;var lights=new System.Collections.Generic.List<Light>();foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))if(light.type==LightType.Point&&light.color.g>light.color.r*1.3f&&light.color.g>light.color.b*1.1f)lights.Add(light);shelterLights=lights.ToArray();if(supplies==null||supplies.Length<4)return;for(int cargo=0;cargo<4;cargo++)if(supplies[cargo]!=null){cargoStarts[cargo]=supplies[cargo].position;supplies[cargo].isKinematic=true;}capturedCargoStarts=true;}
  void CachePhysicalHulls(){
-  var shape=entity!=null?entity.GetComponent<BoxCollider>():null;
-  if(shape!=null)creatureCrown=(shape.center.y+shape.size.y*.5f)*Mathf.Abs(shape.transform.lossyScale.y);
+  creatureHull=entity!=null?entity.GetComponent<BoxCollider>():null;
+  if(creatureHull!=null){creatureCrown=(creatureHull.center.y+creatureHull.size.y*.5f)*Mathf.Abs(creatureHull.transform.lossyScale.y);Vector3 extent=Vector3.Scale(creatureHull.size*.5f,creatureHull.transform.lossyScale);creatureTurnRadius=Mathf.Max(.1f,new Vector2(extent.x,extent.z).magnitude);}
   if(vessels==null)return;
   for(int i=0;i<Mathf.Min(4,vessels.Length);i++)if(vessels[i]!=null){
    var hulls=new System.Collections.Generic.List<Collider>();
@@ -41,10 +44,37 @@ public sealed class BlackwaterMatch:WaterMatch {
   }
  }
  float HullBottom(int slot){float bottom=vessels[slot].body.position.y;if(vesselHulls[slot]!=null)foreach(var hull in vesselHulls[slot])if(hull!=null&&hull.enabled)bottom=Mathf.Min(bottom,hull.bounds.min.y);return bottom;}
+ // The leviathan is a real kinematic obstacle, not a collision-free visual.
+ // Its long hull cannot rotate instantaneously through other barges. Limit the
+ // outer corner's turn speed to the authored swimming speed, sweep translation,
+ // and reject rotations that introduce/deepen an actual vessel penetration.
+ void MoveCreature(Vector3 desired,float dt){
+  Vector3 delta=desired-entity.position,step=Vector3.ClampMagnitude(delta,entitySpeed*dt);
+  Vector3 heading=Vector3.ProjectOnPlane(delta,Vector3.up);Quaternion rotation=entity.rotation;
+  if(heading.sqrMagnitude>1)rotation=Quaternion.RotateTowards(rotation,Quaternion.LookRotation(heading.normalized,Vector3.up),entitySpeed/Mathf.Max(.1f,creatureTurnRadius)*Mathf.Rad2Deg*dt);
+  if(creatureHull!=null){
+   float distance=step.magnitude;
+   if(distance>.0001f){
+    Vector3 center=entity.position+entity.rotation*Vector3.Scale(creatureHull.center,creatureHull.transform.lossyScale);
+    Vector3 half=Vector3.Scale(creatureHull.size*.5f,creatureHull.transform.lossyScale);half=new Vector3(Mathf.Abs(half.x),Mathf.Abs(half.y),Mathf.Abs(half.z));
+    int count=Physics.BoxCastNonAlloc(center,half,step/distance,creatureSweepHits,entity.rotation,distance,~0,QueryTriggerInteraction.Ignore);
+    for(int hit=0;hit<count;hit++)if(creatureSweepHits[hit].rigidbody!=entity)distance=Mathf.Min(distance,Mathf.Max(0,creatureSweepHits[hit].distance-.02f));
+    step=step.normalized*distance;
+   }
+   Vector3 proposed=entity.position+step;
+   for(int slot=0;slot<setup.count;slot++)if(vessels[slot].gameObject.activeInHierarchy&&vesselHulls[slot]!=null)foreach(var hull in vesselHulls[slot]){
+    if(hull==null||!hull.enabled||!hull.gameObject.activeInHierarchy)continue;
+    if(!Physics.ComputePenetration(creatureHull,proposed,rotation,hull,hull.transform.position,hull.transform.rotation,out _,out float nextDepth))continue;
+    bool alreadyOverlapping=Physics.ComputePenetration(creatureHull,entity.position,entity.rotation,hull,hull.transform.position,hull.transform.rotation,out _,out float currentDepth);
+    if(!alreadyOverlapping||nextDepth>=currentDepth){rotation=entity.rotation;step=Vector3.zero;break;}
+   }
+  }
+  entity.MovePosition(entity.position+step);entity.MoveRotation(rotation);
+ }
  protected override void BeginWater(){
   nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;entity.position=new Vector3(0,-5,90);
   for(int i=0;i<4;i++){
-   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=0;boatCargo[i]=cargoOwner[i]=-1;banked[i]=false;
+   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=0;boatCargo[i]=cargoOwner[i]=-1;banked[i]=false;
    if(cargoJoints[i]!=null)Destroy(cargoJoints[i]);cargoJoints[i]=null;
    if(!capturedCargoStarts)cargoStarts[i]=supplies[i].position;
    supplies[i].gameObject.SetActive(i<setup.count);supplies[i].isKinematic=false;supplies[i].position=cargoStarts[i];supplies[i].rotation=Quaternion.identity;supplies[i].linearVelocity=supplies[i].angularVelocity=Vector3.zero;
@@ -82,13 +112,20 @@ public sealed class BlackwaterMatch:WaterMatch {
   if(rescue>=0&&distance<9){float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((.45f-speed)*.8f,-.8f,.4f);}
   else if((healingAt[index]!=null||boatCargo[index]>=0||Cooperative&&BankedSupplies>=SharedSuppliesNeeded)&&distance<22){float desired=Mathf.Clamp((distance-5)*.28f,0,3);float speed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Clamp((desired-speed)*.8f,-.9f,.8f);}
   float reaction=8+(int)setup.players[index].difficulty*5;
-  if(Clock>=25&&Vector3.Distance(vessel.body.position,entity.position)<reaction&&!LightShelter(vessel.body.position)&&quietSeconds[index]<5){float signed=Vector3.Dot(vessel.body.linearVelocity,vessel.transform.forward);drive.y=Mathf.Abs(signed)>.35f?-Mathf.Sign(signed)*.65f:0;}
+  if(Clock>=25&&Clock>=escapeUntil[index]&&Vector3.Distance(vessel.body.position,entity.position)<reaction&&!LightShelter(vessel.body.position)){
+   // Quiet is a finite deliberate tactic, followed by real navigation. Without
+   // this commitment the first throttle frame resets quietSeconds and makes
+   // the AI brake again forever while the creature remains nearby.
+   if(quietSeconds[index]>=aiQuietHoldSeconds)escapeUntil[index]=Clock+aiCommittedEscapeSeconds;
+   else{var planarForward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;float signed=Vector3.Dot(vessel.body.linearVelocity,planarForward);drive.y=Mathf.Abs(signed)>.35f?-Mathf.Sign(signed)*.65f:0;}
+  }
   return drive;
  }
  protected override void TickBoat(WaterVessel vessel,int index,float dt){
+  propulsionInput[index]=0;
   if(FinishTimes[index]>=0||Stranded[index])return;
   if(Integrity[index]<=0){DropCargo(index);if(!Cooperative){FinishTimes[index]=Clock;Scores[index]=option==2?Clock:-1000;vessel.Freeze();}return;}
-  bool ai=setup.players[index].source==BowlingSource.AI;var drive=ai?Bot(index,vessel):commands[index];
+  bool ai=setup.players[index].source==BowlingSource.AI;var drive=ai?Bot(index,vessel):commands[index];propulsionInput[index]=drive.y;
   var forward=Vector3.ProjectOnPlane(vessel.transform.forward,Vector3.up).normalized;
   if(vessel.WaterSupported&&vessel.body.position.y<vessel.flotation.waterHeight+1.5f)vessel.body.AddForce(forward*drive.y*3,ForceMode.Acceleration);
   vessel.SteerWatercraft(drive.x);
@@ -130,8 +167,11 @@ public sealed class BlackwaterMatch:WaterMatch {
    ConfirmOutcome("rescue:"+rescuer+":"+victim+":"+Rescues[rescuer],rescuer,1,"TEAMMATE RECOVERED","RESCUE");
   }
  }
+ bool QuietMovement(int slot)=>Vector3.ProjectOnPlane(vessels[slot].body.linearVelocity,Vector3.up).sqrMagnitude<.8f*.8f&&Mathf.Abs(propulsionInput[slot])<.1f;
  protected override void AfterBoats(float dt){
-  for(int i=0;i<setup.count;i++){if(Stranded[i])Integrity[i]=0;quietSeconds[i]=vessels[i].body.linearVelocity.magnitude<.8f?quietSeconds[i]+dt:0;vessels[i].flotation.waveAmplitude=Mathf.MoveTowards(vessels[i].flotation.waveAmplitude,.1f,dt*.15f);}
+  // Passive vertical buoyancy/wakes are not engine or travel noise. An actual
+  // throttle request still reveals a stationary player pressing into a wall.
+  for(int i=0;i<setup.count;i++){if(Stranded[i])Integrity[i]=0;quietSeconds[i]=QuietMovement(i)?quietSeconds[i]+dt:0;vessels[i].flotation.waveAmplitude=Mathf.MoveTowards(vessels[i].flotation.waveAmplitude,.1f,dt*.15f);}
   if(Cooperative){
    Rescue(dt);bool anyAlive=false,allReady=BankedSupplies>=SharedSuppliesNeeded;
    for(int i=0;i<setup.count;i++){anyAlive|=Integrity[i]>0;allReady&=Integrity[i]>0&&!Stranded[i]&&!vessels[i].Capsized&&vessels[i].body.linearVelocity.magnitude<2.5f&&Vector3.Distance(vessels[i].body.position,dock.position)<22;}
@@ -141,17 +181,18 @@ public sealed class BlackwaterMatch:WaterMatch {
   Hunt(dt);if(wake!=null)for(int i=0;i<setup.count;i++)vessels[i].flotation.waterHeight=wake.Height(vessels[i].body.position,Clock);
  }
  void Hunt(float dt){
-  if(Clock>=targetSwitch){targetSwitch=Clock+12;float loudest=-1;for(int i=0;i<setup.count;i++){float sound=vessels[i].body.linearVelocity.sqrMagnitude;if(!Stranded[i]&&Integrity[i]>0&&FinishTimes[i]<0&&sound>loudest){loudest=sound;hunted=i;}}}
+  if(Clock>=targetSwitch){targetSwitch=Clock+12;float loudest=-1;for(int i=0;i<setup.count;i++){float sound=Vector3.ProjectOnPlane(vessels[i].body.linearVelocity,Vector3.up).sqrMagnitude+Mathf.Abs(propulsionInput[i]);if(!Stranded[i]&&Integrity[i]>0&&FinishTimes[i]<0&&sound>loudest){loudest=sound;hunted=i;}}}
   var victim=vessels[hunted];if(Integrity[hunted]<=0||FinishTimes[hunted]>=0)return;
-  bool quiet=victim.body.linearVelocity.magnitude<.8f&&quietSeconds[hunted]<7,sheltered=LightShelter(victim.body.position);
-  // A 24m-long kinematic hull must not pitch vertically through a boat while
-  // pursuing a tiny depth error. Keep the actual creature horizontal below
-  // both the waterline and the target's real hull. Wakes/strikes remain physical.
+  bool quiet=QuietMovement(hunted)&&quietSeconds[hunted]<7,sheltered=LightShelter(victim.body.position);
+  // Keep the crown below every nearby real hull, not just the current target:
+  // a target switch must not sweep the 24m body through a lower neighbouring
+  // barge or paddle. The physical sweep below still retains all contacts.
   Vector3 desired=victim.body.position;
-  desired.y=Mathf.Min(course.Point(0).y,HullBottom(hunted))-creatureCrown-.6f;
+  float lowestHull=Mathf.Min(course.Point(0).y,HullBottom(hunted));
+  for(int i=0;i<setup.count;i++)if(vessels[i].gameObject.activeInHierarchy&&Vector3.ProjectOnPlane(vessels[i].body.position-entity.position,Vector3.up).sqrMagnitude<Mathf.Pow(creatureTurnRadius+entitySpeed+6,2))lowestHull=Mathf.Min(lowestHull,HullBottom(i));
+  desired.y=lowestHull-creatureCrown-.6f;
   if(Clock<35||quiet||sheltered)desired+=Vector3.ProjectOnPlane(victim.transform.forward,Vector3.up).normalized*30;
-  Vector3 delta=desired-entity.position;entity.MovePosition(entity.position+Vector3.ClampMagnitude(delta,entitySpeed*dt));
-  Vector3 heading=Vector3.ProjectOnPlane(delta,Vector3.up);if(heading.sqrMagnitude>1)entity.MoveRotation(Quaternion.LookRotation(heading.normalized,Vector3.up));
+  MoveCreature(desired,dt);
   float proximity=Vector3.Distance(entity.position,victim.body.position);
   if(proximity<18){victim.body.AddForce((victim.body.position-entity.position).normalized*Mathf.Sin(Clock*2)*2,ForceMode.Acceleration);victim.flotation.waveAmplitude=.1f+(18-proximity)*.035f;}else victim.flotation.waveAmplitude=.1f;
   if(proximity>=7||Clock<nextStrike||Clock<35||quiet||sheltered)return;

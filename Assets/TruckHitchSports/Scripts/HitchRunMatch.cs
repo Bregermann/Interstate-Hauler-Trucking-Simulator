@@ -15,7 +15,8 @@ namespace LWS.TruckHitchSports
         readonly float[] clearKingpinUntil = new float[4];
         readonly Vector3[] clearKingpinTarget = new Vector3[4];
         readonly int[] contestsWon = new int[4];
-        readonly int[] ambushRival = new int[4];
+        readonly int[] ambushRival = new int[4], ambushStage = new int[4];
+        readonly Vector3[] ambushGoal = new Vector3[4];
         float[] respawnAt;
         int[] contestedOwner, cargoStealer;
         public override int MinimumPlayers => option % 4 == 2 ? 4 : 1;
@@ -43,7 +44,7 @@ namespace LWS.TruckHitchSports
             System.Array.Clear(aiTarget, 0, 4); System.Array.Clear(approachStage, 0, 4); System.Array.Clear(aiReadyAt, 0, 4);
             System.Array.Clear(clearKingpinUntil, 0, 4); System.Array.Clear(contestsWon, 0, 4);
             respawnAt = new float[trailers.Length]; contestedOwner = new int[trailers.Length]; cargoStealer = new int[trailers.Length];
-            for (int slot = 0; slot < ambushRival.Length; slot++) ambushRival[slot] = -1;
+            for (int slot = 0; slot < ambushRival.Length; slot++) { ambushRival[slot] = -1; ambushStage[slot] = 0; ambushGoal[slot] = Vector3.zero; }
             for (int t = 0; t < trailers.Length; t++) { contestedOwner[t] = cargoStealer[t] = -1; ConfigureCargo(t); }
         }
         protected override void ReportFinalMeasurements(int slot)
@@ -62,6 +63,7 @@ namespace LWS.TruckHitchSports
                 bool hardAmbush = ai && option % 4 == 0 && setup.count > 1 && setup.players[i].difficulty == BowlingDifficulty.Hard && Deliveries[i] >= 1;
                 bool recoveringContestedCargo = aiTarget[i] != null && aiTarget[i].Owner < 0 && contestedOwner[System.Array.IndexOf(trailers, aiTarget[i])] >= 0;
                 hardAmbush &= !recoveringContestedCargo;
+                if (hardAmbush) EnsureAmbushRival(i);
                 // Close AI backing may choose R explicitly; every other path
                 // retains the existing NWH automatic D/N/R behavior.
                 trucks[i].tractorMotor.vehicle.powertrain.transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
@@ -80,7 +82,7 @@ namespace LWS.TruckHitchSports
                         // Hard Trailer Thief deliberately trades routine loads
                         // for an ambush after its first real delivery. It waits
                         // for an actual courier, never claims imaginary cargo.
-                        if (hardAmbush && trailer.Owner < 0) continue;
+                        if (hardAmbush && (trailer.Owner < 0 || trailer.Owner != ambushRival[i])) continue;
                         float distance = (trailer.Kingpin.position - couplers[i].Anchor.position).sqrMagnitude;
                         int tier = 1 + System.Array.IndexOf(trailers, trailer) % 3;
                         float value = ai && option % 4 == 3 ? tier * tier : ai && option % 4 == 0 && trailer.Owner >= 0 ? 2.5f : 1;
@@ -92,7 +94,7 @@ namespace LWS.TruckHitchSports
                         if (weighted < priority) { priority = weighted; nearest = distance; candidate = trailer; }
                     }
                     bool seekTheft = option % 4 == 0 && Deliveries[i] >= 2 && candidate != null && candidate.Owner >= 0 && aiTarget[i] != null && aiTarget[i].Owner < 0 && approachStage[i] < 2;
-                    bool validLockedTarget = aiTarget[i] != null && aiTarget[i].gameObject.activeSelf && aiTarget[i].Deliveries == 0 && (!hardAmbush || aiTarget[i].Owner >= 0);
+                    bool validLockedTarget = aiTarget[i] != null && aiTarget[i].gameObject.activeSelf && aiTarget[i].Deliveries == 0 && (!hardAmbush || aiTarget[i].Owner == ambushRival[i]);
                     if (ai && !seekTheft && validLockedTarget && (option % 4 != 2 || (aiTarget[i].Owner < 0 || aiTarget[i].Owner % 2 != i % 2) && !ReservedByCloserTeammate(i, aiTarget[i])))
                     { candidate = aiTarget[i]; nearest = (candidate.Kingpin.position - couplers[i].Anchor.position).sqrMagnitude; }
                     if (candidate == null)
@@ -109,8 +111,8 @@ namespace LWS.TruckHitchSports
                         if (ai)
                         {
                             if (hardAmbush && Vector3.Distance(candidate.Body.worldCenterOfMass, depots[candidate.Owner].position) > 35)
-                                AwaitRivalCourier(i, candidate.Owner);
-                            else PursueOccupiedCargo(i, candidate);
+                                AwaitRivalCourier(i);
+                            else PursueOccupiedCargo(i, candidate, hardAmbush);
                         }
                         else trucks[i].TickDrive(commands[i]);
                         // Recompute after selecting a moving locked target.
@@ -124,6 +126,18 @@ namespace LWS.TruckHitchSports
                             {
                                 candidate.SetBrakes(1); contestedOwner[System.Array.IndexOf(trailers, candidate)] = oldOwner; contestsWon[i]++;
                                 approachStage[i] = 0;
+                                // A parallel Hard thief is already alongside
+                                // the head, not behind the trailer. It can drive
+                                // into the open ahead lane before real backing.
+                                if (hardAmbush)
+                                {
+                                    Vector3 forward = Vector3.ProjectOnPlane(candidate.transform.forward, Vector3.up).normalized;
+                                    Vector3 localAnchor = trucks[i].transform.InverseTransformPoint(couplers[i].Anchor.position);
+                                    Vector3 root = candidate.Kingpin.position - Quaternion.LookRotation(forward, Vector3.up) * localAnchor;
+                                    Vector3 offset = trucks[i].body.position - root;
+                                    if (Vector3.Angle(trucks[i].transform.forward, forward) < 15 && Mathf.Abs(Vector3.Dot(offset, Vector3.Cross(Vector3.up, forward))) < 5 && Vector3.Dot(offset, forward) > -2)
+                                        approachStage[i] = 2;
+                                }
                                 if (IsAI(oldOwner))
                                 {
                                     clearKingpinTarget[oldOwner] = trucks[oldOwner].body.position + trucks[oldOwner].transform.forward * 16 + trucks[oldOwner].transform.right * 8;
@@ -166,32 +180,78 @@ namespace LWS.TruckHitchSports
                 }
             }
         }
-        void AwaitRivalCourier(int slot, int preferredRival = -1)
+        void EnsureAmbushRival(int slot)
         {
-            int rival = preferredRival >= 0 && preferredRival < setup.count && preferredRival != slot ? preferredRival : ambushRival[slot];
-            if (rival < 0 || rival >= setup.count || rival == slot)
+            if (ambushRival[slot] >= 0 && ambushRival[slot] < setup.count && ambushRival[slot] != slot) return;
+            float nearest = float.MaxValue;
+            for (int other = 0; other < setup.count; other++)
             {
-                float nearest = float.MaxValue;
-                for (int other = 0; other < setup.count; other++)
-                {
-                    if (other == slot) continue;
-                    float distance = (trucks[slot].body.position - depots[other].position).sqrMagnitude;
-                    if (distance < nearest) { nearest = distance; rival = other; }
-                }
+                if (other == slot) continue;
+                float distance = (trucks[slot].body.position - depots[other].position).sqrMagnitude;
+                if (distance < nearest) { nearest = distance; ambushRival[slot] = other; }
             }
+            ambushStage[slot] = 0;
+        }
+        void AwaitRivalCourier(int slot)
+        {
+            EnsureAmbushRival(slot);
+            int rival = ambushRival[slot];
             if (rival < 0) { ParkAI(slot); return; }
-            ambushRival[slot] = rival;
             Vector3 forward = Vector3.ProjectOnPlane(depots[rival].forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, forward);
             float side = Vector3.Dot(depots[slot].position - depots[rival].position, right) < 0 ? -1 : 1;
             var referenceLoad = trailers[0];
             Vector3 localPinFromCom = referenceLoad.transform.InverseTransformVector(referenceLoad.Kingpin.position - referenceLoad.Body.worldCenterOfMass);
             Vector3 localFifthWheel = trucks[slot].transform.InverseTransformPoint(couplers[slot].Anchor.position);
-            Vector3 receivingRoot = depots[rival].position + forward * (localPinFromCom.z - localFifthWheel.z);
-            Vector3 waiting = receivingRoot + right * side * 3.8f;
-            float gap = Vector3.ProjectOnPlane(waiting - trucks[slot].body.position, Vector3.up).magnitude;
-            if (gap < 1) ParkAI(slot);
-            else trucks[slot].TickDrive(DriveTo(slot, waiting, Mathf.Min(8, Mathf.Sqrt(3 * Mathf.Max(0, gap - .4f)))));
+            // The ordinary courier brakes toward a 3m receiving offset rather
+            // than passing through the exact geometric center of its depot.
+            Vector3 receivingRoot = depots[rival].position + forward * (localPinFromCom.z - localFifthWheel.z - 3);
+            DriveParallelAmbush(slot, receivingRoot + right * side * 3.8f, forward, side);
+        }
+        void DriveParallelAmbush(int slot, Vector3 goal, Vector3 forward, float side)
+        {
+            ambushGoal[slot] = goal;
+            var truck = trucks[slot]; var vehicle = truck.tractorMotor.vehicle;
+            Vector3 right = Vector3.Cross(Vector3.up, forward), offset = truck.body.position - goal;
+            float ahead = Vector3.Dot(offset, forward), lateral = Vector3.Dot(offset, right);
+            float heading = Vector3.Angle(truck.transform.forward, forward);
+            Vector3 target;
+            if (ambushStage[slot] < 2)
+            {
+                target = goal + right * side * 12 + forward * (ambushStage[slot] == 0 ? -20 : 18);
+                truck.TickDrive(DriveTo(slot, target, 5));
+                if (Vector3.ProjectOnPlane(truck.body.position - target, Vector3.up).magnitude < 4) ambushStage[slot]++;
+                return;
+            }
+            var transmission = vehicle.powertrain.transmission;
+            transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
+            float speed = Vector3.Dot(truck.body.linearVelocity, truck.transform.forward);
+            if (ambushStage[slot] == 2)
+            {
+                if (heading < 8 && Mathf.Abs(lateral) < 1.25f && ahead > 8) { ambushStage[slot] = 3; ParkAI(slot); return; }
+                if (transmission.Gear <= 0) { ParkAI(slot); if (Mathf.Abs(speed) < .3f) transmission.ShiftInto(1); return; }
+                target = goal + forward * (ahead + 10);
+                Vector3 local = truck.transform.InverseTransformPoint(target);
+                truck.TickDrive(new Vector2(Mathf.Clamp(Mathf.Atan2(local.x, local.z) * 1.8f - truck.body.angularVelocity.y * .3f, -1, 1), Mathf.Clamp((2.5f - speed) * .5f, -.7f, .7f)));
+                return;
+            }
+            float gap = Vector3.ProjectOnPlane(offset, Vector3.up).magnitude;
+            if (gap < .6f && heading < 8) { ambushStage[slot] = 4; ParkAI(slot); return; }
+            if (heading > 35 || Mathf.Abs(lateral) > 6) { ambushStage[slot] = 0; ParkAI(slot); return; }
+            bool reverse = ahead > 0;
+            if (reverse ? transmission.Gear >= 0 : transmission.Gear <= 0)
+            { ParkAI(slot); if (Mathf.Abs(speed) < .3f) transmission.ShiftInto(reverse ? -1 : 1); return; }
+            float steer;
+            if (reverse)
+            {
+                Vector3 desired = Quaternion.AngleAxis(Mathf.Atan2(lateral, Mathf.Clamp(Mathf.Abs(ahead), 4, 12)) * Mathf.Rad2Deg, Vector3.up) * forward;
+                steer = Mathf.Clamp(-Vector3.SignedAngle(truck.transform.forward, desired, Vector3.up) * .07f + truck.body.angularVelocity.y * .6f, -.65f, .65f);
+            }
+            else { Vector3 local = truck.transform.InverseTransformPoint(goal); steer = Mathf.Clamp(Mathf.Atan2(local.x, local.z) * 1.8f, -.65f, .65f); }
+            float requested = Mathf.Clamp(gap * .3f, .12f, 2) * (reverse ? -1 : 1);
+            float effort = Mathf.Clamp((requested - speed) * .7f, -.65f, .65f);
+            if (!vehicle.powertrain.engine.IsRunning) effort = reverse ? -.35f : .35f;
+            truck.TickDrive(new Vector2(steer, effort));
         }
         bool ReservedByCloserTeammate(int slot, TrailerBody trailer)
         {
@@ -206,7 +266,7 @@ namespace LWS.TruckHitchSports
             }
             return false;
         }
-        void PursueOccupiedCargo(int slot, TrailerBody trailer)
+        void PursueOccupiedCargo(int slot, TrailerBody trailer, bool holdReceivingBay = false)
         {
             Vector3 forward = Vector3.ProjectOnPlane(trailer.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, forward);
@@ -219,8 +279,19 @@ namespace LWS.TruckHitchSports
             // so a thief can physically wait alongside an arriving load rather
             // than chase stale pickup waypoints behind it indefinitely.
             float depotDistance = Vector3.Distance(trailer.Body.worldCenterOfMass, depots[depot].position);
-            if (depotDistance < 35) alongside += depots[depot].position - trailer.Body.worldCenterOfMass;
+            if (depotDistance < 35)
+            {
+                Vector3 receivingCom = depots[depot].position;
+                if (holdReceivingBay)
+                {
+                    // Once stopped, use the real pin. Before then, anticipate
+                    // the same final receiving offset as its physical driver.
+                    receivingCom = velocity.magnitude < 1 ? trailer.Body.worldCenterOfMass : receivingCom - Vector3.ClampMagnitude(receivingCom - trailer.Body.worldCenterOfMass, 3);
+                }
+                alongside += receivingCom - trailer.Body.worldCenterOfMass;
+            }
             else alongside += Vector3.ClampMagnitude(velocity * 1.2f, 12);
+            if (holdReceivingBay) { DriveParallelAmbush(slot, alongside, forward, side); return; }
             float distance = Vector3.ProjectOnPlane(alongside - trucks[slot].body.position, Vector3.up).magnitude;
             if (distance < 1.2f && velocity.magnitude < .8f) ParkAI(slot);
             else trucks[slot].TickDrive(DriveTo(slot, alongside, Mathf.Min(12 * DifficultyValue(slot, .8f, 1, 1.12f), Mathf.Max(1.5f, velocity.magnitude + distance * .5f))));
@@ -229,7 +300,7 @@ namespace LWS.TruckHitchSports
         {
             if (slot < 0 || slot >= setup.count) return "invalid seat";
             var target = contested[slot];
-            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " ambushRival=" + ambushRival[slot] + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
+            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " ambushRival=" + ambushRival[slot] + " bayStage=" + ambushStage[slot] + " tractor=" + trucks[slot].body.position.ToString("F2") + " bayGoal=" + ambushGoal[slot].ToString("F2") + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
         }
         void CoupledLoad(int slot, TrailerBody trailer)
         {

@@ -126,11 +126,27 @@ namespace LWS.TruckExtremeHauling
         }
 
         public float TowedMass(int slot) => targets[slot] != null ? targets[slot].mass : 0;
-        public bool CanDriveDirect(Vector3 start,Vector3 end){
+        public float SupportedRecoveryMass(int slot)
+        {
+            float mass = TowedMass(slot);
+            foreach (var part in match.trucks[slot].GetComponentsInChildren<Rigidbody>(true))
+                if (part.gameObject.activeInHierarchy && !part.isKinematic) mass += part.mass;
+            return mass;
+        }
+        public bool CanDriveDirect(Vector3 start,Vector3 end,float supportedMass=0){
             int samples=Mathf.Max(1,Mathf.CeilToInt(Vector3.ProjectOnPlane(end-start,Vector3.up).magnitude/5));
             for(int i=1;i<=samples;i++){
                 Vector3 at=Vector3.Lerp(start,end,(float)i/samples);
                 if(!Physics.Raycast(new Vector3(at.x,3,at.z),Vector3.down,out var hit,7,1,QueryTriggerInteraction.Ignore)||hit.point.y<.2f)return false;
+                var tile=hit.collider.GetComponent<LoadSensitiveIce>();
+                // Evaluate the whole driven corridor, not only the destination
+                // tile. A thick waypoint may hide a weak loaded crossing en route.
+                // Reserve matches the existing stress onset and5m/s AI speed;
+                // no ice strength or actual failure rule is changed.
+                if(tile!=null&&supportedMass>0){
+                    float capacity=Mathf.Max(1,tile.bearingMass*tile.thickness*tile.thickness/(.45f*.45f));
+                    if(tile.Broken||tile.Stress>.6f||supportedMass*1.1f>capacity*.65f)return false;
+                }
             }
             return true;
         }

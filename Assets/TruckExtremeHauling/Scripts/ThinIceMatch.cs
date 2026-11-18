@@ -51,18 +51,18 @@ namespace LWS.TruckExtremeHauling
             if(age>=replan[i])
             {
                 replan[i]=age+.6f;Vector3 at=trucks[i].body.position;float best=float.MaxValue;waypoints[i]=option==3?at:final;
-                float mass=option==3&&rescue!=null?trucks[i].body.mass+rescue.TowedMass(i):trucks[i].body.mass+trailers[i].Body.mass;
+                float mass=option==3&&rescue!=null?rescue.SupportedRecoveryMass(i):trucks[i].body.mass+trailers[i].Body.mass;
                 foreach(var tile in ice)
                 {
                     if(tile.Broken)continue;Vector3 center=tile.transform.position;float near=Vector3.ProjectOnPlane(center-at,Vector3.up).magnitude;if(near<8||near>65)continue;
-                    if(option==3&&rescue!=null&&!rescue.CanDriveDirect(at,center))continue;
+                    if(option==3&&rescue!=null&&!rescue.CanDriveDirect(at,center,mass))continue;
                     float capacity=Mathf.Max(1,tile.bearingMass*tile.thickness*tile.thickness/(.45f*.45f));
                     float risk=Mathf.Max(0,mass/capacity-.65f)*55+tile.Stress*180;
                     float score=Vector3.ProjectOnPlane(center-final,Vector3.up).magnitude+near*.12f+risk;
                     if(score<best){best=score;waypoints[i]=new Vector3(center.x,at.y,center.z);}
                 }
-                if(Vector3.ProjectOnPlane(final-at,Vector3.up).magnitude<35&&(option!=3||rescue==null||rescue.CanDriveDirect(at,final)))waypoints[i]=final;
-                if(option==3&&rescue!=null&&at.z>rescue.waterBounds.max.z-40&&rescue.CanDriveDirect(at,final))waypoints[i]=final;
+                if(Vector3.ProjectOnPlane(final-at,Vector3.up).magnitude<35&&(option!=3||rescue==null||rescue.CanDriveDirect(at,final,mass)))waypoints[i]=final;
+                if(option==3&&rescue!=null&&at.z>rescue.waterBounds.max.z-40&&rescue.CanDriveDirect(at,final,mass))waypoints[i]=final;
             }
             return waypoints[i];
         }

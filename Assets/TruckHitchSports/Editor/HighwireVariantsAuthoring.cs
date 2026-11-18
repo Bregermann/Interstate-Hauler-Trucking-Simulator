@@ -98,6 +98,22 @@ namespace LWS.TruckHitchSports.Editor
                 line.SetPosition(0, center + new Vector3(side * 4, .2f, -18)); line.SetPosition(1, center + new Vector3(side * 5.5f, 12, 0)); line.SetPosition(2, center + new Vector3(side * 4, .2f, 18));
             }
         }
+        [MenuItem("Truck Sports/Alpha 0.10/Bind active Highwire actual gate collision leaves")]
+        public static void BindActiveHighwireGateLeaves()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling) throw new InvalidOperationException("Stopped compiled Editor required.");
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if (scene.path != "Assets/TruckHitchSports/Scenes/JackknifeHighwire.unity") throw new InvalidOperationException("Open the saved JackknifeHighwire scene explicitly.");
+            var match = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<HighwireMatch>(true)).Single();
+            foreach (var gate in match.crossingBarriers)
+            {
+                if (gate == null || gate.Body == null) throw new InvalidOperationException("Preserve every existing physical gate.");
+                var leaves = gate.Body.GetComponentsInChildren<Collider>(true).Where(shape => !shape.isTrigger && shape.GetComponentInParent<Rigidbody>(true) == gate.Body).ToArray();
+                if (leaves.Length == 0) throw new InvalidOperationException("An actual solid physical leaf is required.");
+                gate.LeafColliders = leaves; EditorUtility.SetDirty(gate);
+            }
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+        }
         static HighwireMovingBarrier Barrier(Transform parent, HighwireMatch match, Vector3 roadCenter, Vector3 roadDirection, TMP_FontAsset font, float phase)
         {
             Vector3 forward = Vector3.ProjectOnPlane(roadDirection, Vector3.up).normalized, right = Vector3.Cross(Vector3.up, forward);
@@ -106,6 +122,8 @@ namespace LWS.TruckHitchSports.Editor
             var collider = go.AddComponent<BoxCollider>(); collider.size = new Vector3(7, 1.3f, 1.1f);
             var body = go.AddComponent<Rigidbody>(); body.isKinematic = true; body.mass = 800; body.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             var barrier = go.AddComponent<HighwireMovingBarrier>(); barrier.Match = match; barrier.Body = body; barrier.ClosedPosition = go.transform.position; barrier.OpenPosition = go.transform.position + right * 15.5f; barrier.ApproachForward = forward; barrier.PhaseOffset = phase;
+            barrier.LeafColliders = go.GetComponentsInChildren<Collider>(true).Where(shape => !shape.isTrigger && shape.GetComponentInParent<Rigidbody>(true) == body).ToArray();
+            if (barrier.LeafColliders.Length != 1 || barrier.LeafColliders[0] != collider) throw new InvalidOperationException("Keepaway production-art Fit must strip its source collision before the explicitly sized physical leaf is added.");
             barrier.Signal = Label(parent, font, "WAIT · CROSSING CLOSED", roadCenter - forward * 17 + new Vector3(-5, 5, 0), new Color(1,.36f,.1f));
             return barrier;
         }

@@ -14,6 +14,7 @@ namespace LWS.TruckHitchSports
         public TMP_Text Signal;
         public float Opening { get; private set; }
         public bool OccupancyHeld { get; private set; }
+        public Collider[] LeafColliders = System.Array.Empty<Collider>();
         Collider[][] rigColliders;
         public bool Blocking => Vector3.Distance(Body.position, ClosedPosition) < (RoadWidth + BarrierWidth) * .5f + .5f;
 
@@ -31,6 +32,9 @@ namespace LWS.TruckHitchSports
                 foreach (var trailer in Match.trailers) rigColliders[cursor++] = trailer.GetComponentsInChildren<Collider>(true);
             }
             if (Body == null) return;
+            // Existing saved gates predate explicit leaf references. Cache all
+            // solid compound shapes; installed art is never a collision proxy.
+            if (LeafColliders == null || LeafColliders.Length == 0) LeafColliders = Body.GetComponentsInChildren<Collider>(true);
             Body.position = ClosedPosition; Body.transform.position = ClosedPosition;
             if (Signal != null) { Signal.text = "WAIT · CROSSING CLOSED"; Signal.color = new Color(1, .36f, .1f); }
         }
@@ -47,33 +51,45 @@ namespace LWS.TruckHitchSports
             if (Match == null || !Match.Live || Match.Elapsed < 3 || Body == null) return;
             float cycle = Mathf.Repeat((Match.Elapsed - 3 + PhaseOffset) / Mathf.Max(8, CycleSeconds), 1);
             float desired = cycle < .25f ? 0 : cycle < .4f ? Mathf.SmoothStep(0, 1, (cycle - .25f) / .15f) : cycle < .8f ? 1 : Mathf.SmoothStep(1, 0, (cycle - .8f) / .2f);
-            OccupancyHeld = desired < Opening && Opening > .001f && RigOccupiesCrossing();
-            if (OccupancyHeld) desired = Opening;
-            Opening = desired;
+            // SmoothStep's maximum derivative is1.5. Resume from the current
+            // held position at the authored cycle's normal mechanical rate;
+            // assigning the old absolute cycle phase after a hold could sweep
+            // nearly15m through the road in a single physics step.
+            float phaseSeconds = Mathf.Max(8, CycleSeconds) * (desired < Opening ? .2f : .15f);
+            float requested = Mathf.MoveTowards(Opening, desired, 1.5f / phaseSeconds * Time.fixedDeltaTime);
+            OccupancyHeld = requested < Opening && Opening > .001f && RigOccupiesClosingSweep();
+            if (OccupancyHeld) requested = Opening;
+            Opening = requested;
             Body.MovePosition(Vector3.Lerp(ClosedPosition, OpenPosition, Opening));
             if (Signal != null) { Signal.text = Blocking ? "WAIT · CROSSING CLOSED" : "GO · CLEAR THE WHOLE LOAD"; Signal.color = Blocking ? new Color(1, .36f, .1f) : new Color(.45f, 1, .7f); }
         }
-        bool RigOccupiesCrossing()
+        bool RigOccupiesClosingSweep()
         {
-            if (rigColliders == null) return false;
-            Vector3 forward = Vector3.ProjectOnPlane(ApproachForward, Vector3.up).normalized;
-            Vector3 right = Vector3.Cross(Vector3.up, forward);
-            // The closing leaf crosses this finite roadway plane. Inflate only
-            // by the actual leaf half-depth and a small physical clearance;
-            // never assume that a root point means the full load has cleared.
-            const float leafHalfDepth = .55f, clearance = .35f;
-            foreach (var rig in rigColliders)
-            foreach (var shape in rig)
+            if (rigColliders == null || LeafColliders == null) return false;
+            Vector3 remainingTravel = ClosedPosition - Body.position;
+            const float clearance = .35f;
+            foreach (var leaf in LeafColliders)
             {
-                if (shape == null || !shape.enabled || shape.isTrigger || !shape.gameObject.activeInHierarchy) continue;
-                Bounds bounds = shape.bounds;
-                Vector3 delta = bounds.center - ClosedPosition, extent = bounds.extents;
-                float alongExtent = Mathf.Abs(forward.x) * extent.x + Mathf.Abs(forward.z) * extent.z;
-                float sideExtent = Mathf.Abs(right.x) * extent.x + Mathf.Abs(right.z) * extent.z;
-                if (Mathf.Abs(delta.y) <= extent.y + .65f + clearance &&
-                    Mathf.Abs(Vector3.Dot(delta, forward)) <= alongExtent + leafHalfDepth + clearance &&
-                    Mathf.Abs(Vector3.Dot(delta, right)) <= sideExtent + RoadWidth * .5f + clearance)
-                    return true;
+                if (leaf == null || !leaf.enabled || leaf.isTrigger || !leaf.gameObject.activeInHierarchy || leaf.attachedRigidbody != Body) continue;
+                // Translation-only kinematic leaf: the union is its complete
+                // actual closing envelope, including offset/compound shapes.
+                // A theoretical plane at the root misses such real geometry.
+                Bounds sweptLeaf = leaf.bounds;
+                var closedLeaf = sweptLeaf; closedLeaf.center += remainingTravel;
+                sweptLeaf.Encapsulate(closedLeaf); sweptLeaf.Expand(clearance * 2);
+                foreach (var rig in rigColliders)
+                foreach (var shape in rig)
+                {
+                    if (shape == null || !shape.enabled || shape.isTrigger || !shape.gameObject.activeInHierarchy) continue;
+                    Bounds sweptRig = shape.bounds;
+                    if (shape.attachedRigidbody != null)
+                    {
+                        var next = sweptRig;
+                        next.center += shape.attachedRigidbody.GetPointVelocity(next.center) * Time.fixedDeltaTime;
+                        sweptRig.Encapsulate(next);
+                    }
+                    if (sweptLeaf.Intersects(sweptRig)) return true;
+                }
             }
             return false;
         }
