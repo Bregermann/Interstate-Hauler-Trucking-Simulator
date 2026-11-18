@@ -56,7 +56,8 @@ namespace LWS.TruckHorrorSports
             float closing=distance>.01f?Vector3.Dot(actor.body.linearVelocity-match.trucks[target].body.linearVelocity,separation/distance):0;
             approachSamples++;smallestObservedGap=Mathf.Min(smallestObservedGap,distance);if(visible)visibleSamples++;
             if(distance>14&&distance<105){inRangeSamples++;maximumClosingInRange=Mathf.Max(maximumClosingInRange,closing);}
-            if(visible&&distance>14&&distance<105&&closing>1&&match.Age>=nextWarning[target]&&warnings[target]<6&&!emitter.isPlaying)
+            bool pursuerMoving=Vector3.ProjectOnPlane(actor.body.linearVelocity,Vector3.up).sqrMagnitude>2.25f;
+            if(visible&&pursuerMoving&&distance>14&&distance<105&&closing>1&&match.Age>=nextWarning[target]&&warnings[target]<6&&!emitter.isPlaying)
             {
                 nextWarning[target]=match.Age+28;warnings[target]++;WarningCount++;LastWarningOwner=target;LastWarningDistance=distance;LastWarningClosingSpeed=closing;
                 Vector3 relative=match.trucks[target].transform.InverseTransformPoint(actor.body.position);
