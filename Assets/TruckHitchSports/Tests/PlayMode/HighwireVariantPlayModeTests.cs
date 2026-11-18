@@ -115,5 +115,102 @@ public sealed class HighwireVariantPlayModeTests
             finally { Time.timeScale = 1; }
         }
     }
+
+    [UnityTest]
+    public IEnumerator NaturalPrecisionHaulingScoresCargoAndMeasuredRouteControlThenResets()
+        => NaturalMeasuredVariant(1);
+
+    [UnityTest]
+    public IEnumerator NaturalSurvivalHighwireScoresActualLiveTimeWithPhysicalCrossingsThenResets()
+        => NaturalMeasuredVariant(2);
+
+    IEnumerator NaturalMeasuredVariant(int mode)
+    {
+        using (Preferences())
+        {
+            Load(); yield return null; yield return null;
+            var match = UnityEngine.Object.FindObjectsByType(Runtime, FindObjectsSortMode.None).Single();
+            var setup = Field(match, "setup"); setup.GetType().GetField("count").SetValue(setup, 1);
+            match.GetType().GetField("option").SetValue(match, mode); Call(match, "NormalizeSetup"); Call(match, "AllBots");
+            var weather = Field(match, "presentationWeather");
+            if (weather != null && Field(weather, "presets") != null) Call(Field(weather, "presets"), "Select", "9aad5ff5dfa09ce468205f676714f891");
+            Assert.That((bool)Call(match, "StartMatch"), Is.True);
+            var truck = (Component)((Array)Field(match, "trucks")).GetValue(0);
+            var cargo = (Component)((Array)Field(match, "trailers")).GetValue(0);
+            var tractor = (Rigidbody)Field(truck, "body"); var load = (Rigidbody)Field(cargo, "Body");
+            int originalLoadId = load.GetInstanceID(); Vector3 start = tractor.position;
+            var coupler = ((Array)Field(match, "couplers")).GetValue(0);
+            var wheels = ((Array)Field(truck, "wheels")).Cast<object>().ToArray();
+            var tractorContacts = truck.GetComponentsInChildren<Rigidbody>(true).Select(part => part.gameObject.AddComponent<HitchNaturalImpactProbe>()).ToArray();
+            var loadContacts = load.gameObject.AddComponent<HitchNaturalImpactProbe>();
+            var courses = ((Array)Field(match, "courseVariants")).Cast<Component>().ToArray();
+            Assert.That(courses.Count(course => course.gameObject.activeInHierarchy), Is.EqualTo(mode == 1 ? 1 : 0));
+            if (mode == 1)
+                Assert.That((int)Field(courses.Single(course => course.gameObject.activeInHierarchy), "Mode"), Is.EqualTo(1), "Precision must use its graded alternate roadway.");
+            else
+            {
+                var barriers = ((Array)Field(match, "crossingBarriers")).Cast<Component>().Where(barrier => barrier.gameObject.activeInHierarchy).ToArray();
+                Assert.That(barriers.Length, Is.EqualTo(4), "Survival requires its four actual crossing hazards on the original road.");
+                Assert.That(barriers.All(barrier => barrier.GetComponentsInChildren<Collider>(true).Any(shape => shape.enabled && !shape.isTrigger)), Is.True);
+            }
+            bool actualNativeDriveSeen = false; float moved = 0, nextSample = 10; string lastLive = "not sampled";
+            float originalScale = Time.timeScale;
+            try
+            {
+                Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 90;
+                while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                {
+                    moved = Mathf.Max(moved, Vector3.ProjectOnPlane(tractor.position - start, Vector3.up).magnitude);
+                    actualNativeDriveSeen |= Property(coupler, "Attached") == cargo && wheels.Any(wheel => (bool)Property(wheel, "IsGrounded")) && Vector3.ProjectOnPlane(tractor.linearVelocity, Vector3.up).magnitude > 1;
+                    if ((float)Property(match, "Elapsed") >= nextSample)
+                    {
+                        nextSample += 10;
+                        lastLive = LiveSample(match, truck, cargo, tractorContacts, loadContacts);
+                        Debug.Log("HH10_HIGHWIRE_MEASURED_VARIANT_LIVE mode=" + mode + " " + lastLive);
+                    }
+                    yield return null;
+                }
+                int gates = ((int[])Field(match, "gate"))[0];
+                float condition = (float)Property(cargo, "CargoCondition");
+                float deviation = ((float[])Field(match, "offCentre"))[0], jackknife = ((float[])Field(match, "jackknife"))[0], survived = ((float[])Field(match, "survivedSeconds"))[0];
+                double score = ((double[])Field(match, "Scores"))[0];
+                string state = "mode=" + mode + " gates=" + gates + " score=" + score + " cargo=" + condition + " offCentre=" + deviation + " jackknife=" + jackknife + " survival=" + survived + " moved=" + moved + " lastLive=[" + lastLive + "]";
+                Assert.That((bool)Property(match, "Finished"), Is.True, state);
+                Assert.That(actualNativeDriveSeen, Is.True, "A live native hitched rig must genuinely drive on its wheels. " + state);
+                Assert.That(moved, Is.GreaterThan(30), "An idle start-platform timer cannot certify the advertised sport. " + state);
+                Assert.That((bool)Call(match, "ResultEligible", 0), Is.True, state);
+                if (mode == 1)
+                {
+                    Assert.That(((bool[])Field(match, "failed"))[0], Is.False, "Precision needs a completed supported crossing. " + state);
+                    int required = ((Vector3[])Field(courses.Single(course => (int)Field(course, "Mode") == 1), "Points")).Length;
+                    Assert.That(gates, Is.EqualTo(required), state);
+                    double controlOutcome = Math.Max(0, 1200 * condition - deviation * 12 - jackknife * 30);
+                    // Cargo only loses condition: each real gate's award must
+                    // lie between the final-condition and undamaged values.
+                    double gateAwards = score - controlOutcome;
+                    Assert.That(gateAwards, Is.InRange(gates * 100d * condition - .2, gates * 100d + .2), "Precision must derive its outcome from preserved cargo and actual route/jackknife measurements, without the Fastest Crossing time multiplier. " + state);
+                }
+                else
+                {
+                    Assert.That(gates, Is.GreaterThan(0), "Survival must include genuine ordered course progress. " + state);
+                    Assert.That(score, Is.EqualTo(survived * 1000d).Within(1 + Time.fixedDeltaTime * 1000), "Survival points must match actual live physics seconds, including the final partial scoring bucket. " + state);
+                }
+                Assert.That((bool)Call(match, "ResultWinner", 0), Is.True, state);
+                Assert.That(load.GetInstanceID(), Is.EqualTo(originalLoadId));
+                Call(match, "SetupScreen"); yield return null; yield return null;
+                Assert.That((bool)Call(match, "StartMatch"), Is.True);
+                Assert.That(((double[])Field(match, "Scores"))[0], Is.Zero);
+                Assert.That(((int[])Field(match, "gate"))[0], Is.Zero);
+                Assert.That(((float[])Field(match, "survivedSeconds"))[0], Is.Zero);
+                Assert.That(((float[])Field(match, "offCentre"))[0], Is.Zero);
+                Assert.That(((float[])Field(match, "jackknife"))[0], Is.Zero);
+                Assert.That((float)Property(cargo, "CargoCondition"), Is.EqualTo(1));
+                Assert.That(load.GetInstanceID(), Is.EqualTo(originalLoadId));
+                Debug.Log("HH10_HIGHWIRE_MEASURED_VARIANT_RESULT " + state + " normalRematch=fresh");
+                Call(match, "SetupScreen");
+            }
+            finally { Time.timeScale = originalScale; }
+        }
+    }
 }
 #endif
