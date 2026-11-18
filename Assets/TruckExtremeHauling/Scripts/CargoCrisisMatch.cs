@@ -34,15 +34,37 @@ namespace LWS.TruckExtremeHauling
         public string RecoveryPhase(int slot) => stage[slot].ToString();
         public bool CableConnected(int slot) => winches != null && winches[slot] != null && winches[slot].connectedBody != null;
         public bool CooperativeSuccess => Cooperative && deliveredTargets != null && SharedRescues == Mathf.Min(setup.count, deliveredTargets.Length);
-        protected override void ReportFinalMeasurements(int i) {if(option==5)RecordMetric(i,"cargo_flood_actual_tow_hitch_losses",floodTowHitchLosses[i]); RecordMetric(i,"cargo_recovery_attempts",recoveryAttempts[i]);RecordMetric(i,"cargo_shared_rescues",SharedRescues);var target=Target(i);if(target!=null)RecordMetric(i,"rescued_cargo_condition",target.CargoCondition);if(emergencySites!=null&&emergencySites.Active!=null){RecordMetric(i,"cargo_fire_exposure_seconds",emergencySites.HeatSeconds[i]);RecordMetric(i,"cargo_water_immersion_seconds",emergencySites.ImmersedSeconds[i]);RecordMetric(i,"cargo_physical_cable_tow_metres",emergencySites.CableTowMetres[i]);RecordMetric(i,"cargo_flood_extracted",emergencySites.Extracted[i]?1:0);} }
+        static readonly string[] ScenarioNames =
+        {
+            "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS",
+            "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE", "HIGHWAY PILEUP RECOVERY"
+        };
+        protected override void ReportFinalMeasurements(int slot)
+        {
+            if (option == 5) RecordMetric(slot, "cargo_flood_actual_tow_hitch_losses", floodTowHitchLosses[slot]);
+            RecordMetric(slot, "cargo_recovery_attempts", recoveryAttempts[slot]);
+            RecordMetric(slot, "cargo_shared_rescues", SharedRescues);
+            var target = Target(slot);
+            if (target != null) RecordMetric(slot, "rescued_cargo_condition", target.CargoCondition);
+            if (emergencySites?.Active == null) return;
+            if (emergencySites.PileupActive)
+            {
+                RecordMetric(slot, "cargo_pileup_wreck_motion_metres", emergencySites.PileupWreckMetres[slot]);
+                return;
+            }
+            RecordMetric(slot, "cargo_fire_exposure_seconds", emergencySites.HeatSeconds[slot]);
+            RecordMetric(slot, "cargo_water_immersion_seconds", emergencySites.ImmersedSeconds[slot]);
+            RecordMetric(slot, "cargo_physical_cable_tow_metres", emergencySites.CableTowMetres[slot]);
+            RecordMetric(slot, "cargo_flood_extracted", emergencySites.Extracted[slot] ? 1 : 0);
+        }
         public override string Title => "CARGO CRISIS";
-        public override int OptionCount => 6;
-        protected override string[] Modes => new[] { "EMERGENCY RESPONSE", "RESCUE RACE", "COOPERATIVE CARGO CRISIS", "HIGH-RISK RECOVERY", "INDUSTRIAL FIRE RECOVERY", "FLOODED LOADING RESCUE" };
+        public override int OptionCount => emergencySites?.highwayPileup?.environment != null ? ScenarioNames.Length : ScenarioNames.Length - 1;
+        protected override string[] Modes => ScenarioNames;
         public override bool Cooperative => option == 2;
         protected override string ActionHint => "HOOK / RELEASE CABLE · HOLD REEL / ALIGN HITCH";
         public override string Status => emergencySites!=null&&emergencySites.Active!=null ? emergencySites.Status : Cooperative ? "TEAM RECOVERY · " + SharedRescues + "/" + Mathf.Min(setup.count, trailers.Length) + " LOADS SAFE · " + ActionHint : "PHYSICAL RECOVERY · " + ActionHint;
         public override string Results => (Cooperative ? (CooperativeSuccess ? "ALL CARGO RECOVERED — TEAM SUCCESS" : "TEAM RECOVERY INCOMPLETE") + "\n" : "") + base.Results;
-        public override string Help => "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points. Industrial Fire: visible burning freight damages exposed cargo; extract it quickly and preserve its condition. Flooded Loading: remain on the dry right bank, use the longer recovery cable and physically reel the floating load up the extraction slope. Native wheel support on the dry bank is required before hitching; buoyant or cable-only arrivals cannot qualify.";
+        public override string Help => "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points. Industrial Fire: visible burning freight damages exposed cargo; extract it quickly and preserve its condition. Flooded Loading: remain on the dry right bank, use the longer recovery cable and physically reel the floating load up the extraction slope. Native wheel support on the dry bank is required before hitching; buoyant or cable-only arrivals cannot qualify. Highway Pileup: work around the disabled vehicles, pull the stranded trailer upright and haul it to your depot. Real wreck movement is tracked separately from cargo delivery.";
 
         public override bool TryReadScoreCard(int card, out string value, out string detail)
         {

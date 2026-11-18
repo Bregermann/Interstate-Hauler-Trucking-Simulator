@@ -6,6 +6,14 @@ using LWS.TruckSports;
 namespace LWS.TruckExtremeHauling
 {
     [Serializable]
+    public sealed class CargoPileupWreck
+    {
+        public int lane;
+        public Rigidbody body;
+        public Rigidbody[] parts;
+        public Transform[] resetPoses;
+    }
+    [Serializable]
     public sealed class CargoEmergencySite
     {
         public string title;
@@ -17,10 +25,11 @@ namespace LWS.TruckExtremeHauling
         public float[] dryBankX;
         [Min(0)] public float heatRadius = 24, conditionLossPerSecond = .008f;
         [Min(0)] public float cableReach = 22, bankApproach = 12;
+        public CargoPileupWreck[] wrecks = Array.Empty<CargoPileupWreck>();
     }
 
     /// <summary>
-    /// Optional authored incidents, selected only by Cargo Crisis options 4/5.
+    /// Optional authored incidents, selected only by Cargo Crisis options4–6.
     /// NWH owns all rig/contact/coupling forces; Archimeds owns displacement;
     /// Cargo Crisis owns the existing winch. This adapter owns incident rules.
     /// </summary>
@@ -30,9 +39,12 @@ namespace LWS.TruckExtremeHauling
         public CargoCrisisMatch match;
         public GameObject defaultSupport;
         public GameObject[] floodedSiteReplacedRoadblocks = Array.Empty<GameObject>();
-        public CargoEmergencySite industrialFire, floodedLoading;
+        public CargoEmergencySite industrialFire, floodedLoading, highwayPileup;
         public CargoEmergencySite Active { get; private set; }
         public bool FloodActive => Active != null && Active == floodedLoading;
+        public bool PileupActive => Active != null && Active == highwayPileup;
+        public readonly float[] PileupWreckMetres = new float[4];
+        Vector3[] lastWreckPositions = Array.Empty<Vector3>();
         public readonly float[] HeatSeconds = new float[4], ImmersedSeconds = new float[4], CableTowMetres = new float[4];
         public readonly bool[] Extracted = new bool[4];
         readonly Vector3[] lastPosition = new Vector3[4];
@@ -46,10 +58,10 @@ namespace LWS.TruckExtremeHauling
         bool originalSupportActive, capturedSupport;
         bool[] originalRoadblockActive;
 
-        public string Status => FloodActive
+        public string Status => PileupActive?"HIGHWAY PILEUP · REAL MOVABLE WRECKS · RIGHT, HITCH AND DELIVER THE STRANDED LOAD":FloodActive
             ? "FLOODED LOADING · STAY ON DRY RIGHT BANK · REEL LOAD UP SLOPE BEFORE HITCHING"
             : "INDUSTRIAL FIRE · BURNING FREIGHT DAMAGES CARGO · EXTRACT, HITCH AND DELIVER";
-        public string PlayerStatus(int slot) => FloodActive
+        public string PlayerStatus(int slot) => PileupActive?"PILEUP · WRECK MOVEMENT "+PileupWreckMetres[slot].ToString("0.0")+"m":FloodActive
             ? (Extracted[slot] ? "DRY BANK RECOVERED" : (frontTow[slot]?"FRONT TOW · ":"RIGHTING · ")+"WET " + ImmersedSeconds[slot].ToString("0") + "s · WINCH " + CableTowMetres[slot].ToString("0") + "m")
             : "HEAT " + HeatSeconds[slot].ToString("0") + "s";
 
@@ -65,9 +77,10 @@ namespace LWS.TruckExtremeHauling
             }
             if (industrialFire?.environment != null) industrialFire.environment.SetActive(false);
             if (floodedLoading?.environment != null) floodedLoading.environment.SetActive(false);
+            if (highwayPileup?.environment != null) highwayPileup.environment.SetActive(false);
             if (defaultSupport != null) defaultSupport.SetActive(originalSupportActive);
             for(int i=0;i<originalRoadblockActive.Length;i++)if(floodedSiteReplacedRoadblocks[i]!=null)floodedSiteReplacedRoadblocks[i].SetActive(originalRoadblockActive[i]);
-            Active = option == 4 ? industrialFire : option == 5 ? floodedLoading : null;
+            Active = option == 4 ? industrialFire : option == 5 ? floodedLoading : option==6?highwayPileup:null;
             if (option < 4) return;
             if (Active?.environment == null || Active.loads == null || Active.loads.Length != 4 || Active.truckStarts == null || Active.truckStarts.Length != 4 || Active.depots == null || Active.depots.Length != 4)
                 throw new InvalidOperationException("The selected Cargo Crisis emergency must have four saved native loads, staging positions and depots.");
@@ -86,7 +99,23 @@ namespace LWS.TruckExtremeHauling
             Array.Clear(HeatSeconds, 0, 4); Array.Clear(ImmersedSeconds, 0, 4); Array.Clear(CableTowMetres, 0, 4);
             Array.Clear(Extracted, 0, 4); Array.Clear(hadWater, 0, 4);
             Array.Clear(frontTow,0,4);
+            Array.Clear(PileupWreckMetres,0,4);
             if (Active == null) return;
+            if(PileupActive){
+                if(Active.wrecks==null||Active.wrecks.Length==0)throw new InvalidOperationException("The saved highway pileup requires real physical vehicle wrecks.");
+                lastWreckPositions=new Vector3[Active.wrecks.Length];
+                for(int wreck=0;wreck<Active.wrecks.Length;wreck++){
+                    var vehicle=Active.wrecks[wreck];vehicle.body.gameObject.SetActive(vehicle.lane<match.setup.count);
+                    for(int part=0;part<vehicle.parts.Length;part++){
+                        var body=vehicle.parts[part];var pose=vehicle.resetPoses[part];body.interpolation=RigidbodyInterpolation.None;body.isKinematic=false;
+                        body.position=pose.position;body.rotation=pose.rotation;body.transform.SetPositionAndRotation(pose.position,pose.rotation);
+                        body.linearVelocity=body.angularVelocity=Vector3.zero;body.interpolation=RigidbodyInterpolation.Interpolate;
+                        if(vehicle.lane>=match.setup.count)body.isKinematic=true;
+                    }
+                    lastWreckPositions[wreck]=vehicle.body.position;
+                }
+                Physics.SyncTransforms();
+            }
             if(FloodActive&&floodWheels==null){floodWheels=new NWH.WheelController3D.WheelController[4][];for(int i=0;i<4;i++)floodWheels[i]=Active.loads[i].GetComponentsInChildren<NWH.WheelController3D.WheelController>(true);}
             for (int i = 0; i < 4; i++)
             {
@@ -101,7 +130,7 @@ namespace LWS.TruckExtremeHauling
                 { Active.flotation[i].enabled = false; Active.flotation[i].Clock = 0; observedFloatSteps[i] = Active.flotation[i].Steps; }
             }
             if(FloodActive)capturedLandingGear=true;
-            effects = Active.environment.GetComponentsInChildren<ParticleSystem>(true);
+            effects = PileupActive?Array.Empty<ParticleSystem>():Active.environment.GetComponentsInChildren<ParticleSystem>(true);
             foreach (var effect in effects) { effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); effect.Play(true); }
             SportsSessionTelemetry.GameplayEvent(match.gameObject.scene.name, "cargo_emergency_selected", "", Active.title, match.option);
         }
@@ -113,6 +142,14 @@ namespace LWS.TruckExtremeHauling
             if (cable != null && cable.connectedBody == load.Body && cable.currentForce.sqrMagnitude > 10000)
                 CableTowMetres[slot] += Vector3.Distance(current, lastPosition[slot]);
             lastPosition[slot] = current;
+            if(PileupActive){
+                for(int wreck=0;wreck<Active.wrecks.Length;wreck++)if(Active.wrecks[wreck].lane==slot){
+                    Vector3 position=Active.wrecks[wreck].body.position;
+                    float moved=Vector3.ProjectOnPlane(position-lastWreckPositions[wreck],Vector3.up).magnitude;
+                    if(moved<5)PileupWreckMetres[slot]+=moved;lastWreckPositions[wreck]=position;
+                }
+                return;
+            }
             if (!FloodActive)
             {
                 float heat = HeatAt(load.Body.worldCenterOfMass);
@@ -181,6 +218,9 @@ namespace LWS.TruckExtremeHauling
         }
         public void StopRound()
         {
+            if(PileupActive&&Active.wrecks!=null)foreach(var vehicle in Active.wrecks)if(vehicle?.parts!=null)foreach(var body in vehicle.parts)if(body!=null){
+                if(!body.isKinematic)body.linearVelocity=body.angularVelocity=Vector3.zero;body.isKinematic=true;
+            }
             if (industrialFire?.flotation != null) foreach (var floating in industrialFire.flotation) if (floating != null) floating.enabled = false;
             if (floodedLoading?.flotation != null) foreach (var floating in floodedLoading.flotation) if (floating != null) floating.enabled = false;
             foreach (var effect in effects) if (effect != null) effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

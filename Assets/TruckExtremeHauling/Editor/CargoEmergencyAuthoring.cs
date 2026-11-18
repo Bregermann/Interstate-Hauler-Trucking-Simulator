@@ -26,6 +26,115 @@ namespace LWS.TruckExtremeHauling.Editor
         const string Planks = "Assets/ConstructionPropsBundle/URP/Prefabs/SM_Planks01 Variant.prefab";
         const string Crates = "Assets/ConstructionPropsBundle/URP/Prefabs/SM_BoxesPack01 Variant.prefab";
         const string Barrier = "Assets/RoadPropsPack/URP/Prefabs/RoadBlock02_URP.prefab";
+        const string WreckVehicle = "Assets/NWH/Vehicle Physics 2/Vehicles/Niva/Niva.prefab";
+        const string RoadSign = "Assets/RoadPropsPack/URP/Prefabs/RoadSign_URP.prefab";
+
+        // Isolated batch entry. Existing fire/flood/default venues are retained.
+        public static void AuthorSavedHighwayPileup()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before isolated pileup authoring.");
+            if(!System.IO.File.Exists(ScenePath))throw new System.IO.FileNotFoundException("Preserve the existing Cargo Crisis scene.",ScenePath);
+            var materials=new HashSet<string>(AssetDatabase.FindAssets("t:Material",new[]{"Assets/TruckExtremeHauling/Materials"}).Select(id=>AssetDatabase.GUIDToAssetPath(id)));
+            var scene=EditorSceneManager.OpenScene(ScenePath,OpenSceneMode.Single);UpgradeActiveHighwayPileup();EditorSceneManager.MarkSceneDirty(scene);
+            if(!EditorSceneManager.SaveScene(scene))throw new InvalidOperationException("Could not save the existing Cargo Crisis scene.");
+            AssetDatabase.SaveAssets();Debug.Log("CARGO_PILEUP_SAVED scene="+ScenePath+"; original native recovery/scoring retained; natural acceptance remains unverified.");
+            foreach(string id in AssetDatabase.FindAssets("t:Material",new[]{"Assets/TruckExtremeHauling/Materials"})){
+                string path=AssetDatabase.GUIDToAssetPath(id);if(!materials.Contains(path))Debug.Log("CARGO_PILEUP_NEW_OWNED_MATERIAL "+path);
+            }
+        }
+        [MenuItem("Truck Sports/Alpha 0.10/Install active Cargo Crisis highway pileup")]
+        public static void InstallActivePileup()=>UpgradeActiveHighwayPileup();
+        public static CargoEmergencySite UpgradeActiveHighwayPileup()
+        {
+            if(EditorApplication.isPlayingOrWillChangePlaymode||SceneManager.GetActiveScene().path!=ScenePath)
+                throw new InvalidOperationException("Open the existing Cargo Crisis scene outside Play Mode.");
+            var match=UnityEngine.Object.FindAnyObjectByType<CargoCrisisMatch>();var sites=match!=null?match.emergencySites:null;
+            if(sites==null||sites.defaultSupport==null||match.trucks.Length!=4||match.objectives.Length!=4)
+                throw new InvalidOperationException("Preserve the existing four-slot Cargo Crisis authority and authored emergency adapter.");
+            if(sites.highwayPileup?.environment!=null)return sites.highwayPileup;
+            Need<GameObject>(WreckVehicle);Need<GameObject>(Barrier);Need<GameObject>(RoadSign);
+            var contact=Need<PhysicsMaterial>("Assets/TruckExtremeHauling/Materials/Freight concrete.asset");
+            var paint=Need<Material>("Assets/TruckExtremeHauling/Materials/Freight safety orange.mat");
+            var site=new CargoEmergencySite{title="HIGHWAY PILEUP RECOVERY",environment=new GameObject("Selected incident · physical highway pileup"),
+                loads=new TrailerBody[4],truckStarts=new Transform[4],depots=new Transform[4],heatSources=Array.Empty<Transform>(),
+                flotation=Array.Empty<SportsFloatingBody>(),floodedVolumes=Array.Empty<Bounds>(),dryBankX=Array.Empty<float>(),cableReach=22};
+            try{
+                var root=site.environment.transform;var wrecks=new List<CargoPileupWreck>();
+                for(int lane=0;lane<4;lane++){
+                    float x=lane*80;
+                    var start=new GameObject("Pileup recovery staging "+lane).transform;start.SetParent(root,false);start.position=new Vector3(x,1,-85);site.truckStarts[lane]=start;
+                    var depot=new GameObject("Pileup cargo supported delivery "+lane).transform;depot.SetParent(root,false);depot.position=new Vector3(x,1,match.objectives[lane].position.z);site.depots[lane]=depot;
+                    var load=HitchAuthoring.CreateTrailer(new Vector3(x,3,-45),Quaternion.Euler(0,0,65),"Pileup original native cargo "+lane);load.transform.SetParent(root,true);site.loads[lane]=load;
+                    var stand=load.Module.module.trailerStand;if(stand==null)throw new InvalidOperationException("Original native parking stand required.");
+                    Vector3 leg=stand.transform.localPosition;leg.y=.544f-CargoLandingGearAuthoring.RecoveryStandExtensionMetres;stand.transform.localPosition=leg;
+                    // The first real wreck catches/obstructs the tipped load's
+                    // left-rear footprint. The second interrupts the haul lane;
+                    // shoulders remain open for careful real steering/recovery.
+                    var recoveryWreck=PileupVehicle(root,lane,new Vector3(x-2.8f,0,-51),Quaternion.Euler(0,30,155),"Recovery-side overturned vehicle");
+                    RequireNoInitialCargoOverlap(load,recoveryWreck);wrecks.Add(recoveryWreck);
+                    wrecks.Add(PileupVehicle(root,lane,new Vector3(x+3.8f,0,65),Quaternion.Euler(0,70,105),"Cross-lane rolled vehicle"));
+                    foreach(int side in new[]{-1,1}){
+                        Owned(root,"Visible highway recovery warning",RoadSign,new Vector3(x+side*22,0,-95),new Vector3(2,4,.6f),side<0?0:180,contact);
+                        foreach(float z in new[]{-15f,85f,180f})Owned(root,"Visible highway shoulder barrier",Barrier,new Vector3(x+side*26,0,z),new Vector3(4,1.4f,.8f),0,contact);
+                        var line=new GameObject("Highway shoulder paint "+lane+" "+side).AddComponent<LineRenderer>();line.transform.SetParent(root,false);
+                        line.useWorldSpace=true;line.sharedMaterial=paint;line.widthMultiplier=.14f;line.positionCount=2;
+                        line.SetPosition(0,new Vector3(x+side*19,.025f,-110));line.SetPosition(1,new Vector3(x+side*19,.025f,depot.position.z+20));
+                    }
+                    Owned(root,"Pileup depot marker left",Barrier,depot.position+new Vector3(-12,-1,0),new Vector3(3,1.4f,.8f),0,contact);
+                    Owned(root,"Pileup depot marker right",Barrier,depot.position+new Vector3(12,-1,0),new Vector3(3,1.4f,.8f),0,contact);
+                }
+                site.wrecks=wrecks.ToArray();site.environment.SetActive(false);sites.highwayPileup=site;EditorUtility.SetDirty(sites);EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+                Debug.Log("CARGO_PILEUP_AUTHORED: four tipped native cargo rigs, eight1210kg passive NWH vehicle wrecks with original bodies/colliders/joints, actual open shoulders; option6 only. No wreck contact awards points; original native delivery determines results.");return site;
+            }catch{UnityEngine.Object.DestroyImmediate(site.environment);throw;}
+        }
+
+        static CargoPileupWreck PileupVehicle(Transform parent,int lane,Vector3 position,Quaternion rotation,string label)
+        {
+            var root=(GameObject)PrefabUtility.InstantiatePrefab(Need<GameObject>(WreckVehicle));PrefabUtility.UnpackPrefabInstance(root,PrefabUnpackMode.Completely,InteractionMode.AutomatedAction);
+            root.name=label+" · native passive wreck";root.transform.SetParent(parent,true);root.transform.SetPositionAndRotation(position,rotation);
+            var body=root.GetComponent<Rigidbody>();if(body==null||body.mass<500)throw new InvalidOperationException("The existing full-mass NWH vehicle Rigidbody is required.");
+            // These are disabled, overturned nonparticipants. Preserve original
+            // rigidbodies/joints/compound collision; do not run a second traffic,
+            // wheel, powertrain or input authority for a passive crash obstacle.
+            foreach(var script in root.GetComponentsInChildren<MonoBehaviour>(true))script.enabled=false;
+            foreach(var camera in root.GetComponentsInChildren<Camera>(true))camera.enabled=false;
+            foreach(var listener in root.GetComponentsInChildren<AudioListener>(true))UnityEngine.Object.DestroyImmediate(listener);
+            foreach(var audio in root.GetComponentsInChildren<AudioSource>(true))audio.enabled=false;
+            foreach(var particle in root.GetComponentsInChildren<ParticleSystem>(true)){particle.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);var main=particle.main;main.playOnAwake=false;var emission=particle.emission;emission.enabled=false;}
+            foreach(var collider in root.GetComponentsInChildren<Collider>(true))collider.gameObject.layer=2;
+            foreach(var renderer in root.GetComponentsInChildren<Renderer>(true)){
+                var materials=renderer.sharedMaterials;for(int i=0;i<materials.Length;i++)materials[i]=PileupMaterial(materials[i]);renderer.sharedMaterials=materials;
+            }
+            float bottom=float.PositiveInfinity;
+            foreach(var box in root.GetComponentsInChildren<BoxCollider>(true))if(!box.isTrigger&&box.GetComponentInParent<Rigidbody>(true)==body){
+                for(int i=0;i<8;i++){Vector3 corner=box.center+Vector3.Scale(box.size*.5f,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1));bottom=Mathf.Min(bottom,box.transform.TransformPoint(corner).y);}
+            }
+            if(float.IsInfinity(bottom))throw new InvalidOperationException("Original vehicle body boxes required for a grounded authored wreck.");
+            root.transform.position+=Vector3.up*(.06f-bottom);
+            var wreck=new CargoPileupWreck{lane=lane,body=body,parts=root.GetComponentsInChildren<Rigidbody>(true).OrderBy(part=>part==body?0:1).ToArray()};wreck.resetPoses=new Transform[wreck.parts.Length];
+            for(int i=0;i<wreck.parts.Length;i++){
+                var part=wreck.parts[i];part.isKinematic=true;part.interpolation=RigidbodyInterpolation.Interpolate;part.collisionDetectionMode=CollisionDetectionMode.ContinuousDynamic;
+                var pose=new GameObject("Saved pileup vehicle part "+lane+" "+label+" "+i).transform;pose.SetParent(parent,false);pose.SetPositionAndRotation(part.transform.position,part.transform.rotation);wreck.resetPoses[i]=pose;
+            }
+            return wreck;
+        }
+        static Material PileupMaterial(Material source)
+        {
+            if(source==null||source.shader.name.StartsWith("Universal Render Pipeline/",StringComparison.Ordinal))return source;
+            string path="Assets/TruckExtremeHauling/Materials/Pileup native "+source.name.Replace('/','_')+".mat";
+            var material=AssetDatabase.LoadAssetAtPath<Material>(path);if(material!=null)return material;
+            material=new Material(Shader.Find("Universal Render Pipeline/Lit"));material.mainTexture=source.mainTexture;
+            material.color=source.HasProperty("_Color")?source.color:Color.white;material.SetFloat("_Smoothness",.3f);material.enableInstancing=true;
+            if(source.renderQueue>=3000){material.SetFloat("_Surface",1);material.SetFloat("_SrcBlend",5);material.SetFloat("_DstBlend",10);material.SetFloat("_ZWrite",0);material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");material.renderQueue=3000;}
+            AssetDatabase.CreateAsset(material,path);return material;
+        }
+        static void RequireNoInitialCargoOverlap(TrailerBody load,CargoPileupWreck wreck)
+        {
+            foreach(var cargo in load.GetComponentsInChildren<Collider>(true))if(cargo.enabled&&!cargo.isTrigger)
+                foreach(var shape in wreck.body.GetComponentsInChildren<Collider>(true))if(shape.enabled&&!shape.isTrigger&&
+                    Physics.ComputePenetration(cargo,cargo.transform.position,cargo.transform.rotation,shape,shape.transform.position,shape.transform.rotation,out _,out float depth)&&depth>.005f)
+                    throw new InvalidOperationException("The authored pileup starts with solid cargo/vehicle overlap: "+cargo.name+" / "+shape.name+" depth="+depth+". Preserve collision instead of forcing the spawn.");
+        }
 
         [MenuItem("Truck Sports/Alpha 0.10/Install active Cargo Crisis fire and flooded loading sites")]
         public static void InstallActiveSites() => UpgradeActiveScene();
