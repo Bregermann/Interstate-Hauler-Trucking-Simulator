@@ -38,6 +38,10 @@ namespace LWS.TruckExtremeHauling.Tests
                 Assert.That(matches.Length, Is.EqualTo(1)); match = (Component)matches[0];
                 var rescue = Field(match, "rescue"); Assert.That(rescue, Is.Not.Null, "Use the actual saved rescue incident; no test-time authoring.");
                 var frontLift=Field(rescue,"frontLift");Assert.That(frontLift,Is.Not.Null,"Install the saved physical recovery gantry before this natural acceptance run.");
+                var rail=(ConfigurableJoint)Field(frontLift,"translationRail");
+                Assert.That(rail,Is.Not.Null,"Run the explicit saved-scene recovery rail upgrade; no test-time scene authoring.");
+                var carrier=Field(frontLift,"carrier");var trolley=(Rigidbody)Field(carrier,"trolley");var hook=Field(frontLift,"hook");
+                Vector3 savedTrolley=trolley.position;
                 match.GetType().GetField("option").SetValue(match, 3);
                 var setup = Field(match, "setup"); setup.GetType().GetField("count").SetValue(setup, 1);
                 Call(match, "NormalizeSetup"); Call(match, "AllBots");
@@ -61,7 +65,8 @@ namespace LWS.TruckExtremeHauling.Tests
                 Assert.That(tractorVolume*1000,Is.GreaterThan(tractorMass),"Actual cab plus chassis sealed volume must support the unchanged assembly mass.");
                 Debug.Log("CONVOY_RESCUE_HULL_ACTUAL cargoLocal="+proxy.bounds+" cargoVolume="+ClosedVolume(proxy)+" cargoMass="+body.mass+" tractorVolume="+tractorVolume+" tractorMass="+tractorMass+" childHydroBodies="+cabBodies);
                 Vector3 spawn = body.position;
-                bool broke = false, immersed = false, wet = false, hooked = false, lifted=false,nativeCoupled=false;
+                bool broke = false, immersed = false, wet = false, hooked = false, lifted=false,nativeCoupled=false,suspendedTranslated=false,seenSuspended=false;
+                Vector3 firstSuspendedCargo=Vector3.zero;
                 float peakCableForce = 0, nextObservation = 0;
                 Assert.That((bool)Call(match,"StartMatch"),Is.True);
                 string firstId = (string)Property(match,"MatchId");
@@ -71,6 +76,11 @@ namespace LWS.TruckExtremeHauling.Tests
                     broke |= (bool)Property(incident,"Broken"); immersed |= body.position.y < -.6f;
                     wet |= (uint)Property(floating,"WetTriangles") > 0;
                     lifted|=(bool)Property(frontLift,"Lifted");
+                    if((bool)Property(hook,"Holding")&&Property(hook,"Captured")==body)
+                    {
+                        if(!seenSuspended){firstSuspendedCargo=body.worldCenterOfMass;seenSuspended=true;}
+                        suspendedTranslated|=trolley.position.z-savedTrolley.z>8.5f&&body.worldCenterOfMass.z-firstSuspendedCargo.z>8.5f;
+                    }
                     foreach(var truck in (Array)Field(match,"trucks")){var hitch=((Component)truck).GetComponent(Runtime("LWS.TruckHitchSports.HitchCoupler"));if(hitch!=null&&Property(hitch,"Attached")==cargo&&(bool)Property(hitch,"PhysicalConstraintPresent"))nativeCoupled=true;}
                     foreach (var joint in (SpringJoint[])Field(rescue,"cables"))
                         if (joint != null && joint.connectedBody == body) { hooked = true; peakCableForce = Mathf.Max(peakCableForce,joint.currentForce.magnitude); }
@@ -89,7 +99,7 @@ namespace LWS.TruckExtremeHauling.Tests
                 Assert.That((bool)Property(match,"Finished"),Is.True,observed);
                 Assert.That(broke && immersed && wet && hooked,Is.True,"Actual stress failure, ingress, vendor buoyancy and native cable must occur. "+observed);
                 Assert.That(peakCableForce,Is.GreaterThan(100),observed);
-                Assert.That(lifted&&nativeCoupled,Is.True,"Actual hoist lift and a real strict native fifth-wheel constraint must precede shore transport. "+observed);
+                Assert.That(lifted&&suspendedTranslated&&nativeCoupled,Is.True,"Actual hoist lift, latched suspended northbound transport and a real strict native fifth-wheel constraint must precede shore transport. "+observed);
                 Assert.That(((float[])Field(rescue,"TowedMetres"))[0],Is.GreaterThan(20),observed);
                 Assert.That((bool)Property(rescue,"CargoRecovered"),Is.True,observed);
                 Assert.That((bool)Property(match,"CooperativeSuccess"),Is.True,observed);
@@ -101,6 +111,8 @@ namespace LWS.TruckExtremeHauling.Tests
                 Assert.That((bool)Property(rescue,"CooperativeSuccess"),Is.False);
                 Assert.That(((float[])Field(rescue,"TowedMetres"))[0],Is.Zero);
                 Assert.That(((int[])Field(rescue,"Contributions"))[0],Is.Zero);
+                Assert.That((bool)Property(frontLift,"RailPresented"),Is.False);Assert.That((float)Property(frontLift,"SuspendedTravel"),Is.Zero);
+                Assert.That(Vector3.Distance(trolley.position,savedTrolley),Is.LessThan(.02f),"Only the normal round-boundary reset restores the rail trolley.");
                 Assert.That((bool)Property(frontLift,"Lifted"),Is.False);Assert.That((bool)Property(frontLift,"NativeCoupled"),Is.False);Assert.That((int)Property(frontLift,"Owner"),Is.EqualTo(-1));
                 Assert.That(Vector3.Distance(body.position,spawn),Is.LessThan(.02f),"Round-boundary reset must restore the original NPC load.");
                 Time.timeScale = 3; yield return new WaitForSeconds(4);

@@ -12,30 +12,41 @@ namespace LWS.TruckExtremeHauling
         public PhysicalCableCar carrier;
         public SuspendedFreightHook hook;
         public Transform liftingEye;
+        public ConfigurableJoint translationRail;
+        public bool RailPresented { get; private set; }
+        public float SuspendedTravel { get; private set; }
         public float roofHeight = 3.4f;
         public int Owner { get; private set; } = -1;
         public bool Lifted { get; private set; }
         public bool NativeCoupled { get; private set; }
-        public enum RecoveryPhase { Idle, AlignHook, Lift, AlignTractor, ReverseHitch, Hauling }
+        public enum RecoveryPhase { Idle, AlignHook, Lift, AlignTractor, Translate, ReverseHitch, Hauling }
         public RecoveryPhase Phase { get; private set; }
         Dnr[] originalDnr;
         float initialPinHeight;
+        Vector3 capturedLoadPosition;
+        bool capturedBefore;
         bool active;
         TrailerBody Cargo => rescue.strandedCargo;
         HitchCoupler Coupler(int slot) => rescue.match.trucks[slot].GetComponent<HitchCoupler>();
         public bool AttachedTo(int slot) => Coupler(slot).Attached == Cargo && Coupler(slot).PhysicalConstraintPresent;
         public bool Owns(int slot) => active && Owner == slot && Phase != RecoveryPhase.Idle;
         public bool HoldsForLift => active && Owner >= 0 && Phase != RecoveryPhase.Hauling;
-        public bool ParkOperator => Phase == RecoveryPhase.AlignHook || Phase == RecoveryPhase.Lift;
+        public bool ParkOperator => Phase == RecoveryPhase.AlignHook || Phase == RecoveryPhase.Lift || Phase == RecoveryPhase.Translate;
         Vector3 EyeLocal => new Vector3(Cargo.Body.centerOfMass.x, Mathf.Max(roofHeight, Cargo.Body.centerOfMass.y + .8f), Cargo.Body.centerOfMass.z);
         public Vector3 Eye => Cargo.transform.TransformPoint(EyeLocal);
 
         public void BeginRound()
         {
-            active = true; Owner = -1; Phase = RecoveryPhase.Idle; Lifted = NativeCoupled = false;
+            active = true; Owner = -1; Phase = RecoveryPhase.Idle; Lifted = NativeCoupled = RailPresented = false; SuspendedTravel = 0; capturedBefore = false;
             originalDnr = new Dnr[rescue.match.trucks.Length];
             for (int i = 0; i < originalDnr.Length; i++) originalDnr[i] = rescue.match.trucks[i].tractorMotor.vehicle.powertrain.transmission.automaticTransmissionDNRShiftType;
             carrier.trolley.isKinematic = false; carrier.ResetCable(); carrier.trolley.isKinematic = true; hook.ResetHook();
+        }
+        void FixedUpdate()
+        {
+            // A manual release leaves a real trolley with inertia. Apply the
+            // existing rail brake while unowned rather than freezing its pose.
+            if(active&&Owner<0&&translationRail!=null&&!carrier.trolley.isKinematic)carrier.DriveAlongRail(0,1);
         }
         public void StopRound()
         {
@@ -109,13 +120,19 @@ namespace LWS.TruckExtremeHauling
                 return;
             }
             if (liftingEye != null) liftingEye.localPosition = EyeLocal;
-            if (!ai && !held) return;
+            if (!ai && !held) { if (translationRail != null && !carrier.trolley.isKinematic) carrier.DriveAlongRail(0,1); return; }
+            if (translationRail != null && !carrier.trolley.isKinematic)
+            {
+                float remaining = carrier.routeEnd.z - carrier.trolley.position.z;
+                carrier.DriveAlongRail(Phase == RecoveryPhase.Translate || RailPresented ? Mathf.Clamp(remaining * .55f - carrier.trolley.linearVelocity.z * .8f, -.65f, .65f) : 0, 1);
+            }
+            if (hook.Holding) SuspendedTravel = Mathf.Max(SuspendedTravel, Cargo.Body.worldCenterOfMass.z - capturedLoadPosition.z);
             float targetY = hook.Holding ? Eye.y + hitch.Anchor.position.y - Cargo.Kingpin.position.y : Eye.y;
             float lift = Mathf.Clamp((targetY - hook.body.position.y) * .8f - hook.body.linearVelocity.y * .45f, -.65f, .65f);
             // Before latching, compensate the measured rope force on the400kg
             // hook. Pure position feedback otherwise hangs short of an off-plumb
             // roof eye. After latching, use bounded motor braking and let the
-            // actual suspended load settle beneath the fixed gantry.
+            // actual suspended load settle beneath the active carrier.
             float sway = Mathf.Clamp((hook.Holding?0:(Eye.x-hook.body.position.x)*1.5f-hook.rope.currentForce.x/(hook.body.mass*5))-hook.body.linearVelocity.x*.8f,-1,1);
             hook.Apply(sway, lift, dt);
             // The existing hook controls X sway and rope length. This fixed
@@ -128,7 +145,9 @@ namespace LWS.TruckExtremeHauling
             {
                 // Only a real near/velocity-matched native hook capture retires
                 // the tractor cable; another player's cable is never stolen.
-                rescue.ReleaseRecoveryCable(slot); Phase = RecoveryPhase.Lift;
+                rescue.ReleaseRecoveryCable(slot);
+                if(!capturedBefore){capturedLoadPosition=Cargo.Body.worldCenterOfMass;capturedBefore=true;}
+                Phase = RecoveryPhase.Lift;
             }
             if (!hook.Holding && Phase != RecoveryPhase.AlignHook) { rescue.match.trucks[slot].tractorMotor.vehicle.powertrain.transmission.automaticTransmissionDNRShiftType=originalDnr[slot];Owner = -1; Phase = RecoveryPhase.Idle; return; }
             if (hook.Holding && Cargo.Kingpin.position.y > initialPinHeight + .35f) Lifted = true;
@@ -138,9 +157,22 @@ namespace LWS.TruckExtremeHauling
             {
                 var truck = rescue.match.trucks[slot]; Vector3 aligned = CouplingPosition(slot);
                 float lateral = Mathf.Abs(Vector3.Dot(truck.body.position - aligned, Cargo.transform.right));
-                if (Vector3.Angle(truck.transform.forward, Cargo.transform.forward) < 5 && lateral < .45f && Vector3.Dot(truck.body.position - aligned, Cargo.transform.forward) > 18)
-                    Phase = RecoveryPhase.ReverseHitch;
+                if (Vector3.Angle(truck.transform.forward, Cargo.transform.forward) < 5 && lateral < .45f && Vector3.Dot(truck.body.position - aligned, Cargo.transform.forward) > (RailPresented ? 5 : 18))
+                {
+                    // Clear the native tractor ahead BEFORE carrying the suspended
+                    // load north. The fixed legacy gantry keeps its original path.
+                    if (translationRail != null && !RailPresented)
+                    { carrier.trolley.isKinematic = false; Phase = RecoveryPhase.Translate; }
+                    else Phase = RecoveryPhase.ReverseHitch;
+                }
             }
+            if (Phase == RecoveryPhase.Translate &&
+                Mathf.Abs(carrier.routeEnd.z - carrier.trolley.position.z) < .25f &&
+                SuspendedTravel > 8.5f && Cargo.Kingpin.position.z > rescue.incidentIce.surface.bounds.max.z + 1.5f &&
+                carrier.trolley.linearVelocity.magnitude < .25f && Cargo.Body.linearVelocity.magnitude < .35f &&
+                Cargo.Body.angularVelocity.magnitude < .25f && Vector3.Dot(Cargo.transform.up,Vector3.up) > .98f &&
+                Mathf.Abs(Cargo.Kingpin.position.y - hitch.Anchor.position.y) < .15f)
+            { RailPresented = true; Phase = RecoveryPhase.AlignTractor; }
             if ((Phase == RecoveryPhase.AlignTractor || Phase == RecoveryPhase.ReverseHitch) && hitch.GuideCoupling(Cargo, dt))
             {
                 NativeCoupled = hitch.PhysicalConstraintPresent;
@@ -158,7 +190,7 @@ namespace LWS.TruckExtremeHauling
             hook.Release();
         }
         public string DiagnosticState() => "hoist=" + Phase + " owner=" + Owner + " holding=" + hook.Holding + " lifted=" + Lifted +
-            " nativeCoupled=" + NativeCoupled + " hook=" + hook.body.position.ToString("F2") + " eye=" + Eye.ToString("F2") +
+            " nativeCoupled=" + NativeCoupled + " railPresented=" + RailPresented + " suspendedTravel=" + SuspendedTravel.ToString("F2") + " trolley=" + carrier.trolley.position.ToString("F2") + " hook=" + hook.body.position.ToString("F2") + " eye=" + Eye.ToString("F2") +
             (Owner >= 0 ? " " + Coupler(Owner).DiagnosticState(Cargo) : "");
     }
 }

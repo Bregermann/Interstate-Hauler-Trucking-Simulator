@@ -179,6 +179,77 @@ namespace LWS.TruckExtremeHauling.Editor
                 Debug.Log("THIN_ICE_FRONT_SUPPORT_AUTHORED: same native cargo; physical roof-eye hook/hoist -> strict native fifth wheel -> unchanged shore haul. Existing public Skyhook constraints/art reused; Convoy Rescue only. Save explicitly; natural runtime acceptance pending.");return owner;
             }catch{if(eye!=null)UnityEngine.Object.DestroyImmediate(eye.gameObject);if(owner!=null)UnityEngine.Object.DestroyImmediate(owner);UnityEngine.Object.DestroyImmediate(root.gameObject);throw;}
         }
+        // Explicit additive upgrade of the one saved incident. The original
+        // fixed gantry remains usable when this optional rail is not installed.
+        [MenuItem("Truck Sports/Alpha 0.10/Upgrade saved Thin Ice supported recovery rail")]
+        public static void AuthorSavedRecoveryRail()
+        {
+            const string scenePath="Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity";
+            if(EditorApplication.isPlayingOrWillChangePlaymode)throw new InvalidOperationException("Stop Play Mode before upgrading the recovery rail.");
+            var scene=EditorSceneManager.OpenScene(scenePath,OpenSceneMode.Single);
+            var hoist=UpgradeActiveRecoveryRail();EditorUtility.SetDirty(hoist);EditorSceneManager.MarkSceneDirty(scene);
+            if(!EditorSceneManager.SaveScene(scene))throw new InvalidOperationException("Could not save the Thin Ice recovery rail.");
+            AssetDatabase.SaveAssets();
+            Debug.Log("THIN_ICE_RECOVERY_RAIL_SAVED: "+scene.path+"; supported 10m native trolley travel; original load/bridle/fifth-wheel and shore qualification unchanged.");
+        }
+
+        public static ThinIceRecoveryHoist UpgradeActiveRecoveryRail()
+        {
+            var scene=SceneManager.GetActiveScene();
+            if(EditorApplication.isPlayingOrWillChangePlaymode||scene.path!="Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity")
+                throw new InvalidOperationException("Open only the saved Thin Ice scene outside Play Mode.");
+            var hoist=UpgradeActiveRecoveryHoist();
+            if(hoist.translationRail!=null)return hoist;
+            if(hoist.carrier==null||hoist.carrier.trolley==null||hoist.hook==null||hoist.carrier.trolley.GetComponent<ConfigurableJoint>()!=null)
+                throw new InvalidOperationException("The original fixed recovery trolley and bridle must be intact and unconstrained.");
+            const string floorPath="Assets/LeartesStudios/Garage Warehouse Environment/Art/Prefabs/SM_Floor_4x6m_01.prefab";
+            var crane=Required<Mesh>("Assets/TruckBungeeDemolition/Models/Lattice Crane.asset");Required<GameObject>(floorPath);
+            var steel=Required<Material>("Assets/TruckExtremeHauling/Materials/Freight tower gunmetal.mat");
+            var contact=Required<PhysicsMaterial>("Assets/TruckExtremeHauling/Materials/Freight concrete.asset");
+            Vector3 start=hoist.carrier.trolley.position;
+            float x=hoist.rescue.incidentIce.transform.position.x,z=hoist.rescue.incidentIce.transform.position.z+5;
+            if(Vector3.Distance(start,new Vector3(x,8,z))>.01f)
+                throw new InvalidOperationException("Preserve the saved fixed gantry pose; this upgrade does not reposition live equipment.");
+            var extension=new GameObject("Supported 10m northbound recovery trolley rail").transform;extension.SetParent(hoist.transform,false);
+            ConfigurableJoint rail=null;
+            try
+            {
+                foreach(int side in new[]{-1,1})
+                {
+                    var footing=HoistChild(extension,"Owned northern recovery portal footing "+side,new Vector3(x+side*18,-.15f,z+10));
+                    LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(footing,floorPath,new Vector3(8,1,8),-.5f,true,Folder);
+                    var footCollider=footing.gameObject.AddComponent<BoxCollider>();footCollider.size=new Vector3(8,1,8);footCollider.sharedMaterial=contact;
+                    var mast=HoistChild(extension,"Owned northern lattice recovery support "+side,new Vector3(x+side*18,.35f,z+10));
+                    var art=HoistChild(mast,"Owned lattice crane mesh",mast.position);
+                    art.gameObject.AddComponent<MeshFilter>().sharedMesh=crane;art.gameObject.AddComponent<MeshRenderer>().sharedMaterial=steel;
+                    float scale=8/Mathf.Max(.1f,crane.bounds.size.y);art.localScale=Vector3.one*scale;
+                    art.localPosition=-new Vector3(crane.bounds.center.x,crane.bounds.min.y,crane.bounds.center.z)*scale;
+                    foreach(var vertex in crane.vertices){Vector3 world=art.TransformPoint(vertex);if(world.y<6&&Mathf.Abs(world.x-x)<8&&world.z>50&&world.z<125)
+                        throw new InvalidOperationException("The northern support intrudes into the real recovery driving corridor.");}
+                    art.gameObject.AddComponent<MeshCollider>().sharedMesh=crane;
+                }
+                var crossmember=HoistChild(extension,"Owned northern overhead recovery crossmember",new Vector3(x,8.45f,z+10));
+                LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(crossmember,floorPath,new Vector3(36,.6f,3),-.3f,true,Folder);
+                var crossCollider=crossmember.gameObject.AddComponent<BoxCollider>();crossCollider.size=new Vector3(36,.6f,3);crossCollider.sharedMaterial=contact;
+                var beam=HoistChild(extension,"Owned longitudinal trolley support rail",new Vector3(x,8.45f,z+5));
+                LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(beam,floorPath,new Vector3(1.2f,.6f,10),-.3f,true,Folder);
+                var beamCollider=beam.gameObject.AddComponent<BoxCollider>();beamCollider.size=new Vector3(1.2f,.6f,10);beamCollider.sharedMaterial=contact;
+                // Same isolated rail constraint as Skyhook: actual trolley forces
+                // act along Z; both transverse axes and all rotation stay locked.
+                rail=hoist.carrier.trolley.gameObject.AddComponent<ConfigurableJoint>();rail.autoConfigureConnectedAnchor=false;
+                rail.anchor=Vector3.zero;rail.connectedAnchor=start+Vector3.forward*5;rail.axis=Vector3.forward;rail.secondaryAxis=Vector3.up;
+                rail.xMotion=ConfigurableJointMotion.Limited;rail.yMotion=rail.zMotion=ConfigurableJointMotion.Locked;
+                rail.linearLimit=new SoftJointLimit{limit=5};rail.angularXMotion=rail.angularYMotion=rail.angularZMotion=ConfigurableJointMotion.Locked;
+                rail.enableCollision=false;hoist.translationRail=rail;hoist.carrier.routeEnd=start+Vector3.forward*10;hoist.carrier.maxSpeed=1.25f;
+                EditorUtility.SetDirty(hoist);EditorUtility.SetDirty(hoist.carrier);EditorSceneManager.MarkSceneDirty(scene);
+                return hoist;
+            }
+            catch
+            {
+                if(rail!=null)UnityEngine.Object.DestroyImmediate(rail);UnityEngine.Object.DestroyImmediate(extension.gameObject);throw;
+            }
+        }
+
         static Transform HoistChild(Transform parent,string name,Vector3 position){var root=new GameObject(name).transform;root.SetParent(parent,false);root.position=position;return root;}
         static T Required<T>(string path)where T:UnityEngine.Object{var asset=AssetDatabase.LoadAssetAtPath<T>(path);if(asset==null)throw new InvalidOperationException("Existing recovery asset required: "+path);return asset;}
 
