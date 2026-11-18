@@ -152,8 +152,17 @@ namespace LWS.TruckExtremeHauling
         {
             var car = cableCars[i];
             car.Drive(Mathf.Max(0, drive.y), Mathf.Max(0, -drive.y));
-            if (option != 3 || !car.Released)
+            if (option != 3)
                 car.load.AddForce(Vector3.right * drive.x * 1.2f, ForceMode.Acceleration);
+            else if (!car.Released)
+            {
+                // The high-wind trim winch must have enough lateral authority
+                // to pull against the maximum gust. A damped bridle also resists
+                // fast pitch/roll while it still carries the actual load.
+                car.load.AddForce(Vector3.right * drive.x * HighWindTrimAcceleration, ForceMode.Acceleration);
+                Vector3 pitchAndRoll = Vector3.ProjectOnPlane(car.load.angularVelocity, Vector3.up);
+                car.load.AddTorque(-pitchAndRoll * .7f, ForceMode.Acceleration);
+            }
             float gust = option == 3 ? Mathf.Sin(age * WindFrequency) * WindAcceleration : 0;
             if (option == 3) car.load.AddForce(Vector3.right * gust, ForceMode.Acceleration);
             Vector3 current = car.load.worldCenterOfMass;
@@ -206,6 +215,7 @@ namespace LWS.TruckExtremeHauling
         }
         const float WindFrequency = .7f;
         const float WindAcceleration = 2;
+        const float HighWindTrimAcceleration = 2.8f;
         float HighWindCarry(float seconds)
         {
             // Integrate the same lateral gust that acts on the released load.
