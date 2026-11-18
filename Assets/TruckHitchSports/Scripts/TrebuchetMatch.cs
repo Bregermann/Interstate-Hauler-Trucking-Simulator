@@ -38,7 +38,8 @@ namespace LWS.TruckHitchSports
         {
             tractorShapes = new Collider[trucks.Length][];
             for (int i = 0; i < trucks.Length; i++) tractorShapes[i] = trucks[i].GetComponentsInChildren<Collider>(true);
-            for (int i = 0; i < engines.Length; i++) { engines[i].Pivot.useLimits = false; engines[i].ResetForRound(); quiet[i] = flightTime[i] = resetAt[i] = longestThrow[i] = totalThrowDistance[i] = aimAngle[i] = aimAge[i] = swingAge[i] = 0; assistPower[i] = IsAI(i) && option % 4 == 0 ? 1 : .65f; trajectoryPeak[i] = default; peakReported[i] = false; peakDeclineSeconds[i] = 0; bestProjectedRange[i] = observedProjectedRange[i] = observedElevation[i] = 0; attempts[i] = targetsHit[i] = 0; release[i] = Vector3.zero; }
+            float botAssist = (option % 4) switch { 0 => 1, 2 => .85f, _ => .65f };
+            for (int i = 0; i < engines.Length; i++) { engines[i].Pivot.useLimits = false; engines[i].ResetForRound(); quiet[i] = flightTime[i] = resetAt[i] = longestThrow[i] = totalThrowDistance[i] = aimAngle[i] = aimAge[i] = swingAge[i] = 0; assistPower[i] = IsAI(i) ? botAssist : .65f; trajectoryPeak[i] = default; peakReported[i] = false; peakDeclineSeconds[i] = 0; bestProjectedRange[i] = observedProjectedRange[i] = observedElevation[i] = 0; attempts[i] = targetsHit[i] = 0; release[i] = Vector3.zero; }
             Physics.SyncTransforms();
             foreach (var target in GetComponentsInChildren<SiegeTarget>()) target.ResetTarget();
         }
@@ -217,7 +218,10 @@ namespace LWS.TruckHitchSports
             if (option % 4 == 0) return passedPeak;
             Vector3 predicted = body.worldCenterOfMass + velocity * flightSeconds;
             float miss = Vector3.ProjectOnPlane(predicted - targets[slot].position, Vector3.up).magnitude;
-            float tolerance = Mathf.Lerp(35, 12, (int)setup.players[slot].difficulty / 2f);
+            float difficulty = (int)setup.players[slot].difficulty / 2f;
+            // A castle is a physical wall beyond the unloading road. Starting
+            // the throw within a loose scoring radius can land on that road.
+            float tolerance = option % 4 == 2 ? Mathf.Lerp(6, 2, difficulty) : Mathf.Lerp(35, 12, difficulty);
             // Accuracy modes first seek their real target. If this apparatus
             // cannot reach it, release its best actual rising trajectory rather
             // than manufacture power or wait until the counterweight stops.
