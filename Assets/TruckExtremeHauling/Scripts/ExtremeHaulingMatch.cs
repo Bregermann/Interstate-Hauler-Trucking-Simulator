@@ -209,6 +209,7 @@ namespace LWS.TruckExtremeHauling
             else if (this is RoadTrainWreckMatch) { target = (trucks[focus].body.position + trailers[FirstTrailerIndex(focus)+TrailersPerDriver-1].Body.position) * .5f; offset = new Vector3(55, 35, -25)*Mathf.Sqrt(TrailersPerDriver/3f); }
             else if (this is ZeroGHitchMatch) offset = new Vector3(22, 16, -32);
             else if (this is SkyhookSprintMatch) offset = new Vector3(42, 16, -8);
+            else if (this is CargoCrisisMatch && views != null) offset = views.groundOffset;
         }
 
         protected override void StopGame()
