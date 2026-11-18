@@ -1,7 +1,7 @@
 # TRUCK SPORTS: PARTY!
 # ALPHA 0.10.0 — HITCHES, HORRORS & HIGH WATER
 
-**Development preview, expansion in progress.** Windows Candidate 6 is available at `Builds/TruckSportsAlpha10Candidate6/TruckSports.exe` from commit `1e63e425`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and newer source. Previous working installations are preserved.
+**Development preview, expansion in progress.** Windows Candidate 7 is available at `Builds/TruckSportsAlpha10Candidate7/TruckSports.exe` from commit `6f330351`. It includes all 22 new sport scenes. The implementation report and acceptance ledger track gameplay evidence, unfinished variants and newer source.
 
 ## New Sports
 
@@ -72,6 +72,6 @@ NWH, Archimeds, shared weather and the existing Game Night services remain the f
 
 ## Known Issues
 
-Candidate 6 includes the shared canoe camera and textured banks, cooperative Blackwater and Scarecrow extraction, the Dead End pursuer cue, physical Hitch & Run steals, the Highway Pileup recovery scenario and the Unhitched quarter-turn trick. The latest build also includes the tested precision rocket landing, Thin Ice shore recovery, Moving Ring Challenge and Unhitched ground remount.
+Candidate 7 adds an alternate physical route to Whitewater Survival and makes the thicker and thinner Thin Ice sheets easier to distinguish. The candidate also includes the shared canoe camera, cooperative Blackwater and Scarecrow extraction, physical Hitch & Run steals, Highway Pileup recovery, precision rocket landing, the Moving Ring Challenge and the Unhitched ground remount.
 
-Candidate 6 completed Trailerblazers and Ice Road Reckoning in Windows Game Night with two software controllers. It returned to the lobby and saved standings, statistics and telemetry. A Candidate 3 relaunch previously confirmed profile persistence. The native exit crash (`0xC0000005`) still blocks promotion. Full-night Graveyard survival, alternate routes, physical controllers, listening and human acceptance remain open. The permanent ledger records each outstanding item.
+Candidate 7 completed Whitewater Race and Ice Road Delivery in Windows Game Night with two software controllers. It returned to the lobby and saved standings, statistics and telemetry. A Candidate 3 relaunch previously confirmed profile persistence. The native exit crash (`0xC0000005`) still blocks promotion. Full-night Graveyard survival, alternate routes, physical controllers, listening and human acceptance remain open. The permanent ledger records each outstanding item.
