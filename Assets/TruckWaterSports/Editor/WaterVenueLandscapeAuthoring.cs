@@ -42,6 +42,37 @@ namespace LWS.TruckWaterSports.Editor
         [MenuItem("Truck Sports/Alpha 0.10/Upgrade active water venue surrounding landscape")]
         public static void UpgradeActiveVenue() { InstallActiveVenue(); }
 
+        public static void RestoreSavedPaddlePalsRiverBed()
+        {
+            var scene = EditorSceneManager.OpenScene(WaterSportsAuthoring.PaddleScene, OpenSceneMode.Single);
+            string path = Folder + "/PaddlePals/Terrain/Scenic valley terrain.asset";
+            TerrainData visual = Required<TerrainData>(path);
+            Terrain valley = null;
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var collider in root.GetComponentsInChildren<TerrainCollider>(true))
+                    if (collider.terrainData == visual)
+                        throw new InvalidOperationException("The render terrain cannot be shared with physical terrain support.");
+                foreach (var terrain in root.GetComponentsInChildren<Terrain>(true))
+                    if (terrain.terrainData == visual)
+                        valley = terrain;
+            }
+            if (valley == null)
+                throw new InvalidOperationException("The saved Paddle Pals valley does not use its owned render terrain.");
+
+            // Keep the visible textured bed beneath the existing water. The
+            // separate collision asset still excludes the full river corridor.
+            int resolution = visual.holesResolution;
+            var continuous = new bool[resolution, resolution];
+            for (int z = 0; z < resolution; z++)
+                for (int x = 0; x < resolution; x++)
+                    continuous[z, x] = true;
+            visual.SetHoles(0, 0, continuous);
+            EditorUtility.SetDirty(visual);
+            AssetDatabase.SaveAssetIfDirty(visual);
+            Debug.Log("PADDLE_PALS_VISIBLE_RIVER_BED_SAVED " + path);
+        }
+
         /// <summary>Leaves saving to the caller. Repeated invocation preserves the authored upgrade.</summary>
         public static GameObject InstallActiveVenue()
         {
