@@ -74,6 +74,8 @@ namespace LWS.TruckHorrorSports
         readonly bool[] backingFromWard = new bool[12];
         readonly int[] departedWard = new int[12];
         readonly Vector3[] wardDeparture = new Vector3[12], wardReverseDirection = new Vector3[12];
+        readonly Vector3[] jobDeparture = new Vector3[12], jobReverseDirection = new Vector3[12];
+        readonly float[] jobReverseUntil = new float[12];
         readonly Collider[] aiClearance = new Collider[24];
         readonly bool[] lights = new bool[12];
         readonly float[] rescueWork = new float[12], roadPenaltyUntil = new float[12], nextRoadWarning = new float[12], stationarySeconds = new float[12];
@@ -263,7 +265,7 @@ namespace LWS.TruckHorrorSports
                 { if (i >= setup.count && cargo[i].coupler != null) cargo[i].coupler.Release(); cargo[i].gameObject.SetActive(i < setup.count); }
                 trucks[i].gameObject.SetActive(i < setup.count);
                 if (i >= setup.count) continue;
-                aiParking[i] = backingFromWard[i] = false; departedWard[i] = -1; paths[i] = new NavMeshPath(); nextPlan[i] = 0; routeIndex[i] = 0; working[i] = -1; carryingRelic[i] = -1; work[i] = 0; stuck[i] = 0; lights[i] = true; lastDamage[i] = -10;
+                aiParking[i] = backingFromWard[i] = false; departedWard[i] = -1; jobReverseUntil[i] = 0; paths[i] = new NavMeshPath(); nextPlan[i] = 0; routeIndex[i] = 0; working[i] = -1; carryingRelic[i] = -1; work[i] = 0; stuck[i] = 0; lights[i] = true; lastDamage[i] = -10;
                 rescueWork[i] = roadPenaltyUntil[i] = nextRoadWarning[i] = stationarySeconds[i] = 0; rescuing[i] = lastWrongGate[i] = -1; lastTravelPosition[i] = starts[i];
                 if (roadPoints.Length > 0) routeIndex[i] = NearestRoadWaypoint(starts[i]) + 1;
                 else if (ScarecrowSurvival && objectives.Length > 0) routeIndex[i] = i % objectives.Length;
@@ -325,7 +327,19 @@ namespace LWS.TruckHorrorSports
                     if (supplyJob == null || supplyJob.TryCabExit(i, TaskPosition(i, wanted), out exitPoint))
                         foot.LeaveCab(exitPoint, truck.transform.rotation);
                 }
-                else if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4 && (ai ? wanted < 0 || !objectives[wanted].requiresFoot : actions[i])) foot.EnterCab();
+                else if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4 && (ai ? wanted < 0 || !objectives[wanted].requiresFoot : actions[i]))
+                {
+                    foot.EnterCab();
+                    if (ai && sport == HorrorSport.GraveyardShift)
+                    {
+                        // Leave the shop or service bay along the space the
+                        // player arrived through before turning onto the aisle.
+                        jobDeparture[i] = trucks[i].body.position;
+                        jobReverseDirection[i] = -Vector3.ProjectOnPlane(trucks[i].transform.forward, Vector3.up).normalized;
+                        jobReverseUntil[i] = Age + 9;
+                        drive = Vector2.zero;
+                    }
+                }
                 if (foot != null && foot.Outside)
                 {
                     trucks[i].HoldForInteraction();
@@ -573,6 +587,15 @@ namespace LWS.TruckHorrorSports
             var truck = trucks[slot]; int id = NextObjective(slot);
             aiParking[slot] = false;
             if(convoyRoad!=null&&convoyRoad.TryDriveAI(slot,out var roadDrive,out var park)){aiParking[slot]=park;return roadDrive;}
+            if (jobReverseUntil[slot] > 0)
+            {
+                float clearDistance = Vector3.Dot(truck.body.position - jobDeparture[slot], jobReverseDirection[slot]);
+                if (Age < jobReverseUntil[slot] && clearDistance < 5)
+                    return new Vector2(0, -.85f);
+                jobReverseUntil[slot] = 0;
+                stuck[slot] = 0;
+                nextPlan[slot] = 0;
+            }
             if (sport == HorrorSport.CursedCargo && (option == 0 || option == 2) && backingFromWard[slot])
             {
                 var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
