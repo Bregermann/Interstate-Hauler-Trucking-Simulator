@@ -143,19 +143,23 @@ namespace LWS.TruckExtremeHauling.Editor
         {
             var scene = EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/TrailerPlinko.unity");
             var match = UnityEngine.Object.FindAnyObjectByType<TrailerPlinkoMatch>();
-            AddPlinkoContainment(match);
-            if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
-                throw new InvalidOperationException("Could not save the Plinko containment screens.");
+            if (AddPlinkoContainment(match))
+            {
+                EditorSceneManager.MarkSceneDirty(scene);
+                if (!EditorSceneManager.SaveScene(scene))
+                    throw new InvalidOperationException("Could not save the Plinko containment screens.");
+            }
             AssetDatabase.SaveAssets();
+            Debug.Log("HH10_PLINKO_CONTAINMENT_SAVED four physical clear screens retain side rebounds without changing pegs or trays.");
         }
 
-        internal static void AddPlinkoContainment(TrailerPlinkoMatch match)
+        internal static bool AddPlinkoContainment(TrailerPlinkoMatch match)
         {
             if (match == null || match.boardOrigins.Length != 4 || match.boardOrigins.Any(board => board == null))
                 throw new InvalidOperationException("All four physical Plinko boards are required.");
             const string folder = "TruckExtremeHauling";
             const string screenName = "Clear physical rebound screen";
-            if (match.boardOrigins.All(board => board.Find(screenName) != null)) return;
+            if (match.boardOrigins.All(board => board.Find(screenName) != null)) return false;
             var glass = SportsEventAuthoring.Mat(folder, "Plinko clear blue rebound screen", new Color(.25f, .65f, .9f, .1f), .78f);
             glass.SetFloat("_Surface", 1);
             glass.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -182,7 +186,7 @@ namespace LWS.TruckExtremeHauling.Editor
                     SportsEventAuthoring.Box("Rebound screen frame rail", new Vector3(0, edge, -5.65f) * scale,
                         new Vector3(52, .5f, .45f) * scale, steel, null, board);
             }
-            Debug.Log("HH10_PLINKO_CONTAINMENT_SAVED four physical clear screens retain side rebounds without changing pegs or trays.");
+            return true;
         }
 
         static void RepairRingFrames()
