@@ -69,10 +69,14 @@ namespace LWS.TruckExtremeHauling.Editor
                 EditorUtility.SetDirty(tile.iceRenderer);
                 EditorSceneManager.MarkSceneDirty(scene);
             }
+            Bounds lake = match.ice[0].surface.bounds;
+            foreach (var tile in match.ice) lake.Encapsulate(tile.surface.bounds);
+            int restoredShoreCells = FillMissingTerrainEdge(scene, Folder + "/IceRoadReckoning/Surrounding authored terrain.asset", lake, 4);
             if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
                 throw new InvalidOperationException("Could not save the textured load-bearing ice.");
             AssetDatabase.SaveAssets();
-            Debug.Log("HH10_THIN_ICE_SURFACE_SAVED sheets=" + match.ice.Length + " existing Arctic textures, physical thickness and colliders preserved.");
+            Debug.Log("HH10_THIN_ICE_SURFACE_SAVED sheets=" + match.ice.Length + " restoredShoreCells=" + restoredShoreCells +
+                " existing Arctic textures, physical thickness and colliders preserved.");
         }
 
         public static void RepairSavedCargoCrisisApronGap()
@@ -82,15 +86,19 @@ namespace LWS.TruckExtremeHauling.Editor
             var scene = EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/CargoCrisis.unity", OpenSceneMode.Single);
             var roots = scene.GetRootGameObjects();
             var floor = roots.Single(g => g.name == "Continuous venue support").GetComponent<BoxCollider>();
-            const string path = Folder + "/CargoCrisis/Surrounding authored terrain.asset";
+            if (floor == null || floor.isTrigger || !floor.enabled)
+                throw new InvalidOperationException("The existing physical freight apron is required.");
+            int repaired = FillMissingTerrainEdge(scene, Folder + "/CargoCrisis/Surrounding authored terrain.asset", floor.bounds, 12);
+            Debug.Log("HH10_CARGO_VISIBLE_APRON_GAP_REPAIRED cells=" + repaired + " saved visual terrain perimeter only.");
+        }
+
+        static int FillMissingTerrainEdge(UnityEngine.SceneManagement.Scene scene, string path, Bounds support, float innerOverlap)
+        {
+            var roots = scene.GetRootGameObjects();
             var asset = Need<TerrainData>(path);
             var terrain = roots.SelectMany(g => g.GetComponentsInChildren<Terrain>(true)).Single(t => t.terrainData == asset);
             if (roots.SelectMany(g => g.GetComponentsInChildren<TerrainCollider>(true)).Any(c => c.terrainData == asset))
-                throw new InvalidOperationException("The Cargo Crisis scenery asset must remain independent of all physical surfaces.");
-            if (floor == null || floor.isTrigger || !floor.enabled)
-                throw new InvalidOperationException("The existing physical freight apron is required.");
-
-            Bounds apron = floor.bounds;
+                throw new InvalidOperationException("The scenic terrain asset must remain independent of all physical surfaces.");
             int resolution = asset.holesResolution;
             bool[,] visible = asset.GetHoles(0, 0, resolution, resolution);
             Vector3 origin = terrain.transform.position;
@@ -101,11 +109,11 @@ namespace LWS.TruckExtremeHauling.Editor
                 if (visible[z, x]) continue;
                 float worldX = origin.x + (x + .5f) * asset.size.x / resolution;
                 float worldZ = origin.z + (z + .5f) * asset.size.z / resolution;
-                // Keep the inner terrain cutout for the alternate flooded
-                // loading bays. Bridge only the gap around the original apron.
-                float insideX = Mathf.Min(worldX - apron.min.x, apron.max.x - worldX);
-                float insideZ = Mathf.Min(worldZ - apron.min.z, apron.max.z - worldZ);
-                if (Mathf.Min(insideX, insideZ) > 12) continue;
+                // Keep the indoor or underwater area at the center open.
+                // Only bridge the visual gap at the existing support edge.
+                float insideX = Mathf.Min(worldX - support.min.x, support.max.x - worldX);
+                float insideZ = Mathf.Min(worldZ - support.min.z, support.max.z - worldZ);
+                if (Mathf.Min(insideX, insideZ) > innerOverlap) continue;
                 visible[z, x] = true;
                 repaired++;
             }
@@ -115,7 +123,7 @@ namespace LWS.TruckExtremeHauling.Editor
                 EditorUtility.SetDirty(asset);
                 AssetDatabase.SaveAssetIfDirty(asset);
             }
-            Debug.Log("HH10_CARGO_VISIBLE_APRON_GAP_REPAIRED cells=" + repaired + " saved visual terrain perimeter only.");
+            return repaired;
         }
 
         // Saving is deliberately left to the integrator, after inspection of the active scene.
