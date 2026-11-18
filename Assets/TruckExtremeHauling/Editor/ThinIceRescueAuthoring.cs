@@ -190,7 +190,7 @@ namespace LWS.TruckExtremeHauling.Editor
             var hoist=UpgradeActiveRecoveryRail();EditorUtility.SetDirty(hoist);EditorSceneManager.MarkSceneDirty(scene);
             if(!EditorSceneManager.SaveScene(scene))throw new InvalidOperationException("Could not save the Thin Ice recovery rail.");
             AssetDatabase.SaveAssets();
-            Debug.Log("THIN_ICE_RECOVERY_RAIL_SAVED: "+scene.path+"; supported 10m native trolley travel; original load/bridle/fifth-wheel and shore qualification unchanged.");
+            Debug.Log("THIN_ICE_RECOVERY_RAIL_SAVED: "+scene.path+"; supported 10m native trolley travel and 72m outboard northern portal; original load/bridle/fifth-wheel and shore qualification unchanged.");
         }
 
         public static ThinIceRecoveryHoist UpgradeActiveRecoveryRail()
@@ -199,7 +199,7 @@ namespace LWS.TruckExtremeHauling.Editor
             if(EditorApplication.isPlayingOrWillChangePlaymode||scene.path!="Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity")
                 throw new InvalidOperationException("Open only the saved Thin Ice scene outside Play Mode.");
             var hoist=UpgradeActiveRecoveryHoist();
-            if(hoist.translationRail!=null)return hoist;
+            if(hoist.translationRail!=null){UpgradeNorthernPortalClearance(hoist);return hoist;}
             if(hoist.carrier==null||hoist.carrier.trolley==null||hoist.hook==null||hoist.carrier.trolley.GetComponent<ConfigurableJoint>()!=null)
                 throw new InvalidOperationException("The original fixed recovery trolley and bridle must be intact and unconstrained.");
             const string floorPath="Assets/LeartesStudios/Garage Warehouse Environment/Art/Prefabs/SM_Floor_4x6m_01.prefab";
@@ -216,10 +216,10 @@ namespace LWS.TruckExtremeHauling.Editor
             {
                 foreach(int side in new[]{-1,1})
                 {
-                    var footing=HoistChild(extension,"Owned northern recovery portal footing "+side,new Vector3(x+side*18,-.15f,z+10));
+                    var footing=HoistChild(extension,"Owned northern recovery portal footing "+side,new Vector3(x+side*36,-.15f,z+10));
                     LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(footing,floorPath,new Vector3(8,1,8),-.5f,true,Folder);
                     var footCollider=footing.gameObject.AddComponent<BoxCollider>();footCollider.size=new Vector3(8,1,8);footCollider.sharedMaterial=contact;
-                    var mast=HoistChild(extension,"Owned northern lattice recovery support "+side,new Vector3(x+side*18,.35f,z+10));
+                    var mast=HoistChild(extension,"Owned northern lattice recovery support "+side,new Vector3(x+side*36,.35f,z+10));
                     var art=HoistChild(mast,"Owned lattice crane mesh",mast.position);
                     art.gameObject.AddComponent<MeshFilter>().sharedMesh=crane;art.gameObject.AddComponent<MeshRenderer>().sharedMaterial=steel;
                     float scale=8/Mathf.Max(.1f,crane.bounds.size.y);art.localScale=Vector3.one*scale;
@@ -229,8 +229,8 @@ namespace LWS.TruckExtremeHauling.Editor
                     art.gameObject.AddComponent<MeshCollider>().sharedMesh=crane;
                 }
                 var crossmember=HoistChild(extension,"Owned northern overhead recovery crossmember",new Vector3(x,8.45f,z+10));
-                LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(crossmember,floorPath,new Vector3(36,.6f,3),-.3f,true,Folder);
-                var crossCollider=crossmember.gameObject.AddComponent<BoxCollider>();crossCollider.size=new Vector3(36,.6f,3);crossCollider.sharedMaterial=contact;
+                LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(crossmember,floorPath,new Vector3(72,.6f,3),-.3f,true,Folder);
+                var crossCollider=crossmember.gameObject.AddComponent<BoxCollider>();crossCollider.size=new Vector3(72,.6f,3);crossCollider.sharedMaterial=contact;
                 var beam=HoistChild(extension,"Owned longitudinal trolley support rail",new Vector3(x,8.45f,z+5));
                 LWS.TruckKeepaway.Editor.KeepawayPresentationAuthoring.Fit(beam,floorPath,new Vector3(1.2f,.6f,10),-.3f,true,Folder);
                 var beamCollider=beam.gameObject.AddComponent<BoxCollider>();beamCollider.size=new Vector3(1.2f,.6f,10);beamCollider.sharedMaterial=contact;
@@ -248,6 +248,45 @@ namespace LWS.TruckExtremeHauling.Editor
             {
                 if(rail!=null)UnityEngine.Object.DestroyImmediate(rail);UnityEngine.Object.DestroyImmediate(extension.gameObject);throw;
             }
+        }
+
+        static void UpgradeNorthernPortalClearance(ThinIceRecoveryHoist hoist)
+        {
+            var extension=hoist.transform.Find("Supported 10m northbound recovery trolley rail");
+            if(extension==null)throw new InvalidOperationException("The saved recovery rail must retain its authored northern portal.");
+            var beam=extension.Find("Owned northern overhead recovery crossmember");
+            var collider=beam!=null?beam.GetComponent<BoxCollider>():null;
+            if(collider==null||collider.size.x<=0||beam.childCount==0)
+                throw new InvalidOperationException("Preserve the real northern crossmember art and matching collider.");
+            var feet=new Transform[2];var masts=new Transform[2];
+            for(int i=0;i<2;i++)
+            {
+                int side=i==0?-1:1;
+                feet[i]=extension.Find("Owned northern recovery portal footing "+side);
+                masts[i]=extension.Find("Owned northern lattice recovery support "+side);
+                if(feet[i]==null||masts[i]==null)throw new InvalidOperationException("Both original northern footings and lattice supports are required.");
+            }
+            float x=hoist.rescue.incidentIce.transform.position.x;
+            // Run92B physically hit the former west footing at x83..91,z81..89.
+            // Move only the northern portal outboard; its new footings end at
+            // x73 and begin at137, leaving the established southwest approach.
+            for(int i=0;i<2;i++)
+            {
+                float outboard=x+(i==0?-36:36);
+                Vector3 foot=feet[i].position,mast=masts[i].position;foot.x=mast.x=outboard;
+                feet[i].position=foot;masts[i].position=mast;
+                EditorUtility.SetDirty(feet[i]);EditorUtility.SetDirty(masts[i]);
+            }
+            // Stretch existing owned art around the unchanged beam centre.
+            // Reapplying uses factor1, so no duplicate supports or models appear.
+            float factor=72/collider.size.x;
+            foreach(Transform art in beam)
+            {
+                Vector3 position=art.localPosition,scale=art.localScale;position.x*=factor;scale.x*=factor;
+                art.localPosition=position;art.localScale=scale;EditorUtility.SetDirty(art);
+            }
+            Vector3 size=collider.size;size.x=72;collider.size=size;EditorUtility.SetDirty(collider);
+            EditorUtility.SetDirty(hoist);EditorSceneManager.MarkSceneDirty(hoist.gameObject.scene);
         }
 
         static Transform HoistChild(Transform parent,string name,Vector3 position){var root=new GameObject(name).transform;root.SetParent(parent,false);root.position=position;return root;}
