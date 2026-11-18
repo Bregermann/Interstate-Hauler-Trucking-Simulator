@@ -7,12 +7,20 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsHitchesAuthoring
     {
-        public static void InstallSavedRescueRampAndCreativeWorkshop()
+        public static void InstallSavedVariantContent()
         {
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/IceRoadReckoning.unity");
             LWS.TruckExtremeHauling.Editor.ThinIceRescueAuthoring.RepairActiveExtractionRamp();
             UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/DominoDerby.unity");
             LWS.TruckExtremeHauling.Editor.DominoCreativeWorkshopAuthoring.InstallActiveWorkshop();
+            var cargo = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                LWS.TruckHorrorSports.Editor.HorrorAuthoring.Scene(LWS.TruckHorrorSports.HorrorSport.CursedCargo));
+            LWS.TruckHorrorSports.Editor.CursedGroundingAuthoring.UpgradeActiveVenue();
+            SaveCurrentHelp(cargo);
+            var canoe = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+                LWS.TruckWaterSports.Editor.WaterSportsAuthoring.PaddleScene);
+            LWS.TruckWaterSports.Editor.PaddleChaosHazardsAuthoring.UpgradeActiveScene();
+            SaveCurrentHelp(canoe);
             AssetDatabase.SaveAssets();
         }
 

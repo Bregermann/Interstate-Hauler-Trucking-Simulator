@@ -18,6 +18,7 @@ namespace LWS.TruckHorrorSports
         public Light[] headlights, venueLights;
         public HorrorFootAgent[] footAgents;
         public HorrorSupplyJob supplyJob;
+        public CursedGroundingRitual groundingRitual;
         public GraveyardNightServices nightServices;
         public CursedConvoyRoad convoyRoad;
         public HorrorHarvestObjects harvestObjects;
@@ -113,7 +114,7 @@ namespace LWS.TruckHorrorSports
         string ModeInstructions => TaskRush ? "\n\nTASK RUSH: bank as many real night-shift jobs as possible before the clock expires. Completing the full task route opens another circuit without moving your truck or clearing earned jobs. No extraction is required. The most completed jobs wins." :
             ConvoyMode ? "\n\nHAUNTED CONVOY: every real rig must stop at each ward before the shared route advances. Park in your own lane. Everyone and every surviving attached load must reach the final receiving area; one driver cannot deliver the whole team." :
             FreightSurvival ? "\n\nSURVIVAL FREIGHT: keep circulating between containment wards. Each physical stop briefly calms the load. Parking indefinitely increases its unrest. Survive the complete clock with the original cargo intact; containment stops break ties." :
-            sport == HorrorSport.CursedCargo && option == 2 ? "\n\nEXORCISM RUN: channel each ward for twice the normal duration while controlling the load. The final successful ward permanently banishes the haunting and completes your attempt there; no final depot delivery is needed." :
+            sport == HorrorSport.CursedCargo && option == 2 ? "\n\nEXORCISM RUN: stop beside the ward and hold ACTION to attach its ground lead to your original load. Hold both vehicles steady while the cable settles and you channel the ward. Release ACTION to disconnect. The final successful ward permanently banishes the haunting and completes your attempt there; no final depot delivery is needed." :
             RoadPuzzle ? "\n\nROUTE PUZZLE: take the west service junction. Real fork signs reveal different clues in headlights and darkness. Wrong forks lead through physical detours and cost points. Clear the generator-road closure, then choose Dawn with LIGHTS ON or the hidden Unlit exit with LIGHTS OFF. Gates alternate between LIGHTS ON and LIGHTS OFF. Read the current exit instruction. Passing with the wrong signal incurs a real three-second lockout and a 25-point penalty; correct it without stopping on the pursuer's route." :
             RoadPursuit ? "\n\nPURSUIT SURVIVAL: survive the full clock while covering real road distance and successive gates. Keep circulating; leaving the visible highway for more than a few seconds exposes you to damage." :
             sport == HorrorSport.DeadEnd && option == 3 ? "\n\nLAST HEADLIGHT STANDING: outlast the other trucks. The final surviving truck resolves the round; stay on the highway and dodge the physical pursuer." :
@@ -178,6 +179,7 @@ namespace LWS.TruckHorrorSports
             int rescue = NearbyRescue(slot);
             if (rescue >= 0) return "HOLD ACTION · RESCUE\n" + setup.players[rescue].name;
             int task = NearestTask(slot);
+            if (task >= 0 && groundingRitual != null && groundingRitual.Active) return groundingRitual.CaptionFor(slot);
             if (task >= 0) return sport == HorrorSport.CursedCargo && !CargoAtTask(slot, task) ? "STOP WITH YOUR ATTACHED LOAD\nINSIDE THE RECEIVING BAY" : "HOLD ACTION\n" + objectives[task].caption;
             var foot = footAgents != null && slot < footAgents.Length ? footAgents[slot] : null;
             if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[slot].body.position) < 4) return "ACTION · ENTER CAB";
@@ -268,6 +270,7 @@ namespace LWS.TruckHorrorSports
                 trucks[i].Prepare(starts[i], rotations[i]); pathCorners[i] = Array.Empty<Vector3>();
                 if (cargo != null && i < cargo.Length && cargo[i] != null) cargo[i].ResetCargo();
             }
+            groundingRitual?.ResetRitual();
             supplyJob?.ResetJobs(); nightServices?.ResetServices(); harvestObjects?.ResetObjects(); junctionPuzzle?.ResetPuzzle(sport==HorrorSport.DeadEnd&&option==2);
             foreach (var a in anomalies) if (a != null) a.ResetEvent();
             foreach (var task in objectives) { task.ResetObjective(); if (task.securityMonitor != null) task.securityMonitor.ResetFeed(); }
@@ -345,6 +348,7 @@ namespace LWS.TruckHorrorSports
                 int task = NearestTask(i);
                 int rescue = NearbyRescue(i);
                 bool held = ai ? task >= 0 || rescue >= 0 : ActionHeld(i);
+                groundingRitual?.ObserveParticipant(i, held, dt);
                 // Holding the real ward begins suppressing the haunting while
                 // the physical assembly settles; progress still requires both
                 // bodies stopped and the ordinary uninterrupted channel time.
@@ -361,7 +365,7 @@ namespace LWS.TruckHorrorSports
                     rescueWork[i] += dt; work[i] = 0; working[i] = -1;
                     if (rescueWork[i] >= 3) CompleteRescue(i, rescue);
                 }
-                else if (task >= 0 && held && (foot != null && foot.Outside || trucks[i].body.linearVelocity.magnitude < 1.4f) && CargoAtTask(i, task) && (supplyJob==null || task!=supplyJob.objectiveIndex || supplyJob.Delivered(i)) && (objectives[task].securityMonitor == null || objectives[task].securityMonitor.HasFrame))
+                else if (task >= 0 && held && (groundingRitual == null || groundingRitual.AllowsChannel(i, task)) && (foot != null && foot.Outside || trucks[i].body.linearVelocity.magnitude < 1.4f) && CargoAtTask(i, task) && (supplyJob==null || task!=supplyJob.objectiveIndex || supplyJob.Delivered(i)) && (objectives[task].securityMonitor == null || objectives[task].securityMonitor.HasFrame))
                 {
                     rescueWork[i] = 0; rescuing[i] = -1;
                     if (working[i] != task) { working[i] = task; work[i] = 0; }
@@ -435,8 +439,9 @@ namespace LWS.TruckHorrorSports
                 return;
             }
             if (!rules.Commit(slot, task)) return;
+            groundingRitual?.ObserveCompletedWard(slot, task);
             nightServices?.ObserveCompletedObjective(slot,task);
-            if (sport == HorrorSport.CursedCargo && option == 0 && setup.players[slot].source == BowlingSource.AI)
+            if (sport == HorrorSport.CursedCargo && (option == 0 || option == 2) && setup.players[slot].source == BowlingSource.AI)
             {
                 // The receiving wards are beside warehouse walls. Pulling a full articulated
                 // rig directly through a 150-degree turn jams the cab against the depot.
@@ -566,7 +571,7 @@ namespace LWS.TruckHorrorSports
             var truck = trucks[slot]; int id = NextObjective(slot);
             aiParking[slot] = false;
             if(convoyRoad!=null&&convoyRoad.TryDriveAI(slot,out var roadDrive,out var park)){aiParking[slot]=park;return roadDrive;}
-            if (sport == HorrorSport.CursedCargo && option == 0 && backingFromWard[slot])
+            if (sport == HorrorSport.CursedCargo && (option == 0 || option == 2) && backingFromWard[slot])
             {
                 var transmission = truck.tractorMotor.vehicle.powertrain.transmission;
                 transmission.automaticTransmissionDNRShiftType = NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput;
@@ -837,6 +842,7 @@ namespace LWS.TruckHorrorSports
             FinalMetricsRecorded = true;
             nightServices?.ReportFinal();
             convoyRoad?.ReportFinal();
+            groundingRitual?.ReportFinal();
             string context = "match=" + MatchId + ";mode=" + option + ";cooperative=" + (Cooperative ? "true" : "false");
             SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_match_seconds", null, context + ";unit=SEC", Age);
             for (int i = 0; i < setup.count; i++)
@@ -880,8 +886,8 @@ namespace LWS.TruckHorrorSports
                 }
             }
         }
-        protected override void StopGame() { convoyRoad?.Freeze(); nightServices?.Freeze(); supplyJob?.FreezeJobs(); if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
-        protected override void StopSounds() { if (antagonist != null) antagonist.GetComponent<ScarecrowHeadlightLure>()?.Silence(); convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
+        protected override void StopGame() { groundingRitual?.Freeze(); convoyRoad?.Freeze(); nightServices?.Freeze(); supplyJob?.FreezeJobs(); if (trucks != null) foreach (var t in trucks) if (t != null) t.Power(false); if (antagonist != null) antagonist.SetActive(false); }
+        protected override void StopSounds() { groundingRitual?.Silence(); if (antagonist != null) antagonist.GetComponent<ScarecrowHeadlightLure>()?.Silence(); convoyRoad?.Silence(); nightServices?.Silence(); if (ambience != null) { if (Paused) ambience.Pause(); else ambience.Stop(); } if (encounterAudio != null) { if (Paused) encounterAudio.Pause(); else encounterAudio.Stop(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (Paused) a.spatialSound.Pause(); else a.spatialSound.Stop(); } }
         protected override void SetPaused(bool paused) { if (ambience != null) { if (paused) ambience.Pause(); else ambience.UnPause(); } if (encounterAudio != null) { if (paused) encounterAudio.Pause(); else encounterAudio.UnPause(); } if (anomalies != null) foreach (var a in anomalies) if (a != null && a.spatialSound != null) { if (paused) a.spatialSound.Pause(); else a.spatialSound.UnPause(); } if (atmosphere != null) atmosphere.Pause(paused); }
     }
 }

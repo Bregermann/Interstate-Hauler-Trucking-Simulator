@@ -11,7 +11,7 @@ namespace LWS.TruckSports
             if (session == null || !session.Finished) return false;
             if (session is LWS.TruckWaterSports.WaterMatch water)
                 snapshot = Capture(session, water.ResultPlace, i => water.ResultHasOutcome(i) ? (double?)water.ResultScore(i) : null,
-                    water.ResultWinner, water.ResultUnit, water.Cooperative, i => "GATES " + water.Gates[i], water.ResultHigherIsBetter);
+                    water.ResultWinner, water.ResultUnit, water.Cooperative, i => WaterDetail(water, i), water.ResultHigherIsBetter);
             else if (session is LWS.TruckHorrorSports.HorrorMatch horror)
                 snapshot = Capture(session, horror.ResultPlace, i => horror.Cooperative || horror.ResultEligible(i) ? (double?)horror.Score(i) : null,
                     horror.ResultWinner, "PTS", horror.Cooperative,
@@ -24,6 +24,20 @@ namespace LWS.TruckSports
                     i => "PHYSICAL OBJECTIVES " + hauling.ObjectivesCompleted(i));
             return snapshot != null;
         }
+        static string WaterDetail(LWS.TruckWaterSports.WaterMatch water, int slot)
+        {
+            if (water.Stranded[slot]) return "STRANDED";
+            var vessel = water.Vessel(slot);
+            if (water is LWS.TruckWaterSports.BlackwaterMatch lake)
+                return lake.Deliveries[slot] + " SUPPLIES · " + lake.Rescues[slot] + " RESCUES · " +
+                    Math.Max(0, lake.Integrity[slot]).ToString("0") + "% HULL";
+            if (water is LWS.TruckWaterSports.WhitewaterWipeoutMatch kayak && kayak.option == 2)
+                return kayak.QualifiedFreestyleLandings(slot) + " CONTROLLED LANDINGS · " + vessel.Capsizes + " CAPSIZES";
+            if (water is LWS.TruckWaterSports.PaddlePalsMatch && water.option == 3)
+                return vessel.Synchronizations + " PAIRED STROKES · " + vessel.Capsizes + " CAPSIZES";
+            return water.MissedGates[slot] + " MISSED GATES · " + vessel.Capsizes + " CAPSIZES";
+        }
+
         static SportsResultsSnapshot Capture(SportsEventSession session, Func<int, int> place, Func<int, double?> measurement,
             Func<int, bool> winner, string unit, bool cooperative, Func<int, string> detail, bool higherIsBetter = true)
         {
