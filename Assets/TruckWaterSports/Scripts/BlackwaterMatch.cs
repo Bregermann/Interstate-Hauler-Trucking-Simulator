@@ -17,7 +17,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  readonly FixedJoint[] cargoJoints=new FixedJoint[4];readonly int[] boatCargo={-1,-1,-1,-1},cargoOwner={-1,-1,-1,-1};
  readonly bool[] banked=new bool[4];readonly Vector3[] cargoStarts=new Vector3[4];
  readonly Light[] healingAt=new Light[4];readonly float[] rescueProgress=new float[4],quietSeconds=new float[4];Light[] shelterLights=System.Array.Empty<Light>();bool capturedCargoStarts;float nextStrike,targetSwitch;int hunted;
- readonly float[] propulsionInput=new float[4],escapeUntil=new float[4],quietAttemptUntil=new float[4];
+ readonly float[] propulsionInput=new float[4],escapeUntil=new float[4],quietAttemptUntil=new float[4],strikeCueUntil=new float[4];
  readonly int[] cargoTargets={-1,-1,-1,-1};
  readonly Collider[][] vesselHulls=new Collider[4][];float creatureCrown,creatureTurnRadius;BoxCollider creatureHull;
  readonly RaycastHit[] creatureSweepHits=new RaycastHit[24];
@@ -26,7 +26,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  public override string ResultUnit=>Cooperative?"DELIVERIES":"SEC";public override bool ResultHigherIsBetter=>option==2||Cooperative;
  public override double ResultScore(int slot)=>Cooperative?Deliveries[slot]:Stranded[slot]?StrandedAt[slot]:FinishTimes[slot]>=0?FinishTimes[slot]:Clock;
  public override bool ResultHasOutcome(int slot)=>slot>=0&&slot<setup.count&&(option==0?FinishTimes[slot]>=0&&Integrity[slot]>0:option==1?Deliveries[slot]>0:Cooperative?CooperativeEscaped||Deliveries[slot]>0||Rescues[slot]>0:Clock>=3);
- public override string Help=>"Drive and steer your physical barge; reverse thrust brakes. Hard normal collisions with sufficient impulse damage the hull; gentle docking and glancing scrapes are protected. Entity strikes remain a separate danger. ACTION rights a capsize. Crossing follows lit buoys to the far shore. Supply Run: touch a real unclaimed crate, then return it slowly inside the dock. Survival ranks actual time afloat; slowing quietly can shake pursuit, but lingering silence eventually draws it back. In crossing/delivery modes the green navigation lights repel direct strikes and slowly restore hull; wakes still move you. Cooperative Escape starts a regroup countdown once shared supplies are secured. Every boat must be upright and moving slowly back inside the dock, and no stranded teammates. Any boat can carry supplies. Hold ACTION while gently touching a stranded teammate for two seconds to repair them. AI can collect, brake, seek shelter and physically rescue. Cooperative success awards no individual winner point.";
+ public override string Help=>"Drive and steer your physical barge; reverse thrust brakes. Hard normal collisions with sufficient impulse damage the hull; gentle docking and glancing scrapes are protected. Entity strikes remain a separate danger. Your named hull panel reports the real wake direction, pursuit, quiet or green-light shelter, and your own impacts. Directions are relative to your barge. ACTION rights a capsize. Crossing follows lit buoys to the far shore. Supply Run: touch a real unclaimed crate, then return it slowly inside the dock. Survival ranks actual time afloat; slowing quietly can shake pursuit, but lingering silence eventually draws it back. In crossing/delivery modes the green navigation lights repel direct strikes and slowly restore hull; wakes still move you. Cooperative Escape starts a regroup countdown once shared supplies are secured. Every boat must be upright and moving slowly back inside the dock, and no stranded teammates. Any boat can carry supplies. Hold ACTION while gently touching a stranded teammate for two seconds to repair them. AI can collect, brake, seek shelter and physically rescue. Cooperative success awards no individual winner point.";
  public override string Status{
   get{
    if(Cooperative){if(BankedSupplies>=SharedSuppliesNeeded)return "SUPPLIES READY · RESCUE TEAMMATES · REGROUP AT DOCK";for(int i=0;i<setup.count;i++)if(Integrity[i]<=0)return "TEAMMATE STRANDED · GENTLE CONTACT + HOLD ACTION";return "SHARED SUPPLIES "+BankedSupplies+" / "+SharedSuppliesNeeded+" · GREEN LIGHTS OFFER SHELTER";}
@@ -78,7 +78,7 @@ public sealed class BlackwaterMatch:WaterMatch {
  protected override void BeginWater(){
   nextStrike=8;targetSwitch=0;hunted=0;BankedSupplies=0;CooperativeEscaped=false;regroupUntil=0;entity.position=new Vector3(0,-5,90);
   for(int i=0;i<4;i++){
-   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=quietAttemptUntil[i]=0;boatCargo[i]=cargoOwner[i]=cargoTargets[i]=-1;banked[i]=false;
+   Integrity[i]=100;HullImpactHits[i]=0;ContactDamageTaken[i]=0;nextContactDamage[i]=0;healingAt[i]=null;vessels[i].flotation.waveAmplitude=.1f;Deliveries[i]=Rescues[i]=0;rescueProgress[i]=quietSeconds[i]=propulsionInput[i]=escapeUntil[i]=quietAttemptUntil[i]=strikeCueUntil[i]=0;boatCargo[i]=cargoOwner[i]=cargoTargets[i]=-1;banked[i]=false;
    if(cargoJoints[i]!=null)Destroy(cargoJoints[i]);cargoJoints[i]=null;
    if(!capturedCargoStarts)cargoStarts[i]=supplies[i].position;
    supplies[i].gameObject.SetActive(i<setup.count);supplies[i].isKinematic=false;supplies[i].position=cargoStarts[i];supplies[i].rotation=Quaternion.identity;supplies[i].linearVelocity=supplies[i].angularVelocity=Vector3.zero;
@@ -255,11 +255,37 @@ public sealed class BlackwaterMatch:WaterMatch {
   float proximity=Vector3.Distance(entity.position,victim.body.position);
   if(proximity<18){victim.body.AddForce((victim.body.position-entity.position).normalized*Mathf.Sin(Clock*2)*2,ForceMode.Acceleration);victim.flotation.waveAmplitude=.1f+(18-proximity)*.035f;}else victim.flotation.waveAmplitude=.1f;
   if(proximity>=7||Clock<nextStrike||Clock<35||quiet||sheltered)return;
-  nextStrike=Clock+11;victim.body.AddForce(Vector3.up*5+entity.transform.right*3,ForceMode.VelocityChange);victim.body.AddTorque(entity.transform.forward*1.5f,ForceMode.VelocityChange);Integrity[hunted]-=25;
+  nextStrike=Clock+11;victim.body.AddForce(Vector3.up*5+entity.transform.right*3,ForceMode.VelocityChange);victim.body.AddTorque(entity.transform.forward*1.5f,ForceMode.VelocityChange);Integrity[hunted]-=25;strikeCueUntil[hunted]=Clock+3;
   if(warning!=null&&warning.clip!=null){warning.transform.position=entity.position;warning.volume=settings.sfx*.6f;warning.Play();}
   SportsSessionTelemetry.GameplayEvent(Title,"entity-strike",setup.players[hunted].participantId,"physical lift",Integrity[hunted]);
  }
- public override bool TryReadScoreCard(int slot,out string score,out string detail){score=Scores[slot].ToString("F0");detail=Stranded[slot]?"STRANDED · LEFT THE LAKE":Mathf.CeilToInt(Integrity[slot])+"% HULL · "+Deliveries[slot]+" SUPPLIES"+(Cooperative?" · "+Rescues[slot]+" RESCUES":"");return slot<setup.count;}
+ // The existing owner-labelled panels remain the presentation authority in
+ // shared and split views. A scare is not attributed to every nearby boat.
+ public string ParticipantDanger(int slot){
+  if(slot<0||slot>=setup.count||!Live)return string.Empty;
+  if(Stranded[slot]||Integrity[slot]<=0)return Cooperative?"NEED TEAM RESCUE":"HULL LOST";
+  if(FinishTimes[slot]>=0)return string.Empty;
+  if(Clock<strikeCueUntil[slot])return "STRUCK FROM BELOW";
+  if(HullImpactHits[slot]>0&&Clock<nextContactDamage[slot])return "HARD HULL IMPACT";
+  if(entity==null||Vector3.Distance(entity.position,vessels[slot].body.position)>=18)return string.Empty;
+  Vector3 offset=Vector3.ProjectOnPlane(entity.position-vessels[slot].body.position,Vector3.up);
+  string bearing="BELOW";
+  if(offset.sqrMagnitude>9){
+   float ahead=Vector3.Dot(offset,vessels[slot].transform.forward),side=Vector3.Dot(offset,vessels[slot].transform.right);
+   bearing=Mathf.Abs(side)>Mathf.Abs(ahead)?side>0?"RIGHT":"LEFT":ahead>0?"AHEAD":"ASTERN";
+  }
+  if(slot!=hunted)return "WAKE "+bearing;
+  if(LightShelter(vessels[slot].body.position))return "GREEN LIGHT SHELTER";
+  if(QuietMovement(slot)&&quietSeconds[slot]<7)return "QUIET · STAY ALERT";
+  return Clock<35?"WAKE "+bearing:"HUNTED "+bearing;
+ }
+ public override bool TryReadScoreCard(int slot,out string score,out string detail){
+  score=detail=null;if(slot<0||slot>=setup.count)return false;
+  score=Scores[slot].ToString("F0");string danger=ParticipantDanger(slot);
+  detail=Stranded[slot]?"STRANDED · LEFT THE LAKE":Mathf.CeilToInt(Integrity[slot])+"% HULL · "+
+   (danger.Length>0?danger:Deliveries[slot]+" SUPPLIES"+(Cooperative?" · "+Rescues[slot]+" RESCUES":""));
+  return true;
+ }
  protected override void RecordModeFinalMetrics(int slot){FinalMetric(slot,"supplies_delivered",Deliveries[slot],"individual");FinalMetric(slot,"hull_condition_percent",Integrity[slot],"individual");FinalMetric(slot,"hull_contact_damage",ContactDamageTaken[slot],"individual");FinalMetric(slot,"hull_damaging_contacts",HullImpactHits[slot],"individual");if(option==2)FinalMetric(slot,"survival_seconds",Stranded[slot]?StrandedAt[slot]:FinishTimes[slot]>=0?FinishTimes[slot]:Clock,"individual");if(Cooperative){FinalMetric(slot,"teammates_rescued",Rescues[slot],"individual");FinalMetric(slot,"cooperative_escape",CooperativeEscaped?1:0,"shared_convoy");}}
  protected override void StopGame(){base.StopGame();if(supplies!=null)foreach(var cargo in supplies)if(cargo!=null){if(!cargo.isKinematic)cargo.linearVelocity=cargo.angularVelocity=Vector3.zero;cargo.isKinematic=true;}}
  protected override void StopSounds(){if(warning!=null)warning.Stop();}
