@@ -1,6 +1,7 @@
 using UnityEngine;using LWS.TruckSports;
 namespace LWS.TruckWaterSports {
 public sealed class WaterVessel:MonoBehaviour {
+ public event System.Action<WaterVessel,Collision> HullImpact;
  public Rigidbody body;public SportsFloatingBody flotation;public WaterCourse course;public Transform[] paddles;public Renderer[] firstPaint=System.Array.Empty<Renderer>(),secondPaint=System.Array.Empty<Renderer>();public int firstSlot,secondSlot=-1;
  public float strokeImpulse=2.5f,turnAuthority=1;public int Capsizes{get;private set;}public int Synchronizations{get;private set;}public int Strokes{get;private set;}public int Collisions{get;private set;}public int OpponentBumps{get;private set;}public int CreditedBumps{get;private set;}public int CausedCapsizes{get;private set;}public int Landings{get;private set;}public int Rolls{get;private set;}public float TrickPoints{get;private set;}public float AirborneRotation{get;private set;}public float LastLandingQuality{get;private set;}public float AirborneSeconds=>airTime;
  public bool Capsized=>Vector3.Dot(transform.up,Vector3.up)<.1f;
@@ -45,7 +46,7 @@ public sealed class WaterVessel:MonoBehaviour {
  public bool Touching(WaterVessel vessel)=>contacts.TryGetValue(vessel,out float when)&&Time.fixedTime-when<.12f;
  WaterVessel ObserveContact(Collision collision){var other=collision.rigidbody!=null?collision.rigidbody.GetComponent<WaterVessel>():null;if(other!=null&&other!=this&&other.flotation!=null&&flotation!=null&&other.flotation.session==flotation.session)contacts[other]=Time.fixedTime;return other;}
  void OnCollisionStay(Collision collision)=>ObserveContact(collision);
- void OnCollisionEnter(Collision collision){var other=ObserveContact(collision);if(flotation==null||body.isKinematic||collision.relativeVelocity.magnitude<2||flotation.Clock<nextCollision)return;nextCollision=flotation.Clock+.8f;Collisions++;if(other==null)return;OpponentBumps++;var normal=collision.contactCount>0?collision.GetContact(0).normal:(body.position-other.body.position).normalized;float ownClosing=Mathf.Max(0,Vector3.Dot(previousVelocity,-normal)),otherClosing=Mathf.Max(0,Vector3.Dot(other.previousVelocity,normal));if(ownClosing>otherClosing+.75f){CreditedBumps++;other.lastAttacker=this;other.lastAttackedAt=flotation.Clock;}}
+ void OnCollisionEnter(Collision collision){if(body!=null&&!body.isKinematic)HullImpact?.Invoke(this,collision);var other=ObserveContact(collision);if(flotation==null||body.isKinematic||collision.relativeVelocity.magnitude<2||flotation.Clock<nextCollision)return;nextCollision=flotation.Clock+.8f;Collisions++;if(other==null)return;OpponentBumps++;var normal=collision.contactCount>0?collision.GetContact(0).normal:(body.position-other.body.position).normalized;float ownClosing=Mathf.Max(0,Vector3.Dot(previousVelocity,-normal)),otherClosing=Mathf.Max(0,Vector3.Dot(other.previousVelocity,normal));if(ownClosing>otherClosing+.75f){CreditedBumps++;other.lastAttacker=this;other.lastAttackedAt=flotation.Clock;}}
  public void Freeze(){flotation.enabled=false;body.linearVelocity=body.angularVelocity=Vector3.zero;body.isKinematic=true;}
 }
 }

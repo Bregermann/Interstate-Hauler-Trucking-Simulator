@@ -48839,6 +48839,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e25fe29dfacf14f9e31827b53ca9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckWaterSports.WaterCourse
+  currentSections:
+  - name: Calm introductory pool
+    firstSegment: 0
+    lastSegment: 1
+    speedMultiplier: 0.4
+    turbulenceMultiplier: 0.25
+    edgeBlendMetres: 6
+  - name: Rocky upper rapids
+    firstSegment: 4
+    lastSegment: 7
+    speedMultiplier: 1.1
+    turbulenceMultiplier: 1.25
+    edgeBlendMetres: 6
+  - name: Recovery pool below first waterfall
+    firstSegment: 11
+    lastSegment: 12
+    speedMultiplier: 0.3
+    turbulenceMultiplier: 0.2
+    edgeBlendMetres: 6
+  - name: Technical lower rapids
+    firstSegment: 14
+    lastSegment: 15
+    speedMultiplier: 1.08
+    turbulenceMultiplier: 1.2
+    edgeBlendMetres: 6
+  - name: Recovery pool below large waterfall
+    firstSegment: 18
+    lastSegment: 19
+    speedMultiplier: 0.3
+    turbulenceMultiplier: 0.2
+    edgeBlendMetres: 6
   stations:
   - {x: 0, y: 26, z: 0}
   - {x: 16.725992, y: 25.3, z: 42}
@@ -49017,6 +49048,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 8300000, guid: f7e7311fb76e790468ce1cec830021fe, type: 3}
+  - {fileID: 8300000, guid: 135b5eb55931a3245ad7659643588ed4, type: 3}
+  - {fileID: 8300000, guid: 55df44f804bbff645b7584194bb28068, type: 3}
+  - {fileID: 8300000, guid: 3f3f5a2bd3e3f1041a7bccc8095df490, type: 3}
   voices: 8
   impactThreshold: 0.35
   impactGain: 0.25
@@ -49068,6 +49103,10 @@ MonoBehaviour:
   match: {fileID: 358868770}
   ambience: {fileID: 358868778}
   gain: 0.15
+  paddleFeedbackIndex: 7
+  capsizeFeedbackIndex: 8
+  recoveryFeedbackIndex: 9
+  impactFeedbackIndex: 10
 --- !u!82 &358868778
 AudioSource:
   m_ObjectHideFlags: 0
@@ -123308,16 +123347,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Drive alternates real paddle strokes; steer carves and leans. ACTION rolls
-    or rights an inverted kayak. Whitewater Race follows the full river to the finish.
-    Slalom adds a physical fork: orange log shortcut or green shallow channel. Missing
-    both branch gates costs three seconds; ordinary gate and collision penalties
-    also apply. Freestyle: tap ACTION in the air for a roll, then hold ACTION to
-    brace toward a controlled landing; tricks score only after physical landing.
-    Survival: three capsizes retire you. After the first descent, circle the lower
-    rapids without attempting an impossible climb back up a waterfall. Currents/waves
-    intensify over time. AI paddles, rolls, braces and recovers through the same
-    forces.'
+  m_text: 'Humans control each real paddle independently. Whole controller: LB/RB
+    paddle sides, RT/LT set forward/backstroke power and left stick carves/leans.
+    Keyboard or split stick: left/right choose a paddle, up/down set direction, centered
+    sides plus up/down stroke both. Steering with a single paddle turns away from
+    that side. ACTION rolls or rights an inverted kayak. Whitewater Race follows
+    the full river to the finish. Slalom adds a physical fork: orange log shortcut
+    or green shallow channel. Missing both branch gates costs three seconds; ordinary
+    gate and collision penalties also apply. Freestyle: tap ACTION in the air for
+    a roll, then hold ACTION to brace toward a controlled landing; tricks score only
+    after physical landing. Survival: three capsizes retire you. After the first
+    descent, circle the lower rapids without attempting an impossible climb back
+    up a waterfall. Currents/waves intensify over time. AI paddles, rolls, braces
+    and recovers through the same forces.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

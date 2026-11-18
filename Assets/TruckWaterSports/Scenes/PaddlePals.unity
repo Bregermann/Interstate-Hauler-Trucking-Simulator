@@ -152814,6 +152814,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e25fe29dfacf14f9e31827b53ca9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckWaterSports.WaterCourse
+  currentSections:
+  - name: Calm introductory pool
+    firstSegment: 0
+    lastSegment: 1
+    speedMultiplier: 0.4
+    turbulenceMultiplier: 0.25
+    edgeBlendMetres: 6
+  - name: Rocky upper rapids
+    firstSegment: 4
+    lastSegment: 7
+    speedMultiplier: 1.1
+    turbulenceMultiplier: 1.25
+    edgeBlendMetres: 6
+  - name: Recovery pool below first waterfall
+    firstSegment: 11
+    lastSegment: 12
+    speedMultiplier: 0.3
+    turbulenceMultiplier: 0.2
+    edgeBlendMetres: 6
+  - name: Technical lower rapids
+    firstSegment: 14
+    lastSegment: 15
+    speedMultiplier: 1.08
+    turbulenceMultiplier: 1.2
+    edgeBlendMetres: 6
+  - name: Recovery pool below large waterfall
+    firstSegment: 18
+    lastSegment: 19
+    speedMultiplier: 0.3
+    turbulenceMultiplier: 0.2
+    edgeBlendMetres: 6
   stations:
   - {x: 0, y: 26, z: 0}
   - {x: 16.725992, y: 25.3, z: 42}
@@ -152990,6 +153021,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 8300000, guid: f7e7311fb76e790468ce1cec830021fe, type: 3}
+  - {fileID: 8300000, guid: 135b5eb55931a3245ad7659643588ed4, type: 3}
+  - {fileID: 8300000, guid: 55df44f804bbff645b7584194bb28068, type: 3}
+  - {fileID: 8300000, guid: 3f3f5a2bd3e3f1041a7bccc8095df490, type: 3}
   voices: 8
   impactThreshold: 0.35
   impactGain: 0.25
@@ -153041,6 +153076,10 @@ MonoBehaviour:
   match: {fileID: 1223744452}
   ambience: {fileID: 1223744460}
   gain: 0.15
+  paddleFeedbackIndex: 7
+  capsizeFeedbackIndex: 8
+  recoveryFeedbackIndex: 9
+  impactFeedbackIndex: 10
 --- !u!82 &1223744460
 AudioSource:
   m_ObjectHideFlags: 0
