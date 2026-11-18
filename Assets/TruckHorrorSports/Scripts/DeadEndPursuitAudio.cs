@@ -13,6 +13,7 @@ namespace LWS.TruckHorrorSports
         readonly float[] nextWarning=new float[4],captionUntil=new float[4];
         readonly int[] warnings=new int[4],cleanPasses=new int[4];
         readonly string[] captions=new string[4];
+        readonly RaycastHit[] approachOccluders=new RaycastHit[16];
         int encounter=-1;float minimumGap,encounterHealth,soundUntil,nextBrake;
         bool focused=true,reported;
         public bool Active {get;private set;}
@@ -37,7 +38,7 @@ namespace LWS.TruckHorrorSports
             if(target<0||target>=match.setup.count||match.rules.outcome[target]!=HorrorOutcome.Active||actor.State==HorrorPursuitState.Watching||actor.State==HorrorPursuitState.Repelled)
             {if(match.Age>=soundUntil)Silence();ObserveClosePass();return;}
             Vector3 player=match.PlayerPosition(target),separation=player-actor.body.position;float distance=separation.magnitude;
-            bool visible=!Physics.Linecast(actor.body.position+Vector3.up*2.2f,player+Vector3.up*2.2f,1,QueryTriggerInteraction.Ignore);
+            bool visible=ClearApproach(target,player);
             // Walls/tunnel occlusion and intervals without an actual approach are
             // intentionally silent. Do not warn about an enemy through scenery.
             if(!visible||match.Age>=soundUntil)Silence();
@@ -58,6 +59,25 @@ namespace LWS.TruckHorrorSports
             float forwardSpeed=Vector3.Dot(actor.body.linearVelocity,actor.transform.forward);
             if(visible&&distance<38&&actor.semi!=null&&actor.semi.command.y<-.2f&&forwardSpeed>2&&match.Age>=nextBrake&&!emitter.isPlaying)
             {nextBrake=match.Age+18;BrakeCues++;Play(airBrake,.75f);captions[target]="AIR BRAKES HISS NEARBY";captionUntil[target]=match.Age+3;}
+        }
+        bool ClearApproach(int target,Vector3 player)
+        {
+            var from=actor.body.position+Vector3.up*2.2f;
+            var delta=player+Vector3.up*2.2f-from;
+            float range=delta.magnitude;
+            if(range<.01f)return false;
+            var pursuer=actor.semi!=null?actor.semi.transform:actor.transform;
+            var truck=match.trucks[target].transform;
+            int count=Physics.RaycastNonAlloc(from,delta/range,approachOccluders,range,1,QueryTriggerInteraction.Ignore);
+            if(count==approachOccluders.Length)return false;
+            for(int index=0;index<count;index++)
+            {
+                var shape=approachOccluders[index].collider.transform;
+                // The ray endpoints are inside the vehicles. Their own collision
+                // shells do not hide the encounter. Everything else still can.
+                if(!shape.IsChildOf(pursuer)&&!shape.IsChildOf(truck))return false;
+            }
+            return true;
         }
         void ObserveClosePass()
         {
