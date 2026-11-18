@@ -108,6 +108,11 @@ namespace LWS.TruckExtremeHauling
                 float height = Mathf.Max(0, car.load.worldCenterOfMass.y - objectives[i].position.y);
                 float fall = (car.load.linearVelocity.y + Mathf.Sqrt(car.load.linearVelocity.y * car.load.linearVelocity.y + 2 * gravity * height)) / gravity;
                 float remaining = Vector3.Dot(objectives[i].position - car.load.worldCenterOfMass, direction);
+                if (option == 3)
+                {
+                    float lateralLandingError = error - car.load.linearVelocity.x * fall - HighWindCarry(fall);
+                    steer = Mathf.Clamp(error * .42f + lateralLandingError * .25f - car.load.linearVelocity.x * .6f, -1, 1);
+                }
                 requested = Mathf.Clamp((remaining - 1) / Mathf.Max(.5f, fall), 0, 12);
             }
             else requested = Mathf.Min(12, Mathf.Max(0, distance - 9) * .3f);
@@ -147,8 +152,9 @@ namespace LWS.TruckExtremeHauling
         {
             var car = cableCars[i];
             car.Drive(Mathf.Max(0, drive.y), Mathf.Max(0, -drive.y));
-            car.load.AddForce(Vector3.right * drive.x * 1.2f, ForceMode.Acceleration);
-            float gust = option == 3 ? Mathf.Sin(age * .7f) * 2 : 0;
+            if (option != 3 || !car.Released)
+                car.load.AddForce(Vector3.right * drive.x * 1.2f, ForceMode.Acceleration);
+            float gust = option == 3 ? Mathf.Sin(age * WindFrequency) * WindAcceleration : 0;
             if (option == 3) car.load.AddForce(Vector3.right * gust, ForceMode.Acceleration);
             Vector3 current = car.load.worldCenterOfMass;
             if (!car.Released)
@@ -165,10 +171,18 @@ namespace LWS.TruckExtremeHauling
             float height = Mathf.Max(0, current.y - objectives[i].position.y);
             float fall = (car.load.linearVelocity.y + Mathf.Sqrt(car.load.linearVelocity.y * car.load.linearVelocity.y + 2 * gravity * height)) / gravity;
             Vector3 predicted = current + car.load.linearVelocity * fall;
+            if (option == 3)
+                predicted += Vector3.right * HighWindCarry(fall);
             float error = Vector3.ProjectOnPlane(predicted - objectives[i].position, Vector3.up).magnitude;
             bool ready = option != 2 || nextGate[i] >= slalomGatesPerLane;
-            if (actions[i] || ai && ready && error < (option == 1 ? 3.5f : 8)) car.Release();
-            bool landed = car.Released && AtRestIn(i, car.load, objectives[i], 12) && Vector3.Dot(car.load.transform.up, Vector3.up) > .7f;
+            if (option == 3)
+            {
+                Vector3 spin = Vector3.ProjectOnPlane(car.load.angularVelocity, Vector3.up);
+                ready = Vector3.Dot(car.load.transform.up, Vector3.up) > .94f && spin.magnitude < .32f;
+            }
+            float releaseWindow = option == 1 ? 3.5f : option == 3 ? 5.5f : 8;
+            if (actions[i] || ai && ready && error < releaseWindow) car.Release();
+            bool landed = car.Released && AtRestIn(i, car.load, objectives[i], 12) && Vector3.Dot(car.load.transform.up, Vector3.up) > .7f && (option != 3 || trailers[i].WheelContact);
             quiet[i] = landed ? quiet[i] + dt : 0;
             if (quiet[i] >= 1.5f)
             {
@@ -190,6 +204,17 @@ namespace LWS.TruckExtremeHauling
             }
             if (car.load.position.y < -20) retired[i] = true;
         }
+        const float WindFrequency = .7f;
+        const float WindAcceleration = 2;
+        float HighWindCarry(float seconds)
+        {
+            // Integrate the same lateral gust that acts on the released load.
+            float phase = age * WindFrequency;
+            float speedTerm = seconds * Mathf.Cos(phase) / WindFrequency;
+            float phaseTerm = (Mathf.Sin(phase + WindFrequency * seconds) - Mathf.Sin(phase)) / (WindFrequency * WindFrequency);
+            return WindAcceleration * (speedTerm - phaseTerm);
+        }
+
         Transform NextGate(int slot)
         {
             int index = slot * slalomGatesPerLane + nextGate[slot];
