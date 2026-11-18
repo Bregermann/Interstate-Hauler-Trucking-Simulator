@@ -644,13 +644,12 @@ namespace LWS.TruckHorrorSports
             }
             bool carefulDriver = sport == HorrorSport.ScarecrowSeason || sport == HorrorSport.CursedCargo;
             bool outside = footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside;
-            bool graveyardServiceDrive = sport == HorrorSport.GraveyardShift && nightServices != null && !outside &&
-                (id < 0 || supplyJob == null || id != supplyJob.objectiveIndex);
+            bool graveyardServiceDrive = sport == HorrorSport.GraveyardShift && nightServices != null && !outside;
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
             if (sport == HorrorSport.GraveyardShift && outside && (id < 0 || !objectives[id].requiresFoot))
                 destination = GraveyardCabDoor(slot);
             if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
-                supplyJob != null && id != supplyJob.objectiveIndex &&
+                supplyJob != null &&
                 Vector3.Distance(truck.body.position, destination) < FootParkingRadius(id) &&
                 supplyJob.TryCabExit(slot, TaskPosition(slot, id), out _))
             {
