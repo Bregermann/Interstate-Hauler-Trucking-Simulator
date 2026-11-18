@@ -48,6 +48,11 @@ namespace LWS.TruckExtremeHauling.Tests
                 yield return null;
                 yield return null;
                 Assert.That((bool)Call(match, "StartMatch"), Is.True);
+                // StartMatch resets the normal input gate. Release controls in
+                // the new match before holding a placement direction.
+                InputSystem.QueueStateEvent(pad, new GamepadState());
+                yield return null;
+                yield return null;
                 Time.timeScale = 2;
 
                 var workshop = (GameObject)Read(match, "creativeWorkshop");
