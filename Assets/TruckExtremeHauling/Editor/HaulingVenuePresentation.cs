@@ -159,7 +159,30 @@ namespace LWS.TruckExtremeHauling.Editor
                 throw new InvalidOperationException("All four physical Plinko boards are required.");
             const string folder = "TruckExtremeHauling";
             const string screenName = "Clear physical rebound screen";
-            if (match.boardOrigins.All(board => board.Find(screenName) != null)) return false;
+            int screenLayer = LayerMask.NameToLayer("TransparentFX");
+            if (screenLayer < 0) throw new InvalidOperationException("The existing TransparentFX layer is unavailable.");
+
+            // Only the Plinko rigs look through the clear screens. Keep the native
+            // collision layer enabled for all motion and game physics.
+            bool changed = false;
+            var cameras = new[] { match.broadcast }.Concat(match.views != null ? match.views.views : Array.Empty<LWS.TruckSports.SportsEventCamera>());
+            foreach (var camera in cameras)
+            {
+                var obstacle = camera != null && camera.rig != null ? camera.rig.GetComponent<Cinemachine.CinemachineCollider>() : null;
+                if (obstacle == null || (obstacle.m_CollideAgainst.value & (1 << screenLayer)) == 0) continue;
+                obstacle.m_CollideAgainst = obstacle.m_CollideAgainst.value & ~(1 << screenLayer);
+                EditorUtility.SetDirty(obstacle);
+                changed = true;
+            }
+            foreach (Transform board in match.boardOrigins)
+            {
+                var existing = board.Find(screenName);
+                if (existing == null || existing.gameObject.layer == screenLayer) continue;
+                existing.gameObject.layer = screenLayer;
+                EditorUtility.SetDirty(existing.gameObject);
+                changed = true;
+            }
+            if (match.boardOrigins.All(board => board.Find(screenName) != null)) return changed;
             var glass = SportsEventAuthoring.Mat(folder, "Plinko clear blue rebound screen", new Color(.25f, .65f, .9f, .1f), .78f);
             glass.SetFloat("_Surface", 1);
             glass.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -178,6 +201,7 @@ namespace LWS.TruckExtremeHauling.Editor
                 if (board.Find(screenName) != null) continue;
                 var screen = SportsEventAuthoring.Box(screenName, new Vector3(0, -26, -5.4f) * scale,
                     new Vector3(52, 62, .35f) * scale, glass, screenContact, board);
+                screen.layer = screenLayer;
                 screen.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 foreach (float edge in new[] { -25.8f, 25.8f })
                     SportsEventAuthoring.Box("Rebound screen frame upright", new Vector3(edge, -26, -5.65f) * scale,
