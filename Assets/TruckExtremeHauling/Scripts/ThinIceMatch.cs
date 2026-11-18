@@ -9,10 +9,17 @@ namespace LWS.TruckExtremeHauling
     {
         public LoadSensitiveIce[] ice;
         public ThinIceRescueObjectives rescue;
+        [Min(1)] public float rescueMatchSeconds = 180;
+        float standardMatchSeconds;
+        bool rescueTimerApplied;
+        float ConfiguredRescueSeconds => float.IsNaN(rescueMatchSeconds) || float.IsInfinity(rescueMatchSeconds) ? 180 : Mathf.Max(1,rescueMatchSeconds);
         readonly int[] rescueReceipts = new int[4];
         public float RescueClock => age;
         public bool CooperativeSuccess => option == 3 && rescue != null && rescue.CooperativeSuccess;
         protected override bool StartsCoupled => option != 3 && base.StartsCoupled;
+        public override string Header => option == 3
+            ? Title + " · " + OptionLabel + " · " + Mathf.CeilToInt(Mathf.Max(0,(rescueTimerApplied ? matchSeconds : ConfiguredRescueSeconds)-age)) + "s"
+            : base.Header;
         public override string Status => option == 3 && rescue != null ? rescue.Status : base.Status;
         public override string Results => option == 3 ? (CooperativeSuccess ? "CONVOY RECOVERED · TEAM SUCCESS" : "CONVOY RESCUE INCOMPLETE") + "\n" + base.Results : base.Results;
         protected override string ActionHint => option == 3 ? "HOOK / RELEASE WINCH · HOLD TO REEL" : base.ActionHint;
@@ -32,7 +39,17 @@ namespace LWS.TruckExtremeHauling
         protected override void ReportFinalMeasurements(int i) { if(option==3&&rescue!=null){RecordMetric(i,"convoy_rescue_actual_towed_metres",rescue.TowedMetres[i]);RecordMetric(i,"convoy_rescue_cargo_recoveries",rescue.Contributions[i]);RecordMetric(i,"convoy_rescue_players_recovered",rescue.RecoveredPlayers);RecordMetric(i,"convoy_rescue_team_success",rescue.CooperativeSuccess?1:0);return;} RecordMetric(i,"thin_ice_supported_haul_metres",distanceTravelled[i]);RecordMetric(i,"thin_ice_cargo_condition",trailers[i].CargoCondition);RecordMetric(i,"thin_ice_vehicle_below_surface",trailers[i].Body.position.y<-3?1:0); }
         public override string Title => "ICE ROAD RECKONING: THIN ICE";
         protected override string[] Modes => new[] { "ICE ROAD DELIVERY", "THIN ICE SURVIVAL", "HEAVY HAUL CHAMPIONSHIP", "CONVOY RESCUE" };
-        public override string Help => "Haul actual cargo across load-sensitive ice. Darkening ice and cracks warn of cumulative stress. Heavy cargo and hard impacts increase risk. Choose the wider marked thick-ice route or risk a short crossing. Deliver the connected trailer upright and stopped in the northern depot. A breakthrough is a real loss of support, not a random failure roll. Convoy Rescue uses recovery tractors: winch the genuinely stranded original cargo trailer up its extraction ramp to the northern shore, then regroup. A supported upright load must be stopped for two seconds after a real cable tow. Fallen teammates have a buoyant 45-second rescue window; gentle proximity alone never earns rescue credit.";
+        public override string Help => "Haul actual cargo across load-sensitive ice. Darkening ice and cracks warn of cumulative stress. Heavy cargo and hard impacts increase risk. Choose the wider marked thick-ice route or risk a short crossing. Deliver the connected trailer upright and stopped in the northern depot. A breakthrough is a real loss of support, not a random failure roll. Convoy Rescue uses recovery tractors. Hook the stranded trailer and keep ACTION held to reel it up the ramp. The gantry lifts and carries that same load over level ice. Straighten ahead of it, then back below the kingpin while holding ACTION to hitch. Haul to the northern shore and stop the original load upright for two seconds, then regroup. Fallen teammates have a buoyant 45-second rescue window; gentle proximity alone never earns rescue credit.";
+        protected override void BeginGame()
+        {
+            // The ordinary hauling clock remains designer-owned. The real
+            // gantry and native coupling sequence receives its own mode clock.
+            if(rescueTimerApplied)matchSeconds=standardMatchSeconds;
+            standardMatchSeconds=matchSeconds;
+            rescueTimerApplied=option==3;
+            if(rescueTimerApplied)matchSeconds=ConfiguredRescueSeconds;
+            base.BeginGame();
+        }
         protected override void BeginMechanic()
         {
             rescue?.StopRound();
@@ -79,7 +96,11 @@ namespace LWS.TruckExtremeHauling
             return new Vector2(Mathf.Clamp(Mathf.Atan2(local.x,local.z)*1.3f,-1,1),Mathf.Clamp((desired-speed)*.45f,-1,.8f));
         }
         protected override void Simulate(float dt) { base.Simulate(dt); if(option==3&&rescue!=null)rescue.StepObjectives(dt);foreach (var tile in ice) tile.Simulate(dt); }
-        protected override void StopGame(){rescue?.StopRound();base.StopGame();}
+        protected override void StopGame()
+        {
+            rescue?.StopRound();base.StopGame();
+            if(rescueTimerApplied){matchSeconds=standardMatchSeconds;rescueTimerApplied=false;}
+        }
         void SupportedWeight(Rigidbody body, NWH.WheelController3D.WheelController[] wheels)
         {
             if (wheels == null || wheels.Length == 0) return;

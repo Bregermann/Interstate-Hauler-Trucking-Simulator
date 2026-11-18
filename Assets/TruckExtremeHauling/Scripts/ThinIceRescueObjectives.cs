@@ -42,8 +42,25 @@ namespace LWS.TruckExtremeHauling
             CargoRecovered ? "CARGO SAFE · REGROUP ALL RIGS AT NORTHERN SHORE" :
             incidentIce != null && !incidentIce.Broken ? "STRANDED CONVOY · LOADED ICE IS FAILING" :
             "RECOVER THE STRANDED LOAD · ACTION HOOK/RELEASE · HOLD TO REEL";
-        public string PlayerStatus(int slot) => lost[slot] ? "RESCUE WINDOW EXPIRED" : ingress[slot] > 0 ? "SINKING · " + Mathf.CeilToInt(recoverySeconds - ingress[slot]) + "s TO RECOVER" :
-            frontLift!=null&&frontLift.Owns(slot)?"GANTRY "+frontLift.Phase+" · HOLD ACTION TO LIFT / HITCH · PRESS TO RELEASE":targets[slot] != null ? "WINCH CONNECTED · TOW TO SHORE" : Status;
+        public string PlayerStatus(int slot)
+        {
+            if (lost[slot]) return "RESCUE WINDOW EXPIRED";
+            if (ingress[slot] > 0) return "SINKING · " + Mathf.CeilToInt(recoverySeconds - ingress[slot]) + "s TO RECOVER";
+            if (frontLift != null && frontLift.Owns(slot))
+                return frontLift.Phase switch
+                {
+                    ThinIceRecoveryHoist.RecoveryPhase.AlignHook or ThinIceRecoveryHoist.RecoveryPhase.Lift => "KEEP ACTION HELD · GANTRY IS LIFTING THE TRAILER",
+                    ThinIceRecoveryHoist.RecoveryPhase.AlignTractor => "DRIVE AHEAD AND STRAIGHTEN · KEEP ACTION HELD",
+                    ThinIceRecoveryHoist.RecoveryPhase.Translate => "STOP · KEEP ACTION HELD TO MOVE THE GANTRY",
+                    ThinIceRecoveryHoist.RecoveryPhase.ReverseHitch => "BACK UNDER THE KINGPIN · KEEP ACTION HELD TO HITCH",
+                    ThinIceRecoveryHoist.RecoveryPhase.Hauling => "HITCH LOCKED · HAUL TO THE NORTHERN SHORE AND STOP",
+                    _ => Status
+                };
+            if (targets[slot] == null) return Status;
+            return frontLift != null && targets[slot] == strandedCargo.Body
+                ? "WINCH CONNECTED · TOW THE LOAD TO THE GANTRY"
+                : "WINCH CONNECTED · TOW TO THE NORTHERN SHORE";
+        }
         public bool PlayerLost(int slot) => lost[slot];
 
         void Awake()
