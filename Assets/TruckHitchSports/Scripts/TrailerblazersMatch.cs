@@ -140,7 +140,12 @@ namespace LWS.TruckHitchSports
                 if (separated[i] && body.linearVelocity.y < 0 && burn)
                 {
                     float height = Mathf.Max(0, body.position.y - starts[i].y);
-                    float descentSpeed = Mathf.Lerp(6, 35, Mathf.Clamp01((height - 20) / 180));
+                    // Precision guidance estimates its remaining glide using a
+                    // 6 m/s canopy descent. The other modes' fast high-altitude
+                    // descent provided less than half that steering time and
+                    // caused a genuine ~72 m undershoot of the authored pad.
+                    // Reuse the same capped physical lift; never change velocity.
+                    float descentSpeed = option % 4 == 2 ? 6 : Mathf.Lerp(6, 35, Mathf.Clamp01((height - 20) / 180));
                     float upwardAcceleration = Mathf.Clamp(Physics.gravity.magnitude + (-descentSpeed - body.linearVelocity.y) * 1.4f, 0, 30);
                     float tractorMass = 0; foreach (var part in tractorBodies[i]) tractorMass += part.mass;
                     body.AddForce(Vector3.up * tractorMass * upwardAcceleration);

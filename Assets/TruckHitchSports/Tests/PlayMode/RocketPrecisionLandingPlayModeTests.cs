@@ -50,6 +50,9 @@ public sealed class RocketPrecisionLandingPlayModeTests
                 var pad = padTransform.GetComponent<Collider>();
                 Assert.That(pad, Is.Not.Null, "The assigned saved pad must be an actual load-bearing surface.");
                 Assert.That(pad.isTrigger, Is.False);
+                var pads = (Array)Field(match, "landingPads"); var trucks = (Array)Field(match, "trucks");
+                for (int slot = 0; slot < 4; slot++)
+                    Assert.That(((Transform)pads.GetValue(slot)).position.x, Is.EqualTo(((Component)trucks.GetValue(slot)).transform.position.x).Within(.01f), "Explicitly repair the saved stale X=-10 target centers to their original native lanes before testing; the fixture never moves them.");
                 Assert.That((bool)Call(match, "StartMatch"), Is.True);
                 Time.timeScale = 3;
                 float deadline = Time.realtimeSinceStartup + 75, nextObservation = 0;
