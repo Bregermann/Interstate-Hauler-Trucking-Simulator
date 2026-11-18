@@ -37,7 +37,7 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
         if (action) state = state.WithButton(GamepadButton.South);
         InputSystem.QueueStateEvent(pad, state);
     }
-    static string State(object match) => Call(match, "PlatformDiagnostic", 0) + " " + Call(match, "RecoveryDiagnostic", 0);
+    static string State(object match) => Call(match, "PlatformDiagnostic", 0) + " " + Call(match, "RecoveryDiagnostic", 0) + " " + Call(match, "TrickDiagnostic", 0);
 
     [UnityTest]
     public IEnumerator HumanActuallyFallsGroundHopsAndRemountsSameMovingNativeDeck()
@@ -63,11 +63,15 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 var surface = ((Collider[])Read(match, "deckSurfaces"))[0];
                 while (((float[])Read(match, "supportedRideSeconds"))[0] < 4 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad); yield return null; }
                 Assert.That(((float[])Read(match, "supportedRideSeconds"))[0], Is.GreaterThanOrEqualTo(4), State(match));
-                while (!((bool[])Read(match, "recovering"))[0] && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad, .85f, .55f); yield return null; }
+                // A controlled straight rear departure exercises remounting
+                // with an upright truck. Real pad braking and platform motion
+                // must still produce the actual unsupported fall.
+                while (!((bool[])Read(match, "recovering"))[0] && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) { Queue(pad, 0, -.35f); yield return null; }
                 Assert.That(((bool[])Read(match, "recovering"))[0], Is.True, "A real unsupported fall must enter recovery rather than teleporting/resetting. " + State(match));
-                float nextPress = 0, pressUntil = 0;
+                float nextPress = 0, pressUntil = 0, nextObservation = 0; string lastLive = State(match);
                 while (((int[])Read(match, "recoveries"))[0] == 0 && !(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
                 {
+                    if (Time.time >= nextObservation) { nextObservation = Time.time + 2; lastLive = State(match); Debug.Log("HH10_UNHITCHED_RECOVERY_LIVE " + lastLive); }
                     bool grounded = (bool)Property(truck, "Grounded"); float steering = 0, effort = 0;
                     if (grounded)
                     {
@@ -82,8 +86,8 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
                 }
                 Queue(pad);
                 Assert.That(((int[])Read(match, "falls"))[0], Is.GreaterThan(0), State(match));
-                Assert.That(((int[])Read(match, "recoveryHops"))[0], Is.GreaterThan(0), "Only an actual grounded ACTION impulse can certify the remount-hop input. " + State(match));
-                Assert.That(((int[])Read(match, "recoveries"))[0], Is.GreaterThan(0), "Actual stable supported wheel contact on the same native deck is required. " + State(match));
+                Assert.That(((int[])Read(match, "recoveryHops"))[0], Is.GreaterThan(0), "Only an actual grounded ACTION impulse can certify the remount-hop input. " + State(match) + " lastLive=[" + lastLive + "]");
+                Assert.That(((int[])Read(match, "recoveries"))[0], Is.GreaterThan(0), "Actual stable supported wheel contact on the same native deck is required. " + State(match) + " lastLive=[" + lastLive + "]");
                 Assert.That(deck.GetInstanceID(), Is.EqualTo(deckId));
                 Assert.That(Property(((Array)Read(match, "couplers")).GetValue(0), "Attached"), Is.Null, "Recovery must not create a hidden hitch.");
                 string recovered = State(match);
@@ -115,9 +119,13 @@ public sealed class UnhitchedRecoveryAndTricksPlayModeTests
             Call(match, "NormalizeSetup"); Call(match, "AllBots"); Clear(match); Assert.That((bool)Call(match, "StartMatch"), Is.True);
             try
             {
-                Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 75;
-                while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline) yield return null;
-                string state = State(match) + " netQuarterTurns=" + ((int[])Read(match, "quarterTurns"))[0] + " landedAir=" + ((float[])Read(match, "landedAirtime"))[0];
+                Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 75, nextObservation = 0; string lastLive = State(match);
+                while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
+                {
+                    if (Time.time >= nextObservation) { nextObservation = Time.time + 2; lastLive = State(match); Debug.Log("HH10_UNHITCHED_TRICK_LIVE " + lastLive); }
+                    yield return null;
+                }
+                string state = State(match) + " lastLive=[" + lastLive + "] netQuarterTurns=" + ((int[])Read(match, "quarterTurns"))[0] + " landedAir=" + ((float[])Read(match, "landedAirtime"))[0];
                 Assert.That((bool)Property(match, "Finished"), Is.True, state);
                 Assert.That(((int[])Read(match, "quarterTurns"))[0], Is.GreaterThan(0), "Ground turns and opposite-direction wiggles cannot substitute for a landed net90degree airborne turn. " + state);
                 Assert.That(((int[])Read(match, "cleanLandings"))[0], Is.GreaterThan(0), state);

@@ -14,6 +14,8 @@ namespace LWS.TruckHitchSports
         readonly float[] riding = new float[4], airtime = new float[4], combo = new float[4];
         readonly float[] rotation = new float[4], lastHeading = new float[4];
         readonly bool[] airborne = new bool[4];
+        readonly float[] lastFlightSeconds = new float[4], lastFlightSignedYaw = new float[4], lastFlightUp = new float[4];
+        readonly string[] lastFlightEnd = new string[4];
         readonly float[] bank = new float[4];
         readonly float[] landedRotation = new float[4], landedAirtime = new float[4];
         readonly float[] supportedRideSeconds = new float[4];
@@ -44,6 +46,7 @@ namespace LWS.TruckHitchSports
             {
                 recovering[i] = rampRiderAboard[i] = false; recoveryUntil[i] = remountQuiet[i] = offDeckGround[i] = signedAirYaw[i] = supportedDistance[i] = rampLandingQuiet[i] = 0; falls[i] = recoveries[i] = recoveryHops[i] = rampCombo[i] = bestRampCombo[i] = 0;
                 previousDeckPosition[i] = trailers[i].Body.position;
+                lastFlightSeconds[i] = lastFlightSignedYaw[i] = lastFlightUp[i] = 0; lastFlightEnd[i] = "none";
                 var contacts = new System.Collections.Generic.List<UnhitchedSurfaceContact>();
                 foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true))
                 {
@@ -117,7 +120,14 @@ namespace LWS.TruckHitchSports
                     drive = trucks[i].Grounded || HasPhysicalSupport(i)
                         ? DriveTo(i, RecoveryAimPoint(i), Mathf.Min(16, deck.linearVelocity.magnitude + 4))
                         : Vector2.zero;
-                else if (IsAI(i) && option % 4 == 3 && airborne[i] && !recovering[i]) drive.x = .8f;
+                else if (IsAI(i) && option % 4 == 3 && airborne[i] && !recovering[i])
+                {
+                    // Use the same physical torque limit as human air steering.
+                    // Aim past a genuine quarter turn, then brake the measured
+                    // yaw rate instead of spinning until the truck leaves the deck.
+                    float remainingYaw = (120 - signedAirYaw[i]) * Mathf.Deg2Rad;
+                    drive.x = Mathf.Clamp(remainingYaw * 2.2f - Vector3.Dot(body.angularVelocity, Vector3.up) * .7f, -.8f, .8f);
+                }
                 trucks[i].TickDrive(drive);
                 bool supported = TryDeckSupport(i, out var hit) && trucks[i].Grounded;
                 bool physicallySupported = trucks[i].Grounded || HasPhysicalSupport(i);
@@ -134,7 +144,21 @@ namespace LWS.TruckHitchSports
                     lastJump[i] = riding[i]; airborne[i] = true; recoveryHops[i]++;
                 }
                 else if (jump && supported && !airborne[i] && riding[i] - lastJump[i] >= 1.25f)
-                { body.AddForce(Vector3.up * 6, ForceMode.VelocityChange); deck.AddForceAtPosition(Vector3.down * body.mass * 6, hit.point, ForceMode.Impulse); airborne[i] = true; supported = false; lastJump[i] = riding[i]; }
+                {
+                    if (option % 4 == 3)
+                    {
+                        // A trick takeoff launches the native jointed assembly,
+                        // just like its existing platform launch/recovery hop.
+                        // Leaving the separate 1500kg cab behind drags/pitches the
+                        // chassis through its joint and consumes the intended hop.
+                        float launchedMass = 0;
+                        foreach (var part in trucks[i].GetComponentsInChildren<Rigidbody>(true)) if (!part.isKinematic)
+                        { part.AddForce(Vector3.up * 6, ForceMode.VelocityChange); launchedMass += part.mass; }
+                        deck.AddForceAtPosition(Vector3.down * launchedMass * 6, hit.point, ForceMode.Impulse);
+                    }
+                    else { body.AddForce(Vector3.up * 6, ForceMode.VelocityChange); deck.AddForceAtPosition(Vector3.down * body.mass * 6, hit.point, ForceMode.Impulse); }
+                    airborne[i] = true; supported = false; lastJump[i] = riding[i];
+                }
                 float signedTurn = Mathf.DeltaAngle(lastHeading[i], body.rotation.eulerAngles.y); float turn = Mathf.Abs(signedTurn); lastHeading[i] = body.rotation.eulerAngles.y;
                 if (!supported)
                 {
@@ -145,6 +169,7 @@ namespace LWS.TruckHitchSports
                     }
                     else
                     {
+                        if (airtime[i] > .05f) RememberFlightEnd(i, "outside wheel/hull support");
                         if (airtime[i] > .3f) combo[i] = 0;
                         airtime[i] = rotation[i] = signedAirYaw[i] = 0; airborne[i] = false;
                     }
@@ -152,6 +177,7 @@ namespace LWS.TruckHitchSports
                 else
                 {
                     supportedRideSeconds[i] += dt;
+                    if (airtime[i] > .05f) RememberFlightEnd(i, "own deck wheel support");
                     if (airtime[i] > .3f && Vector3.Dot(body.transform.up, Vector3.up) > .65f)
                     {
                         int turns = Mathf.FloorToInt(Mathf.Abs(signedAirYaw[i]) / 90);
@@ -180,6 +206,7 @@ namespace LWS.TruckHitchSports
                     else
                     {
                         recovering[i] = true; recoveryUntil[i] = riding[i] + recoveryWindowSeconds; remountQuiet[i] = 0;
+                        if (airtime[i] > .05f) RememberFlightEnd(i, "outside deck envelope before landing");
                         airtime[i] = rotation[i] = signedAirYaw[i] = 0; rampRiderAboard[i] = false; rampLandingUntil[i] = 0; rampCombo[i] = 0;
                         BankSupportedRide(i);
                     }
@@ -191,6 +218,12 @@ namespace LWS.TruckHitchSports
                 if (Elapsed >= matchSeconds) BankSupportedRide(i);
             }
         }
+        void RememberFlightEnd(int slot, string reason)
+        {
+            lastFlightSeconds[slot] = airtime[slot]; lastFlightSignedYaw[slot] = signedAirYaw[slot];
+            lastFlightUp[slot] = Vector3.Dot(trucks[slot].body.rotation * Vector3.up, Vector3.up); lastFlightEnd[slot] = reason;
+        }
+        public string TrickDiagnostic(int slot) => "currentAir=" + airtime[slot].ToString("F2") + " yaw=" + signedAirYaw[slot].ToString("F1") + " bodyOmega=" + trucks[slot].body.angularVelocity.ToString("F2") + " lastFlight=" + lastFlightSeconds[slot].ToString("F2") + "s/" + lastFlightSignedYaw[slot].ToString("F1") + "deg up=" + lastFlightUp[slot].ToString("F2") + " end=" + lastFlightEnd[slot] + " hopCount=" + recoveryHops[slot] + " landedTurns=" + quarterTurns[slot];
         bool HasPhysicalSupport(int slot)
         {
             if (physicalSupport[slot] != null) foreach (var contact in physicalSupport[slot]) if (contact != null && contact.Supported) return true;
@@ -220,7 +253,7 @@ namespace LWS.TruckHitchSports
             Vector3 riderHalf = truck.shape != null ? Vector3.Scale(truck.shape.size, truck.shape.transform.lossyScale) * .5f : Vector3.one;
             return Mathf.Abs(local.x) < Mathf.Max(.25f, half.x - riderHalf.x) && Mathf.Abs(local.z) < Mathf.Max(.5f, half.z - riderHalf.z) && Vector3.Dot(truck.transform.up, Vector3.up) > .8f;
         }
-        public string RecoveryDiagnostic(int slot) => "recovering=" + recovering[slot] + " remaining=" + Mathf.Max(0, recoveryUntil[slot] - riding[slot]).ToString("F2") + " falls=" + falls[slot] + " actualRemounts=" + recoveries[slot] + " wheelsGrounded=" + trucks[slot].Grounded + " bodySupported=" + HasPhysicalSupport(slot) + " hopPrediction=" + RecoveryHopPrediction(slot);
+        public string RecoveryDiagnostic(int slot) => "recovering=" + recovering[slot] + " remaining=" + Mathf.Max(0, recoveryUntil[slot] - riding[slot]).ToString("F2") + " falls=" + falls[slot] + " actualRemounts=" + recoveries[slot] + " wheelsGrounded=" + trucks[slot].Grounded + " bodySupported=" + HasPhysicalSupport(slot) + " hopPrediction=" + RecoveryHopPrediction(slot) + " body=" + trucks[slot].body.position.ToString("F2") + " velocity=" + trucks[slot].body.linearVelocity.ToString("F2") + " up=" + Vector3.Dot(trucks[slot].body.rotation * Vector3.up,Vector3.up).ToString("F2") + " deckTop=" + deckSurfaces[slot].bounds.max.y.ToString("F2") + " maxGroundRise=" + (groundRemountJumpVelocity * groundRemountJumpVelocity / (2 * Mathf.Max(.1f,Physics.gravity.magnitude))).ToString("F2");
         void FinishRide(int slot)
         {
             if (Completed[slot]) return;
