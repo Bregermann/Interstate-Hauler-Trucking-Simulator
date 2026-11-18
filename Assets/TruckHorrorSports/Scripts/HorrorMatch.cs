@@ -77,6 +77,10 @@ namespace LWS.TruckHorrorSports
         readonly Vector3[] wardDeparture = new Vector3[12], wardReverseDirection = new Vector3[12];
         readonly Vector3[] jobDeparture = new Vector3[12], jobReverseDirection = new Vector3[12];
         readonly float[] jobReverseUntil = new float[12];
+        readonly bool[] graveyardCabRetreat = new bool[12];
+        readonly Vector3[] graveyardRetreatDoorLocal = new Vector3[12];
+        readonly float[] graveyardRetreatCheck = new float[12], graveyardCabCautionUntil = new float[12], graveyardRetreatThreatDistance = new float[12];
+        readonly int[] graveyardRetreats = new int[12], graveyardCabReturns = new int[12];
         readonly Collider[] aiClearance = new Collider[24];
         readonly bool[] lights = new bool[12];
         readonly float[] rescueWork = new float[12], roadPenaltyUntil = new float[12], nextRoadWarning = new float[12], stationarySeconds = new float[12];
@@ -259,6 +263,7 @@ namespace LWS.TruckHorrorSports
             roadPoints = sport == HorrorSport.DeadEnd && roadRoute != null ? new Vector3[roadRoute.Length] : Array.Empty<Vector3>();
             for (int p = 0; p < roadPoints.Length; p++) roadPoints[p] = roadRoute[p].position;
             Successful = false; Ending = null; FinalMetricsRecorded = false; Array.Clear(securityChecks, 0, securityChecks.Length); Array.Clear(physicallyExtracted, 0, physicallyExtracted.Length); announcement = "MIDNIGHT · BEGIN YOUR SHIFT"; announcementUntil = 5;
+            Array.Clear(graveyardCabRetreat,0,graveyardCabRetreat.Length);Array.Clear(graveyardRetreatDoorLocal,0,graveyardRetreatDoorLocal.Length);Array.Clear(graveyardRetreatCheck,0,graveyardRetreatCheck.Length);Array.Clear(graveyardCabCautionUntil,0,graveyardCabCautionUntil.Length);Array.Clear(graveyardRetreatThreatDistance,0,graveyardRetreatThreatDistance.Length);Array.Clear(graveyardRetreats,0,graveyardRetreats.Length);Array.Clear(graveyardCabReturns,0,graveyardCabReturns.Length);
             for (int i = 0; i < trucks.Length; i++)
             {
                 if (footAgents != null && i < footAgents.Length && footAgents[i] != null) footAgents[i].EnterCab();
@@ -312,25 +317,39 @@ namespace LWS.TruckHorrorSports
                     if(turns>0){rules.wrongSignals[i]+=turns;roadPenaltyUntil[i]=Age+3;SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"wrong_physical_fork",setup.players[i].participantId,"Actual wrong-road detour",turns);}
                 }
                 bool ai = setup.players[i].source == BowlingSource.AI;
+                UpdateGraveyardCabRetreat(i,ai);
                 bool cargoRecovery = sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && cargo[i] != null
                     && (ai ? Vector3.Dot(cargo[i].Body.rotation * Vector3.up, Vector3.up) < .4f && trucks[i].body.linearVelocity.magnitude < 1.2f : actions[i]) && cargo[i].RequestRecovery();
                 if(cargoRecovery)Say(setup.players[i].name+" · BRACING THE CURSED LOAD",3);
 
-                supplyJob?.TickParticipant(i, ai || ActionHeld(i), dt);
+                supplyJob?.TickParticipant(i, ai ? !graveyardCabRetreat[i] : ActionHeld(i), dt);
                 Vector2 drive = ai ? DriveAI(i, dt) : commands[i];
                 if (sport == HorrorSport.CursedCargo && cargo != null && i < cargo.Length && !cargo[i].Ready) drive = Vector2.zero;
                 var foot = footAgents != null && i < footAgents.Length ? footAgents[i] : null;
                 int wanted = NextObjective(i);
-                if (foot != null && !foot.Outside && wanted >= 0 && objectives[wanted].requiresFoot && Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i,wanted)) < FootParkingRadius(wanted) && trucks[i].body.linearVelocity.magnitude < 1.4f && (ai || actions[i]))
+                bool footTask = wanted >= 0 && objectives[wanted].requiresFoot;
+                bool retreating = graveyardCabRetreat[i];
+                bool exitCab = !ai ? actions[i] : sport != HorrorSport.GraveyardShift || Age >= graveyardCabCautionUntil[i];
+                bool enterCab = !ai ? actions[i] : !footTask;
+                if (foot != null && foot.Outside && retreating)
+                    enterCab = Vector3.ProjectOnPlane(foot.transform.position - GraveyardRetreatDoor(i), Vector3.up).magnitude < 1.4f;
+                if (foot != null && !foot.Outside && footTask && exitCab &&
+                    Vector3.Distance(trucks[i].body.position, TaskTruckApproach(i, wanted)) < FootParkingRadius(wanted) &&
+                    trucks[i].body.linearVelocity.magnitude < 1.4f)
                 {
                     var truck = trucks[i];
                     Vector3 exitPoint = truck.body.position + truck.transform.right * 2.2f + Vector3.up * .5f;
                     if (supplyJob == null || supplyJob.TryCabExit(i, TaskPosition(i, wanted), out exitPoint))
                         foot.LeaveCab(exitPoint, truck.transform.rotation);
                 }
-                else if (foot != null && foot.Outside && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4 && (ai ? wanted < 0 || !objectives[wanted].requiresFoot : actions[i]))
+                else if (foot != null && foot.Outside && enterCab && Vector3.Distance(foot.transform.position, trucks[i].body.position) < 4)
                 {
                     foot.EnterCab();
+                    if(graveyardCabRetreat[i])
+                    {
+                        graveyardCabRetreat[i]=false;graveyardCabReturns[i]++;graveyardCabCautionUntil[i]=Age+8;nextPlan[i]=0;
+                        SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"graveyard_worker_reached_cab",setup.players[i].participantId,"Actual foot route and existing cab-door entry; no protection granted",graveyardCabReturns[i]);
+                    }
                     if (ai && sport == HorrorSport.GraveyardShift)
                     {
                         // Leave the shop or service bay along the space the
@@ -346,11 +365,11 @@ namespace LWS.TruckHorrorSports
                     trucks[i].HoldForInteraction();
                     if(ai)
                     {
-                        bool supply=supplyJob!=null&&wanted==supplyJob.objectiveIndex;
-                        bool returningToGraveyardCab = sport == HorrorSport.GraveyardShift && (wanted < 0 || !objectives[wanted].requiresFoot);
-                        Vector3 target = returningToGraveyardCab ? GraveyardCabDoor(i)
-                            : wanted >= 0 && objectives[wanted].requiresFoot ? TaskPosition(i, wanted) : trucks[i].body.position;
-                        if ((returningToGraveyardCab || wanted >= 0 && objectives[wanted].requiresFoot) && paths[i] != null && paths[i].status == NavMeshPathStatus.PathComplete)
+                        bool supply=supplyJob!=null&&wanted==supplyJob.objectiveIndex&&!graveyardCabRetreat[i];
+                        bool returningToGraveyardCab = sport == HorrorSport.GraveyardShift && !footTask;
+                        Vector3 target = retreating ? GraveyardRetreatDoor(i) : returningToGraveyardCab ? GraveyardCabDoor(i)
+                            : footTask ? TaskPosition(i, wanted) : trucks[i].body.position;
+                        if ((retreating || returningToGraveyardCab || footTask) && paths[i] != null && paths[i].status == NavMeshPathStatus.PathComplete)
                             for(int c=1;c<pathCorners[i].Length;c++)
                             {
                                 float cornerDistance=supply?Vector3.ProjectOnPlane(foot.transform.position-pathCorners[i][c],Vector3.up).magnitude:Vector3.Distance(foot.transform.position,pathCorners[i][c]);
@@ -366,7 +385,7 @@ namespace LWS.TruckHorrorSports
                 if (atmosphere != null && !trucks[i].body.isKinematic) { trucks[i].grip = Mathf.Max(.65f, atmosphere.Grip); if (trucks[i].tractorMotor != null) trucks[i].tractorMotor.gripScale = Mathf.Max(.65f, atmosphere.Grip); trucks[i].body.AddForce(atmosphere.Flow * .04f, ForceMode.Acceleration); }
                 int task = NearestTask(i);
                 int rescue = NearbyRescue(i);
-                bool held = ai ? task >= 0 || rescue >= 0 : ActionHeld(i);
+                bool held = ai ? !graveyardCabRetreat[i] && (task >= 0 || rescue >= 0) : ActionHeld(i);
                 groundingRitual?.ObserveParticipant(i, held, dt);
                 // Holding the real ward begins suppressing the haunting while
                 // the physical assembly settles; progress still requires both
@@ -504,6 +523,42 @@ namespace LWS.TruckHorrorSports
             return supplyJob != null && supplyJob.TryCabExit(slot, position, out var door)
                 ? door : trucks[slot].body.position;
         }
+        Vector3 GraveyardRetreatDoor(int slot)=>trucks[slot].transform.TransformPoint(graveyardRetreatDoorLocal[slot]);
+        void UpdateGraveyardCabRetreat(int slot,bool ai)
+        {
+            if(sport!=HorrorSport.GraveyardShift)return;
+            if(!ai){graveyardCabRetreat[slot]=false;return;}
+            if(graveyardCabRetreat[slot]||footAgents==null||slot>=footAgents.Length||footAgents[slot]==null||!footAgents[slot].Outside||antagonist==null||antagonist.body==null||antagonist.Target!=slot||antagonist.State==HorrorPursuitState.Watching||antagonist.State==HorrorPursuitState.Repelled||Age<graveyardRetreatCheck[slot])return;
+            int task=NextObjective(slot);if(task<0||!objectives[task].requiresFoot)return;
+            Vector3 worker=footAgents[slot].transform.position;float danger=Vector3.Distance(worker,antagonist.body.position);
+            if(danger>22)return;
+            graveyardRetreatCheck[slot]=Age+.75f;
+            if(!TryReachableGraveyardDoor(slot,out var door))return;
+            graveyardRetreatDoorLocal[slot]=trucks[slot].transform.InverseTransformPoint(door);graveyardCabRetreat[slot]=true;graveyardRetreats[slot]++;graveyardRetreatThreatDistance[slot]=danger;
+            nextPlan[slot]=0;jobReverseUntil[slot]=0;work[slot]=0;working[slot]=-1;
+            Say(setup.players[slot].name+" · THE DRIVER IS CLOSE · GET BACK TO THE CAB",4);
+            SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"graveyard_worker_seeks_cab",setup.players[slot].participantId,"Actual targeted worker; complete NavMesh route to clear original cab door",danger);
+        }
+        bool TryReachableGraveyardDoor(int slot,out Vector3 selected)
+        {
+            selected=Vector3.zero;if(supplyJob==null||!NavMesh.SamplePosition(footAgents[slot].transform.position,out var origin,2,NavMesh.AllAreas))return false;
+            var truck=trucks[slot];var probe=new NavMeshPath();float best=float.PositiveInfinity;
+            for(int side=-1;side<=1;side+=2)
+            {
+                if(!supplyJob.TryCabExit(slot,truck.body.position+truck.transform.right*(side*10),out var door)||!NavMesh.SamplePosition(door,out var goal,2,NavMesh.AllAreas)||Vector3.ProjectOnPlane(goal.position-door,Vector3.up).sqrMagnitude>1)continue;
+                if(!NavMesh.CalculatePath(origin.position,goal.position,NavMesh.AllAreas,probe)||probe.status!=NavMeshPathStatus.PathComplete)continue;
+                var corners=probe.corners;float length=0;for(int point=1;point<corners.Length;point++)length+=Vector3.Distance(corners[point-1],corners[point]);
+                // Prefer a reachable short route and a door farther from the
+                // actual attacker. Neither choice changes collision or damage.
+                float cost=length+Mathf.Max(0,12-Vector3.Distance(door,antagonist.body.position))*2;
+                if(cost<best){best=cost;selected=door;}
+            }
+            return !float.IsPositiveInfinity(best);
+        }
+        public bool GraveyardWorkerRetreating(int slot)=>Live&&slot>=0&&slot<setup.count&&graveyardCabRetreat[slot];
+        public int GraveyardWorkerRetreats(int slot)=>slot>=0&&slot<setup.count?graveyardRetreats[slot]:0;
+        public int GraveyardWorkerCabReturns(int slot)=>slot>=0&&slot<setup.count?graveyardCabReturns[slot]:0;
+        public string GraveyardWorkerEscapeDiagnostic(int slot)=>slot<0||slot>=setup.count?"invalid worker":"retreating="+GraveyardWorkerRetreating(slot)+" started="+GraveyardWorkerRetreats(slot)+" returned="+GraveyardWorkerCabReturns(slot)+" actualThreatGap="+graveyardRetreatThreatDistance[slot].ToString("F2")+" door="+GraveyardRetreatDoor(slot).ToString("F2")+" cautionSeconds="+Mathf.Max(0,graveyardCabCautionUntil[slot]-Age).ToString("F1");
         Vector3 TaskTruckApproach(int slot,int task) => supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.TruckApproach(slot) : objectives[task].truckApproach;
         float FootParkingRadius(int task) => sport == HorrorSport.GraveyardShift &&
             supplyJob != null && task != supplyJob.objectiveIndex ? utilityCabApproachRadius : 8;
@@ -646,8 +701,8 @@ namespace LWS.TruckHorrorSports
             bool outside = footAgents != null && slot < footAgents.Length && footAgents[slot] != null && footAgents[slot].Outside;
             bool graveyardServiceDrive = sport == HorrorSport.GraveyardShift && nightServices != null && !outside;
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
-            if (sport == HorrorSport.GraveyardShift && outside && (id < 0 || !objectives[id].requiresFoot))
-                destination = GraveyardCabDoor(slot);
+            if (sport == HorrorSport.GraveyardShift && outside && (graveyardCabRetreat[slot] || id < 0 || !objectives[id].requiresFoot))
+                destination = graveyardCabRetreat[slot]?GraveyardRetreatDoor(slot):GraveyardCabDoor(slot);
             if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
                 supplyJob != null &&
                 Vector3.Distance(truck.body.position, destination) < FootParkingRadius(id) &&
@@ -918,7 +973,11 @@ namespace LWS.TruckHorrorSports
                 SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_survived", participant, reason + ";unit=BOOLEAN", alive ? 1 : 0);
                 SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_failed_objective", participant, reason + ";unit=BOOLEAN", !alive || !TaskRush && !SurvivalMode && !Escaped(i) ? 1 : 0);
                 if (sport == HorrorSport.GraveyardShift)
+                {
                     SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_owned_security_checks", participant, reason + ";unit=COUNT", securityChecks[i]);
+                    SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_worker_cab_retreats", participant, reason + ";unit=COUNT", graveyardRetreats[i]);
+                    SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_worker_cab_returns", participant, reason + ";unit=COUNT", graveyardCabReturns[i]);
+                }
                 if (sport == HorrorSport.DeadEnd)
                 { SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_highway_metres", participant, reason + ";unit=METRES", rules.distance[i]); SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, "horror_final_wrong_exit_signals", participant, reason + ";unit=COUNT", rules.wrongSignals[i]); }
                 if (sport == HorrorSport.ScarecrowSeason && Cooperative)
