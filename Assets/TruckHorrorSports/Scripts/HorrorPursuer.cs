@@ -50,7 +50,11 @@ namespace LWS.TruckHorrorSports
             if (match == null || !match.Live) return;
             deception?.TickDeception(dt);
             pursuitAudio?.TickWarnings(dt);
-            if (match.Age < 15 || match.Age < repelledUntil) { State = match.Age < repelledUntil ? HorrorPursuitState.Repelled : HorrorPursuitState.Watching; if (semi != null) semi.TickDrive(Vector2.zero); return; }
+            // The escape story opens quietly. Competitive pursuit begins
+            // from the original physical start before either semi disappears
+            // hundreds of metres down the road.
+            float wakeDelay = match.sport == HorrorSport.DeadEnd && match.SurvivalMode ? 2.5f : 15f;
+            if (match.Age < wakeDelay || match.Age < repelledUntil) { State = match.Age < repelledUntil ? HorrorPursuitState.Repelled : HorrorPursuitState.Watching; if (semi != null) semi.TickDrive(Vector2.zero); return; }
             if (match.Age >= nextPlan)
             {
                 nextPlan = match.Age + .4f; target = -1; float best = float.MaxValue;
