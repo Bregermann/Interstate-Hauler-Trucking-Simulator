@@ -68,8 +68,24 @@ namespace LWS.TruckExtremeHauling
 
         public override bool TryReadScoreCard(int card, out string value, out string detail)
         {
-            value=detail=null;if(card<0||card>=setup.count)return false;
-            value=scores[card].ToString("0");detail=(Cooperative?"TEAM "+SharedRescues+" SAFE · ":"")+stage[card].ToString().ToUpperInvariant();if(emergencySites!=null&&emergencySites.Active!=null)detail+=" · "+emergencySites.PlayerStatus(card);return true;
+            value = detail = null;
+            if (card < 0 || card >= setup.count) return false;
+            value = scores[card].ToString("0");
+            string phase;
+            if (stage[card] == RescueStage.Delivered) phase = "CARGO SAFE";
+            else if (stage[card] == RescueStage.Failed) phase = "CARGO LOST";
+            else if (CableConnected(card))
+                phase = "WINCH · " + (winches[card].currentForce.magnitude / 1000).ToString("0") + " kN";
+            else if (hitches != null && hitches[card]?.Attached != null) phase = "HITCH LOCKED";
+            else phase = stage[card] switch
+            {
+                RescueStage.ClearSide or RescueStage.AlignLane or RescueStage.Straighten => "ALIGN HITCH",
+                RescueStage.ReverseHitch => "REVERSE TO KINGPIN",
+                _ => "APPROACH RECOVERY EYE"
+            };
+            detail = Cooperative ? "TEAM " + SharedRescues + " SAFE · " + phase : phase;
+            if (emergencySites?.Active != null) detail += " · " + emergencySites.PlayerStatus(card);
+            return true;
         }
 
         protected override void BeginGame()

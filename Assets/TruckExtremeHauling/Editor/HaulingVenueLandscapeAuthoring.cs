@@ -32,6 +32,49 @@ namespace LWS.TruckExtremeHauling.Editor
         [MenuItem("Truck Sports/Alpha 0.10/Upgrade active advanced hauling surroundings")]
         public static void UpgradeActiveVenue() { InstallActiveVenue(); }
 
+        public static void RepairSavedCargoCrisisApronGap()
+        {
+            if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Stop Play Mode before repairing the saved apron.");
+            var scene = EditorSceneManager.OpenScene("Assets/TruckExtremeHauling/Scenes/CargoCrisis.unity", OpenSceneMode.Single);
+            var roots = scene.GetRootGameObjects();
+            var floor = roots.Single(g => g.name == "Continuous venue support").GetComponent<BoxCollider>();
+            const string path = Folder + "/CargoCrisis/Surrounding authored terrain.asset";
+            var asset = Need<TerrainData>(path);
+            var terrain = roots.SelectMany(g => g.GetComponentsInChildren<Terrain>(true)).Single(t => t.terrainData == asset);
+            if (roots.SelectMany(g => g.GetComponentsInChildren<TerrainCollider>(true)).Any(c => c.terrainData == asset))
+                throw new InvalidOperationException("The Cargo Crisis scenery asset must remain independent of all physical surfaces.");
+            if (floor == null || floor.isTrigger || !floor.enabled)
+                throw new InvalidOperationException("The existing physical freight apron is required.");
+
+            Bounds apron = floor.bounds;
+            int resolution = asset.holesResolution;
+            bool[,] visible = asset.GetHoles(0, 0, resolution, resolution);
+            Vector3 origin = terrain.transform.position;
+            int repaired = 0;
+            for (int z = 0; z < resolution; z++)
+            for (int x = 0; x < resolution; x++)
+            {
+                if (visible[z, x]) continue;
+                float worldX = origin.x + (x + .5f) * asset.size.x / resolution;
+                float worldZ = origin.z + (z + .5f) * asset.size.z / resolution;
+                // Keep the inner terrain cutout for the alternate flooded
+                // loading bays. Bridge only the gap around the original apron.
+                float insideX = Mathf.Min(worldX - apron.min.x, apron.max.x - worldX);
+                float insideZ = Mathf.Min(worldZ - apron.min.z, apron.max.z - worldZ);
+                if (Mathf.Min(insideX, insideZ) > 12) continue;
+                visible[z, x] = true;
+                repaired++;
+            }
+            if (repaired > 0)
+            {
+                asset.SetHoles(0, 0, visible);
+                EditorUtility.SetDirty(asset);
+                AssetDatabase.SaveAssetIfDirty(asset);
+            }
+            Debug.Log("HH10_CARGO_VISIBLE_APRON_GAP_REPAIRED cells=" + repaired + " saved visual terrain perimeter only.");
+        }
+
         // Saving is deliberately left to the integrator, after inspection of the active scene.
         public static GameObject InstallActiveVenue()
         {
