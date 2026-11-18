@@ -40,10 +40,13 @@ namespace LWS.TruckExtremeHauling
         public GameObject defaultSupport;
         public GameObject[] floodedSiteReplacedRoadblocks = Array.Empty<GameObject>();
         public CargoEmergencySite industrialFire, floodedLoading, highwayPileup, mountainRecovery;
+        public Transform[] mountainFairleads = Array.Empty<Transform>();
         public CargoEmergencySite Active { get; private set; }
         public bool FloodActive => Active != null && Active == floodedLoading;
         public bool PileupActive => Active != null && Active == highwayPileup;
         public bool MountainActive => Active != null && Active == mountainRecovery;
+        public bool MountainAvailable => mountainRecovery?.environment != null && mountainFairleads != null &&
+            mountainFairleads.Length == 4 && !Array.Exists(mountainFairleads, fairlead => fairlead == null);
         public readonly bool[] MountainRecovered = new bool[4];
         readonly bool[] mountainInitiallyTipped = new bool[4];
         public readonly float[] PileupWreckMetres = new float[4];
@@ -85,11 +88,14 @@ namespace LWS.TruckExtremeHauling
             if (defaultSupport != null) defaultSupport.SetActive(originalSupportActive);
             for(int i=0;i<originalRoadblockActive.Length;i++)if(floodedSiteReplacedRoadblocks[i]!=null)floodedSiteReplacedRoadblocks[i].SetActive(originalRoadblockActive[i]);
             Active = option == 4 ? industrialFire : option == 5 ? floodedLoading : option==6?highwayPileup:option==7?mountainRecovery:null;
+            foreach(var fairlead in mountainFairleads ?? Array.Empty<Transform>())if(fairlead!=null)fairlead.gameObject.SetActive(MountainActive && MountainAvailable);
             if (option < 4) return;
             if (Active?.environment == null || Active.loads == null || Active.loads.Length != 4 || Active.truckStarts == null || Active.truckStarts.Length != 4 || Active.depots == null || Active.depots.Length != 4)
                 throw new InvalidOperationException("The selected Cargo Crisis emergency must have four saved native loads, staging positions and depots.");
             if (FloodActive && (Active.flotation == null || Active.flotation.Length != 4 || Active.floodedVolumes == null || Active.floodedVolumes.Length != 4 || Active.dryBankX == null || Active.dryBankX.Length != 4 || defaultSupport == null))
                 throw new InvalidOperationException("The saved flooded loading incident is incomplete.");
+            if(MountainActive&&!MountainAvailable)
+                throw new InvalidOperationException("Explicitly repair the saved mountain front fairleads and facing approach before selecting this incident.");
             Active.environment.SetActive(true);
             if (FloodActive)
             {

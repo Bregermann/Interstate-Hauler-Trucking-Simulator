@@ -28,6 +28,8 @@ namespace LWS.TruckExtremeHauling
         BoxCollider floodNorthernRoad;
         readonly int[] floodTowHitchLosses = new int[4];
         readonly bool[] alignmentBacking = new bool[4], holdForAlignment = new bool[4];
+        readonly Vector3[] ordinaryCableAnchors = new Vector3[4];
+        readonly bool[] capturedCableAnchors = new bool[4];
         readonly LineRenderer[] cables = new LineRenderer[4];
         bool[] deliveredTargets;
         Material ownedCableMaterial;
@@ -67,13 +69,13 @@ namespace LWS.TruckExtremeHauling
         }
         public override string Title => "CARGO CRISIS";
         public override int OptionCount => emergencySites?.highwayPileup?.environment == null ? 6 :
-            emergencySites.mountainRecovery?.environment == null ? 7 : ScenarioNames.Length;
+            emergencySites.MountainAvailable ? ScenarioNames.Length : 7;
         protected override string[] Modes => ScenarioNames;
         public override bool Cooperative => option == 2;
         protected override string ActionHint => "HOOK / RELEASE CABLE · HOLD REEL / ALIGN HITCH";
         public override string Status => emergencySites!=null&&emergencySites.Active!=null ? emergencySites.Status : Cooperative ? "TEAM RECOVERY · " + SharedRescues + "/" + Mathf.Min(setup.count, trailers.Length) + " LOADS SAFE · " + ActionHint : "PHYSICAL RECOVERY · " + ActionHint;
         public override string Results => (Cooperative ? (CooperativeSuccess ? "ALL CARGO RECOVERED — TEAM SUCCESS" : "TEAM RECOVERY INCOMPLETE") + "\n" : "") + base.Results;
-        public override string Help => "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points. Industrial Fire: visible burning freight damages exposed cargo; extract it quickly and preserve its condition. Flooded Loading: remain on the dry right bank, use the longer recovery cable and physically reel the floating load up the extraction slope. Native wheel support on the dry bank is required before hitching; buoyant or cable-only arrivals cannot qualify. Highway Pileup: work around the disabled vehicles, pull the stranded trailer upright and haul it to your depot. Real wreck movement is tracked separately from cargo delivery.";
+        public override string Help => option == 7 ? "Mountain Pass: face the load, park on supported tyres, ACTION to hook the low FRONT winch and HOLD ACTION to reel. A side-loaded line or leaning truck stops reeling; ACTION releases it so you can reposition. The visible cable starts at the bumper fairlead. Physically right the load, release the cable, align ahead and reverse the native fifth wheel under the kingpin. Hold ACTION to hitch, then control your speed down the mountain road and stop your upright attached load at the lower depot. Actual cable force, native tyre support and physical delivery decide the result." : "Drive alongside the high recovery eye of a tipped trailer and press ACTION to hook your physical winch cable. Hold ACTION to reel while braking or driving to pull the load upright; press ACTION again to release. A cable transmits force at the trailer roof eye, so truck position matters. Once upright, clear the cable, position ahead of the trailer, straighten and reverse the fifth wheel beneath its kingpin. Hold ACTION near the aligned kingpin to lock the native hitch. Tow to your lit depot and stop the upright load for two seconds. A touch or cable-only arrival never scores. In cooperative play the team must recover every active load; teammates may assist other unclaimed loads, and cooperative success awards no individual winner points. Industrial Fire: visible burning freight damages exposed cargo; extract it quickly and preserve its condition. Flooded Loading: remain on the dry right bank, use the longer recovery cable and physically reel the floating load up the extraction slope. Native wheel support on the dry bank is required before hitching; buoyant or cable-only arrivals cannot qualify. Highway Pileup: work around the disabled vehicles, pull the stranded trailer upright and haul it to your depot. Real wreck movement is tracked separately from cargo delivery.";
 
         public override bool TryReadScoreCard(int card, out string value, out string detail)
         {
@@ -84,7 +86,7 @@ namespace LWS.TruckExtremeHauling
             if (stage[card] == RescueStage.Delivered) phase = "CARGO SAFE";
             else if (stage[card] == RescueStage.Failed) phase = "CARGO LOST";
             else if (CableConnected(card))
-                phase = "WINCH · " + (winches[card].currentForce.magnitude / 1000).ToString("0") + " kN";
+                phase = emergencySites != null && emergencySites.MountainActive && !MountainReelingAllowed(card, out _) ? "FACE LOAD · PARK ON TYRES TO REEL" : "WINCH · " + (winches[card].currentForce.magnitude / 1000).ToString("0") + " kN";
             else if (hitches != null && hitches[card]?.Attached != null) phase = "HITCH LOCKED";
             else phase = stage[card] switch
             {
@@ -121,6 +123,9 @@ namespace LWS.TruckExtremeHauling
                 assigned[i] = Mathf.Min(i, trailers.Length - 1); stage[i] = RescueStage.Approach;
                 recoveryAttempts[i] = 0;
                 stable[i] = stageTime[i] = 0; DetachCable(i);
+                if(!capturedCableAnchors[i]) { ordinaryCableAnchors[i]=winches[i].anchor;capturedCableAnchors[i]=true; }
+                winches[i].anchor=emergencySites!=null&&emergencySites.MountainActive
+                    ? trucks[i].transform.InverseTransformPoint(emergencySites.mountainFairleads[i].position) : ordinaryCableAnchors[i];
                 if (i < setup.count) foreach (var body in trailers[assigned[i]].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = false;
                 if (option == 3) trailers[assigned[i]].AddCargo(trailers[assigned[i]].InitialMass * .4f);
                 EnsureCable(i); cables[i].enabled = false;
@@ -189,7 +194,7 @@ namespace LWS.TruckExtremeHauling
             Vector3 aligned = AlignedRoot(i, target), forward = Vector3.ProjectOnPlane(target.transform.forward, Vector3.up).normalized;
             switch (stage[i])
             {
-                case RescueStage.Approach: return emergencySites!=null&&emergencySites.FloodActive?emergencySites.DryBankApproach(i,target):target.Body.position + RecoverySide(target) * (recoveryAttempts[i] == 0 ? 12 : 17) - forward * 2;
+                case RescueStage.Approach: return emergencySites!=null&&emergencySites.MountainActive?Eye(target)+RecoverySide(target)*14:emergencySites!=null&&emergencySites.FloodActive?emergencySites.DryBankApproach(i,target):target.Body.position + RecoverySide(target) * (recoveryAttempts[i] == 0 ? 12 : 17) - forward * 2;
                 case RescueStage.ClearSide: return MountainSupportedDestination(i, aligned + (emergencySites!=null&&emergencySites.FloodActive?Vector3.right:RecoverySide(target)) * 18 + forward * 12);
                 case RescueStage.AlignLane: return MountainSupportedDestination(i, aligned + forward * 22);
                 case RescueStage.Straighten: return emergencySites != null && (emergencySites.FloodActive || emergencySites.MountainActive) ? SupportedAlignmentTarget(i, target) : aligned + forward * 50;
@@ -210,6 +215,13 @@ namespace LWS.TruckExtremeHauling
             transmission.automaticTransmissionDNRShiftType=stage[i]==RescueStage.ReverseHitch
                 ? NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.RequireShiftInput
                 : NWH.VehiclePhysics2.Powertrain.TransmissionComponent.AutomaticTransmissionDNRShiftType.Auto;
+            if(emergencySites!=null&&emergencySites.MountainActive&&stage[i]==RescueStage.Approach)
+            {
+                Vector3 destination=MountainSupportedDestination(i,Destination(i));
+                if(Vector3.ProjectOnPlane(trucks[i].body.position-destination,Vector3.up).magnitude<3&&!MountainReelingAllowed(i,out _))
+                    return DriveToward(i,Eye(target),1.5f,true);
+                return DriveToward(i,destination,3,true);
+            }
             if (emergencySites != null && emergencySites.MountainActive && (stage[i] == RescueStage.ClearSide || stage[i] == RescueStage.AlignLane))
             {
                 if (!TryMountainTerraceBounds(i, out _)) { holdForAlignment[i] = true; return Vector2.zero; }
@@ -452,7 +464,10 @@ namespace LWS.TruckExtremeHauling
             {
                 if (!tipped&&HitchReady(i,target)) SetStage(i, RescueStage.ClearSide);
                 else if (Vector3.ProjectOnPlane(trucks[i].body.position - Destination(i), Vector3.up).magnitude < 3 && trucks[i].body.linearVelocity.magnitude < 1.5f)
-                { HookCable(i, target); SetStage(i, RescueStage.Winching); }
+                {
+                    HookCable(i, target);
+                    if(emergencySites==null||!emergencySites.MountainActive||winches[i].connectedBody!=null)SetStage(i, RescueStage.Winching);
+                }
             }
             if (!ai && actions[i] && hitches[i].Attached == null)
             {
@@ -472,8 +487,11 @@ namespace LWS.TruckExtremeHauling
                     if(Vector3.Distance(trucks[i].transform.TransformPoint(winches[i].anchor),frontEye)<=EffectiveCableReach)
                     {ConfigureRecoveryCable(winches[i],trucks[i].body,target.Body,frontEye,EffectiveCableReach);emergencySites.SetFloodTowPhase(i,target,true);stable[i]=0;}
                 }
-                if (ai || ActionHeld(i))
+                bool safeMountainLine=emergencySites==null||!emergencySites.MountainActive||MountainReelingAllowed(i,out _);
+                if ((ai || ActionHeld(i))&&safeMountainLine)
                     winches[i].maxDistance = Mathf.Max(2, winches[i].maxDistance - reelSpeed * dt * (option == 3 ? .8f : 1));
+                if(ai&&!safeMountainLine&&stageTime[i]>.5f)
+                { DetachCable(i);recoveryAttempts[i]++;SetStage(i,RescueStage.Approach); }
                 if (ai&&!(emergencySites!=null&&emergencySites.FrontRecoveryTow(i)&&!emergencySites.Extracted[i])) Park(i);
                 stable[i] = !tipped && HitchReady(i,target) && target.Body.angularVelocity.magnitude < .65f ? stable[i] + dt : 0;
                 if (ai && stable[i] > 1) { emergencySites?.ParkExtractedLandingGear(i,target);DetachCable(i); target.SetBrakes(1); SetStage(i, RescueStage.ClearSide); }
@@ -548,6 +566,7 @@ namespace LWS.TruckExtremeHauling
         }
         void HookCable(int i, TrailerBody target)
         {
+            if(emergencySites!=null&&emergencySites.MountainActive&&!MountainReelingAllowed(i,out _))return;
             var winch = winches[i];
             bool frontTow=emergencySites!=null&&emergencySites.FloodActive&&Upright(target);
             Vector3 eye = frontTow?target.Kingpin.position:Eye(target), anchor = trucks[i].transform.TransformPoint(winch.anchor);
@@ -555,6 +574,28 @@ namespace LWS.TruckExtremeHauling
             ConfigureRecoveryCable(winch,trucks[i].body,target.Body,eye,EffectiveCableReach);
             if(emergencySites!=null&&emergencySites.FloodActive)emergencySites.SetFloodTowPhase(i,target,frontTow);
             target.SetBrakes(0); stable[i] = 0;
+        }
+        public bool MountainReelingAllowed(int slot,out string reason)
+        {
+            reason="FACE LOAD · PARK ON TYRES";
+            if(emergencySites==null||!emergencySites.MountainActive)return true;
+            var truck=trucks[slot];var load=Target(slot);
+            if(load==null||Vector3.Dot(truck.transform.up,Vector3.up)<.95f) { reason="TRUCK LEANING · RELEASE AND REPOSITION";return false; }
+            int grounded=0;
+            foreach(var wheel in truck.wheels)
+                if(wheel!=null&&wheel.enabled&&wheel.IsGrounded&&Vector3.Dot(wheel.HitNormal,Vector3.up)>.8f&&wheel.HitCollider!=null&&wheel.HitCollider.transform.IsChildOf(emergencySites.Active.environment.transform))grounded++;
+            if(grounded<3) { reason="PARK ON SUPPORTED TYRES";return false; }
+            Vector3 anchor=truck.transform.TransformPoint(winches[slot].anchor);
+            Vector3 eye=winches[slot].connectedBody==load.Body?load.transform.TransformPoint(winches[slot].connectedAnchor):Eye(load);
+            Vector3 line=Vector3.ProjectOnPlane(eye-anchor,Vector3.up),forward=Vector3.ProjectOnPlane(truck.transform.forward,Vector3.up);
+            if(line.sqrMagnitude<.01f||Vector3.Angle(forward,line)>20) { reason="SIDE-LOADED LINE · FACE THE LOAD";return false; }
+            if(truck.body.linearVelocity.magnitude>1.5f) { reason="PARK BEFORE REELING";return false; }
+            reason="FRONT LINE ALIGNED";return true;
+        }
+        public string MountainWinchDiagnostic(int slot)
+        {
+            bool safe=MountainReelingAllowed(slot,out string reason);
+            return "lineSafe="+safe+" reason="+reason+" localAnchor="+winches[slot].anchor.ToString("F2")+" tractorUp="+Vector3.Dot(trucks[slot].transform.up,Vector3.up).ToString("F3")+" speed="+trucks[slot].body.linearVelocity.magnitude.ToString("F2");
         }
         // One cable tuning authority for Cargo Crisis and the thin-ice rescue adapter.
         // Callers own the meaningful hook action and distance/ownership checks.

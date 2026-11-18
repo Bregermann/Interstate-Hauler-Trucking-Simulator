@@ -44,17 +44,35 @@ namespace LWS.TruckExtremeHauling.Tests
                     var load = ((Array)Field(mountain, "loads")).GetValue(0); var body = (Rigidbody)Field(load, "Body"); int bodyId = body.GetInstanceID();
                     Assert.That(Vector3.Dot(((Component)load).transform.up, Vector3.up), Is.LessThan(.6f), "The incident begins with a genuinely tipped native load.");
                     var depot = (Transform)((Array)Field(mountain, "depots")).GetValue(0);
+                    var truck = (Component)((Array)Field(match, "trucks")).GetValue(0);
+                    var cable = (SpringJoint)((Array)Field(match, "winches")).GetValue(0);
+                    Vector3 ordinaryAnchor=cable.anchor;
+                    float deadline = Time.realtimeSinceStartup + 110;
+                    for(int round=0;round<2;round++)
+                    {
                     Assert.That((bool)Call(match, "StartMatch"), Is.True);
                     Assert.That((bool)Property(sites, "MountainActive"), Is.True);
-                    var truck = (Component)((Array)Field(match, "trucks")).GetValue(0);
+                    Assert.That(((bool[])Field(sites, "MountainRecovered")).Any(value => value), Is.False);
+                    Assert.That(((float[])Field(sites, "CableTowMetres")).Any(value => value != 0), Is.False);
+                    Assert.That((int)Call(match, "ObjectivesCompleted", 0), Is.Zero);
+                    var fairlead=(Transform)((Array)Field(sites,"mountainFairleads")).GetValue(0);
+                    Assert.That(fairlead.gameObject.activeInHierarchy,Is.True);
+                    Assert.That(cable.anchor,Is.EqualTo(truck.transform.InverseTransformPoint(fairlead.position)));
+                    Assert.That(cable.anchor.y,Is.EqualTo(.3f).Within(.01f),"The actual joint must use its visible low front hardware.");
                     var coupler = truck.GetComponent(Type.GetType("LWS.TruckHitchSports.HitchCoupler, Assembly-CSharp", true));
-                    var cable = (SpringJoint)((Array)Field(match, "winches")).GetValue(0);
-                    Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 80, nextObservation = 0;
+                    var nativeBodies=truck.GetComponentsInChildren<Rigidbody>(true);
+                    Time.timeScale = 3; float nextObservation = 0;
                     bool loadedCableSeen = false, elevatedNativeHitchSeen = false, actualDepotSupportSeen = false;
+                    bool safelyAlignedReelingSeen=false;float maximumLoadedCabLean=0;
                     float highestTowed = float.NegativeInfinity, lowestTowed = float.PositiveInfinity;
                     while (!(bool)Property(match, "Finished") && Time.realtimeSinceStartup < deadline)
                     {
                         loadedCableSeen |= cable.connectedBody == body && cable.currentForce.magnitude > 100;
+                        if(cable.connectedBody==body&&cable.currentForce.magnitude>100)
+                        {
+                            foreach(var part in nativeBodies)maximumLoadedCabLean=Mathf.Max(maximumLoadedCabLean,Vector3.Angle(part.transform.up,Vector3.up));
+                            object[] lineArgs={0,null};safelyAlignedReelingSeen|=(bool)match.GetType().GetMethod("MountainReelingAllowed").Invoke(match,lineArgs);
+                        }
                         if (Property(coupler, "Attached") == load)
                         {
                             elevatedNativeHitchSeen |= body.position.y > 25;
@@ -64,13 +82,15 @@ namespace LWS.TruckExtremeHauling.Tests
                         if (Time.realtimeSinceStartup >= nextObservation)
                         {
                             nextObservation = Time.realtimeSinceStartup + 6;
-                            Debug.Log("HH10_CARGO_MOUNTAIN_LIVE stage=" + Call(match, "RecoveryPhase", 0) + " cargo=" + body.worldCenterOfMass.ToString("F2") + " winchedMetres=" + ((float[])Field(sites, "CableTowMetres"))[0] + " righted=" + ((bool[])Field(sites, "MountainRecovered"))[0] + " " + Call(sites, "DiagnosticState", 0));
+                            Debug.Log("HH10_CARGO_MOUNTAIN_LIVE round="+round+" stage=" + Call(match, "RecoveryPhase", 0) + " cargo=" + body.worldCenterOfMass.ToString("F2") + " winchedMetres=" + ((float[])Field(sites, "CableTowMetres"))[0] + " righted=" + ((bool[])Field(sites, "MountainRecovered"))[0] + " " + Call(sites, "DiagnosticState", 0)+" "+Call(match,"MountainWinchDiagnostic",0)+" "+Call(match,"MountainAlignmentDiagnostic",0));
                         }
                         yield return null;
                     }
-                    string state = "stage=" + Call(match, "RecoveryPhase", 0) + " cargo=" + body.worldCenterOfMass.ToString("F2") + " nativeTowHeight=" + highestTowed + ".." + lowestTowed + " " + Call(sites, "DiagnosticState", 0);
+                    string state = "round="+round+" maxLoadedCabLean="+maximumLoadedCabLean+" stage=" + Call(match, "RecoveryPhase", 0) + " cargo=" + body.worldCenterOfMass.ToString("F2") + " nativeTowHeight=" + highestTowed + ".." + lowestTowed + " " + Call(sites, "DiagnosticState", 0)+" "+Call(match,"MountainWinchDiagnostic",0);
                     Assert.That((bool)Property(match, "Finished"), Is.True, state);
                     Assert.That(loadedCableSeen, Is.True, "A genuine loaded cable must perform the rescue. " + state);
+                    Assert.That(safelyAlignedReelingSeen,Is.True,"Real longitudinal reeling requires supported native tyres. "+state);
+                    Assert.That(maximumLoadedCabLean,Is.LessThan(30),"Rolling the native cab/chassis sideways cannot certify a stable recovery. "+state);
                     Assert.That(((float[])Field(sites, "CableTowMetres"))[0], Is.GreaterThan(.5f), state);
                     Assert.That(((bool[])Field(sites, "MountainRecovered"))[0], Is.True, "Real elevated upright native wheel support must follow actual winching. " + state);
                     Assert.That(elevatedNativeHitchSeen, Is.True, "The original high-terrace load must physically couple to the tractor. " + state);
@@ -80,12 +100,12 @@ namespace LWS.TruckExtremeHauling.Tests
                     Assert.That((bool)Call(match, "ResultWinner", 0), Is.True, state);
                     Assert.That(body.GetInstanceID(), Is.EqualTo(bodyId));
                     Call(match, "SetupScreen"); yield return null; yield return null;
-                    Assert.That((bool)Call(match, "StartMatch"), Is.True);
-                    Assert.That(((bool[])Field(sites, "MountainRecovered")).Any(value => value), Is.False);
-                    Assert.That(((float[])Field(sites, "CableTowMetres")).Any(value => value != 0), Is.False);
-                    Assert.That((int)Call(match, "ObjectivesCompleted", 0), Is.Zero);
-                    Assert.That(body.GetInstanceID(), Is.EqualTo(bodyId));
-                    Debug.Log("HH10_CARGO_MOUNTAIN_RESULT " + state + " rematch=fresh");
+                    Debug.Log("HH10_CARGO_MOUNTAIN_RESULT " + state + " normalSetup=returned");
+                    }
+                    match.GetType().GetField("option").SetValue(match,0);Call(match,"NormalizeSetup");
+                    Assert.That((bool)Call(match,"StartMatch"),Is.True);
+                    Assert.That(cable.anchor,Is.EqualTo(ordinaryAnchor),"Ordinary Cargo Crisis must retain its original cable anchor.");
+                    Assert.That(((Array)Field(sites,"mountainFairleads")).Cast<Transform>().Any(value=>value.gameObject.activeSelf),Is.False,"Mountain hardware must not appear in previous incidents.");
                 }
                 finally
                 {
