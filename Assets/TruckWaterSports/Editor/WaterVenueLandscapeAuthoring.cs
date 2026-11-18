@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -45,7 +46,12 @@ namespace LWS.TruckWaterSports.Editor
         public static void RestoreSavedPaddlePalsRiverBed()
         {
             var scene = EditorSceneManager.OpenScene(WaterSportsAuthoring.PaddleScene, OpenSceneMode.Single);
-            string path = Folder + "/PaddlePals/Terrain/Scenic valley terrain.asset";
+            RestoreVisibleRiverBed(scene);
+        }
+
+        static void RestoreVisibleRiverBed(UnityEngine.SceneManagement.Scene scene)
+        {
+            string path = Folder + "/" + scene.name + "/Terrain/Scenic valley terrain.asset";
             TerrainData visual = Required<TerrainData>(path);
             Terrain valley = null;
             foreach (var root in scene.GetRootGameObjects())
@@ -58,7 +64,7 @@ namespace LWS.TruckWaterSports.Editor
                         valley = terrain;
             }
             if (valley == null)
-                throw new InvalidOperationException("The saved Paddle Pals valley does not use its owned render terrain.");
+                throw new InvalidOperationException("The saved river valley does not use its owned render terrain.");
 
             // Keep the visible textured bed beneath the existing water. The
             // separate collision asset still excludes the full river corridor.
@@ -70,7 +76,75 @@ namespace LWS.TruckWaterSports.Editor
             visual.SetHoles(0, 0, continuous);
             EditorUtility.SetDirty(visual);
             AssetDatabase.SaveAssetIfDirty(visual);
-            Debug.Log("PADDLE_PALS_VISIBLE_RIVER_BED_SAVED " + path);
+            string logTag = scene.path == WaterSportsAuthoring.PaddleScene
+                ? "PADDLE_PALS_VISIBLE_RIVER_BED_SAVED" : "WHITEWATER_VISIBLE_RIVER_BED_SAVED";
+            Debug.Log(logTag + " " + path);
+        }
+
+        public static void AuthorSavedWhitewaterLaunch()
+        {
+            if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Stop Play Mode before repairing the Whitewater launch.");
+            var scene = EditorSceneManager.OpenScene(WaterSportsAuthoring.KayakScene, OpenSceneMode.Single);
+            int banks = UpgradeActiveRiverBanks(scene);
+            ExtendWhitewaterLaunchWater(scene);
+            RestoreVisibleRiverBed(scene);
+            if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
+                throw new InvalidOperationException("Could not save the Whitewater launch presentation.");
+            AssetDatabase.SaveAssets();
+            Debug.Log("WHITEWATER_LAUNCH_LOOK_SAVED banks=" + banks + " existing river material and exact physical course preserved.");
+        }
+
+        static void ExtendWhitewaterLaunchWater(UnityEngine.SceneManagement.Scene scene)
+        {
+            const string originalPath = "Assets/TruckWaterSports/Art/WhitewaterWipeoutMatch watercourse.asset";
+            const string launchPath = Folder + "/WhitewaterWipeout/Meshes/Whitewater river with visible launch pool.asset";
+            var roots = scene.GetRootGameObjects();
+            var race = roots.SelectMany(root => root.GetComponentsInChildren<WhitewaterWipeoutMatch>(true)).Single();
+            var visible = roots.SelectMany(root => root.GetComponentsInChildren<MeshFilter>(true))
+                .Single(filter => filter.name == "Owned River Modeler shaded flowing surface");
+            if (visible.GetComponent<Collider>() != null)
+                throw new InvalidOperationException("The visible water mesh cannot own physical support.");
+            if (AssetDatabase.GetAssetPath(visible.sharedMesh) == launchPath) return;
+            var source = Required<Mesh>(originalPath);
+            if (visible.sharedMesh != source || source.vertexCount != race.course.stations.Length * 2)
+                throw new InvalidOperationException("Preserve a customized authored river surface.");
+
+            Mesh extended = AssetDatabase.LoadAssetAtPath<Mesh>(launchPath);
+            if (extended == null)
+            {
+                var vertices = new List<Vector3>(source.vertices);
+                var uv = new List<Vector2>(source.uv);
+                var colors = new List<Color>(source.colors);
+                var triangles = new List<int>(source.triangles);
+                if (uv.Count != vertices.Count || colors.Count != vertices.Count)
+                    throw new InvalidOperationException("Preserve the original water texture coordinates and flow colors.");
+                const float extensionMetres = 9;
+                Vector3 firstReach = Vector3.ProjectOnPlane(race.course.Point(1) - race.course.Point(0), Vector3.up);
+                if (firstReach.sqrMagnitude < 0.01f)
+                    throw new InvalidOperationException("The first two river stations must define a launch direction.");
+                Vector3 upstream = visible.transform.InverseTransformVector(-firstReach.normalized * extensionMetres);
+                Vector2 upstreamUv = (uv[0] - uv[2]) * (extensionMetres / firstReach.magnitude);
+                int start = vertices.Count;
+                vertices.Add(vertices[0] + upstream);
+                vertices.Add(vertices[1] + upstream);
+                uv.Add(uv[0] + upstreamUv);
+                uv.Add(uv[1] + upstreamUv);
+                colors.Add(colors[0]);
+                colors.Add(colors[1]);
+                triangles.AddRange(new[] { start, 0, start + 1, start + 1, 0, 1 });
+                extended = new Mesh { name = "Whitewater river with visible launch pool" };
+                extended.SetVertices(vertices);
+                extended.SetUVs(0, uv);
+                extended.SetColors(colors);
+                extended.SetTriangles(triangles, 0);
+                extended.RecalculateNormals();
+                extended.RecalculateTangents();
+                AssetDatabase.CreateAsset(extended, launchPath);
+            }
+            visible.sharedMesh = extended;
+            EditorUtility.SetDirty(visible);
+            EditorSceneManager.MarkSceneDirty(scene);
         }
 
         [MenuItem("Truck Sports/Alpha 0.10/Repair saved Paddle Pals visible shoreline materials")]
@@ -90,6 +164,11 @@ namespace LWS.TruckWaterSports.Editor
             var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             if(Application.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode||scene.path!=WaterSportsAuthoring.PaddleScene)
                 throw new InvalidOperationException("Open the saved Paddle Pals scene outside Play Mode.");
+            return UpgradeActiveRiverBanks(scene);
+        }
+
+        static int UpgradeActiveRiverBanks(UnityEngine.SceneManagement.Scene scene)
+        {
             // Audit every target and dependency before creating assets or changing
             // assignments. Never make a previously visible collision surface vanish.
             var grass=Required<TerrainLayer>("Assets/TruckFishing/Materials/Grass bank.terrainlayer");
@@ -102,7 +181,7 @@ namespace LWS.TruckWaterSports.Editor
             Mesh source=null;Vector3 dimensions=Vector3.zero;Vector3[] originalVertices=null;
             foreach(var root in scene.GetRootGameObjects())
             {
-                var candidate=root.GetComponentInChildren<PaddlePalsMatch>(true);if(candidate!=null)match=candidate;
+                var candidate=root.GetComponentInChildren<WaterMatch>(true);if(candidate!=null)match=candidate;
                 foreach(var filter in root.GetComponentsInChildren<MeshFilter>(true))
                 {
                     if(filter.name!="Textured riverbank")continue;
@@ -122,8 +201,8 @@ namespace LWS.TruckWaterSports.Editor
                 }
             }
             if(match==null||match.course==null||match.course.stations==null||filters.Count!=match.course.stations.Length*2)
-                throw new InvalidOperationException("All original paired bank surfaces and Paddle Pals stations are required.");
-            string folder=Folder+"/PaddlePals";EnsureFolder(folder+"/Materials");EnsureFolder(folder+"/Meshes");
+                throw new InvalidOperationException("All original paired bank surfaces and river stations are required.");
+            string folder=Folder+"/"+scene.name;EnsureFolder(folder+"/Materials");EnsureFolder(folder+"/Meshes");
             Material top=ShorelineMaterial(folder+"/Materials/Visible grass shoreline.mat",template,grass);
             Material side=ShorelineMaterial(folder+"/Materials/Visible pebbled shoreline.mat",template,pebble);
             string meshPath=folder+"/Meshes/Exact original shoreline render surface.asset";
