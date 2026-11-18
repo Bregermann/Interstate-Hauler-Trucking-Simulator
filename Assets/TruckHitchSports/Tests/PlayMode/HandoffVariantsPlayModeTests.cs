@@ -20,6 +20,7 @@ public sealed class HandoffVariantsPlayModeTests
 
     [UnityTest] public IEnumerator ExtendedRelayPhysicallyTransfersOriginalBatonThroughFourLegsAndRematches() => Natural(3);
     [UnityTest] public IEnumerator ReverseRelayActuallyBacksTheLoadIntoItsBayThenFinishesAndRematches() => Natural(2);
+    [UnityTest] public IEnumerator ObstacleRelayTraversesSavedPhysicalChicaneHandsOffOriginalBatonAndRematches() => Natural(1);
 
     IEnumerator Natural(int mode)
     {
@@ -40,6 +41,9 @@ public sealed class HandoffVariantsPlayModeTests
             var owners = new[] { new List<int>(), new List<int>() };
             var travel = new float[2]; var backed = new bool[2]; var reverseEntryObserved = new bool[2];
             Assert.That((bool)Call(match, "StartMatch"), Is.True);
+            var obstaclePassages = new bool[2, 3]; var passageClearance = new float[2, 3];
+            var previousCom = bodies.Select(b => b.worldCenterOfMass).ToArray();
+            BoxCollider[,] obstacleGates = mode == 1 ? SavedObstacleGates((Component)match) : null;
             var players = (Array)Field(setup, "players"); var participantIds = Enumerable.Range(0, 4).Select(i => (string)Field(players.GetValue(i), "participantId")).ToArray();
             try
             {
@@ -51,6 +55,29 @@ public sealed class HandoffVariantsPlayModeTests
                         int owner = (int)Property(trailers.GetValue(team), "Owner");
                         if (owner >= 0 && (owners[team].Count == 0 || owners[team][owners[team].Count - 1] != owner)) owners[team].Add(owner);
                         travel[team] = Mathf.Max(travel[team], Vector3.ProjectOnPlane(bodies[team].position - starts[team], Vector3.up).magnitude);
+                        if (mode == 1)
+                        {
+                            Vector3 current = bodies[team].worldCenterOfMass;
+                            for (int gate = 0; gate < 3; gate++)
+                            {
+                                var shape = obstacleGates[team, gate]; var bounds = shape.bounds;
+                                // Observe the real baton sweeping across each saved
+                                // collider's centre plane. Correct-side clearance is
+                                // derived from that physical barrier, never an AI
+                                // waypoint or a manufactured gameplay receipt.
+                                if (!obstaclePassages[team, gate] && previousCom[team].z < bounds.center.z && current.z >= bounds.center.z)
+                                {
+                                    float t = (bounds.center.z - previousCom[team].z) / (current.z - previousCom[team].z);
+                                    float x = Mathf.Lerp(previousCom[team].x, current.x, t);
+                                    float clearance = gate == 1 ? bounds.min.x - x : x - bounds.max.x;
+                                    int requiredOwner = gate < 2 ? team : team + 2;
+                                    bool physicallyAttached = owner == requiredOwner && ReferenceEquals(Property(couplers.GetValue(owner), "Attached"), trailers.GetValue(team)) && (bool)Property(couplers.GetValue(owner), "PhysicalConstraintPresent");
+                                    if (clearance > 0 && physicallyAttached)
+                                    { obstaclePassages[team, gate] = true; passageClearance[team, gate] = clearance; }
+                                }
+                            }
+                            previousCom[team] = current;
+                        }
                         if (mode == 2)
                         {
                             reverseEntryObserved[team] |= ((bool[])Field(match, "reverseEntered"))[team];
@@ -67,6 +94,7 @@ public sealed class HandoffVariantsPlayModeTests
                     yield return null;
                 }
                 string state = "mode=" + mode + " elapsed=" + Property(match, "Elapsed") + " legs=" + string.Join(",", (int[])Field(match, "leg")) + " owners0=" + string.Join(",", owners[0]) + " owners1=" + string.Join(",", owners[1]);
+                if (mode == 1) state += " obstaclePassages=" + string.Join("/", Enumerable.Range(0, 2).Select(team => string.Join(",", Enumerable.Range(0, 3).Select(gate => obstaclePassages[team, gate] + ":" + passageClearance[team, gate].ToString("F2")))));
                 Assert.That((bool)Property(match, "Finished"), Is.True, state);
                 int winnerTeam = Array.FindIndex((bool[])Field(match, "finishedTeam"), done => done);
                 Assert.That(winnerTeam, Is.GreaterThanOrEqualTo(0), "At least one team must complete every real leg, not exhaust the timer. " + state);
@@ -77,6 +105,11 @@ public sealed class HandoffVariantsPlayModeTests
                 for (int leg = 0; leg < legs; leg++) Assert.That((float)Call(match, "LegSplitSeconds", winnerTeam, leg), Is.GreaterThan(0), "Every real leg records an elapsed split.");
                 for (int leg = 0; leg < legs - 1; leg++) Assert.That((float)Call(match, "HandoffWaitSeconds", winnerTeam, leg), Is.GreaterThan(0), "Every exchange physically releases then couples the same load.");
                 Assert.That(travel[winnerTeam], Is.GreaterThan(mode == 3 ? 350 : 200), state);
+                if (mode == 1)
+                {
+                    for (int gate = 0; gate < 3; gate++) Assert.That(obstaclePassages[winnerTeam, gate], Is.True, "The winning original native baton must physically pass right of the first wall, left of the outer gate, and right of the return gate after the real teammate handoff. " + state);
+                    Debug.Log("HH10_HANDOFF_OBSTACLE_ROUTE_PASS " + state);
+                }
                 if (mode == 2) Assert.That(backed[winnerTeam] && reverseEntryObserved[winnerTeam], Is.True, "Observe both real backward approach motion and the physics-qualified reverse-entry state in the receiving bay.");
                 if (mode == 3)
                 {
@@ -91,12 +124,33 @@ public sealed class HandoffVariantsPlayModeTests
                 for (int i = 0; i < 4; i++) Assert.That((string)Field(players.GetValue(i), "participantId"), Is.EqualTo(participantIds[i]), "Rematches preserve roster identities.");
                 for (int team = 0; team < 2; team++) for (int leg = 0; leg < 4; leg++) Assert.That((float)Call(match, "LegSplitSeconds", team, leg), Is.Zero);
                 Assert.That(((double[])Field(match, "Scores")).Take(4).All(value => value == 0), Is.True);
+                if (mode == 1) for (int team = 0; team < 2; team++) for (int gate = 0; gate < 3; gate++) Assert.That(obstacleGates[team, gate].enabled && obstacleGates[team, gate].gameObject.activeInHierarchy, Is.True, "Rematch must retain every actual obstacle collider.");
                 Time.timeScale = 3; yield return new WaitForSeconds(.8f);
                 Assert.That((bool)Property(match, "Running"), Is.True);
                 Call(match, "SetupScreen");
             }
             finally { Time.timeScale = 1; }
         }
+    }
+    static BoxCollider[,] SavedObstacleGates(Component match)
+    {
+        var result = new BoxCollider[2, 3];
+        var stations = (Transform[])Field(match, "transferZones");
+        string[] names = { "Obstacle relay offset chicane", "Outer obstacle relay gate", "Trailer-clearance return gate" };
+        var shapes = match.GetComponentsInChildren<BoxCollider>(true);
+        for (int gate = 0; gate < names.Length; gate++)
+        {
+            var saved = shapes.Where(shape => shape.name == names[gate]).OrderBy(shape => shape.bounds.center.x).ToArray();
+            Assert.That(saved.Length, Is.EqualTo(2), "Use the TWO saved team barriers named " + names[gate] + ", not substitute test geometry.");
+            for (int team = 0; team < 2; team++)
+            {
+                var shape = saved[stations[team].position.x < stations[1 - team].position.x ? 0 : 1];
+                Assert.That(shape.enabled && shape.gameObject.activeInHierarchy && !shape.isTrigger, Is.True, "Obstacle Relay requires the saved solid collider " + names[gate]);
+                Assert.That(shape.bounds.size.x, Is.GreaterThan(4), "The full-size physical gate must remain in the course.");
+                result[team, gate] = shape;
+            }
+        }
+        return result;
     }
 }
 #endif
