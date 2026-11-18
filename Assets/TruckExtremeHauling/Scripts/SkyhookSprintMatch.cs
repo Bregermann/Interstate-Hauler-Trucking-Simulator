@@ -1,11 +1,13 @@
 using UnityEngine;
 using LWS.TruckSports;
-
 namespace LWS.TruckExtremeHauling
 {
     public sealed class SkyhookSprintMatch : ExtremeHaulingMatch
     {
         public PhysicalCableCar[] cableCars;
+        public SkyhookTransferRoute[] transferRoutes;
+        [Min(150)] public float transferMatchSeconds=240;
+        float ordinaryMatchSeconds;
         [Min(1)] public int slalomGatesPerLane = 4;
         public Transform[] slalomGates;
         public GameObject[] slalomMarkers;
@@ -18,10 +20,10 @@ namespace LWS.TruckExtremeHauling
         string reportedMatch;
         protected override Vector3 CameraFocus(int slot) => cableCars[CameraParticipant(slot)].load.position;
         public override string Title => "SKYHOOK SPRINT";
-        public override string Status => option==0?base.Status:option==2?"CLEAR EVERY OPENING · RELEASE AFTER FINAL GATE":option==1?"BRAKE THE SWING · CENTER THE LANDING":"HAUL THROUGH GUSTS · PRESERVE CARGO";
+        public override string Status => option==1&&transferRoutes!=null&&transferRoutes.Length>0?"HOOK · HOIST · TRANSFER THE SAME LOAD · RECAPTURE":option==0?base.Status:option==2?"CLEAR EVERY OPENING · RELEASE AFTER FINAL GATE":option==1?"BRAKE THE SWING · CENTER THE LANDING":"HAUL THROUGH GUSTS · PRESERVE CARGO";
         protected override string[] Modes => new[] { "SKYHOOK SPRINT", "PRECISION CABLE DELIVERY", "SUSPENDED SLALOM", "HIGH-WIND HAULING" };
-        protected override string ActionHint => "RELEASE CABLE";
-        public override string Help => "Throttle accelerates the physical overhead trolley; brake controls momentum and steering shifts the real suspended load. ACTION releases its cable. Sprint rewards an upright settled delivery and speed. Precision judges the final landing offset, tilt, preserved cargo, actual impacts and accumulated swing; rushing adds no precision bonus. Suspended Slalom requires the entire trailer to clear all four alternating marked openings in order before a successful platform landing can score. High-Wind Hauling applies real extra gusts and rewards successful forward transport through them, with impact and landing penalties. Release timing, swing and momentum matter; an early release or missed slalom opening is a failed slalom attempt.";
+        protected override string ActionHint => option==1&&transferRoutes!=null&&transferRoutes.Length>0?"HOOK / RELEASE · HOLD + DRIVE: WINCH":"RELEASE CABLE";
+        public override string Help => option==1&&transferRoutes!=null&&transferRoutes.Length>0 ? "TWO-STATION PRECISION: drive forward/reverse along the active trolley rail; steer sways its physical hook. HOLD ACTION + forward/back to winch up/down. With drive released, TAP ACTION near the lifting eye to attach/release. Lift from the loading platform, carry to the middle platform, lower and release the original load there. Lower the second hook and recapture that SAME load, then haul, lower and release it at the final platform. Close hook distance and matched velocity are required. A supported dropped load can be recaptured; falls into the ravine are final. No transported load is teleported." : "Throttle accelerates the physical overhead trolley; brake controls momentum and steering shifts the real suspended load. ACTION releases its cable. Sprint rewards an upright settled delivery and speed. Precision judges the final landing offset, tilt, preserved cargo, actual impacts and accumulated swing; rushing adds no precision bonus. Suspended Slalom requires the entire trailer to clear all four alternating marked openings in order before a successful platform landing can score. High-Wind Hauling applies real extra gusts and rewards successful forward transport through them, with impact and landing penalties. Release timing, swing and momentum matter; an early release or missed slalom opening is a failed slalom attempt.";
         public int SlalomGatesPassed(int slot) => passed[slot];
         public int SlalomGatesMissed(int slot) => missed[slot];
         public float LandingErrorMetres(int slot) => landingError[slot];
@@ -29,6 +31,8 @@ namespace LWS.TruckExtremeHauling
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
         {
             if (option == 0) return base.TryReadScoreCard(slot, out value, out detail);
+            if(option==1&&transferRoutes!=null&&slot>=0&&slot<setup.count&&slot<transferRoutes.Length&&transferRoutes[slot]!=null)
+            {value=scores[slot].ToString("F0");detail=transferRoutes[slot].Instruction;return true;}
             if (slot < 0 || slot >= setup.count) { value = detail = null; return false; }
             value = scores[slot].ToString("F0");
             if (option == 2)
@@ -43,6 +47,8 @@ namespace LWS.TruckExtremeHauling
         }
         protected override void BeginMechanic()
         {
+            if(ordinaryMatchSeconds<=0)ordinaryMatchSeconds=matchSeconds;
+            matchSeconds=option==1&&transferRoutes!=null&&transferRoutes.Length>0?Mathf.Max(ordinaryMatchSeconds,transferMatchSeconds):ordinaryMatchSeconds;
             for(int i=0;i<setup.count;i++){trucks[i].Power(false);foreach(var body in trucks[i].GetComponentsInChildren<Rigidbody>(true))body.isKinematic=true;}
             foreach (var car in cableCars) { car.trolley.isKinematic = false; car.ResetCable(); }
             System.Array.Clear(passed, 0, 4); System.Array.Clear(missed, 0, 4); System.Array.Clear(nextGate, 0, 4); System.Array.Clear(gateQuality, 0, 4); System.Array.Clear(quiet, 0, 4); System.Array.Clear(impactSeverity, 0, 4); System.Array.Clear(maximumImpact, 0, 4); System.Array.Clear(swingIntegral, 0, 4); System.Array.Clear(windMetres, 0, 4); System.Array.Clear(landingError, 0, 4); System.Array.Clear(entering, 0, 4); System.Array.Clear(blocked, 0, 4); System.Array.Clear(crossed, 0, 4); System.Array.Clear(delivered, 0, 4);
@@ -57,6 +63,8 @@ namespace LWS.TruckExtremeHauling
                 if (impact == null) impact = cableCars[i].load.gameObject.AddComponent<SkyhookLoadImpact>();
                 impact.match = this; impact.slot = i;
             }
+            if(transferRoutes!=null)for(int i=0;i<transferRoutes.Length;i++)if(transferRoutes[i]!=null)
+            {bool active=option==1&&i<setup.count;transferRoutes[i].SetMode(active);if(active)transferRoutes[i].BeginRoute();}
         }
         protected override void StopGame()
         {
@@ -66,6 +74,8 @@ namespace LWS.TruckExtremeHauling
                 reportedMatch = MatchId;
                 for (int i = 0; i < setup.count; i++)
                 {
+                    if(option==1&&transferRoutes!=null&&i<transferRoutes.Length&&transferRoutes[i]!=null)
+                    {var route=transferRoutes[i];Metric(i,"physical_hook_captures",route.firstHook.Captures+route.secondHook.Captures);Metric(i,"supported_cable_transfers",route.Transfers);Metric(i,"cable_load_recaptures",route.Recoveries);}
                     Metric(i, "cable_maximum_impact_mps", maximumImpact[i]);
                     Metric(i, "cable_swing_degree_seconds", swingIntegral[i]);
                     if (delivered[i]) Metric(i, "cable_landing_error_metres", landingError[i]);
@@ -73,11 +83,13 @@ namespace LWS.TruckExtremeHauling
                     if (option == 3) Metric(i, "wind_weighted_forward_metres", windMetres[i]);
                 }
             }
+            if(transferRoutes!=null)foreach(var route in transferRoutes)if(route!=null&&route.gameObject.activeSelf)route.Freeze();
             base.StopGame(); if (cableCars != null) foreach (var car in cableCars) car.trolley.isKinematic = true;
         }
         void Metric(int i, string name, double value) => SportsSessionTelemetry.GameplayEvent(gameObject.scene.name, name, setup.players[i].participantId, "mode=" + OptionLabel, value);
         protected override Vector2 AICommand(int i, float dt)
         {
+            if(option==1&&transferRoutes!=null&&i<transferRoutes.Length&&transferRoutes[i]!=null)return Vector2.zero;
             if (option == 0) return new Vector2(-Vector3.Dot(trailers[i].Body.linearVelocity, Vector3.right) * .1f, Vector3.Distance(cableCars[i].trolley.position, cableCars[i].routeEnd) > 16 ? 1 : -.6f);
             var car = cableCars[i]; var gate = option == 2 ? NextGate(i) : null;
             Vector3 desired = gate != null ? gate.position : objectives[i].position;
@@ -103,6 +115,15 @@ namespace LWS.TruckExtremeHauling
         }
         protected override void StepMechanic(int i, Vector2 drive, bool ai, float dt)
         {
+            if(option==1&&transferRoutes!=null&&i<transferRoutes.Length&&transferRoutes[i]!=null)
+            {
+                var route=transferRoutes[i];route.Tick(drive,ActionHeld(i),actions[i],ai,(int)setup.players[i].difficulty,dt);
+                if(route.Delivered)
+                {delivered[i]=true;landingError[i]=route.LandingError;maximumImpact[i]=route.MaximumImpact;swingIntegral[i]=route.SwingSeconds;
+                    Award(i,Mathf.Max(1,3500*trailers[i].CargoCondition-route.LandingError*150-route.MaximumImpact*12-route.SwingSeconds+route.Transfers*500),"physical_two_station_winch_delivery");retired[i]=true;}
+                else if(route.Failed)retired[i]=true;
+                return;
+            }
             // Keep the already-passing default physics, AI release and award
             // path unchanged. Variant rules never alter Sprint's result.
             if (option == 0)
@@ -167,7 +188,6 @@ namespace LWS.TruckExtremeHauling
                 retired[i] = true;
             }
             if (car.load.position.y < -20) retired[i] = true;
-
         }
         Transform NextGate(int slot)
         {
@@ -212,6 +232,7 @@ namespace LWS.TruckExtremeHauling
         public void RegisterImpact(int slot, Collision collision)
         {
             if (option == 0 || !Live || slot < 0 || slot >= setup.count || retired[slot]) return;
+            if(option==1&&transferRoutes!=null&&slot<transferRoutes.Length&&transferRoutes[slot]!=null)transferRoutes[slot].RegisterImpact(collision);
             float speed = collision.relativeVelocity.magnitude;
             maximumImpact[slot] = Mathf.Max(maximumImpact[slot], speed);
             impactSeverity[slot] += Mathf.Max(0, speed - 1.5f);

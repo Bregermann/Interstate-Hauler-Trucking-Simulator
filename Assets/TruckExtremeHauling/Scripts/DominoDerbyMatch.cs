@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using LWS.TruckHitchSports;
 
 namespace LWS.TruckExtremeHauling
@@ -6,6 +6,12 @@ namespace LWS.TruckExtremeHauling
     public sealed class DominoDerbyMatch : ExtremeHaulingMatch
     {
         public int piecesPerPlayer = 12;
+        public DominoCollapseReplay collapseReplay;
+        bool replayStarted;
+        public override bool ReplayControls => collapseReplay != null && collapseReplay.Playing;
+        public override string Header => ReplayControls ? Title + " · RECORDED COLLAPSE HIGHLIGHTS" : base.Header;
+        public override string Status => ReplayControls ? "ACTUAL CONTACTS · LANES ALIGNED TO FIRST PUSH · " + collapseReplay.Speed.ToString("0.##") + "×" : base.Status;
+        public override void ExtraAction(string key) { if (!ReplayControls) return; collapseReplay.Action(key); ConsumeActions(); }
         public float setupSeconds = 35;
         readonly bool[] triggered = new bool[4];
         readonly int[] selected = new int[4], fallen = new int[4], longest = new int[4];
@@ -19,7 +25,7 @@ namespace LWS.TruckExtremeHauling
         readonly RaycastHit[] floorHits = new RaycastHit[64];
         public override bool Cooperative => option == 3;
         protected override Vector3 CameraFocus(int slot) => trailers[slot * piecesPerPlayer + Mathf.Clamp(selected[slot], 0, piecesPerPlayer - 1)].Body.worldCenterOfMass;
-        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"domino_contact_topples",fallen[i]);RecordMetric(i,"domino_longest_connected_chain",longest[i]);RecordMetric(i,"domino_triggered",triggered[i]?1:0);if(finishTime[i]>0)RecordMetric(i,"domino_complete_collapse_seconds",finishTime[i]-triggerTime[i]); }
+        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"domino_contact_topples",fallen[i]);RecordMetric(i,"domino_longest_connected_chain",longest[i]);RecordMetric(i,"domino_triggered",triggered[i]?1:0);if(finishTime[i]>0)RecordMetric(i,"domino_complete_collapse_seconds",finishTime[i]); }
         public override string Title => "DOMINO DERBY";
         protected override string[] Modes => new[] { "LONGEST CHAIN", "PRECISION DOMINO COURSE", "FASTEST COMPLETE COLLAPSE", "CREATIVE CHAIN CHALLENGE" };
         protected override string ActionHint => age < setupSeconds ? "TAP NEUTRAL: NEXT · HOLD + STEER: ROTATE" : "TOPPLE FIRST TRAILER ONCE";
@@ -28,6 +34,7 @@ namespace LWS.TruckExtremeHauling
         { if (slot < 0 || slot >= setup.count) { value = detail = null; return false; } value = option == 2 && finishTime[slot] > 0 ? finishTime[slot].ToString("F2") + "s" : scores[slot].ToString("F0"); detail = fallen[slot] + "/" + piecesPerPlayer + " TOPPLED · DEPTH " + longest[slot]; return true; }
         protected override void BeginMechanic()
         {
+            collapseReplay?.ResetCapture(setup.count); replayStarted=false;
             counted = new bool[trailers.Length]; activated = new bool[trailers.Length]; depth = new int[trailers.Length]; parent = new int[trailers.Length]; children = new int[trailers.Length];
             envelopes = new Bounds[trailers.Length]; layoutStart = new Vector3[trailers.Length]; layoutRotation = new Quaternion[trailers.Length];
             System.Array.Clear(triggered, 0, 4); System.Array.Clear(selected, 0, 4); System.Array.Clear(fallen, 0, 4); System.Array.Clear(longest, 0, 4); System.Array.Clear(triggerTime, 0, 4); System.Array.Clear(finishTime, 0, 4);
@@ -103,9 +110,36 @@ namespace LWS.TruckExtremeHauling
                 retired[i] = true;
             }
         }
+        protected override void Simulate(float dt)
+        {
+            if(ReplayControls)
+            {
+                if(collapseReplay.Step(dt))
+                {collapseReplay.End();views?.Restore();EndMatch();}
+                return;
+            }
+            base.Simulate(dt);
+            if(!ReplayControls && !Finished && collapseReplay!=null)
+                for(int lane=0;lane<setup.count;lane++)collapseReplay.RecordLane(lane,age,triggered[lane]);
+        }
+        protected override bool DelayMatchCompletion()
+        {
+            if(replayStarted || collapseReplay==null)return false;
+            replayStarted=true;
+            for(int lane=0;lane<setup.count;lane++)collapseReplay.RecordLane(lane,age,triggered[lane]);
+            // Recorded ghosts cannot interact with the stopped original simulation.
+            foreach(var truck in trucks){truck.Power(false);foreach(var body in truck.GetComponentsInChildren<Rigidbody>(true))body.isKinematic=true;}
+            foreach(var trailer in trailers)foreach(var body in trailer.GetComponentsInChildren<Rigidbody>(true))body.isKinematic=true;
+            if(!collapseReplay.BeginPlayback())return false;
+            StopSounds();Gate();return true;
+        }
+        protected override void Present(float dt)
+        {if(ReplayControls){collapseReplay.Present(views,broadcast);return;}base.Present(dt);}
+        protected override void StopGame()
+        {collapseReplay?.End();if(views!=null && views.Replay)views.Restore();base.StopGame();}
         public void ChainContact(int a, int b, float speed)
         {
-            if (!Live || age < setupSeconds || speed < .15f || a < 0 || b < 0 || a >= activated.Length || b >= activated.Length || a / piecesPerPlayer != b / piecesPerPlayer) return;
+            if (ReplayControls || !Live || age < setupSeconds || speed < .15f || a < 0 || b < 0 || a >= activated.Length || b >= activated.Length || a / piecesPerPlayer != b / piecesPerPlayer) return;
             if (!activated[a] && activated[b]) { int swap = a; a = b; b = swap; }
             if (!activated[a] || activated[b]) return;
             activated[b] = true; parent[b] = a; depth[b] = depth[a] + 1; children[a]++;

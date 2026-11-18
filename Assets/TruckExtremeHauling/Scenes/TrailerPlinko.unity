@@ -17229,6 +17229,10 @@ MonoBehaviour:
   - 1000
   - 300
   - 100
+  dropsPerPlayer: 3
+  preparationSeconds: 12
+  dropTimeoutSeconds: 32
+  betweenDropSeconds: 1.2
 --- !u!114 &332361326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136005,10 +136009,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Steer to choose the release position. Throttle adds initial rotational
-    momentum. ACTION releases the physical trailer into the peg board. Real peg collisions
-    and inertia determine the final bin. The trailer must settle inside the catch
-    tray before points are awarded.
+  m_text: Each player gets the configured 1-5 drops (default three); real settled-bin
+    points add across the competition. Steering chooses release position and throttle
+    adjusts initial spin. Hold ACTION and steer to roll the trailer across the board,
+    or throttle/brake to tilt its release angle. Release ACTION to drop; a quick
+    tap also drops. You have the displayed preparation time before automatic release.
+    Real peg contacts, inertia and gravity determine the bin; the trailer must settle
+    supported by the catch tray. Precision Drop marks a target bin for each drop;
+    Chaos moves physical pegs; High-Risk Jackpot triples the center bin. Leaving
+    the board or exceeding the flight timer is a zero-point miss. Only a scored or
+    failed drop resets to the ordinary starting position for the next turn. Horn
+    and pause controls are unchanged.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

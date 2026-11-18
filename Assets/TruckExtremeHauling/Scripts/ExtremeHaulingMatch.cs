@@ -25,7 +25,11 @@ namespace LWS.TruckExtremeHauling
         protected HitchCoupler[] hitches;
         Vector3[] viewFocus;
         bool[] initialCoupling = new bool[4];
+        protected virtual bool HasAtmosphere => true;
         protected virtual bool StartsCoupled => this is JackknifeIceMatch || this is RoadTrainWreckMatch || this is HitchRingTossMatch || this is ThinIceMatch;
+        public virtual int TrailerCapacityPerDriver=>this is DominoDerbyMatch domino?domino.piecesPerPlayer:1;
+        public virtual int TrailersPerDriver=>TrailerCapacityPerDriver;
+        public virtual int FirstTrailerIndex(int slot)=>slot*TrailerCapacityPerDriver;
         public virtual bool Cooperative => false;
         public override int MinimumPlayers => 1;
         public override int MaximumPlayers => 4;
@@ -62,12 +66,12 @@ namespace LWS.TruckExtremeHauling
             age = 0; Array.Clear(scores, 0, scores.Length); Array.Clear(deliveries, 0, deliveries.Length); Array.Clear(retired, 0, retired.Length);
             Array.Clear(initialCoupling, 0, initialCoupling.Length);
             for (int i = 0; i < hitches.Length; i++) { hitches[i]?.Release(); hitches[i]?.ResetMatchRecords(); }
-            foreach (var trailer in trailers) trailer.ResetForRound();
+            foreach (var trailer in trailers) { trailer.gameObject.SetActive(true); trailer.ResetForRound(); }
             for (int i = 0; i < trucks.Length; i++)
             {
                 trucks[i].gameObject.SetActive(i < setup.count);
-                int pieces=this is RoadTrainWreckMatch ? 3 : this is DominoDerbyMatch domino ? domino.piecesPerPlayer : 1;
-                for(int piece=0;piece<pieces;piece++){int index=i*pieces+piece;if(index<trailers.Length)trailers[index].gameObject.SetActive(i<setup.count);}
+                int pieces=TrailerCapacityPerDriver;
+                for(int piece=0;piece<pieces;piece++){int index=FirstTrailerIndex(i)+piece;if(index<trailers.Length)trailers[index].gameObject.SetActive(i<setup.count&&piece<TrailersPerDriver);}
                 if (i < setup.count)
                 {
                     foreach (var body in trucks[i].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = false;
@@ -75,7 +79,7 @@ namespace LWS.TruckExtremeHauling
                     if (StartsCoupled)
                     {
                         foreach (var body in trucks[i].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = true;
-                        int index = this is RoadTrainWreckMatch ? i * 3 : i;
+                        int index = FirstTrailerIndex(i);
                         foreach (var body in trailers[index].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = true;
                     }
                 }
@@ -109,7 +113,7 @@ namespace LWS.TruckExtremeHauling
             {
                 for (int i = 0; i < setup.count; i++) if (StartsCoupled && !initialCoupling[i])
                 {
-                    int index = this is RoadTrainWreckMatch ? i * 3 : i;
+                    int index = FirstTrailerIndex(i);
                     initialCoupling[i] = hitches[i].TryCouple(trailers[index]);
                     if (initialCoupling[i])
                     {
@@ -125,8 +129,9 @@ namespace LWS.TruckExtremeHauling
                 for(int i=0;i<setup.count;i++){trucks[i].tractorMotor.gripScale=traction;trucks[i].tractorMotor.lateralGripMultiplier=this is JackknifeIceMatch?.25f:1;}
                 foreach(var trailer in trailers)
                 {
+                    if(!trailer.gameObject.activeInHierarchy)continue;
                     if(this is JackknifeIceMatch)trailer.SetGripMultipliers(traction,.025f*weatherGrip);else trailer.SetGripMultiplier(traction);
-                    if(presentationWeather!=null&&!trailer.Body.isKinematic)trailer.Body.AddForce(Vector3.ClampMagnitude(presentationWeather.Flow,20)*trailer.Body.mass*.04f);
+                    if(HasAtmosphere&&presentationWeather!=null&&!trailer.Body.isKinematic)trailer.Body.AddForce(Vector3.ClampMagnitude(presentationWeather.Flow,20)*trailer.Body.mass*.04f);
                 }
             }
             for (int i = 0; i < setup.count; i++)
@@ -151,9 +156,11 @@ namespace LWS.TruckExtremeHauling
                         ReportFinalMeasurements(slot);
                     }
                 }
+                if(DelayMatchCompletion())return;
                 EndMatch();
             }
         }
+        protected virtual bool DelayMatchCompletion()=>false;
         protected abstract void StepMechanic(int slot, Vector2 drive, bool ai, float dt);
         protected virtual void ReportFinalMeasurements(int slot) { }
         protected void RecordMetric(int slot,string measurement,double value)
@@ -199,7 +206,7 @@ namespace LWS.TruckExtremeHauling
             target = CameraFocus(focus); offset = new Vector3(35, 28, -42);
             if (this is TrailerPlinkoMatch plinko) { target = plinko.boardOrigins[focus].position + Vector3.down * (27*plinko.boardScale); offset = new Vector3(10, 4, -95)*plinko.boardScale; }
             else if (this is DominoDerbyMatch domino) { target = (trailers[focus * domino.piecesPerPlayer].Body.position + trailers[(focus + 1) * domino.piecesPerPlayer - 1].Body.position) * .5f; offset = new Vector3(30, 55, -35); }
-            else if (this is RoadTrainWreckMatch) { target = (trucks[focus].body.position + trailers[focus * 3 + 2].Body.position) * .5f; offset = new Vector3(55, 35, -25); }
+            else if (this is RoadTrainWreckMatch) { target = (trucks[focus].body.position + trailers[FirstTrailerIndex(focus)+TrailersPerDriver-1].Body.position) * .5f; offset = new Vector3(55, 35, -25)*Mathf.Sqrt(TrailersPerDriver/3f); }
             else if (this is ZeroGHitchMatch) offset = new Vector3(22, 16, -32);
             else if (this is SkyhookSprintMatch) offset = new Vector3(42, 16, -8);
         }

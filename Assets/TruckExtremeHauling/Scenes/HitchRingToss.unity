@@ -50124,7 +50124,10 @@ MonoBehaviour:
       m_Calls: []
   m_text: Swing the attached trailer with the tractor. ACTION releases the real hitch,
     preserving momentum. The trailer must physically cross a ring aperture; projected
-    aim is not a score. More distant rings award larger multipliers.
+    aim is not a score. More distant rings award larger multipliers. Precision rewards
+    the actual centered passage of the whole load. Each match has the configured
+    number of physical throws; a missed throw costs100points. Between throws the
+    normal equipment reset returns your original rig to the loading start.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -54353,6 +54356,7 @@ MonoBehaviour:
   - {fileID: 1243410899}
   - {fileID: 1140225443}
   - {fileID: 377826292}
+  throwsPerPlayer: 3
 --- !u!114 &810644291
 MonoBehaviour:
   m_ObjectHideFlags: 0

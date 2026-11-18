@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using LWS.TruckSports;
 using LWS.TruckHitchSports;
 
@@ -6,12 +6,20 @@ namespace LWS.TruckExtremeHauling
 {
     public sealed class RoadTrainWreckMatch : ExtremeHaulingMatch
     {
+        [HideInInspector] public int authoredTrailersPerDriver = 3;
+        [Min(1)] public int trailersPerDriver = 3;
+        [Min(1)] public int maximumChallengeTrailers = 6;
         public ConfigurableJoint[] additionalHitches;
-        struct Link { public Rigidbody owner, next; public Vector3 anchor, connectedAnchor; public SoftJointLimit low, high, roll; public float force, torque; }
+        public Link[] authoredLinkDefinitions = System.Array.Empty<Link>();
+        public override int TrailerCapacityPerDriver => Mathf.Max(1, Mathf.Min(authoredTrailersPerDriver, trailers != null && trucks != null && trucks.Length > 0 ? trailers.Length / trucks.Length : authoredTrailersPerDriver));
+        public override int TrailersPerDriver => Mathf.Clamp(option == 2 ? maximumChallengeTrailers : trailersPerDriver, 1, TrailerCapacityPerDriver);
+        public override int FirstTrailerIndex(int slot) => slot * TrailerCapacityPerDriver;
+        [System.Serializable] public struct Link { public Rigidbody owner, next; public Vector3 anchor, connectedAnchor; public float low, high, roll, force, torque; }
         Link[] links;
         readonly Vector3[] previous = new Vector3[4];
         readonly float[] safeDistance = new float[4], unbankedDistance = new float[4], survival = new float[4], unbankedSurvival = new float[4], lostHitch = new float[4], settled = new float[4];
-        readonly int[] route = new int[4], connected = new int[4];
+        readonly int[] route = new int[4], connected = new int[4], deliveredCount = new int[4], longestConnected = new int[4];
+        readonly float[] stableMovingSeconds = new float[4], startingMass = new float[4], startingLength = new float[4];
         readonly bool[] initialLock = new bool[4];
         protected override void Awake()
         {
@@ -20,27 +28,43 @@ namespace LWS.TruckExtremeHauling
             links = new Link[additionalHitches.Length];
             for (int i = 0; i < links.Length; i++)
             {
+                if (authoredLinkDefinitions != null && i < authoredLinkDefinitions.Length && authoredLinkDefinitions[i].owner != null) { links[i] = authoredLinkDefinitions[i]; continue; }
                 var joint = additionalHitches[i]; if (joint == null) continue;
-                links[i] = new Link { owner = joint.GetComponent<Rigidbody>(), next = joint.connectedBody, anchor = joint.anchor, connectedAnchor = joint.connectedAnchor, low = joint.lowAngularXLimit, high = joint.highAngularXLimit, roll = joint.angularZLimit, force = joint.breakForce, torque = joint.breakTorque };
+                links[i] = new Link { owner = joint.GetComponent<Rigidbody>(), next = joint.connectedBody, anchor = joint.anchor, connectedAnchor = joint.connectedAnchor, low = joint.lowAngularXLimit.limit, high = joint.highAngularXLimit.limit, roll = joint.angularZLimit.limit, force = joint.breakForce, torque = joint.breakTorque };
             }
         }
-        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"road_train_safe_metres",safeDistance[i]);RecordMetric(i,"road_train_moving_survival_seconds",survival[i]);RecordMetric(i,"road_train_connected_trailers",CountConnected(i)); }
+        protected override void ReportFinalMeasurements(int i) { RecordMetric(i,"road_train_safe_metres",safeDistance[i]);RecordMetric(i,"road_train_moving_survival_seconds",survival[i]);RecordMetric(i,"road_train_connected_trailers",CountConnected(i)); RecordMetric(i,"road_train_authored_capacity",TrailerCapacityPerDriver);RecordMetric(i,"road_train_selected_trailers",TrailersPerDriver);RecordMetric(i,"road_train_delivered_trailers",deliveredCount[i]);RecordMetric(i,"road_train_longest_connected",longestConnected[i]);RecordMetric(i,"road_train_stable_moving_seconds",stableMovingSeconds[i]);RecordMetric(i,"road_train_starting_trailer_mass_kg",startingMass[i]);RecordMetric(i,"road_train_starting_hitch_span_metres",startingLength[i]); }
         public override string Title => "ROAD TRAIN WRECK";
         protected override string[] Modes => new[] { "LONGEST SAFE CONVOY", "ROAD TRAIN OBSTACLE RACE", "MAXIMUM TRAILER CHALLENGE", "ROAD TRAIN SURVIVAL" };
         protected override string ActionHint => "INDEPENDENT TRAILER BRAKES";
-        public override string Help => "Drive a genuine three-trailer road train with native axle contact and physical articulated hitches. Hold ACTION to brake every trailer independently of the tractor. Longest Safe Convoy banks controlled travel with all three trailers attached. Obstacle Race rewards a stopped delivery at your marked depot, with speed and actual cargo condition deciding the result. Maximum Trailer Challenge prioritizes the number of trailers still physically connected when delivered, then cargo preservation and time; this venue supplies three per rig. Survival banks actual moving, supported survival time and ends when any link is lost. Detached trailers never count. A delivery requires the last connected trailer stopped at your depot and the whole connected train settled.";
+        public override string Help => "Drive a genuine configurable articulated road train (three trailers by default) with native axle contact and physical articulated hitches. Hold ACTION to brake every trailer independently of the tractor. Longest Safe Convoy banks controlled travel with the entire selected train attached. Obstacle Race rewards a stopped delivery at your marked depot, with speed and actual cargo condition deciding the result. Maximum Trailer Challenge requires delivering the full configured length goal; losing a link fails that goal. Its actual length is bounded by this venue's authored native-trailer capacity. Successful delivered count dominates ranking, followed by cargo preservation and time. The Inspector selects normal train length and the Maximum Challenge length independently. Survival banks actual moving, supported survival time and ends when any link is lost. Detached trailers never count. A delivery requires the last connected trailer stopped at your depot and the whole connected train settled.";
         public override bool TryReadScoreCard(int slot, out string value, out string detail)
         {
             if (slot < 0 || slot >= setup.count) { value = detail = null; return false; }
             value = scores[slot].ToString("F0");
-            detail = connected[slot] + "/3 LINKED · " + (option == 3 ? survival[slot].ToString("F1") + "s MOVING" : safeDistance[slot].ToString("F0") + "m SAFE") + (retired[slot] ? " · COMPLETE" : "");
+            detail = connected[slot] + "/" + TrailersPerDriver + " LINKED · " + (option == 3 ? survival[slot].ToString("F1") + "s MOVING" : safeDistance[slot].ToString("F0") + "m SAFE") + (retired[slot] ? " · COMPLETE" : "");
             return true;
+        }
+        public override string Results
+        {
+            get
+            {
+                var text = new System.Text.StringBuilder();
+                for (int i = 0; i < setup.count; i++)
+                {
+                    text.Append(setup.players[i].name).Append(" · ").Append(scores[i].ToString("F0")).Append(" PTS · ").Append(CountConnected(i)).Append('/').Append(TrailersPerDriver).Append(" LINKED · ").Append(safeDistance[i].ToString("F0")).Append("m SAFE");
+                    if (option == 1 || option == 2) text.Append(" · ").Append(deliveredCount[i]).Append(" DELIVERED");
+                    if (option == 2 && deliveredCount[i] < TrailersPerDriver) text.Append(" · LENGTH GOAL FAILED");
+                    text.AppendLine();
+                }
+                return text.ToString();
+            }
         }
         protected override Vector3 Destination(int i)
         {
             if (option == 0 || option == 3) return RoutePoint(i);
             int count = Mathf.Max(1, CountConnected(i));
-            return objectives[i].position + trucks[i].body.position - trailers[i * 3 + count - 1].Body.worldCenterOfMass;
+            return objectives[i].position + trucks[i].body.position - trailers[FirstTrailerIndex(i) + count - 1].Body.worldCenterOfMass;
         }
         Vector3 RoutePoint(int i)
         {
@@ -55,25 +79,45 @@ namespace LWS.TruckExtremeHauling
         }
         protected override void BeginMechanic()
         {
-            for (int i = 0; i < links.Length; i++) if (additionalHitches[i] == null && links[i].owner != null && links[i].next != null)
+            for (int slot = 0; slot < trucks.Length; slot++)
+            for (int link = 0; link < TrailerCapacityPerDriver - 1; link++)
             {
-                var data = links[i]; var joint = data.owner.gameObject.AddComponent<ConfigurableJoint>();
+                int index = slot * (TrailerCapacityPerDriver - 1) + link;
+                if (index >= links.Length) continue;
+                bool active = slot < setup.count && link < TrailersPerDriver - 1;
+                if (!active)
+                {
+                    if (additionalHitches[index] != null) Destroy(additionalHitches[index]);
+                    additionalHitches[index] = null;
+                    continue;
+                }
+                // Only a normal match boundary restores a previously broken
+                // link. An active run never manufactures a missing connection.
+                if (additionalHitches[index] != null) continue;
+                var data = links[index]; if (data.owner == null || data.next == null) continue;
+                var joint = data.owner.gameObject.AddComponent<ConfigurableJoint>();
                 joint.connectedBody = data.next; joint.autoConfigureConnectedAnchor = false; joint.anchor = data.anchor; joint.connectedAnchor = data.connectedAnchor;
                 joint.xMotion = joint.yMotion = joint.zMotion = ConfigurableJointMotion.Locked; joint.angularYMotion = ConfigurableJointMotion.Free; joint.angularXMotion = joint.angularZMotion = ConfigurableJointMotion.Limited;
-                joint.lowAngularXLimit = data.low; joint.highAngularXLimit = data.high; joint.angularZLimit = data.roll; joint.breakForce = data.force; joint.breakTorque = data.torque;
-                joint.enableCollision = false; joint.projectionMode = JointProjectionMode.PositionAndRotation; additionalHitches[i] = joint;
+                joint.lowAngularXLimit = new SoftJointLimit { limit = data.low }; joint.highAngularXLimit = new SoftJointLimit { limit = data.high }; joint.angularZLimit = new SoftJointLimit { limit = data.roll }; joint.breakForce = data.force; joint.breakTorque = data.torque;
+                joint.enableCollision = false; joint.projectionMode = JointProjectionMode.PositionAndRotation; additionalHitches[index] = joint;
             }
             System.Array.Clear(safeDistance, 0, 4); System.Array.Clear(unbankedDistance, 0, 4); System.Array.Clear(survival, 0, 4); System.Array.Clear(unbankedSurvival, 0, 4); System.Array.Clear(lostHitch, 0, 4); System.Array.Clear(settled, 0, 4); System.Array.Clear(route, 0, 4); System.Array.Clear(connected, 0, 4); System.Array.Clear(initialLock, 0, 4);
-            for (int i = 0; i < setup.count; i++) previous[i] = trucks[i].body.position;
+            System.Array.Clear(deliveredCount, 0, 4); System.Array.Clear(longestConnected, 0, 4); System.Array.Clear(stableMovingSeconds, 0, 4);
+            for (int i = 0; i < setup.count; i++)
+            {
+                previous[i] = trucks[i].body.position; startingMass[i] = 0;
+                for (int j = 0; j < TrailersPerDriver; j++) startingMass[i] += trailers[FirstTrailerIndex(i) + j].Body.mass;
+                startingLength[i] = Vector3.Distance(trucks[i].body.position, trailers[FirstTrailerIndex(i) + TrailersPerDriver - 1].Body.position);
+            }
         }
         int CountConnected(int slot)
         {
-            int first = slot * 3;
-            if (hitches[slot].Attached != trailers[first] || !Usable(trailers[first])) return 0;
+            int first = FirstTrailerIndex(slot);
+            if (hitches[slot].Attached != trailers[first] || !hitches[slot].PhysicalConstraintPresent || !Usable(trailers[first])) return 0;
             int count = 1;
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < TrailersPerDriver - 1; j++)
             {
-                int index = slot * 2 + j;
+                int index = slot * (TrailerCapacityPerDriver - 1) + j;
                 if (index >= additionalHitches.Length) break;
                 var joint = additionalHitches[index]; var before = trailers[first + j]; var after = trailers[first + j + 1];
                 if (joint == null || joint.GetComponent<Rigidbody>() != before.Body || joint.connectedBody != after.Body || !Usable(after)) break;
@@ -95,8 +139,9 @@ namespace LWS.TruckExtremeHauling
             float angle = Mathf.Atan2(local.x, local.z);
             float speed = Vector3.Dot(trucks[i].body.linearVelocity, trucks[i].transform.forward);
             float articulation = 0;
-            for (int j = 0; j < 3; j++) articulation = Mathf.Max(articulation, Vector3.Angle(j == 0 ? trucks[i].transform.forward : trailers[i * 3 + j - 1].transform.forward, trailers[i * 3 + j].transform.forward));
+            for (int j = 0; j < TrailersPerDriver; j++) articulation = Mathf.Max(articulation, Vector3.Angle(j == 0 ? trucks[i].transform.forward : trailers[FirstTrailerIndex(i) + j - 1].transform.forward, trailers[FirstTrailerIndex(i) + j].transform.forward));
             float requested = 6 + (int)setup.players[i].difficulty * 1.5f;
+            if (TrailersPerDriver > 3) requested *= Mathf.Sqrt(3f / TrailersPerDriver);
             requested *= Mathf.Lerp(1, .35f, Mathf.Clamp01(Mathf.Abs(angle) / 1.2f));
             if (articulation > 55) requested = Mathf.Min(requested, 3);
             if (option == 1 || option == 2) requested = Mathf.Min(requested, Mathf.Max(0, distance - 7) * .35f);
@@ -104,7 +149,7 @@ namespace LWS.TruckExtremeHauling
         }
         protected override void StepMechanic(int i, Vector2 drive, bool ai, float dt)
         {
-            connected[i] = CountConnected(i);
+            connected[i] = CountConnected(i); longestConnected[i] = Mathf.Max(longestConnected[i], connected[i]);
             if (connected[i] > 0) initialLock[i] = true;
             // Initial capture belongs to the base countdown. Losing a live hitch
             // cannot be repaired by automatically snapping/recreating it mid-run.
@@ -114,21 +159,21 @@ namespace LWS.TruckExtremeHauling
                 if (initialLock[i] || lostHitch[i] > 2) FinishAttempt(i, "road_train_lost_native_hitch");
                 return;
             }
-            bool parking = ai && (option == 1 || option == 2) && Vector3.ProjectOnPlane(trailers[i * 3 + connected[i] - 1].Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude < 12;
+            bool parking = ai && (option == 1 || option == 2) && Vector3.ProjectOnPlane(trailers[FirstTrailerIndex(i) + connected[i] - 1].Body.worldCenterOfMass - objectives[i].position, Vector3.up).magnitude < 12;
             if (parking)
             {
                 trucks[i].TickDrive(Vector2.zero); var input = trucks[i].tractorMotor.vehicle.input;
-                input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 1;
+                input.states.handbrake = input.states.handbrakeRaw = 1; input.states.brakes = input.states.brakesRaw = 0;
             }
             bool supported = true, stable = true, atRest = trucks[i].body.linearVelocity.magnitude < 1 && trucks[i].body.angularVelocity.magnitude < .4f;
             float condition = 0;
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < TrailersPerDriver; j++)
             {
-                var trailer = trailers[i * 3 + j];
+                var trailer = trailers[FirstTrailerIndex(i) + j];
                 trailer.SetBrakes(parking ? 1 : ActionHeld(i) ? .7f : 0);
                 if (j >= connected[i]) continue;
                 supported &= trailer.WheelContact;
-                stable &= Vector3.Dot(trailer.transform.up, Vector3.up) > .65f && Vector3.Angle(j == 0 ? trucks[i].transform.forward : trailers[i * 3 + j - 1].transform.forward, trailer.transform.forward) < 75;
+                stable &= Vector3.Dot(trailer.transform.up, Vector3.up) > .65f && Vector3.Angle(j == 0 ? trucks[i].transform.forward : trailers[FirstTrailerIndex(i) + j - 1].transform.forward, trailer.transform.forward) < 75;
                 atRest &= trailer.Body.linearVelocity.magnitude < 1 && trailer.Body.angularVelocity.magnitude < .4f;
                 condition += trailer.CargoCondition;
             }
@@ -139,30 +184,35 @@ namespace LWS.TruckExtremeHauling
             bool moving = Vector3.ProjectOnPlane(trucks[i].body.linearVelocity, Vector3.up).magnitude > 2 && distance <= Mathf.Max(1, 35 * dt);
             if (supported && stable && moving)
             {
-                safeDistance[i] += distance;
-                if (option == 0 && connected[i] == 3)
+                safeDistance[i] += distance; stableMovingSeconds[i] += dt;
+                if (option == 0 && connected[i] == TrailersPerDriver)
                 {
                     unbankedDistance[i] += distance;
-                    if (unbankedDistance[i] >= 10) { Award(i, unbankedDistance[i] * 3 * condition, "connected_safe_metres"); unbankedDistance[i] = 0; }
+                    if (unbankedDistance[i] >= 10) { Award(i, unbankedDistance[i] * TrailersPerDriver * condition, "connected_safe_metres"); unbankedDistance[i] = 0; }
                 }
-                if (option == 3 && connected[i] == 3)
+                if (option == 3 && connected[i] == TrailersPerDriver)
                 {
                     survival[i] += dt; unbankedSurvival[i] += dt;
                     if (unbankedSurvival[i] >= 2) { Award(i, unbankedSurvival[i] * 30 * condition, "moving_road_train_survival_seconds"); unbankedSurvival[i] = 0; }
                 }
             }
-            if ((option == 0 || option == 3) && (connected[i] < 3 || !stable)) { FinishAttempt(i, "road_train_chain_failed"); return; }
+            if ((option == 0 || option == 3) && (connected[i] < TrailersPerDriver || !stable)) { FinishAttempt(i, "road_train_chain_failed"); return; }
+            if (option == 2 && connected[i] < TrailersPerDriver) { FinishAttempt(i, "road_train_length_goal_lost"); return; }
             if (option != 1 && option != 2) return;
-            var tail = trailers[i * 3 + connected[i] - 1];
+            var tail = trailers[FirstTrailerIndex(i) + connected[i] - 1];
             bool atDepot = AtRestIn(i, tail.Body, objectives[i], 16) && atRest && supported && stable;
             settled[i] = atDepot ? settled[i] + dt : 0;
             if (settled[i] < 1.5f) return;
             // Trailer count dominates Maximum Challenge; fast empty tractors
             // and detached cargo can never beat a genuinely delivered train.
             float award = option == 2 ? connected[i] * 100000 + condition * 10000 + Mathf.Max(0, matchSeconds - age) : condition * 1000 + Mathf.Max(0, matchSeconds - age) * 10;
+            deliveredCount[i] = connected[i];
             Award(i, award, option == 2 ? "connected_trailers_delivered" : "road_train_timed_delivery");
             retired[i] = true;
         }
+        public int ConnectedTrailerCount(int slot) => CountConnected(slot);
+        public int DeliveredTrailerCount(int slot) => deliveredCount[slot];
+        public string TrainDiagnostic(int slot) => "capacity=" + TrailerCapacityPerDriver + " selected=" + TrailersPerDriver + " connected=" + CountConnected(slot) + " delivered=" + deliveredCount[slot] + " stableMoving=" + stableMovingSeconds[slot].ToString("F1") + " tail=" + trailers[FirstTrailerIndex(slot) + Mathf.Max(1,CountConnected(slot)) - 1].Body.position.ToString("F1");
         void FinishAttempt(int i, string reason)
         {
             if (retired[i]) return;
