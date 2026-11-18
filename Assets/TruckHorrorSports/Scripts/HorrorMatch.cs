@@ -117,6 +117,7 @@ namespace LWS.TruckHorrorSports
              sport == HorrorSport.ScarecrowSeason ? "Find the ritual objects in the maze, restore the four wards and escape through the farm gate. Corn passages change only while clear of vehicles. The scarecrow moves faster when nobody watches and hears engines. Face it with headlights to slow its approach; use alternate passages to escape. HOLD ACTION beside a ward to activate it. The barn key physically opens a locked shortcut; in Ritual Hunt your carried effigy must return to the barn altar before the next search." :
              sport == HorrorSport.DeadEnd ? "Follow the road, read the numbered exit clues and drive the correct route gates. The black semi is a physical pursuer: brake, turn and use junctions to avoid it. Repeated landmarks and contradictory signs are intentional. Complete the route before taking the last exit. Survival variants award actual time alive." :
              "The load is fighting you. Tow your physically attached trailer between the containment depots. Stop both tractor AND trailer at each ward and HOLD ACTION to contain its cargo. Haunted sway, brakes and shifting weight affect real momentum. Keep the load intact and deliver it to the final depot.") +
+            (nightServices?.securityAudit != null ? "\n\nAt the CCTV console, tap ACTION to change the live camera. Hold ACTION while the parking feed shows an empty bay to report the missing truck." : "") +
             ModeInstructions + "\n\nMovement uses your assigned driving controls. ACTION braces a tipped cursed load using physical restoring torque; otherwise ACTION away from a station toggles headlights. Each human keeps an independent truck and camera. Cooperative variants share objectives and never award individual winner points. Eliminated participants spectate surviving trucks. Rematch restores the whole venue, cargo and encounters. Default match: four minutes.";
         string ModeInstructions => TaskRush ? "\n\nTASK RUSH: bank as many real night-shift jobs as possible before the clock expires. Completing the full task route opens another circuit without moving your truck or clearing earned jobs. No extraction is required. The most completed jobs wins." :
             ConvoyMode ? "\n\nHAUNTED CONVOY: every real rig must stop at each ward before the shared route advances. Park in your own lane. Everyone and every surviving attached load must reach the final receiving area; one driver cannot deliver the whole team." :
@@ -185,6 +186,7 @@ namespace LWS.TruckHorrorSports
             if(nightServices!=null&&nightServices.CanAnswerSecondCall(slot))return nightServices.InteractionFor(slot);
             string pursuitCue = antagonist != null ? antagonist.PursuitCueFor(slot) : null;
             if (!string.IsNullOrEmpty(pursuitCue)) return pursuitCue;
+            if (nightServices != null && nightServices.HandlesSecurityConsole(slot)) return nightServices.SecurityInstructionFor(slot);
             int rescue = NearbyRescue(slot);
             if (rescue >= 0) return "HOLD ACTION · RESCUE\n" + setup.players[rescue].name;
             int task = NearestTask(slot);
@@ -394,7 +396,9 @@ namespace LWS.TruckHorrorSports
                     &&Vector3.Distance(cargo[i].Body.position,TaskPosition(i,task))<interactionRadius+8) cargo[i].Contain(.25f);
 
                 nightServices?.ObserveAction(i,!ai&&ActionHeld(i),dt);
-                if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0 && (nightServices==null||!nightServices.CanAnswerSecondCall(i))) lights[i] = !lights[i];
+                if (!ai && actions[i] && !cargoRecovery && task < 0 && rescue < 0 &&
+                    (nightServices == null || !nightServices.CanAnswerSecondCall(i) && !nightServices.HandlesSecurityConsole(i)))
+                    lights[i] = !lights[i];
                 if (headlights != null && i < headlights.Length && headlights[i] != null) headlights[i].enabled = lights[i];
                 if (foot != null && foot.flashlight != null) foot.flashlight.enabled = foot.Outside && lights[i];
                 if (rescue >= 0 && held && trucks[i].body.linearVelocity.magnitude < 1.4f)

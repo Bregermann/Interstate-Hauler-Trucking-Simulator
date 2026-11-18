@@ -11,6 +11,7 @@ namespace LWS.TruckHorrorSports
     {
         public HorrorMatch match;
         public GraveyardDriverlessArrival visitor;
+        public GraveyardSecurityAudit securityAudit;
         public Transform[] animatedProps;
         public Animation[] animations;
         public Sequencer[] sequences;
@@ -57,7 +58,9 @@ namespace LWS.TruckHorrorSports
         float nextCaption;
         Quaternion[] originalRotations;
         bool initialized,frozen,reported;
-        public string CaptionFor(int slot)=>slot>=0&&slot<match.setup.count&&match.Age<captionUntil[slot]?participantCaption[slot]:null;
+        public string CaptionFor(int slot)=>securityAudit!=null&&!string.IsNullOrEmpty(securityAudit.CaptionFor(slot))?securityAudit.CaptionFor(slot):slot>=0&&slot<match.setup.count&&match.Age<captionUntil[slot]?participantCaption[slot]:null;
+        public bool HandlesSecurityConsole(int slot)=>securityAudit!=null&&securityAudit.HandlesConsole(slot);
+        public string SecurityInstructionFor(int slot)=>securityAudit!=null?securityAudit.InstructionFor(slot):null;
         public bool Observed(int slot,int objective)=>observed[slot,objective];
         public void ResetServices()
         {
@@ -67,10 +70,12 @@ namespace LWS.TruckHorrorSports
             for(int i=0;i<animatedProps.Length;i++)animatedProps[i].localRotation=originalRotations[i];
             pumpLight.enabled=true;breakerLight.enabled=false;generatorLight.enabled=false;
             pumpReadout.text="PUMP 03\nCHECK REQUIRED";cbReadout.text="CB 19 · NO CARRIER";generatorReadout.text="AUXILIARY POWER OFF";visitor.ResetArrival();
+            securityAudit?.ResetAudit();
         }
         public void TickServices(float dt)
         {
             if(frozen)return;
+            securityAudit?.TickAudit(dt);
             for(int slot=0;slot<match.setup.count;slot++)for(int task=0;task<6;task++)ObserveCompletedObjective(slot,task);
             if(match.Escalation>=1 && !PumpChecked)
             {
@@ -151,6 +156,7 @@ namespace LWS.TruckHorrorSports
         public void ReportFinal()
         {
             if(reported)return;reported=true;
+            securityAudit?.ReportFinal();
             SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"graveyard_physical_visitor_arrivals",null,"A real NWH rig completed the authored arrival line",visitor.Arrivals);
             SportsSessionTelemetry.GameplayEvent(gameObject.scene.name,"graveyard_physical_visitor_distance",null,"Actual bounded horizontal movement; unit=M",visitor.DistanceDriven);
             for(int slot=0;slot<match.setup.count;slot++)
@@ -161,6 +167,7 @@ namespace LWS.TruckHorrorSports
         }
         public void Silence()
         {
+            securityAudit?.Silence();
             if(stations!=null)foreach(var source in stations)if(source!=null)source.Stop();
             if(pumpMotor!=null)pumpMotor.Stop();if(generatorMotor!=null)generatorMotor.Stop();
             if(visitor!=null&&visitor.truck!=null)visitor.truck.StopSound();
@@ -168,6 +175,7 @@ namespace LWS.TruckHorrorSports
         public void Freeze()
         {
             frozen=true;Silence();
+            securityAudit?.Freeze();
             if(sequences!=null)foreach(var sequence in sequences)if(sequence!=null)sequence.Stop();
             if(animations!=null)foreach(var animation in animations)if(animation!=null)animation.Stop();
             if(visitor!=null)visitor.Freeze();

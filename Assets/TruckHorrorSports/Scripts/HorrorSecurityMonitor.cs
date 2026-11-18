@@ -8,12 +8,19 @@ namespace LWS.TruckHorrorSports
         public Camera securityCamera;
         public Renderer display;
         public bool HasFrame { get; private set; }
+        public float LastRenderedTime { get; private set; }=-1;
+        public Vector3 LastRenderedPosition { get; private set; }
+        public Quaternion LastRenderedRotation { get; private set; }
         RenderTexture image;
         Material material;
         float nextFrame;
         void OnEnable() { RenderPipelineManager.endCameraRendering += Rendered; }
-        void Rendered(ScriptableRenderContext context, Camera camera) { if (camera == securityCamera && image != null) HasFrame = true; }
-        public void ResetFeed() { HasFrame = false; nextFrame = 0; }
+        void Rendered(ScriptableRenderContext context, Camera camera) { if (camera == securityCamera && image != null) {HasFrame = true;LastRenderedTime=Time.unscaledTime;LastRenderedPosition=camera.transform.position;LastRenderedRotation=camera.transform.rotation;} }
+        public void ResetFeed() { HasFrame = false; nextFrame = 0; LastRenderedTime=-1; }
+        public void SelectView(Transform station,float fieldOfView)
+        {
+            securityCamera.transform.SetPositionAndRotation(station.position,station.rotation);securityCamera.fieldOfView=fieldOfView;ResetFeed();
+        }
         void Start()
         {
             image = new RenderTexture(320, 180, 16) { name = "Night stop security feed", hideFlags = HideFlags.DontSave };
