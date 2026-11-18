@@ -36,6 +36,15 @@ namespace LWS.TruckExtremeHauling
         public int GatesMissed(int slot) => missed[slot];
         public bool Complete(int slot) => GateCount(slot) > 0 && passed[slot] == GateCount(slot);
         public Vector3 NextGate(int slot) => Lanes[slot].Gates[Mathf.Min(passed[slot], GateCount(slot) - 1)].Marker.position;
+        public Vector3 TractorApproach(int slot, Vector3 tractorPosition)
+        {
+            Transform gate = Lanes[slot].Gates[passed[slot]].Marker;
+            float distancePastGate = gate.InverseTransformPoint(tractorPosition).z;
+            // Center the tractor on the physical lane and hold that heading
+            // until the last trailer clears. Steering from delayed tail error
+            // kept adding lock after the tractor was already across the lane.
+            return gate.TransformPoint(0, 0, Mathf.Max(10, distancePastGate + 14));
+        }
         public void BeginRound(bool enabled)
         {
             CaptureAuthoredBlocks();

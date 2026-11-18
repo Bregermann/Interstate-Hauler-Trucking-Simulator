@@ -136,7 +136,8 @@ namespace LWS.TruckExtremeHauling
         static bool Usable(TrailerBody trailer) => trailer.Body.position.y > -5 && trailer.CargoCondition > .1f;
         protected override Vector2 AICommand(int i, float dt)
         {
-            Vector3 target = Destination(i);
+            bool approachingGate = ObstacleRouteActive && obstacleCourse.GateCount(i) > 0 && !obstacleCourse.Complete(i);
+            Vector3 target = approachingGate ? obstacleCourse.TractorApproach(i, trucks[i].body.position) : Destination(i);
             float distance = Vector3.ProjectOnPlane(target - trucks[i].body.position, Vector3.up).magnitude;
             if ((option == 0 || option == 3) && distance < 35)
             { route[i] = route[i] >= 4 ? 1 : route[i] + 1; target = Destination(i); distance = Vector3.ProjectOnPlane(target - trucks[i].body.position, Vector3.up).magnitude; }
@@ -148,6 +149,7 @@ namespace LWS.TruckExtremeHauling
             float requested = 6 + (int)setup.players[i].difficulty * 1.5f;
             if (TrailersPerDriver > 3) requested *= Mathf.Sqrt(3f / TrailersPerDriver);
             requested *= Mathf.Lerp(1, .35f, Mathf.Clamp01(Mathf.Abs(angle) / 1.2f));
+            if (approachingGate) requested = Mathf.Min(requested, Mathf.Lerp(5.5f, 3, Mathf.InverseLerp(20, 55, articulation)));
             if (articulation > 55) requested = Mathf.Min(requested, 3);
             if ((option == 1 && (!ObstacleRouteActive || obstacleCourse.Complete(i))) || option == 2) requested = Mathf.Min(requested, Mathf.Max(0, distance - 7) * .35f);
             return new Vector2(Mathf.Clamp(angle * 1.1f, -1, 1), Mathf.Clamp((requested - speed) * .3f, -.8f, .85f));
