@@ -119,6 +119,18 @@ namespace LWS.TruckExtremeHauling
         float EffectiveCableReach=>emergencySites!=null&&emergencySites.Active!=null?emergencySites.Active.cableReach:cableReach;
         bool HitchReady(int i,TrailerBody target)=>emergencySites==null||emergencySites.Active==null||emergencySites.HitchReady(i,target);
         TrailerBody Target(int i) => assigned[i] >= 0 && assigned[i] < trailers.Length ? trailers[assigned[i]] : null;
+
+        protected override Vector3 CameraFocus(int slot)
+        {
+            int focus = CameraParticipant(slot);
+            Vector3 tractorPosition = trucks[focus].body.position;
+            var load = Target(focus);
+            if (load == null || !load.gameObject.activeInHierarchy) return tractorPosition;
+            // Frame both ends of the winch and hitch without losing the driver's
+            // truck when the available cargo is across the recovery yard.
+            Vector3 toLoad = load.Body.worldCenterOfMass - tractorPosition;
+            return tractorPosition + Vector3.ClampMagnitude(toLoad, 18) * .42f;
+        }
         bool Upright(TrailerBody trailer) => Vector3.Dot(trailer.transform.up, Vector3.up) > uprightThreshold;
         Vector3 Eye(TrailerBody trailer)
         {
