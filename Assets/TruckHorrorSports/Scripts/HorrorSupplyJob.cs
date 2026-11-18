@@ -73,11 +73,14 @@ namespace LWS.TruckHorrorSports
             if (!ClearFootPath(slot, foot, navigationTarget, out var blocker) && blocker != null
                 && blocker.transform.IsChildOf(match.trucks[slot].transform))
                 navigationTarget = CabBypass(slot, foot, blocker, navigationTarget);
-            Vector3 delta=Vector3.ProjectOnPlane(navigationTarget-foot.transform.position,Vector3.up);
-            Vector3 local=foot.transform.InverseTransformDirection(delta);float angle=Mathf.Atan2(local.x,local.z)*Mathf.Rad2Deg;
-            // The existing CharacterController turns in place before stepping; it must
-            // not run into/through shelving while turning toward a dropped parcel.
-            return new Vector2(Mathf.Clamp(angle/45,-1,1),delta.magnitude>.4f?Mathf.Clamp01((delta.magnitude-.25f)/.8f)*Mathf.Clamp01(1-Mathf.Abs(angle)/60):0);
+            Vector3 delta = Vector3.ProjectOnPlane(navigationTarget - foot.transform.position, Vector3.up);
+            Vector3 local = foot.transform.InverseTransformDirection(delta);
+            float angle = Mathf.Atan2(local.x, local.z) * Mathf.Rad2Deg;
+            // The tray stance is closer than the ordinary walking dead zone.
+            // Keep enough precision to get into reach without changing interaction distance.
+            float stopDistance = refineToSupply && Carrying(slot) ? .1f : .4f;
+            float stride = delta.magnitude > stopDistance ? Mathf.Clamp01((delta.magnitude - stopDistance * .5f) / .8f) : 0;
+            return new Vector2(Mathf.Clamp(angle / 45, -1, 1), stride * Mathf.Clamp01(1 - Mathf.Abs(angle) / 60));
         }
         bool ClearFootPath(int slot, HorrorFootAgent foot, Vector3 destination, out Collider blocker)
         {
@@ -218,8 +221,21 @@ namespace LWS.TruckHorrorSports
                 {
                     // Holding the parcel with both hands steadies it before release.
                     // The grip still has to lift the real collider; the tray decides delivery.
-                    parcel.AddTorque(-parcel.angularVelocity * 7, ForceMode.Acceleration);
-                    hand = new Vector3(receiver.bounds.center.x, receiver.bounds.max.y + parcelShapes[slot].bounds.extents.y + .15f, receiver.bounds.center.z);
+                    Vector3 level = Vector3.Cross(parcel.transform.up, Vector3.up) * 18;
+                    parcel.AddTorque(level - parcel.angularVelocity * 7, ForceMode.Acceleration);
+                    Bounds tray = receiver.bounds;
+                    Bounds crate = parcelShapes[slot].bounds;
+                    Vector3 slide = tray.center;
+                    if (crate.min.y < tray.max.y + .025f)
+                    {
+                        // Pull the crate clear of the lip before lifting it.
+                        // A diagonal pull can pin a corner beneath the tray.
+                        Vector3 forward = receiver.transform.forward;
+                        float trayDepth = Mathf.Abs(forward.x) * tray.extents.x + Mathf.Abs(forward.z) * tray.extents.z;
+                        float crateDepth = Mathf.Abs(forward.x) * crate.extents.x + Mathf.Abs(forward.z) * crate.extents.z;
+                        slide -= forward * (trayDepth + crateDepth + .18f);
+                    }
+                    hand = new Vector3(slide.x, tray.max.y + crate.extents.y + .25f, slide.z);
                 }
                 Vector3 requested=Vector3.ClampMagnitude((hand-carryingAnchors[slot].position)*4,5);
                 anchorVelocity[slot]=Vector3.MoveTowards(anchorVelocity[slot],requested,dt*6);
