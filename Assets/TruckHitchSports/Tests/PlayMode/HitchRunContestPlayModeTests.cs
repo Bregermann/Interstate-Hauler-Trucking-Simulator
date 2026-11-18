@@ -51,6 +51,7 @@ public sealed class HitchRunContestPlayModeTests
             var originalOwners = Enumerable.Repeat(-1, trailers.Length).ToArray();
             var deliveredStolen = new bool[4];
             int samples = 0; float nextSample = 30; string lastLive = "not sampled"; bool contestObservedLogged = false;
+            float firstContestAt = -1, firstRecaptureAt = -1, firstStolenDeliveryAt = -1;
             try
             {
                 Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 75;
@@ -61,12 +62,21 @@ public sealed class HitchRunContestPlayModeTests
                     {
                         var load = trailers.GetValue(t); int owner = (int)Property(load, "Owner");
                         if (priorOwners[t] >= 0 && owner < 0) { observedContest[t] = true; originalOwners[t] = priorOwners[t]; }
-                        if (observedContest[t] && owner >= 0 && owner != originalOwners[t] && ReferenceEquals(Property(couplers.GetValue(owner), "Attached"), load) && (bool)Property(couplers.GetValue(owner), "PhysicalConstraintPresent")) observedPhysicalRecapture[t] = true;
-                        if (observedPhysicalRecapture[t] && stealers[t] >= 0 && (int)Property(load, "Deliveries") > 0) deliveredStolen[stealers[t]] = true;
+                        if (observedContest[t] && owner >= 0 && owner != originalOwners[t] && ReferenceEquals(Property(couplers.GetValue(owner), "Attached"), load) && (bool)Property(couplers.GetValue(owner), "PhysicalConstraintPresent"))
+                        {
+                            observedPhysicalRecapture[t] = true;
+                            if (firstRecaptureAt < 0) { firstRecaptureAt = (float)Property(match, "Elapsed"); Debug.Log("HH10_HITCH_RUN_FIRST_NATIVE_RECAPTURE age=" + firstRecaptureAt + " owner=" + owner + " " + Call(match, "HitchRunApproachDiagnostic", owner)); }
+                        }
+                        if (observedPhysicalRecapture[t] && stealers[t] >= 0 && (int)Property(load, "Deliveries") > 0)
+                        {
+                            deliveredStolen[stealers[t]] = true;
+                            if (firstStolenDeliveryAt < 0) { firstStolenDeliveryAt = (float)Property(match, "Elapsed"); Debug.Log("HH10_HITCH_RUN_FIRST_STOLEN_DELIVERY age=" + firstStolenDeliveryAt + " owner=" + stealers[t]); }
+                        }
                     }
                     if (!contestObservedLogged && observedContest.Any(value => value))
                     {
                         contestObservedLogged = true;
+                        firstContestAt = (float)Property(match, "Elapsed");
                         Debug.Log("HH10_HITCH_RUN_FIRST_PHYSICAL_CONTEST age=" + Property(match, "Elapsed") + " " + Call(match, "ContestDiagnostic", 0));
                     }
                     if ((float)Property(match, "Elapsed") >= nextSample && samples < 6)
@@ -77,7 +87,7 @@ public sealed class HitchRunContestPlayModeTests
                     }
                     yield return null;
                 }
-                string state = "age=" + Property(match, "Elapsed") + " contests=" + string.Join(",", (int[])Read(match, "contestsWon")) + " steals=" + string.Join(",", (int[])Read(match, "successfulSteals")) + " deliveries=" + string.Join(",", ((int[])Read(match, "Deliveries")).Take(4)) + " lastLive=[" + lastLive + "]";
+                string state = "age=" + Property(match, "Elapsed") + " firstContest=" + firstContestAt + " firstNativeRecapture=" + firstRecaptureAt + " firstStolenDelivery=" + firstStolenDeliveryAt + " contests=" + string.Join(",", (int[])Read(match, "contestsWon")) + " steals=" + string.Join(",", (int[])Read(match, "successfulSteals")) + " deliveries=" + string.Join(",", ((int[])Read(match, "Deliveries")).Take(4)) + " lastLive=[" + lastLive + "]";
                 Assert.That((bool)Property(match, "Finished"), Is.True, state);
                 Assert.That(observedContest.Any(value => value), Is.True, "A normal stopped three-second challenge must release actual opponent cargo. " + state);
                 Assert.That(observedPhysicalRecapture.Any(value => value), Is.True, "Strict native physical coupling must occur after the opponent releases. " + state);

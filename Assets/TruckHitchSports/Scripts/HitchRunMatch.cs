@@ -16,6 +16,7 @@ namespace LWS.TruckHitchSports
         readonly Vector3[] clearKingpinTarget = new Vector3[4];
         readonly int[] contestsWon = new int[4];
         readonly int[] ambushRival = new int[4], ambushStage = new int[4];
+        readonly int[] upstreamStaging = new int[4];
         readonly Vector3[] ambushGoal = new Vector3[4];
         float[] respawnAt;
         int[] contestedOwner, cargoStealer;
@@ -44,7 +45,7 @@ namespace LWS.TruckHitchSports
             System.Array.Clear(aiTarget, 0, 4); System.Array.Clear(approachStage, 0, 4); System.Array.Clear(aiReadyAt, 0, 4);
             System.Array.Clear(clearKingpinUntil, 0, 4); System.Array.Clear(contestsWon, 0, 4);
             respawnAt = new float[trailers.Length]; contestedOwner = new int[trailers.Length]; cargoStealer = new int[trailers.Length];
-            for (int slot = 0; slot < ambushRival.Length; slot++) { ambushRival[slot] = -1; ambushStage[slot] = 0; ambushGoal[slot] = Vector3.zero; }
+            for (int slot = 0; slot < ambushRival.Length; slot++) { ambushRival[slot] = -1; ambushStage[slot] = upstreamStaging[slot] = 0; ambushGoal[slot] = Vector3.zero; }
             for (int t = 0; t < trailers.Length; t++) { contestedOwner[t] = cargoStealer[t] = -1; ConfigureCargo(t); }
         }
         protected override void ReportFinalMeasurements(int slot)
@@ -118,7 +119,7 @@ namespace LWS.TruckHitchSports
                     {
                         if (ai)
                         {
-                            if (hardAmbush && Vector3.Distance(candidate.Body.worldCenterOfMass, depots[candidate.Owner].position) > 35)
+                            if (hardAmbush && (upstreamStaging[i] < 2 || Vector3.Distance(candidate.Body.worldCenterOfMass, depots[candidate.Owner].position) > 35))
                                 AwaitRivalCourier(i);
                             else PursueOccupiedCargo(i, candidate, hardAmbush);
                         }
@@ -199,6 +200,7 @@ namespace LWS.TruckHitchSports
                 if (distance < nearest) { nearest = distance; ambushRival[slot] = other; }
             }
             ambushStage[slot] = 0;
+            upstreamStaging[slot] = 0;
         }
         void AwaitRivalCourier(int slot)
         {
@@ -214,7 +216,44 @@ namespace LWS.TruckHitchSports
             // The ordinary courier brakes toward a 3m receiving offset rather
             // than passing through the exact geometric center of its depot.
             Vector3 receivingRoot = depots[rival].position + forward * (localPinFromCom.z - localFifthWheel.z - 3);
-            DriveParallelAmbush(slot, receivingRoot + right * side * 3.8f, forward, side);
+            Vector3 goal = receivingRoot + right * side * 3.8f;
+            if (upstreamStaging[slot] < 2) StageUpstreamAmbush(slot, goal, forward, side);
+            else DriveParallelAmbush(slot, goal, forward, side);
+        }
+        void StageUpstreamAmbush(int slot, Vector3 goal, Vector3 forward, float side)
+        {
+            // This is an empty tractor arriving in the same direction as the
+            // courier. It needs no trailer-style overshoot and reverse parking.
+            // Stage in the open upstream aisle, then drive forward alongside the
+            // first receiving run. Physical stopped contest rules remain below.
+            ambushGoal[slot] = goal;
+            var truck = trucks[slot];
+            Vector3 right = Vector3.Cross(Vector3.up, forward);
+            Vector3 offset = truck.body.position - goal;
+            float ahead = Vector3.Dot(offset, forward), lateral = Vector3.Dot(offset, right);
+            float heading = Vector3.Angle(truck.transform.forward, forward);
+            if (upstreamStaging[slot] == 0)
+            {
+                Vector3 upstream = goal - forward * 24;
+                truck.TickDrive(DriveTo(slot, upstream, 8));
+                if (Vector3.ProjectOnPlane(truck.body.position - upstream, Vector3.up).magnitude < 4)
+                    upstreamStaging[slot] = 1;
+                return;
+            }
+            if (Mathf.Abs(ahead) < .8f && Mathf.Abs(lateral) < 1.25f && heading < 10)
+            {
+                upstreamStaging[slot] = 2; ambushStage[slot] = 4; ParkAI(slot); return;
+            }
+            // A physical bump or a missed approach still uses the established
+            // bay-recovery controller; never reposition an actor to rescue AI.
+            if (ahead > 3 || Mathf.Abs(lateral) > 6 || heading > 35)
+            {
+                upstreamStaging[slot] = 3; ambushStage[slot] = 0;
+                DriveParallelAmbush(slot, goal, forward, side); return;
+            }
+            float remaining = Mathf.Max(0, -ahead);
+            float desired = Mathf.Min(5, Mathf.Sqrt(2 * 1.8f * Mathf.Max(0, remaining - .3f)));
+            truck.TickDrive(DriveTo(slot, goal, desired));
         }
         void DriveParallelAmbush(int slot, Vector3 goal, Vector3 forward, float side)
         {
@@ -311,7 +350,7 @@ namespace LWS.TruckHitchSports
         {
             if (slot < 0 || slot >= setup.count) return "invalid seat";
             var target = contested[slot];
-            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " ambushRival=" + ambushRival[slot] + " bayStage=" + ambushStage[slot] + " tractor=" + trucks[slot].body.position.ToString("F2") + " bayGoal=" + ambushGoal[slot].ToString("F2") + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
+            return "contests=" + contestsWon[slot] + " steals=" + successfulSteals[slot] + " holding=" + contest[slot].ToString("F2") + " clearSeconds=" + Mathf.Max(0, clearKingpinUntil[slot] - Elapsed).ToString("F1") + " ambushRival=" + ambushRival[slot] + " upstreamStage=" + upstreamStaging[slot] + " bayStage=" + ambushStage[slot] + " tractor=" + trucks[slot].body.position.ToString("F2") + " bayGoal=" + ambushGoal[slot].ToString("F2") + " targetOwner=" + (target != null ? target.Owner : -1) + " gap=" + (target != null ? Vector3.Distance(couplers[slot].Anchor.position, target.Kingpin.position).ToString("F2") : "none");
         }
         void CoupledLoad(int slot, TrailerBody trailer)
         {
