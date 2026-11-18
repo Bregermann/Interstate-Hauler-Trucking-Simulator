@@ -2,6 +2,7 @@ using UnityEngine;
 using LWS.TruckBowling;
 namespace LWS.TruckWaterSports {
 public sealed class WhitewaterWipeoutMatch:WaterMatch {
+ public WhitewaterSurvivalFork survivalFork;
  protected override bool Canoe=>false;
  public override string ControlCaption(int slot){var player=setup.players[slot];if(player.source==BowlingSource.AI)return "AI · ALTERNATING PHYSICAL STROKES";if(player.source==BowlingSource.WholeController)return "LB LEFT PADDLE · RB RIGHT PADDLE · RT/LT POWER/DIRECTION · LS LEAN/CARVE · SOUTH ROLL";return Controls(slot)+" · LEFT/RIGHT CHOOSE PADDLE · UP/DOWN STROKE DIRECTION · CENTER + UP/DOWN BOTH";}
 
@@ -12,7 +13,7 @@ public sealed class WhitewaterWipeoutMatch:WaterMatch {
  public override double ResultScore(int slot)=>option<2?FinishTimes[slot]>=0?FinishTimes[slot]+Vessel(slot).Capsizes*2+(option==1?Vessel(slot).Collisions*2+RoutePenaltySeconds(slot):0):0:option==2?Scores[slot]:Stranded[slot]?StrandedAt[slot]:FinishTimes[slot]>=0?FinishTimes[slot]:Clock;
  public override bool ResultHasOutcome(int slot)=>slot>=0&&slot<setup.count&&(option<2?FinishTimes[slot]>=0:option==2?qualifiedFreestyle[slot]>0:Clock>=3);
  public override string Help=>"Humans control each real paddle independently. Whole controller: LB/RB paddle sides, RT/LT set forward/backstroke power and left stick carves/leans. Keyboard or split stick: left/right choose a paddle, up/down set direction, centered sides plus up/down stroke both. Steering with a single paddle turns away from that side. ACTION rolls or rights an inverted kayak. Whitewater Race follows the full river to the finish. Slalom adds a physical fork: orange log shortcut or green shallow channel. Missing both branch gates costs three seconds; ordinary gate and collision penalties also apply. Freestyle: tap ACTION in the air for a roll, then hold ACTION to brace toward a controlled landing; tricks score only after physical landing. Survival: three capsizes retire you. After the first descent, circle the lower rapids without attempting an impossible climb back up a waterfall. Currents/waves intensify over time. AI paddles, rolls, braces and recovers through the same forces.";
- public override string Status=>option==2?"TAP ACTION: AERIAL ROLL · HOLD: LANDING BRACE":option==3?"THREE CAPSIZES AND OUT · WAVES ARE BUILDING":base.Status;
+ public override string Status=>option==2?"TAP ACTION: AERIAL ROLL · HOLD: LANDING BRACE":option==3?"THREE CAPSIZES AND OUT · WAVES ARE BUILDING"+(survivalFork!=null?" · LOWER ROCK NOTCH OR OPEN CENTRAL CHANNEL":""):base.Status;
  readonly int[] side=new int[4],survivalGate=new int[4],notifiedLandings=new int[4];
  readonly bool[] paddleArmed=new bool[4];
  readonly bool[] upstream=new bool[4];readonly Vector3[] lastPosition=new Vector3[4];readonly float[] distance=new float[4],originalWaves=new float[4],qualifiedFreestyle=new float[4];readonly int[] qualifiedLandings=new int[4];bool wavesCaptured;int survivalFloor;
@@ -26,7 +27,7 @@ public sealed class WhitewaterWipeoutMatch:WaterMatch {
  protected override void TickBoat(WaterVessel vessel,int index,float dt){
   if(FinishTimes[index]>=0||Stranded[index])return;
   bool ai=setup.players[index].source==BowlingSource.AI;
-  int target=option==3?survivalGate[index]:Gates[index];var drive=ai?NavigateWatercraft(index,vessel,RouteAim(index,vessel,course.Point(target)),11):commands[index];
+  int target=option==3?survivalGate[index]:Gates[index];Vector3 aim=course.Point(target);if(ai){aim=RouteAim(index,vessel,aim);if(option==3&&survivalFork!=null)aim=survivalFork.Aim(vessel,index,aim,upstream[index]);}var drive=ai?NavigateWatercraft(index,vessel,aim,11):commands[index];
   if(ai){
    // Preserve the natural AI/default/Slalom acceptance path.
    if(vessel.WaterSupported&&vessel.Stroke(side[index],drive.y,Clock))side[index]=1-side[index];
@@ -67,6 +68,6 @@ public sealed class WhitewaterWipeoutMatch:WaterMatch {
   if(option==1)Scores[index]=Gates[index]*100-vessel.Capsizes*20-MissedGates[index]*50-vessel.Collisions*10+(FinishTimes[index]>=0?10000-FinishTimes[index]:0);
   if(option==2){Scores[index]=qualifiedFreestyle[index]+Gates[index]*10-vessel.Capsizes*20-MissedGates[index]*25;if(landingReward>0)ConfirmScore("freestyle-landing:"+index+":"+vessel.Landings,index,landingReward,Scores[index],"CONTROLLED WATERFALL LANDING");}
  }
- protected override void RecordModeFinalMetrics(int slot){if(option==2){FinalMetric(slot,"qualified_freestyle_landing_points",qualifiedFreestyle[slot],"individual");FinalMetric(slot,"qualified_freestyle_landings",qualifiedLandings[slot],"individual");}if(option==3)FinalMetric(slot,"survival_distance_metres",distance[slot],"individual");}
+ protected override void RecordModeFinalMetrics(int slot){if(option==2){FinalMetric(slot,"qualified_freestyle_landing_points",qualifiedFreestyle[slot],"individual");FinalMetric(slot,"qualified_freestyle_landings",qualifiedLandings[slot],"individual");}if(option==3){FinalMetric(slot,"survival_distance_metres",distance[slot],"individual");if(survivalFork!=null){FinalMetric(slot,"survival_narrow_channel_passages",survivalFork.NarrowPassages[slot],"individual");FinalMetric(slot,"survival_open_channel_passages",survivalFork.OpenChannelPassages[slot],"individual");}}}
 }
 }
