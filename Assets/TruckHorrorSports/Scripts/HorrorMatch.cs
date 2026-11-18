@@ -347,8 +347,9 @@ namespace LWS.TruckHorrorSports
                     if(ai)
                     {
                         bool supply=supplyJob!=null&&wanted==supplyJob.objectiveIndex;
-                        Vector3 target=wanted<0?trucks[i].body.position:objectives[wanted].requiresFoot?TaskPosition(i,wanted):trucks[i].body.position;
                         bool returningToGraveyardCab = sport == HorrorSport.GraveyardShift && (wanted < 0 || !objectives[wanted].requiresFoot);
+                        Vector3 target = returningToGraveyardCab ? GraveyardCabDoor(i)
+                            : wanted >= 0 && objectives[wanted].requiresFoot ? TaskPosition(i, wanted) : trucks[i].body.position;
                         if ((returningToGraveyardCab || wanted >= 0 && objectives[wanted].requiresFoot) && paths[i] != null && paths[i].status == NavMeshPathStatus.PathComplete)
                             for(int c=1;c<pathCorners[i].Length;c++)
                             {
@@ -497,6 +498,12 @@ namespace LWS.TruckHorrorSports
             return -1;
         }
         Vector3 TaskPosition(int slot, int task) => convoyRoad!=null&&convoyRoad.Active?convoyRoad.WardPosition(slot,task):junctionPuzzle!=null&&junctionPuzzle.Active?RoadGatePosition(task):supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.Target(slot) : ConvoyMode ? ConvoyLane(objectives[task].transform.position, slot) : objectives[task].transform.position;
+        Vector3 GraveyardCabDoor(int slot)
+        {
+            Vector3 position = footAgents[slot].transform.position;
+            return supplyJob != null && supplyJob.TryCabExit(slot, position, out var door)
+                ? door : trucks[slot].body.position;
+        }
         Vector3 TaskTruckApproach(int slot,int task) => supplyJob!=null && task==supplyJob.objectiveIndex ? supplyJob.TruckApproach(slot) : objectives[task].truckApproach;
         float FootParkingRadius(int task) => sport == HorrorSport.GraveyardShift &&
             supplyJob != null && task != supplyJob.objectiveIndex ? utilityCabApproachRadius : 8;
@@ -641,7 +648,7 @@ namespace LWS.TruckHorrorSports
                 (id < 0 || supplyJob == null || id != supplyJob.objectiveIndex);
             Vector3 destination = id < 0 ? ExitPosition(slot) : objectives[id].requiresFoot && !outside ? TaskTruckApproach(slot,id) : TaskPosition(slot, id);
             if (sport == HorrorSport.GraveyardShift && outside && (id < 0 || !objectives[id].requiresFoot))
-                destination = truck.body.position;
+                destination = GraveyardCabDoor(slot);
             if (sport == HorrorSport.GraveyardShift && !outside && id >= 0 && objectives[id].requiresFoot &&
                 supplyJob != null && id != supplyJob.objectiveIndex &&
                 Vector3.Distance(truck.body.position, destination) < FootParkingRadius(id) &&
