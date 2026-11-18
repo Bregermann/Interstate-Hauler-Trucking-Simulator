@@ -24,6 +24,7 @@ namespace LWS.TruckExtremeHauling
         readonly Vector3[] preparedPosition = new Vector3[4];
         readonly float[,] releaseSpin = new float[4, 5], releaseRoll = new float[4, 5], releaseTilt = new float[4, 5], releaseX = new float[4, 5], dropPoints = new float[4, 5];
         readonly int[,] settledBins = new int[4, 5];
+        readonly int[,] pegContacts = new int[4, 5], movingPegContacts = new int[4, 5];
         int BinCount => Mathf.Clamp(binPoints != null ? binPoints.Length : 0, 1, 5);
         int TargetBin(int slot) => (targetBin + completedDrops[slot]) % BinCount;
 
@@ -39,7 +40,7 @@ namespace LWS.TruckExtremeHauling
             string turn = "DROP " + Mathf.Min(completedDrops[slot] + 1, Mathf.Max(1, competitionDrops)) + "/" + Mathf.Max(1, competitionDrops);
             if (retired[slot]) detail = "FINAL / " + deliveries[slot] + " SCORED / " + misses[slot] + " MISSED";
             else if (resolved[slot]) detail = lastOutcome[slot] + " / NEXT DROP";
-            else if (dropped[slot]) detail = turn + " / FALLING " + (age - releasedAt[slot]).ToString("F1") + "s";
+            else if (dropped[slot]) detail = turn + " · " + (age - releasedAt[slot]).ToString("F1") + "s · " + pegContacts[slot, completedDrops[slot]] + " HITS";
             else detail = turn + " / " + Mathf.CeilToInt(Mathf.Max(0, preparationSeconds - (age - preparedAt[slot]))) + "s / R" + roll[slot].ToString("F0") + "° T" + tilt[slot].ToString("F0") + "° / " + spin[slot].ToString("F1") + "rad/s";
             if (option == 1 && !retired[slot] && !resolved[slot]) detail += " / TARGET " + (TargetBin(slot) + 1);
             return true;
@@ -79,11 +80,16 @@ namespace LWS.TruckExtremeHauling
             }
             for (int p = 0; p < movingPegs.Length; p++) { movingPegs[p].position = pegPositions[p]; movingPegs[p].transform.position = pegPositions[p]; }
             System.Array.Clear(completedDrops, 0, 4); System.Array.Clear(releasedDrops, 0, 4); System.Array.Clear(misses, 0, 4);
+            System.Array.Clear(pegContacts, 0, pegContacts.Length); System.Array.Clear(movingPegContacts, 0, movingPegContacts.Length);
             System.Array.Clear(releaseSpin, 0, releaseSpin.Length); System.Array.Clear(releaseRoll, 0, releaseRoll.Length); System.Array.Clear(releaseTilt, 0, releaseTilt.Length); System.Array.Clear(releaseX, 0, releaseX.Length); System.Array.Clear(dropPoints, 0, dropPoints.Length);
             for (int slot = 0; slot < 4; slot++) for (int n = 0; n < 5; n++) settledBins[slot, n] = -1;
             foreach (var tray in landingTrays) tray.ResetContacts();
             for (int i = 0; i < setup.count; i++)
             {
+                var body = trailers[i].Body.gameObject;
+                var contacts = body.GetComponent<PlinkoPegContact>() ?? body.AddComponent<PlinkoPegContact>();
+                contacts.match = this;
+                contacts.slot = i;
                 originalRotation[i] = Quaternion.Inverse(boardOrigins[i].rotation) * trailers[i].StartRotation;
                 lastBin[i] = -1; lastOutcome[i] = ""; PrepareDrop(i, false);
                 trucks[i].Power(false); foreach (var body in trucks[i].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = true;
@@ -175,12 +181,26 @@ namespace LWS.TruckExtremeHauling
             foreach (var body in trailers[slot].GetComponentsInChildren<Rigidbody>(true)) body.isKinematic = true;
             if (completedDrops[slot] >= competitionDrops) retired[slot] = true; else nextDropAt[slot] = age + betweenDropSeconds;
         }
+        internal void OnPegContact(int slot, Collision collision)
+        {
+            if (!Live || !dropped[slot] || resolved[slot] || collision.collider.name != "Physical rebound peg") return;
+            int drop = completedDrops[slot];
+            pegContacts[slot, drop]++;
+            if (option == 2 && collision.collider.attachedRigidbody != null &&
+                System.Array.IndexOf(movingPegs, collision.collider.attachedRigidbody) >= 0)
+                movingPegContacts[slot, drop]++;
+            if (collision.contactCount > 0)
+                feedback.PlayAt(1, collision.GetContact(0).point, collision.relativeVelocity.magnitude);
+        }
+
         protected override void ReportFinalMeasurements(int i)
         {
             RecordMetric(i, "plinko_released", releasedDrops[i] > 0 ? 1 : 0); RecordMetric(i, "plinko_releases", releasedDrops[i]); RecordMetric(i, "plinko_drops_completed", completedDrops[i]); RecordMetric(i, "plinko_misses", misses[i]);
             for (int n = 0; n < releasedDrops[i]; n++)
             {
                 string suffix = "_drop_" + (n + 1);
+                RecordMetric(i, "plinko_physical_peg_contacts" + suffix, pegContacts[i, n]);
+                if (option == 2) RecordMetric(i, "plinko_moving_peg_contacts" + suffix, movingPegContacts[i, n]);
                 RecordMetric(i, "plinko_release_spin_radians" + suffix, releaseSpin[i, n]); RecordMetric(i, "plinko_release_roll_degrees" + suffix, releaseRoll[i, n]); RecordMetric(i, "plinko_release_tilt_degrees" + suffix, releaseTilt[i, n]); RecordMetric(i, "plinko_release_x_metres" + suffix, releaseX[i, n]);
                 if (option == 1) RecordMetric(i, "plinko_target_bin" + suffix, (targetBin + n) % BinCount);
                 if (n < completedDrops[i]) { RecordMetric(i, "plinko_drop_points" + suffix, dropPoints[i, n]); if (settledBins[i, n] >= 0) RecordMetric(i, "plinko_supported_landing_bin" + suffix, settledBins[i, n]); }
@@ -195,7 +215,16 @@ namespace LWS.TruckExtremeHauling
         public float ReleaseSpinRadians(int slot, int drop) => releaseSpin[slot, drop];
         public float MeasuredDropPoints(int slot, int drop) => dropPoints[slot, drop];
         public int SettledBinForDrop(int slot, int drop) => settledBins[slot, drop];
+        public int PegContactsForDrop(int slot, int drop) => pegContacts[slot, drop];
+        public int MovingPegContactsForDrop(int slot, int drop) => movingPegContacts[slot, drop];
         public string PlinkoDiagnostic(int slot) => "drops=" + completedDrops[slot] + "/" + competitionDrops + " released=" + releasedDrops[slot] + " scored=" + deliveries[slot] + " misses=" + misses[slot] + " bin=" + lastBin[slot] + " roll=" + roll[slot].ToString("F1") + " tilt=" + tilt[slot].ToString("F1") + " flight=" + (dropped[slot] ? age - releasedAt[slot] : 0).ToString("F1") + " quiet=" + quiet[slot].ToString("F2") + " outcome=" + lastOutcome[slot];
         protected override Vector3 CameraFocus(int slot) => trailers[CameraParticipant(slot)].Body.worldCenterOfMass;
+    }
+
+    public sealed class PlinkoPegContact : MonoBehaviour
+    {
+        internal TrailerPlinkoMatch match;
+        internal int slot;
+        void OnCollisionEnter(Collision collision) => match?.OnPegContact(slot, collision);
     }
 }
