@@ -1,48 +1,43 @@
-# Luna Wolf Studios — November 19, 2026 asset acquisition notice
+# Luna Wolf Studios — CONFIRMED owned assets, November 19, 2026
 
-## Status and provenance
+**Status update (authoritative, supersedes earlier pending/evaluated wording):** The owner directly confirmed purchasing BOTH **Sonity - Audio Middleware** and **Undergrounds / Mega Bundle 7 in 1**, and individually redeeming/grabbing ALL SEVEN constituent packages on **November 19, 2026**. **All nine Unity Asset Store listing IDs below are confirmed owned.** This is **two purchases (Sonity + the bundle) plus seven package entitlements**, not nine separately paid purchases. Exact paid prices, owning organization/license seat, local file availability and imported state have not been independently checked.
 
-The owner stated on 2026-11-19: **"Undergrounds / Mega Bundle 7 in 1" — "am buying"**. Treat this as **purchase intended/in progress**, NOT a verified completed checkout, entitlement, download, import or Unity validation. When the owner confirms purchase or the official `My Assets` listing contains asset ID `320220`, promote the status to `Owned / confirmed` in the central inventory and deduplicate by Asset Store ID. Until then, reference as an **incoming asset for planning only**.
+**Installed != owned.** Nothing in this notice asserts any Unity project has downloaded, imported, run, verified or shipped these products. Match assets by stable Asset Store IDs; avoid double-counting content shared between modules.
 
-Publisher: **Abandoned World**. Unity Asset Store ID: **320220**. Official listing: https://assetstore.unity.com/packages/3d/environments/industrial/undergrounds-mega-bundle-7-in-1-320220
+## Newly confirmed ownership
 
-This is a Unity bundle with listed Unity 6.0/URP compatibility, not an Unreal pack requiring FBX conversion. Publisher specs (claims; verify imported packages): **1,172 meshes; 1,998 prefabs; 496 PBR materials; 751 textures; 5 shaders**, including Unity Shader Graph content. **Four underground environments and three prop/vehicle collections**. Asset Store lists the bundle container as **53.8 KB**; description says purchase grants separate access to individual Unity packages. Do not interpret the tiny container as a missing 3D asset archive. Validate individual package entitlements and real contents after purchase.
+| Unity Asset ID | Product | Acquisition | Potentially useful for |
+|---|---|---|---|
+| [229857](https://assetstore.unity.com/packages/tools/audio/sonity-audio-middleware-229857) | **Sonity - Audio Middleware** — Sonigon | **Purchased** | Rowan combat/magic/ambience, Interstate engines/traffic ambience, Truck Sports' responsive SFX, horror |
+| [320220](https://assetstore.unity.com/packages/3d/environments/industrial/undergrounds-mega-bundle-7-in-1-320220) | **Undergrounds / Mega Bundle 7 in 1** — Abandoned World | **Purchased parent bundle** | Factory/warehouse/service environments, tunnels, abandoned underground areas and horror |
+| [311075](https://assetstore.unity.com/packages/3d/environments/industrial/modular-abandoned-shelter-311075) | **Modular Abandoned Shelter** — Abandoned World | **Individually claimed via bundle 320220** | Shelters, bunkers, horror, service rooms |
+| [317175](https://assetstore.unity.com/packages/3d/environments/industrial/modular-subway-tunnels-317175) | **Modular Subway Tunnels** — Abandoned World | **Individually claimed via bundle 320220** | Subway tunnels, service corridors, stations, horror |
+| [318615](https://assetstore.unity.com/packages/slug/318615) | **CyberPunk Underpass** — Abandoned World | **Individually claimed via bundle 320220** | Urban underpasses, industrial city spaces, graffiti |
+| [317481](https://assetstore.unity.com/packages/3d/environments/industrial/modular-mini-bunker-317481) | **Modular Mini Bunker** — Abandoned World | **Individually claimed via bundle 320220** | Small bunkers, survival rooms, horror |
+| [143712](https://assetstore.unity.com/packages/3d/props/industrial/industrial-underground-props-pack-143712) | **Industrial Underground Props Pack** — Abandoned World | **Individually claimed via bundle 320220** | Furniture, electrical panels, generators, equipment; overlaps shelter pack |
+| [175045](https://assetstore.unity.com/packages/3d/props/industrial/modular-pipes-vent-pack-175045) | **Modular Pipes & Vent Pack** — Abandoned World | **Individually claimed via bundle 320220** | Pipes, vents, utility tunnels, warehouse/service interiors |
+| [304609](https://assetstore.unity.com/packages/3d/vehicles/off-road-vehicle-304609) | **Off-Road Vehicle** — Abandoned World | **Individually claimed via bundle 320220** | Vehicle art for Interstate/Lifeline; gameplay physics integration required |
 
-### Seven included products (publisher list)
+The Undergrounds publisher describes **four modular environments + three prop/vehicle sets** (bundle totals quoted as **1,172 meshes, 1,998 prefabs, 496 materials, 751 textures**). The 53.8 KB bundle container is an entitlement listing, **not** the entire set of environment files. Download the seven products separately where appropriate. Current listing says Unity 6 and URP compatible; actual local import/compatibility remains to be tested.
 
-1. Modular Abandoned Shelter
-2. Modular Subway Tunnels
-3. CyberPunk Underpass
-4. Modular Mini Bunker
-5. Industrial Underground Props Pack
-6. Modular Pipes & Vent Pack
-7. Off-Road Vehicle
+## Project-specific adoption guidance (ownership record, not work authorization)
 
-## Relevance by project (planning only; do not import until verified owned)
+- **Interstate: Hauler / Truck Taxi:** prioritize subway/service tunnels, underpasses, pipes, industrial interiors and the off-road vehicle model. Preserve existing authoritative EasyRoads3D, NWH vehicle physics, Weatherade/Weather Maker, streaming and navigation; retain the Virginia-first planning gate. Audio middleware only behind adapters; do not replace working systems.
+- **Truck Sports: Party!** (same Interstate project): bunker/industrial arena scenery and responsive Sonity sound events, after profiling and controller-first testing. Do not import unrelated environments.
+- **Cartastrophe / Rest Stop Racket** shared-world concepts: modular industrial rooms, underground backrooms, factory/storage clutter and vents; all controls must remain gamepad-first.
+- **Rowan of Bramblebrook:** Sonity is a strong audio candidate for magic, combat, ambience and dynamic layers. Undergrounds industrial art is a **conditional fit**, primarily for deliberately re-styled crypts/caverns; do not disrupt the PSX fantasy look or replace approved scenery.
+- **Horror prototypes:** abandoned bunkers, subway corridors, shelter interiors and reactive audio are high-priority.
+- **Lifeline Run:** off-road vehicle art, roads/underpasses, industrial mission locations and dynamic music.
+- **Jersey Devil / PS1 Universal Importer:** optional production-owned original environments/audio only; never substitute for original-disc data, research captures, immutable preservation or accepted native reconstruction checkpoints.
 
-- **Interstate: Hauler / Truck Taxi:** tunnel/underpass architecture, roads and truck-stop utility spaces, service basements, industrial pipes and freight locations. Reuse selectively while retaining EasyRoads3D, NWH vehicle physics, Weatherade/Weather Maker, Compass navigation, streaming and authored gamepad-first behavior as authorities. Preserve the Virginia-first world rollout and established project requirements.
-- **Truck Sports: Party!** (Interstate project): racing tunnels, industrial arenas, destructible-game set dressing when compatible; no bulk import into multiplayer runtime.
-- **Cartastrophe / Rest Stop Racket and related shared-world simulator games:** basement warehouses, backroom areas, industrial components, comic chaos props; preserve controller-only gameplay.
-- **Rowan of Bramblebrook:** only potentially suitable for hidden crypts, subterranean ruins and reworked fantasy underground spaces. The realistic/industrial art direction likely clashes with Rowan's PSX fantasy look; assess artistic coherence before using and do not replace approved designs.
-- **Horror prototypes:** high-priority candidate for abandoned subway, shelters, bunkers and underground survival scenarios.
-- **Jersey Devil remake and PS1 importer:** potential original exploratory environment art only; do not alter protected archival/original game data, reversals or accepted native reconstruction checkpoints.
-- **Lifeline Run:** possible underpasses, tunnels and industrial mission spaces; respect existing Unity architecture.
+## Codex implementation safeguards
 
-## Import safeguards
+1. Before any new purchase or import, consult the **historical master library**, `Docs/OwnedAssets/ConfirmedOwnership_2026-11-16.md`, **this updated notice**, and the structured JSON file `Docs/OwnedAssets/Confirmed_2026-11-19.json`.
+2. **Owned, downloaded, imported, verified compatible and used in a game are independent states.** These nine have only ownership confirmed; no direct installation proof was provided.
+3. Test packages in an isolated Unity 6 URP sandbox; inspect LODs, culling, shader graphs, ORM mapping, collisions, prefabs, lightmaps, licensing, platform builds and project-specific render settings.
+4. **Deduplicate imported assets:** the Industrial Underground Props Pack significantly overlaps Modular Abandoned Shelter, and some bundles repeat pipe/vent/vehicle pieces. Preserve GUIDs and sources and avoid bulk importing all seven into every game.
+5. **Sonity:** integrate via project-owned adapters if appropriate; avoid conflicting with NWH engine audio, existing dialogue, music and ambience systems. Validate audio events, source licenses, CPU cost, save/load behavior and build compatibility before making it authoritative.
+6. Track exact installed package versions and scene use per project after verifying the real local environment; preserve active roadmaps, working features, test baselines and the user’s no-placeholder, asset-first and controller requirements.
+7. **Explicit exclusion:** the **Ultimate Cyber November Game Dev Humble Bundle was NOT purchased**. Its unrelated products remain unowned regardless of previous browsing or recommendations. **Leartes Demonic Village is separately confirmed owned for free.**
 
-1. First verify purchase and the actual seven package entitlements. Catalogue package IDs, versions, installation evidence, source licenses and whether each is genuinely imported. Ownership alone never means installed.
-2. Inspect the demo scenes and URP shaders in a **separate safe test project**. Bring in only appropriate prefabs/meshes; map ORM textures as necessary, inspect shader graph variants, texture memory, lightmaps, collisions/LOD/culling, and platform targets.
-3. Guard existing scenes, GUIDs, code, material pipelines and Unity package dependencies. Benchmark before large scene conversion. No mass-import or replacing vendor systems blindly.
-4. Any use must honor existing project constraints, tests, backup paths, version-control policy and feature priorities. This notice **does not authorize new unrelated implementation work**.
-
-## Related evaluation — Sonity, **NOT yet owned**
-
-**Sonity — Audio Middleware** by Sonigon, Unity Asset Store ID **229857**: https://assetstore.unity.com/packages/tools/audio/sonity-audio-middleware-229857 . On 2026-11-19 the official listing showed **$4.95 (95% discount from $99)**. It offers realtime SoundParameters, music playlists/stems, low-code sound event triggers, visual audio debugging, DSP filters, full source code, Unity 6/URP and IL2CPP support. **The owner asked whether to buy it; has not confirmed purchase**. Good candidate for Rowan combat/ambience, dynamic Interstate engines and Truck Sports sound variation. Do NOT treat as owned or imported, replace existing audio/engine systems, or create a dependency until purchase is confirmed and integration tested. Existing audio tools and content remain authoritative in live scenes.
-
-## Explicit exclusions and existing library
-
-- **The Ultimate Cyber November Game Dev Humble Bundle was NOT purchased. Do not count its assets as owned.**
-- The free **Leartes Demonic Village** is independently owned as confirmed by the owner and may be considered in fantasy/horror planning.
-- Existing Unity Asset Store master + confirmed November 16 addendum remain the baseline; do not overwrite them or count duplicate assets twice.
-
-Sources: direct owner statement (2026-11-19) and Unity Asset Store's official product pages viewed the same day. **Licenses, checkout, installation and runtime suitability must be verified per project.**
+This document updates purchasing status only; it does not authorize importing content or starting unrelated backlog work automatically.
