@@ -24,3 +24,7 @@ Every major prompt final report must include:
 - `CUSTOM SYSTEMS CREATED`
 - `VENDOR SOURCE MODIFIED`
 - `DUPLICATE VENDOR FUNCTIONALITY CREATED`
+
+## Luna Wolf Studios shared owned-asset intelligence (2026-11-19)
+
+Before purchasing, planning, or importing vendor assets, consult `Docs/OwnedAssets/ConfirmedOwnership_2026-11-16.md` (confirmed additions and free Demonic Village) and `Docs/OwnedAssets/2026-11-19_Undergrounds_Acquisition_and_Sonity_Evaluation.md` (Undergrounds bundle purchase **in progress, not yet verified**; Sonity **recommended, not owned**). The previously discussed Ultimate Cyber November Humble Bundle was **not purchased**. These documents are inventory/planning references, not instructions to change project priority or import packages; actual installations and compatibility require validation. Retain existing project-specific requirements and authoritative vendor systems.
